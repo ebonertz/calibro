@@ -10,4 +10,7 @@ module.exports = function(app) {
 	app.route('/products')
 		.get(products.list);
 
+	app.route('/products/contentful')
+		.get(products.listContentful);
+
 };

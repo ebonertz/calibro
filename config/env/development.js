@@ -44,5 +44,11 @@ module.exports = {
         "project_key": "reactionsphere-test",
         "client_id": "r_IHigKd7TDtvC7nX_XDIQYB",
         "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw"
+    },
+    contenful: {
+        space: 'wl86s32z4irf',
+        accessToken: 'a4df0e89344a2951b7c2b91f86a16ef93044baf5125f17689505a380f773fa38',
+        secure: true,
+        host: 'cdn.contentful.com'
     }
 };

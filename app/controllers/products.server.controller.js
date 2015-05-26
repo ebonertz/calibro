@@ -1,4 +1,5 @@
-var ProductService = require('../services/products.sphere.server.service.js');
+var ProductService = require('../services/sphere.products.server.service.js'),
+	ContentfulProductService = require('../services/contentful.products.server.service.js');
 
 
 /**
@@ -13,6 +14,17 @@ exports.list = function(req, res) {
 		}
 	});
 };
+
+exports.listContentful = function(req, res) {
+	ContentfulProductService.list(function(err, resultArray) {
+		if (err) {
+			return res.status(400);
+		} else {
+			res.json(resultArray);
+		}
+	});
+};
+
 
 
 /**
