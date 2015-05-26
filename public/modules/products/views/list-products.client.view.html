@@ -3,7 +3,7 @@
         <h1>Products</h1>
     </div>
     <div class="list-group">
-        <a data-ng-repeat="product in products" data-ng-href="#!/products/{{product._id}}" class="list-group-item">
+        <a data-ng-repeat="product in products" ng-click="addToCart(product)" class="list-group-item" style="cursor: pointer;">
 			<small class="list-group-item-text">
                 <pre style="font-size: 12px;">{{product}}</pre>
 			</small>

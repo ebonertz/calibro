@@ -8,7 +8,11 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	function($locationProvider) {
 		$locationProvider.hashPrefix('!');
 	}
-]);
+]).run(function ($rootScope, CartService) {
+
+	$rootScope.cart = CartService.createAnonymous();
+
+});
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {

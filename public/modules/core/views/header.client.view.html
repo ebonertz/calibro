@@ -23,6 +23,32 @@
 				<a ng-switch-default href="/#!/{{item.link}}" data-ng-bind="item.title"></a>
 			</li>
 		</ul>
+
+		<ul class="nav navbar-nav navbar-right">
+
+			<li class="dropdown"  style="height: 49px;">
+				<a href="#" class="dropdown-toggle"><i class="glyphicon glyphicon-shopping-cart"></i></a>
+
+				<div ng-if="cart.lineItems.length > 0" style="background-color: #4253FF;height: 14px;width: 17px;position: relative;top: -37px;left: 30px;text-align: center">
+					<span style="font-size: 11px;color: white;position: relative;top: -5px;">{{cart.lineItems.length}}</span>
+				</div>
+				<ul class="dropdown-menu">
+					<li style="width: 515px;">
+
+						<div ng-repeat="item in cart.lineItems" style="margin-bottom: 5px;">
+							<span style="margin-left: 5px;font-size: 12px;"><b>{{item}}</b></span>
+						</div>
+
+						<div ng-if="cart.lineItems == 0" style="margin-bottom: 5px;">
+							<span style="position: relative;left: 12px;top: 3px;">There are no requests.</span>
+						</div>
+
+					</li>
+				</ul>
+			</li>
+
+		</ul>
+
 		<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
 			<li ui-route="/signup" ng-class="{active: $uiRoute}">
 				<a href="/#!/signup">Sign Up</a>
