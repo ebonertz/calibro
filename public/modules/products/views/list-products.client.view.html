@@ -1,0 +1,15 @@
+<section data-ng-controller="ProductsController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Products</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="product in products" data-ng-href="#!/products/{{product._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+                <pre style="font-size: 12px;">{{product}}</pre>
+			</small>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!products.$resolved || products.length">
+    	No Products yet, why don't you <a href="/#!/products/create">create one</a>?
+    </div>
+</section>
