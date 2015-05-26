@@ -26,13 +26,24 @@ exports.create = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    var customer = req.body;
+    var email, password;
 
-    CustomerService.login(customer, function (err, result) {
+    email = req.body.email;
+    password = req.body.password;
+
+    if(typeof email === "undefined" || typeof password === "undefined" || email.length < 1 || password.length < 1){
+        return res.status(400);
+    }
+
+    CustomerService.login(email, password, function (err, result) {
         if (err) {
             return res.status(400);
         } else {
-            res.json(result);
+            // res.json(result);
+            if(result.body && typeof result.body.customer !== 'undefined')
+                return res.json(result.body.customer);
+            else
+                return res.status(503);
         }
     });
 };
