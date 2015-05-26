@@ -28,29 +28,50 @@ module.exports = function () {
     });
 
     // Use local strategy
-    passport.use('sphere', new LocalStrategy({
-            usernameField: 'email',
-            passwordField: 'password'
-        },
-        function (email, password, done) {
-
-            CustomerService.login(email, password, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    return done(null, false, {
-                        message: 'Unknown user or invalid password'
-                    });
-                }
-                if (false) { // TODO: Check passwords match.
-                    return done(null, false, {
-                        message: 'Unknown user or invalid password'
-                    });
-                }
-
-                return done(null, user);
+    passport.use('sphere-login', new LocalStrategy({
+          usernameField: 'email',
+          passwordField: 'password'
+      },
+      function (email, password, done) {
+        CustomerService.login(email, password, function (err, customer) {
+          if (err) {
+            return done(err);
+          }
+          if (!customer) {
+            return done(null, false, {
+              message: 'Unknown user or invalid password'
             });
+          }
+          if (false) { // TODO: Check passwords match.
+            return done(null, false, {
+              message: 'Unknown user or invalid password'
+            });
+          }
+
+          return done(null, customer);
+        });
+      }
+    ));
+
+    passport.use('sphere-register', new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+      },
+      function (req, email, password, done) {
+        var customer = {
+          "email": email,
+          "password": password,
+          "firstName": req.body.firstName,
+          "lastName": req.body.lastName
         }
+        CustomerService.create(customer, function (err, customer) {
+          if (err) {
+            return done(err);
+          } else {
+            return done(null, customer)
+          }
+        });
+      }
     ));
 };

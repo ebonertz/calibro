@@ -20,7 +20,7 @@ exports.create = function (req, res) {
         if (err) {
             return res.status(400);
         } else {
-            res.json(result);
+            res.json(result.body.customer);
         }
     });
 };
