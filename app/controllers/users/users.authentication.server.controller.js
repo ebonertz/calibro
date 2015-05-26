@@ -8,7 +8,7 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
-	CustomerService = require('../../services/sphere.customers.server.service.js');
+	CustomerService = require('../../services/sphere/sphere.customers.server.service.js');
 
 /**
  * Signup
