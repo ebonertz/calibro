@@ -7,62 +7,60 @@ var _ = require('lodash'),
 	errorHandler = require('../errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+	User = mongoose.model('User'),
+	CustomerService = require('../../services/sphere.customers.server.service.js');
 
 /**
  * Signup
  */
 exports.signup = function(req, res) {
 	// For security measurement we remove the roles from the req.body object
-	delete req.body.roles;
+	// delete req.body.roles;
 
 	// Init Variables
-	var user = new User(req.body);
-	var message = null;
+	var body = req.body
 
-	// Add missing user fields
-	user.provider = 'local';
-	user.displayName = user.firstName + ' ' + user.lastName;
+	if(typeof body === 'undefined' || !body.email || !body.firstName || !body.lastName || !body.password){
+		res.status(400).send({
+			message: "Mandatory values missing"
+		})
+	}
 
-	// Then save the user 
-	user.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+	passport.authenticate('sphere-register', function(err, customer, info) {
+		if (err || !customer) {
+			res.status(400).send(info);
 		} else {
 			// Remove sensitive data before login
-			user.password = undefined;
-			user.salt = undefined;
+			delete customer.password;
+			// customer.salt = undefined;
 
-			req.login(user, function(err) {
+			req.login(customer, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
-					res.json(user);
+					res.json(customer);
 				}
 			});
 		}
-	});
+	})(req, res);
 };
 
 /**
  * Signin after passport authentication
  */
 exports.signin = function(req, res, next) {
-	passport.authenticate('sphere', function(err, user, info) {
-		if (err || !user) {
+	passport.authenticate('sphere-login', function(err, customer, info) {
+		if (err || !customer) {
 			res.status(400).send(info);
 		} else {
 			// Remove sensitive data before login
-			user.password = undefined;
-			user.salt = undefined;
+			delete customer.password;
 
-			req.login(user, function(err) {
+			req.login(customer, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
-					res.json(user);
+					res.json(customer);
 				}
 			});
 		}

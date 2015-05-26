@@ -14,7 +14,7 @@ exports.list = function (callback) {
 
 exports.create = function (customer, callback) {
     SphereClient.getClient().customers.create(customer).then(function (result) {
-        callback(null, result);
+        callback(null, result.body.customer);
     }).error(function (err) {
         console.log(err);
         callback(err, null);
