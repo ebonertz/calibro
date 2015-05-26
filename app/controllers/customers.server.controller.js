@@ -1,4 +1,4 @@
-var CustomerService = require('../services/sphere.customers.server.service.js');
+var CustomerService = require('../services/sphere/sphere.customers.server.service.js');
 
 /**
  * List

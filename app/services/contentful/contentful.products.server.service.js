@@ -1,4 +1,4 @@
-var ContenfulClient = require('../clients/contenful.server.client');
+var ContenfulClient = require('../../clients/contenful.server.client.js');
 
 /**
  * List

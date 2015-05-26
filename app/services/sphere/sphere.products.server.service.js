@@ -1,4 +1,4 @@
-var SphereClient = require('../clients/sphere.server.client');
+var SphereClient = require('../../clients/sphere.server.client.js');
 
 /**
  * List

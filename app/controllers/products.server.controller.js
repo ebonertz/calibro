@@ -1,5 +1,5 @@
-var ProductService = require('../services/sphere.products.server.service.js'),
-	ContentfulProductService = require('../services/contentful.products.server.service.js');
+var ProductService = require('../services/sphere/sphere.products.server.service.js'),
+	ContentfulProductService = require('../services/contentful/contentful.products.server.service.js');
 
 
 /**

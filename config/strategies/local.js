@@ -5,7 +5,7 @@
  */
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    CustomerService = require('../../app/services/sphere.customers.server.service.js');
+    CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js');
 
 module.exports = function () {
     // =========================================================================
