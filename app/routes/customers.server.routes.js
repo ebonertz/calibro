@@ -14,4 +14,7 @@ module.exports = function(app) {
 	app.route('/customers/login')
 		.post(customers.login);
 
+  app.route('/customers/:id')
+    .get(customers.findOne);
+
 };
