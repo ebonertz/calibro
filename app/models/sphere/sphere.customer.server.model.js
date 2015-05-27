@@ -2,9 +2,9 @@
 
 var CustomerService = require('../../services/sphere/sphere.customers.server.service.js');
 
-var User = {};
+var Customer = {};
 
-User.findById = function(id, callback) {
+Customer.findById = function(id, callback) {
   CustomerService.findOne(id, function(err, result){
     if(result){
       delete result.password 
@@ -13,4 +13,4 @@ User.findById = function(id, callback) {
   });
 };
 
-module.exports = User;
+module.exports = Customer;

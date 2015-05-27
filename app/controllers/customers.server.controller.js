@@ -1,5 +1,17 @@
+'use strict';
+
+/**
+ * This file should only contain the export extend.
+ * Nonetheless, it'll be used as a container while the users functionalities are ported to the customers'
+ */
+
+/**
+ * Module dependencies.
+ */
+var _ = require('lodash');
+
 var CustomerService = require('../services/sphere/sphere.customers.server.service.js');
-var User = require('../models/sphere/sphere.user.server.model.js');
+var User = require('../models/sphere/sphere.customer.server.model.js');
 
 /**
  * List
@@ -14,40 +26,6 @@ var User = require('../models/sphere/sphere.user.server.model.js');
   });
 };
 
-exports.create = function (req, res) {
-  var customer = req.body;
-
-  CustomerService.create(customer, function (err, result) {
-    if (err) {
-      return res.status(400);
-    } else {
-      res.json(result.body.customer);
-    }
-  });
-};
-
-exports.login = function (req, res) {
-  var email, password;
-
-  email = req.body.email;
-  password = req.body.password;
-
-  if(typeof email === "undefined" || typeof password === "undefined" || email.length < 1 || password.length < 1){
-    return res.status(400);
-  }
-
-  CustomerService.login(email, password, function (err, result) {
-    if (err) {
-      return res.status(400);
-    } else {
-      // res.json(result);
-      if(result.body && typeof result !== 'undefined')
-        return res.json(result);
-      else
-        return res.status(503);
-    }
-  });
-};
 
 exports.findOne = function(req, res){
   var id;
@@ -59,7 +37,7 @@ exports.findOne = function(req, res){
       return res.status(400);
     } else {
       // res.json(result);
-      if(result && typeof result !== 'undefined')
+      if(result && result !== 'undefined')
         return res.json(result);
       else
         return res.status(503);
@@ -73,3 +51,11 @@ exports.findOne = function(req, res){
  exports.hasAuthorization = function (req, res, next) {
   next();
 };
+
+/**
+ * Extend user's controller
+ */
+
+module.exports = _.extend(
+  require('./customers/customers.authentication.server.controller')
+);
