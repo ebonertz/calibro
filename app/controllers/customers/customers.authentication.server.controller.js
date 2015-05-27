@@ -4,10 +4,7 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-  errorHandler = require('../errors.server.controller'),
-  passport = require('passport'),
-  User = require('../../models/sphere/sphere.customer.server.model.js'),
-  CustomerService = require('../../services/sphere/sphere.customers.server.service.js');
+  passport = require('passport');
 
 /**
  * Signup

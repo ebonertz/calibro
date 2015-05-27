@@ -6,9 +6,9 @@
 var customers = require('../controllers/customers.server.controller.js');
 
 module.exports = function(app) {
-	// app.route('/customers').get(customers.list);
-
-  // app.route('/customers/:id').get(customers.findOne);
+  // TODO: Disable list. Change findOne to me
+	app.route('/customers').get(customers.list);
+  app.route('/customers/:id').get(customers.findOne);
 
   app.route('/auth/signup').post(customers.signup);
   app.route('/auth/signin').post(customers.signin);

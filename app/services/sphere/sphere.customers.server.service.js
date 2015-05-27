@@ -1,4 +1,7 @@
-var SphereClient = require('../../clients/sphere.server.client.js');
+'use strict';
+
+var SphereClient = require('../../clients/sphere.server.client.js'),
+  Customer = require('../../models/sphere/sphere.customer.server.model.js');
 
 /**
  * List
@@ -6,10 +9,11 @@ var SphereClient = require('../../clients/sphere.server.client.js');
 
 exports.create = function (customer, callback) {
     SphereClient.getClient().customers.create(customer).then(function (result) {
-        callback(null, result.body.customer);
+      var customer = new Customer(result.body.customer)
+      callback(null, customer);
     }).error(function (err) {
-        console.log(err);
-        callback(err, null);
+      console.log(err);
+      callback(err, null);
     });
 };
 
@@ -20,12 +24,12 @@ exports.login = function (username, password, callback) {
     };
 
     SphereClient.getClient().authentication.save(customer).then(function (result) {
-        callback(null, result.body.customer);
+      var customer = new Customer(result.body.customer)
+      callback(null, customer);
     }).error(function (err) {
-        console.log(err);
-        callback(err, null);
+      console.log(err);
+      callback(err, null);
     });
-
 };
 
 /**
@@ -43,7 +47,9 @@ exports.list = function (callback) {
 
 exports.findOne = function(id, callback){
   SphereClient.getClient().customers.byId(id).fetch().then(function (result){
-    callback(null, result.body);
+    delete result.body.password 
+    var customer = new Customer(result.body);
+    callback(null, customer);
   })
   .error(function (err) {
     console.log(err);
