@@ -5,44 +5,46 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
     function ($http, $q, $cookies, $rootScope, Authentication, LoggerServices, Cart) {
         var urlString = '/carts';
 
-        var anonymousCart = {
-            "currency": "EUR"
-        };
-
         this.pageLoad = function () {
 
             if (Authentication.user) {
 
+                // TODO
 
             } else {
 
                 if ($cookies.anonymousCart == null || $cookies.anonymousCart == 'null') {
-                    var cart = new Cart(anonymousCart);
-
-                    // Create Cart in SPHERE.
-                    cart.$save(function (sphereCart) {
-
-                        $rootScope.cart = sphereCart;
-                        $cookies.anonymousCart = sphereCart.id;
-
-                        LoggerServices.success('Anonymous cart created in Sphere. ID: ' + $rootScope.cart.id);
-
-                    }, function (errorResponse) {
-                        LoggerServices.error('Error while saving to Sphere');
-                    });
+                    this.createAnonymous();
                 } else {
 
                     Cart.get({
                         cartId: $cookies.anonymousCart
                     }, function (data) {
-                        $rootScope.cart = data;
-                        $rootScope.cart = data;
-                        LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+
+                        // This check is to avoid showing a user cart, that started as an anonymous cart.
+                        if (data.customerId != null) {
+                            this.createAnonymous();
+                        } else {
+                            $rootScope.cart = data;
+                            LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                        }
+
                     });
                 }
-
-
             }
+
+        }
+
+        this.createAnonymous = function () {
+            var cart = new Cart({
+                "currency": "EUR"
+            });
+
+            cart.$save(function (sphereCart) {
+                $rootScope.cart = sphereCart;
+                $cookies.anonymousCart = sphereCart.id;
+                LoggerServices.success('Anonymous cart created in Sphere. ID: ' + $rootScope.cart.id);
+            });
 
         }
 
