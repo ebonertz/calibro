@@ -9,8 +9,9 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 		$locationProvider.hashPrefix('!');
 	}
 ]).run(function ($rootScope, CartService) {
-
-	$rootScope.cart = CartService.createAnonymous();
+	CartService.pageLoad();
+	//console.log(Authentication)
+	//$rootScope.cart = CartService.createAnonymous();
 
 });
 

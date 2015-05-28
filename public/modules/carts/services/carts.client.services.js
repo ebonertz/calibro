@@ -1,48 +1,76 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('products').service('CartService', ['$http', '$q', '$cookies', '$rootScope',
-    function ($http, $q, $cookies, $rootScope) {
+angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$rootScope', 'Authentication', 'LoggerServices', 'Cart',
+    function ($http, $q, $cookies, $rootScope, Authentication, LoggerServices, Cart) {
         var urlString = '/carts';
 
-        this.createAnonymous = function () {
+        var anonymousCart = {
+            "currency": "EUR"
+        };
 
-            var cart = null;
+        this.pageLoad = function () {
 
-            if ($cookies.anonymousCart == null || $cookies.anonymousCart == 'null') {
-                cart = {
-                    "type": "Cart",
-                    "version": 1,
-                    "lineItems": [],
-                    "cartState": "Active",
-                    "totalPrice": {
-                        "currencyCode": "USD",
-                        "centAmount": 0
-                    },
-                    "inventoryMode": "None",
-                    "customLineItems": [],
-                    "discountCodes": []
-                };
+            if (Authentication.user) {
 
-                $cookies.anonymousCart = JSON.stringify(cart);
 
             } else {
-                try {
-                    cart = JSON.parse($cookies.anonymousCart)
+
+                if ($cookies.anonymousCart == null || $cookies.anonymousCart == 'null') {
+                    var cart = new Cart(anonymousCart);
+
+                    // Create Cart in SPHERE.
+                    cart.$save(function (sphereCart) {
+
+                        $rootScope.cart = sphereCart;
+                        $cookies.anonymousCart = sphereCart.id;
+
+                        LoggerServices.success('Anonymous cart created in Sphere. ID: ' + $rootScope.cart.id);
+
+                    }, function (errorResponse) {
+                        LoggerServices.error('Error while saving to Sphere');
+                    });
+                } else {
+
+                    Cart.get({
+                        cartId: $cookies.anonymousCart
+                    }, function (data) {
+                        $rootScope.cart = data;
+                        $rootScope.cart = data;
+                        LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                    });
                 }
-                catch (err) {
-                    $cookies.anonymousCart = null;
-                }
+
+
             }
 
-            return cart;
         }
 
         this.addToCart = function (item) {
-            if ($rootScope.cart != null && $rootScope.cart.lineItems.indexOf(item) == -1) {
-                $rootScope.cart.lineItems.push(item);
-                $cookies.anonymousCart = JSON.stringify($rootScope.cart);
+
+            var payload = {
+                productId: item.id,
+                variantId: item.masterData.current.masterVariant.id,
+                quantity: 1
             }
+
+            this.addLineItem($rootScope.cart.id, payload).then(function (result) {
+                LoggerServices.success('Added to Sphere Cart ' + result);
+                $rootScope.cart = result;
+            }, function (error) {
+                LoggerServices.success('Error while adding to Sphere Cart');
+            });
+
+        }
+
+        this.addLineItem = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/addLineItem/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
         }
 
     }

@@ -4,11 +4,18 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-	carts = require('../controllers/carts.server.controller.js');
+    carts = require('../controllers/carts.server.controller.js');
 
-module.exports = function(app) {
-	app.route('/carts')
-		.get(carts.list)
-		.post(carts.create);
+module.exports = function (app) {
+    app.route('/carts')
+        .get(carts.list)
+        .post(carts.create);
+
+    app.route('/carts/:cartId')
+        .get(carts.byId);
+
+    app.route('/carts/addLineItem/:cartId')
+        .post(carts.addLineItem);
+
 
 };

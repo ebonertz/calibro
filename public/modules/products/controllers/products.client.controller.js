@@ -21,7 +21,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         };
 
         $scope.addToCart = function (product) {
-            CartService.addToCart(product.id);
+            CartService.addToCart(product);
         };
 
     }

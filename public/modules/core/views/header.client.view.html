@@ -36,10 +36,10 @@
 					<li style="width: 515px;">
 
 						<div ng-repeat="item in cart.lineItems" style="margin-bottom: 5px;">
-							<span style="margin-left: 5px;font-size: 12px;"><b>{{item}}</b></span>
+							<span style="margin-left: 5px;font-size: 12px;"><b>{{item.id}}</b></span>
 						</div>
 
-						<div ng-if="cart.lineItems == 0" style="margin-bottom: 5px;">
+						<div ng-if="cart.lineItems.length == 0" style="margin-bottom: 5px;">
 							<span style="position: relative;left: 12px;top: 3px;">There are no requests.</span>
 						</div>
 
