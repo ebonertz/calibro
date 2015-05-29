@@ -15,9 +15,9 @@ var fs = require('fs'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
-/*	mongoStore = require('connect-mongo')({
+	mongoStore = require('connect-mongo')({
 		session: session
-	}),*/
+	}),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
@@ -82,11 +82,15 @@ module.exports = function(db) {
 	app.use(bodyParser.json());
 	app.use(methodOverride());
 
+	// Setting the app router and static folder
+	// Should be at the top to avoid session checking
+	app.use(express.static(path.resolve('./public')));
+
 	// CookieParser should be above session
 	app.use(cookieParser());
 
 	// Express MongoDB session storage
-	/*app.use(session({
+	app.use(session({
 		saveUninitialized: true,
 		resave: true,
 		secret: config.sessionSecret,
@@ -94,7 +98,7 @@ module.exports = function(db) {
 			db: db.connection.db,
 			collection: config.sessionCollection
 		})
-	}));*/
+	}));
 
 	// use passport session
 	app.use(passport.initialize());
@@ -109,9 +113,6 @@ module.exports = function(db) {
 	app.use(helmet.nosniff());
 	app.use(helmet.ienoopen());
 	app.disable('x-powered-by');
-
-	// Setting the app router and static folder
-	app.use(express.static(path.resolve('./public')));
 
 	// Globbing routing files
 	config.getGlobbedFiles('./app/routes/**/*.js').forEach(function(routePath) {

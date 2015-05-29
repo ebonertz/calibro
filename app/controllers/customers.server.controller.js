@@ -1,57 +1,30 @@
-var CustomerService = require('../services/sphere/sphere.customers.server.service.js');
+'use strict';
 
 /**
- * List
+ * This file should only contain the export extend.
+ * Nonetheless, it'll be used as a container while the users functionalities are ported to the customers'
  */
-exports.list = function (req, res) {
-    CustomerService.list(function (err, resultArray) {
-        if (err) {
-            return res.status(400);
-        } else {
-            res.json(resultArray);
-        }
-    });
-};
 
-exports.create = function (req, res) {
-    var customer = req.body;
+/**
+ * Module dependencies.
+ */
+var _ = require('lodash');
 
-    CustomerService.create(customer, function (err, result) {
-        if (err) {
-            return res.status(400);
-        } else {
-            res.json(result.body.customer);
-        }
-    });
-};
+/**
+ * Extend user's controller
+ */
 
-exports.login = function (req, res) {
-    var email, password;
-
-    email = req.body.email;
-    password = req.body.password;
-
-    if(typeof email === "undefined" || typeof password === "undefined" || email.length < 1 || password.length < 1){
-        return res.status(400);
-    }
-
-    CustomerService.login(email, password, function (err, result) {
-        if (err) {
-            return res.status(400);
-        } else {
-            // res.json(result);
-            if(result.body && typeof result.body.customer !== 'undefined')
-                return res.json(result.body.customer);
-            else
-                return res.status(503);
-        }
-    });
-};
+module.exports = _.extend(
+  require('./customers/customers.authentication.server.controller'),
+  require('./customers/customers.others.server.controller'),
+  require('./customers/customers.profile.server.controller')
+);
 
 
 /**
  *  authorization middleware
  */
+
 exports.hasAuthorization = function (req, res, next) {
-    next();
+  next();
 };

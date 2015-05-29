@@ -51,14 +51,19 @@ exports.signup = function(req, res) {
 exports.signin = function(req, res, next) {
 	passport.authenticate('sphere-login', function(err, customer, info) {
 		if (err || !customer) {
-			res.status(400).send(info);
+			res.status(400).send({
+				message: "Login incorrect"
+			})
 		} else {
 			// Remove sensitive data before login
 			delete customer.password;
 
 			req.login(customer, function(err) {
 				if (err) {
-					res.status(400).send(err);
+					res.status(400).send({
+						message: "Issue login in customer. Please try again."
+					})
+					console.error(err)
 				} else {
 					res.json(customer);
 				}

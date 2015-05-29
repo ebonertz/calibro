@@ -3,15 +3,17 @@
 /**
  * Module dependencies.
  */
-var users = require('../../app/controllers/users.server.controller'),
-	customers = require('../controllers/customers.server.controller.js');
+var customers = require('../controllers/customers.server.controller.js');
 
 module.exports = function(app) {
+  // TODO: Disable list. Change findOne to me
 	app.route('/customers')
-		.get(customers.list)
-		.post(customers.create);
+    .put(customers.update)
+    .get(customers.list);
+  app.route('/customers/password').post(customers.changePassword);
+  app.route('/customers/:id').get(customers.findOne);
 
-	app.route('/customers/login')
-		.post(customers.login);
-
+  app.route('/auth/signup').post(customers.signup);
+  app.route('/auth/signin').post(customers.signin);
+  app.route('/auth/signout').get(customers.signout);
 };
