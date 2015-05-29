@@ -6,25 +6,26 @@
 var passport = require('passport'),
 	User = require('mongoose').model('User'),
 	path = require('path'),
-	config = require('./config');
+	config = require('./config'),
+	CustomerService = require('../app/services/sphere/sphere.customers.server.service.js');
 	
 /**
  * Module init function.
  */
 module.exports = function() {
-	// Serialize sessions
-	passport.serializeUser(function(user, done) {
-		done(null, user.id);
-	});
+   // Serialize the user for the session
+  passport.serializeUser(function(user, done) {
+    console.log("Serializing "+user.email)
+    done(null, user.id);
+  });
 
-	// Deserialize sessions
-	passport.deserializeUser(function(id, done) {
-		User.findOne({
-			_id: id
-		}, '-salt -password', function(err, user) {
-			done(err, user);
-		});
-	});
+  // Deserialize the user
+  passport.deserializeUser(function(id, done) {
+    console.log("Deserializing "+id)
+    CustomerService.findOne(id, function(err, customer){
+      done(err, customer)
+    });
+  });
 
 	// Initialize strategies
 	config.getGlobbedFiles('./config/strategies/**/*.js').forEach(function(strategy) {

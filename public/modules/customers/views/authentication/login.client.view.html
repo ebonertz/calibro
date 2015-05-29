@@ -1,0 +1,60 @@
+<section class="row" data-ng-controller="AuthenticationController">
+  <div class="col-xs-8 col-md-4 col-md-offset-1">
+    <h3>Login</h3>
+    <form data-ng-submit="signin()" class="signin form-horizontal" autocomplete="off">
+      <fieldset>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+        </div>
+        <div class="text-center form-group">
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+        <div class="forgot-password">
+          <a href="/#!/password/forgot">Forgot your password?</a>
+        </div>
+        <div data-ng-show="error" class="text-center text-danger">
+          <strong data-ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="col-xs-8 col-md-4 col-md-offset-1">
+    <h3>Register</h3>
+    <form name="userForm" data-ng-submit="register()" class="signin form-horizontal" novalidate autocomplete="off">
+      <fieldset>
+        <!-- <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" required id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name">
+        </div> -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" data-ng-model="register.email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" data-ng-model="register.password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Repeat Password</label>
+          <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" data-ng-model="register.repeatPassword" placeholder="Repeat Password" compare-to="register.password" required>
+        </div>
+        <div class="text-center form-group">
+          <button type="submit" class="btn btn-large btn-primary">Register</button>
+        </div>
+        <div data-ng-show="register.error" class="text-center text-danger">
+          <strong data-ng-bind="register.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

@@ -15,6 +15,8 @@ exports.signup = function(req, res) {
 
   // Init Variables
   var body = req.body
+  body.firstName = body.firstName || ""
+  body.lastName = body.lastName || "" 
 
   if(typeof body === 'undefined' || !body.email || !body.firstName || !body.lastName || !body.password){
     res.status(400).send({
@@ -63,6 +65,8 @@ exports.signin = function(req, res, next) {
           })
           console.error(err)
         } else {
+          console.log(req.user);
+          req.session.user = req.user;
           res.json(customer);
         }
       });

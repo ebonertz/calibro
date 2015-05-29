@@ -16,7 +16,8 @@ var _ = require('lodash');
 
 module.exports = _.extend(
   require('./customers/customers.authentication.server.controller'),
-  require('./customers/customers.others.server.controller')
+  require('./customers/customers.others.server.controller'),
+  require('./customers/customers.profile.server.controller')
 );
 
 

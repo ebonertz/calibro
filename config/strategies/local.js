@@ -9,18 +9,6 @@ var passport = require('passport'),
 
 module.exports = function () {
 
-    // Serialize the user for the session
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
-    });
-
-    // Deserialize the user
-    passport.deserializeUser(function(id, done) {
-      CustomerService.findOne(id, function(err, customer){
-        done(err, customer)
-      });
-    });
-
     // Use local strategy
     passport.use('sphere-login', new LocalStrategy({
           usernameField: 'email',
