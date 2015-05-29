@@ -12,7 +12,12 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				$scope.register.error = "Passwords do not match"
 				return false
 			}
-			$http.post('/auth/signup', $scope.register).success(function(response) {
+
+      var createValues = {
+        email: $scope.register.email,
+        password: $scope.register.password
+      }
+			$http.post('/auth/signup', createValues).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
@@ -31,7 +36,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				// And redirect to the index page
 				$location.path('/');
 			}).error(function(response) {
-				$scope.error = response.message;
+				$scope.login.error = response.message;
 			});
 		};
 	}

@@ -18,8 +18,8 @@ exports.signup = function(req, res) {
   body.firstName = body.firstName || ""
   body.lastName = body.lastName || "" 
 
-  if(typeof body === 'undefined' || !body.email || !body.firstName || !body.lastName || !body.password){
-    res.status(400).send({
+  if(typeof body === 'undefined' || !body.email || !body.password){
+    return res.status(400).send({
       message: "Mandatory values missing"
     })
   }
@@ -27,18 +27,18 @@ exports.signup = function(req, res) {
   passport.authenticate('sphere-register', function(err, customer, info) {
     if (err) {
       var message = err.message.indexOf('duplicate') > 0 ? "This email has already been registered" : err.message
-      res.status(400).send({message: message})
+      return res.status(400).send({message: message})
     }else if(!customer){
-      res.status(400).send({message: "Error creating user"});
+      return res.status(400).send({message: "Error creating user"});
     } else {
       // Remove sensitive data before login
       delete customer.password;
 
       req.login(customer, function(err) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(400).send(err);
         } else {
-          res.json(customer);
+          return res.json(customer);
         }
       });
     }
