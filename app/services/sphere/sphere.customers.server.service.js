@@ -18,15 +18,18 @@ exports.create = function (customer, callback) {
     });
 };
 
-exports.login = function (email, password, callback) {
+exports.login = function (email, password, anonymousCartId, callback) {
     var customer = {
         "email": email,
-        "password": password
+        "password": password,
+        "anonymousCartId": anonymousCartId
     };
+
+    console.log("anonymousCartId " + anonymousCartId)
 
     SphereClient.getClient().authentication.save(customer).then(function (result) {
       var customer = new Customer(result.body.customer)
-      callback(null, customer);
+      callback(null, customer, result.body.cart);
     }).error(function (err) {
       console.log(err);
       callback(err, null);

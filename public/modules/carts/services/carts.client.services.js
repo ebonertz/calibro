@@ -9,7 +9,28 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             if (Authentication.user) {
 
-                // TODO
+                this.byCustomer(Authentication.user.id).then(function(carts) {
+
+                    if(carts != null && carts.length > 0) {
+                        $rootScope.cart = carts[0];
+                        LoggerServices.success('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
+
+                    } else {
+
+                        var cart = new Cart({
+                            "currency": "EUR",
+                            "customerId": Authentication.user.id
+                        });
+
+                        cart.$save(function (sphereCart) {
+                            $rootScope.cart = sphereCart;
+                            LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
+                        });
+
+
+                    }
+
+                });
 
             } else {
 
@@ -23,13 +44,13 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
                         // This check is to avoid showing a user cart, that started as an anonymous cart.
                         if (data.customerId != null) {
-                            this.createAnonymous();
+                            this.service.createAnonymous();
                         } else {
                             $rootScope.cart = data;
                             LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
                         }
 
-                    });
+                    }.bind({service: this}));
                 }
             }
 
@@ -65,10 +86,45 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
         }
 
+        this.removeFromCart = function (item) {
+
+            var payload = {
+                lineItemId: item.id
+            }
+
+            this.removeLineItem($rootScope.cart.id, payload).then(function (result) {
+                LoggerServices.success('Remove from Sphere Cart ' + result);
+                $rootScope.cart = result;
+            }, function (error) {
+                LoggerServices.success('Error while removing to Sphere Cart');
+            });
+
+        }
+
         this.addLineItem = function (cartId, payload) {
             var deferred = $q.defer();
 
             $http.post(urlString + '/addLineItem/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.removeLineItem = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/removeLineItem/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.byCustomer = function (customerId) {
+            var deferred = $q.defer();
+
+            $http.get(urlString + '/byCustomer/' + customerId).success(function (data) {
                 deferred.resolve(data);
             });
 

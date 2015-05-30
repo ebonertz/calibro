@@ -49,7 +49,7 @@ exports.signup = function(req, res) {
  * Signin after passport authentication
  */
 exports.signin = function(req, res, next) {
-  passport.authenticate('sphere-login', function(err, customer, info) {
+  passport.authenticate('sphere-login', function(err, customer, cart) {
     if (err || !customer) {
       res.status(400).send({
         message: "Login incorrect"
@@ -67,7 +67,13 @@ exports.signin = function(req, res, next) {
         } else {
           console.log(req.user);
           req.session.user = req.user;
-          res.json(customer);
+
+          var result = {
+            customer: customer,
+            cart: cart
+          }
+
+          res.json(result);
         }
       });
     }

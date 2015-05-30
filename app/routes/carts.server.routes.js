@@ -17,5 +17,11 @@ module.exports = function (app) {
     app.route('/carts/addLineItem/:cartId')
         .post(carts.addLineItem);
 
+    app.route('/carts/removeLineItem/:cartId')
+        .post(carts.removeLineItem);
+
+    app.route('/carts/byCustomer/:customerId')
+        .get(carts.byCustomer);
+
 
 };

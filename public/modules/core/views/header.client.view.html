@@ -36,6 +36,7 @@
 					<li style="width: 515px;">
 
 						<div ng-repeat="item in cart.lineItems" style="margin-bottom: 5px;">
+							<button ng-click="removeFromCart(item)" class="btn btn-xs" style="margin-left: 10px;"><i class="glyphicon glyphicon-remove"></i> </button>
 							<span style="margin-left: 5px;font-size: 12px;"><b>{{item.id}}</b></span>
 						</div>
 

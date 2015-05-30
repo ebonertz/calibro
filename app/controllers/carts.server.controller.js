@@ -26,6 +26,18 @@ exports.create = function (req, res) {
     });
 };
 
+exports.byCustomer = function (req, res) {
+    var customerId = req.param('customerId');
+
+    CartService.byCustomer(customerId, function (err, result) {
+        if (err) {
+            return res.status(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
 exports.byId = function (req, res) {
     var id = req.param('cartId');
 
@@ -43,6 +55,19 @@ exports.addLineItem = function (req, res) {
         payload = req.body;
 
     CartService.addLineItem(cartId, payload, function (err, result) {
+        if (err) {
+            return res.status(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.removeLineItem = function (req, res) {
+    var cartId = req.param('cartId'),
+        payload = req.body;
+
+    CartService.removeLineItem(cartId, payload, function (err, result) {
         if (err) {
             return res.status(400);
         } else {

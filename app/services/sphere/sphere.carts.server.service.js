@@ -38,6 +38,17 @@ exports.byId = function (id, callback) {
     });
 };
 
+exports.byCustomer = function (customerId, callback) {
+    SphereClient.getClient().carts
+        .where('customerId="' + customerId + '"')
+        .fetch().then(function (result) {
+            callback(null, result.body.results);
+        }).error(function (err) {
+            console.log(err);
+            callback(err, null);
+        });
+};
+
 exports.update = function (cartId, actions, callback) {
     SphereClient.getClient().carts.byId(cartId).fetch().then(function (result) {
         SphereClient.getClient().carts.byId(cartId).update({
@@ -66,7 +77,7 @@ exports.removeLineItem = function (cartId, payload, callback) {
     if (payload)
         payload.action = actions.removeLineItem;
 
-    update(cartId, [payload], function (err, result) {
+    exports.update(cartId, [payload], function (err, result) {
         callback(err, result);
     });
 }
