@@ -4,6 +4,10 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
   Customer = require('../../models/sphere/sphere.customer.server.model.js'),
   _ = require('lodash');
 
+var updateCustomer = function(customer_id, actions){
+  return SphereClient.getClient().customers.byId(customer_id).update(actions)
+}
+
 /**
  * List
  */
@@ -90,7 +94,7 @@ exports.updateProfile = function(customer, updateValues, callback){
   } else {
     console.log("Updating "+customer.email+", version "+customer.version)
     SphereClient.getClient().customers.byId(customer.id).update(actions).then(function(result){
-      console.log(result);
+      // console.log(result);
       var customer = new Customer(result.body);
       callback(null, customer);
     }).error(function (err) {
@@ -102,4 +106,40 @@ exports.updateProfile = function(customer, updateValues, callback){
 
 exports.changePassword = function(customer, currentPassword, newPassword, callback){
   callback(new Error("Not yet implemented"), null)
+}
+
+exports.addAddress = function(customer, address, callback){
+  var actions = {
+    version: customer.version,
+    actions: [{
+      action: 'addAddress',
+      address: address
+    }]
+  }
+
+  updateCustomer(customer.id, actions).then(function(result){
+    var customer = new Customer(result.body);
+    callback(null, customer);
+  }).error(function(err){
+    console.log(err);
+    callback(err, null);
+  })
+}
+
+exports.deleteAddress = function(customer, addressId, callback){
+  var actions = {
+    version: customer.version,
+    actions: [{
+      action: "removeAddress",
+      addressId: addressId
+    }]
+  }
+
+  updateCustomer(customer.id, actions).then(function(result){
+    var customer = new Customer(result.body);
+    callback(null, customer);
+  }).error(function(err){
+    console.log(err);
+    callback(err, null);
+  })
 }
