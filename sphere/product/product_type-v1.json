@@ -1,0 +1,356 @@
+{
+  "name": "focali-product",
+  "description": "Focali product type",
+  "attributes": [
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "TORTOISE",
+            "label": {
+              "en": "Tortoise"
+            }
+          },
+          {
+            "key": "BLACK",
+            "label": {
+              "en": "Black"
+            }
+          },
+          {
+            "key": "GREEN",
+            "label": {
+              "en": "Green"
+            }
+          },
+          {
+            "key": "BLUE",
+            "label": {
+              "en": "Blue"
+            }
+          },
+          {
+            "key": "SILVER",
+            "label": {
+              "en": "Silver"
+            }
+          },
+          {
+            "key": "BROWN",
+            "label": {
+              "en": "Brown"
+            }
+          },
+          {
+            "key": "GREY",
+            "label": {
+              "en": "Grey"
+            }
+          },
+          {
+            "key": "RED",
+            "label": {
+              "en": "Red"
+            }
+          },
+          {
+            "key": "GOLD",
+            "label": {
+              "en": "Gold"
+            }
+          },
+          {
+            "key": "CRYSTAL",
+            "label": {
+              "en": "Crystal"
+            }
+          }
+        ]
+      },
+      "name": "FrameColor",
+      "label": {
+        "en": "Search Color Frame"
+      },
+      "isRequired": false,
+      "attributeConstraint": "CombinationUnique",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "GREEN",
+            "label": {
+              "en": "Green"
+            }
+          },
+          {
+            "key": "BLUE",
+            "label": {
+              "en": "Blue"
+            }
+          },
+          {
+            "key": "SILVER",
+            "label": {
+              "en": "Silver"
+            }
+          },
+          {
+            "key": "BROWN",
+            "label": {
+              "en": "Brown"
+            }
+          },
+          {
+            "key": "GREY",
+            "label": {
+              "en": "Grey"
+            }
+          },
+          {
+            "key": "RED",
+            "label": {
+              "en": "Red"
+            }
+          },
+          {
+            "key": "GOLD",
+            "label": {
+              "en": "Gold"
+            }
+          }
+        ]
+      },
+      "name": "LensColor",
+      "label": {
+        "en": "Search Color Lens"
+      },
+      "isRequired": false,
+      "attributeConstraint": "CombinationUnique",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name":"ltext"
+      },
+      "name": "color",
+      "label": {
+        "en": "Color"
+      },
+      "isRequired": false,
+      "attributeConstraint": "Unique",
+      "isSearchable": false
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "SQUARE",
+            "label": {
+              "en": "square"
+            }
+          },
+          {
+            "key": "ROUND",
+            "label": {
+              "en": "round"
+            }
+          },
+          {
+            "key": "RECTANGLE",
+            "label": {
+              "en": "rectangle"
+            }
+          }
+        ]
+      },
+      "name": "frameShape",
+      "label": {
+        "en": "Frame Shape"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "OPTICAL",
+            "label": {
+              "en": "optical"
+            }
+          },
+          {
+            "key": "SUNGLASS",
+            "label": {
+              "en": "sunglass"
+            }
+          },
+          {
+            "key": "BOTH",
+            "label": {
+              "en": "both"
+            }
+          }
+        ]
+      },
+      "name": "frameType",
+      "label": {
+        "en": "Frame Type"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "ltext"
+      },
+      "name": "frameMaterial",
+      "label": {
+        "en": "Frame Material"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "boolean"
+      },
+      "name": "mirrorReflection",
+      "label": {
+        "en": "Mirror Reflection"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "NARROW",
+            "label": {
+              "en": "narrow"
+            }
+          },
+          {
+            "key": "MEDIUM",
+            "label": {
+              "en": "medium"
+            }
+          },
+          {
+            "key": "WIDE",
+            "label": {
+              "en": "wide"
+            }
+          }
+        ]
+      },
+      "name": "width",
+      "label": {
+        "en": "Width"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "boolean"
+      },
+      "name": "homeTryOn",
+      "label": {
+        "en": "Home Try On"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "boolean"
+      },
+      "name": "polarized",
+      "label": {
+        "en": "Polarized"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "NONPRESCRIPTION",
+            "label": {
+              "en": "Non Prescription"
+            }
+          },
+          {
+            "key": "SINGLEVISION",
+            "label": {
+              "en": "Single-Vision"
+            }
+          },
+          {
+            "key": "PROGRESSIVE",
+            "label": {
+              "en": "Progressive"
+            }
+          }
+        ]
+      },
+      "name": "options",
+      "label": {
+        "en": "Options"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "lenum",
+        "values": [
+          {
+            "key": "MEN",
+            "label": {
+              "en": "Men"
+            }
+          },
+          {
+            "key": "WOMEN",
+            "label": {
+              "en": "Women"
+            }
+          },
+          {
+            "key": "UNISEX",
+            "label": {
+              "en": "Unisex"
+            }
+          }
+        ]
+      },
+      "name": "sex",
+      "label": {
+        "en": "Sex"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    }
+  ]
+}
