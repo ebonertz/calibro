@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$location', 'Customers', 'Authentication',
-	function($scope, $http, $location, Customers, Authentication) {
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$location', 'Customers', 'Authentication', 'Addresses',
+	function($scope, $http, $location, Customers, Authentication, Addresses) {
 		$scope.customer = angular.copy(Authentication.user);
 
 		// If user is not signed in then redirect back home
@@ -16,6 +16,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				customer.$update(function(response) {
 					$scope.success = true;
 					Authentication.user = response;
+					$scope.customer = angular.copy(Authentication.user);
 				}, function(response) {
 					$scope.error = response.data.message;
 				});
@@ -41,5 +42,40 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				$scope.error = response.message;
 			});
 		};
+
+		$scope.addCustomerAddress = function(isValid){
+			if(isValid){
+				$scope.success = $scope.error = null;
+				var address = new Addresses($scope.newAddress);
+
+				address.$create(function(response) {
+					$scope.success = true;
+					Authentication.user = response.body;
+					$scope.customer = angular.copy(Authentication.user);
+				}, function(response) {
+					$scope.error = response.data.message;
+				});
+			}else{
+				$scope.submitted = true;
+			}
+		};
+
+		$scope.deleteAddress = function(address){
+			if(address){
+				$scope.success = $scope.error = null;
+				var address = new Addresses(address);
+
+				address.$delete(function(response){
+					$scope.success = true;
+					Authentication.user = response;
+					$scope.customer = angular.copy(Authentication.user);
+				}, function(response) {
+					$scope.error = response.data.message;
+				});
+			}else{
+				console.log("No address to delete.")
+				return false;
+			}
+		}
 	}
 ]);

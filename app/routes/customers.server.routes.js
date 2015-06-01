@@ -16,4 +16,8 @@ module.exports = function(app) {
   app.route('/auth/signup').post(customers.signup);
   app.route('/auth/signin').post(customers.signin);
   app.route('/auth/signout').get(customers.signout);
+
+  app.route('/addresses').post(customers.addAddress)
+  app.route('/addresses/:id')
+    .delete(customers.deleteAddress);
 };
