@@ -3,15 +3,17 @@
 /**
  * Module dependencies.
  */
-var customers = require('../controllers/customers.server.controller.js');
+var customers = require('../controllers/customers.server.controller.js'),
+    commons = require('../controllers/commons.server.controller.js'),
+    entity = 'customers';
 
 module.exports = function(app) {
   // TODO: Disable list. Change findOne to me
 	app.route('/customers')
     .put(customers.update)
-    .get(customers.list);
+    .get(commons.list.bind({entity: entity}));
   app.route('/customers/password').post(customers.changePassword);
-  app.route('/customers/:id').get(customers.findOne);
+  app.route('/customers/:id').get(commons.byId.bind({entity: entity}));
 
   app.route('/auth/signup').post(customers.signup);
   app.route('/auth/signin').post(customers.signin);

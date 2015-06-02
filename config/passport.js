@@ -7,7 +7,7 @@ var passport = require('passport'),
 	User = require('mongoose').model('User'),
 	path = require('path'),
 	config = require('./config'),
-	CustomerService = require('../app/services/sphere/sphere.customers.server.service.js');
+    CommonService = require('../app/services/sphere/sphere.commons.server.service.js');
 	
 /**
  * Module init function.
@@ -22,7 +22,7 @@ module.exports = function() {
   // Deserialize the user
   passport.deserializeUser(function(id, done) {
     console.log("Deserializing "+id)
-    CustomerService.findOne(id, function(err, customer){
+    CommonService.byId('customers', id, function(err, customer){
       done(err, customer)
     });
   });

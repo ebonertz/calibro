@@ -3,19 +3,17 @@
 /**
  * Module dependencies.
  */
-var users = require('../../app/controllers/users.server.controller'),
-    orders = require('../controllers/orders.server.controller.js');
+var commons = require('../controllers/commons.server.controller.js'),
+    entity = 'orders';
 
 module.exports = function (app) {
     app.route('/orders')
-        .get(orders.list)
-        .post(orders.create);
+        .get(commons.list.bind({entity: entity}))
+        .post(commons.create.bind({entity: entity}));
 
     app.route('/orders/:orderId')
-        .get(orders.byId);
+        .get(commons.byId.bind({entity: entity}));
 
     app.route('/orders/byCustomer/:customerId')
-        .get(orders.byCustomer);
-
-
+        .get(commons.byCustomer.bind({entity: entity}));
 };

@@ -3,12 +3,13 @@
 /**
  * Module dependencies.
  */
-var users = require('../../app/controllers/users.server.controller'),
-	products = require('../controllers/products.server.controller.js');
+var products = require('../controllers/products.server.controller.js'),
+	commons = require('../controllers/commons.server.controller.js'),
+	entity = 'products';
 
 module.exports = function(app) {
 	app.route('/products')
-		.get(products.list);
+		.get(commons.list.bind({entity: entity}));
 
 	app.route('/products/contentful')
 		.get(products.listContentful);

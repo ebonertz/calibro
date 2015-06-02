@@ -3,15 +3,15 @@
 /**
  * Module dependencies.
  */
-var users = require('../../app/controllers/users.server.controller'),
-    shippingMethods = require('../controllers/shipping-methods.server.controller.js');
+var commons = require('../controllers/commons.server.controller.js'),
+    entity = 'shippingMethods';
 
 module.exports = function (app) {
     app.route('/shipping-methods')
-        .get(shippingMethods.list)
-        .post(shippingMethods.create);
+        .get(commons.list.bind({entity: entity}))
+        .post(commons.create.bind({entity: entity}));
 
-    app.route('/shipping-methods/:shippingMethodId')
-        .get(shippingMethods.byId);
+    app.route('/shipping-methods/:id')
+        .get(commons.byId.bind({entity: entity}));
 
 };

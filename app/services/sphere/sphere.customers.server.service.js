@@ -8,20 +8,6 @@ var updateCustomer = function(customer_id, actions){
   return SphereClient.getClient().customers.byId(customer_id).update(actions)
 }
 
-/**
- * List
- */
-
-exports.create = function (customer, callback) {
-    SphereClient.getClient().customers.create(customer).then(function (result) {
-      var customer = new Customer(result.body.customer)
-      callback(null, customer);
-    }).error(function (err) {
-      console.log(err);
-      callback(err, null);
-    });
-};
-
 exports.login = function (email, password, anonymousCartId, callback) {
     var customer = {
         "email": email,
@@ -38,31 +24,6 @@ exports.login = function (email, password, anonymousCartId, callback) {
       console.log(err);
       callback(err, null);
     });
-};
-
-/**
- * Find
- */
-
-exports.list = function (callback) {
-  SphereClient.getClient().customers.all().fetch().then(function (resultArray) {
-    callback(null, resultArray.body.results);
-  }).error(function (err) {
-    console.log(err);
-    callback(err, null);
-  });
-};
-
-exports.findOne = function(id, callback){
-  SphereClient.getClient().customers.byId(id).fetch().then(function (result){
-    delete result.body.password 
-    var customer = new Customer(result.body);
-    callback(null, customer);
-  })
-  .error(function (err) {
-    console.log(err);
-    callback(err, null);
-  });
 };
 
 /**

@@ -1,11 +1,7 @@
-var OrderService = require('../services/sphere/sphere.orders.server.service.js');
+var CommonService = require('../services/sphere/sphere.commons.server.service.js');
 
-
-/**
- * List
- */
 exports.list = function (req, res) {
-    OrderService.list(function (err, resultArray) {
+    CommonService.list(this.entity, function (err, resultArray) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -17,7 +13,7 @@ exports.list = function (req, res) {
 exports.create = function (req, res) {
     var cart = req.body;
 
-    OrderService.create(cart, function (err, result) {
+    CommonService.create(this.entity, cart, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -29,7 +25,7 @@ exports.create = function (req, res) {
 exports.byCustomer = function (req, res) {
     var customerId = req.param('customerId');
 
-    OrderService.byCustomer(customerId, function (err, result) {
+    CommonService.byCustomer(this.entity, customerId, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -39,9 +35,9 @@ exports.byCustomer = function (req, res) {
 };
 
 exports.byId = function (req, res) {
-    var id = req.param('orderId');
+    var id = req.param('id');
 
-    OrderService.byId(id, function (err, result) {
+    CommonService.byId(this.entity, id, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
