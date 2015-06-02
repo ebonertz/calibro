@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var passport = require('passport'),
-	User = require('mongoose').model('User'),
 	path = require('path'),
 	config = require('./config'),
     CommonService = require('../app/services/sphere/sphere.commons.server.service.js');
@@ -28,7 +27,9 @@ module.exports = function() {
   });
 
 	// Initialize strategies
-	config.getGlobbedFiles('./config/strategies/**/*.js').forEach(function(strategy) {
+  // var strategyFiles = './config/strategies/**/*.js'
+  var strategyFiles = './config/strategies/local.js'
+	config.getGlobbedFiles(strategyFiles).forEach(function(strategy) {
 		require(path.resolve(strategy))();
 	});
 };
