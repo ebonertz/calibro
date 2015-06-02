@@ -8,7 +8,7 @@ var ProductService = require('../services/sphere/sphere.products.server.service.
 exports.list = function(req, res) {
 	ProductService.list(function(err, resultArray) {
 		if (err) {
-			return res.status(400);
+			return res.sendStatus(400);
 		} else {
 			res.json(resultArray);
 		}
@@ -18,7 +18,7 @@ exports.list = function(req, res) {
 exports.listContentful = function(req, res) {
 	ContentfulProductService.list(function(err, resultArray) {
 		if (err) {
-			return res.status(400);
+			return res.sendStatus(400);
 		} else {
 			res.json(resultArray);
 		}

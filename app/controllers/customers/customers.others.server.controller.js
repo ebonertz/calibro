@@ -13,7 +13,7 @@ var _ = require('lodash'),
  exports.list = function (req, res) {
   CustomerService.list(function (err, resultArray) {
     if (err) {
-      return res.status(400);
+      return res.sendStatus(400);
     }
 
     return res.json(resultArray);

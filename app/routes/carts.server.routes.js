@@ -20,6 +20,16 @@ module.exports = function (app) {
     app.route('/carts/removeLineItem/:cartId')
         .post(carts.removeLineItem);
 
+    app.route('/carts/setShippingAddress/:cartId')
+        .post(carts.setShippingAddress);
+
+    app.route('/carts/setBillingAddress/:cartId')
+        .post(carts.setBillingAddress);
+
+    app.route('/carts/setShippingMethod/:cartId')
+        .post(carts.setShippingMethod);
+
+
     app.route('/carts/byCustomer/:customerId')
         .get(carts.byCustomer);
 

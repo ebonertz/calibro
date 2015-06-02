@@ -4,7 +4,10 @@ var actions = {
     addLineItem: 'addLineItem',
     removeLineItem: 'removeLineItem',
     changeLineItemQuantity: 'changeLineItemQuantity',
-    addCustomLineItem: 'addCustomLineItem'
+    addCustomLineItem: 'addCustomLineItem',
+    setShippingAddress: 'setShippingAddress',
+    setBillingAddress: 'setBillingAddress',
+    setShippingMethod: 'setShippingMethod'
 }
 
 /**
@@ -81,3 +84,31 @@ exports.removeLineItem = function (cartId, payload, callback) {
         callback(err, result);
     });
 }
+
+exports.setShippingAddress = function (cartId, payload, callback) {
+    if (payload)
+        payload.action = actions.setShippingAddress;
+
+    exports.update(cartId, [payload], function (err, result) {
+        callback(err, result);
+    });
+}
+
+exports.setBillingAddress = function (cartId, payload, callback) {
+    if (payload)
+        payload.action = actions.setBillingAddress;
+
+    exports.update(cartId, [payload], function (err, result) {
+        callback(err, result);
+    });
+}
+
+exports.setShippingMethod = function (cartId, payload, callback) {
+    if (payload)
+        payload.action = actions.setShippingMethod;
+
+    exports.update(cartId, [payload], function (err, result) {
+        callback(err, result);
+    });
+}
+
