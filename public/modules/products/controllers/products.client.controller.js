@@ -1,9 +1,12 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService',
-    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils',
+    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils) {
         $scope.authentication = Authentication;
+
+        $scope.lang = 'en';
+        $scope.utils = ProductUtils
 
         // Find a list of Products
         $scope.find = function () {
@@ -24,5 +27,24 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             CartService.addToCart(product);
         };
 
+        $scope.view = function(id){
+            if(!id)
+                id = $stateParams.id
+
+            var products = new Products({id: id})
+            products.$get({id: id}, function(result){
+                $scope.product = result;
+                $scope.currentVariant = $scope.product.masterVariant;
+                $scope.product.variants.unshift($scope.product.masterVariant);
+                $scope.selectedColor = $scope.currentVariant.attr.color[$scope.lang];
+
+                // TODO: Fix price update when changing variant
+                $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
+                $scope.$watch(currentVariant, function(){
+                    $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
+                })
+                
+            })
+        };
     }
 ]);
