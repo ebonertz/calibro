@@ -36,8 +36,7 @@ angular.module('products').config(['$stateProvider',
     state('product-detail', {
         url: '/product-detail/:id',
         templateUrl: 'modules/products/views/product-detail.client.view.html'
-    })
-
+    }).
     state('listProducts', {
         url: '/products',
         templateUrl: 'modules/products/views/list-products.client.view.html'

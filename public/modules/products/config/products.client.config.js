@@ -3,11 +3,6 @@
 // Configuring the Articles module
 angular.module('products').run(['Menus',
 	function(Menus) {
-		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Products', 'products', 'dropdown', '/products(/create)?');
-		Menus.addSubMenuItem('topbar', 'products', 'List Products', 'products');
-		Menus.addSubMenuItem('topbar', 'products', 'New Product', 'products/create');
-
     Menus.addMenuItem('topbar', 'Men', 'men', 'dropdown', '/categories/men(/.*)');
     Menus.addSubMenuItem('topbar', 'men', 'Men\'s Eyewear', 'categories/men/eyewear');
     Menus.addSubMenuItem('topbar', 'men', 'Men\'s Sunglasses', 'categories/men/sunglasses');
