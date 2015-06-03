@@ -37,6 +37,14 @@
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
 
+
+	<!-- FOCALI -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300|Noto+Serif:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet/less" href="design/css/main.less">
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript">less = { env: 'development' };</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -44,12 +52,10 @@
 </head>
 
 <body class="ng-cloak">
-	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-	<section class="content">
-		<section class="container">
-			{% block content %}{% endblock %}
-		</section>
-	</section>
+
+	<div data-ng-include="'/modules/core/views/header.client.view.html'"></div>
+	<div data-ui-view></div>
+	<div data-ng-include="'/modules/core/views/footer.client.view.html'"></div>
 
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
@@ -57,12 +63,8 @@
 	</script>
 
 	<!--Application JavaScript Files-->
-	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
+	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
 
-	{% if process.env.NODE_ENV === 'development' %}
-	<!--Livereload script rendered -->
-	<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
-	{% endif %}
 </body>
 
 </html>

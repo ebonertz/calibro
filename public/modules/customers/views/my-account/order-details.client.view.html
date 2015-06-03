@@ -1,0 +1,121 @@
+<hr class="nav-divider"/>
+<div class="content-wrapper">
+	<section id="breadcrumbs">
+		<div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
+				<a class="bc-link" rel="v:url" property="v:title" href="/account.html">My Account</a> / 
+				<a class="bc-link" rel="v:url" property="v:title" href="/my-account/my-orders.html">My Orders</a> /
+				<span class="breadcrumb-last" rel="v:url" property="v:title">#FCL-001-0003</span>
+			</span></span>
+		</div>
+	</section>
+	<section class="page" id="order-details">
+		<div class="content my-account order-details">
+			<h1 class="page-title">Order Details <span class="badge radius outline tblue small">#FCL-001-0003</span></h1>
+			<table id="cart">
+						<thead>
+							<th>Product</th>
+							<th>Price</th>
+							<th>Quantity</th>
+							<th>Total</th>
+						</thead>
+						<tbody>
+							<tr class="product-row">
+								<td class="product-image">
+									<img src="/images/eyewear/eyewear-model.jpg"/>
+									<span class="product-name">Focali Better View</span>
+								</td>
+								<td class="product-price">
+									$49.99
+								</td>
+								<td class="quantity">
+									2
+								</td>
+								<td class="item-total">
+									<div class="item-cart-price">
+									
+									</div>
+								</td>
+							</tr>
+							<tr class="product-row">
+								<td class="product-image">
+									<img src="/images/eyewear/eyewear-model.jpg"/>
+									<span class="product-name">Focali Even Better. Testing More than one line here</span>
+								</td>
+								<td class="product-price">
+									$79.99
+								</td>
+								<td class="quantity">
+										1
+								</td>
+								<td class="item-total">
+			
+								</td>
+							</tr>			
+						</tbody>
+					
+				</table>
+				<section class="placed-order">
+					<div class="placed-order-details" id="billing">
+						<h6>Payment Information</h6>
+						<b>John Doe</b><br/>
+						XXXX-XXXX-XXXX-3874<br/>
+						10035, New York City, NY<br/>
+						08/2015
+						
+					</div>
+					<div class="placed-order-details" id="shipping">
+						<h6>Shipping Information</h6>
+						<b>Fox Mulder</b><br/>
+						345E 58th Street<br/>
+						10035, New York City, NY<br/>
+						+1 718 456681
+						<hr/>
+						<p>
+						<b>Shipping Carrier:</b> DHL <br/>
+						<b>Shipping Cost:</b> free <br/>
+						<b>Arrives:</b> 6-10 Days
+						</p>
+ 					</div>
+				</section>
+				<hr/>
+				<a href="#!/my-orders" class="btn radius tblue outline thick">&larr; Back to My Orders</a>
+		</div>
+		<div id="cart-totals">
+			<h3>Your Cart</h3>
+			<hr/>
+			<table id="subtotals">
+				<span class="sub-title">Products</span>
+				<tr class="subtotal">
+					<td class="concept">
+						Subtotal
+					</td>
+					<td id="sub-amount" class="amount">
+						$499.99
+					</td>
+				</tr>
+				<tr class="shipping">
+					<td class="concept">
+						Shipping
+					</td>
+					<td id="shipping-cost" class="amount">
+						free
+					</td>
+				</tr>
+				<tr id="final-order-price">
+					<td class="concept">
+						<b>Order Total</b>
+					</td>
+					<td id="price-total" class="amount">
+						$499.99
+					</td>
+				</tr>
+			</table>
+			<a class="btn block radius red" href="/cart.html">Repeat Order</a>
+		</div>
+	
+	</section>
+</div>

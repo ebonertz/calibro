@@ -1,0 +1,56 @@
+<hr class="nav-divider"/>
+<div class="content-wrapper">
+  <section id="breadcrumbs">
+    <div class="breadcrumb">
+
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
+				<span class="breadcrumb-last" rel="v:url" property="v:title">Login</span>
+			</span></span>
+    </div>
+  </section>
+  <section class="page">
+    <div class="content login-register">
+      <h1 class="page-title">Login / Register</h1>
+      <section class="inner">
+        <div class="login">
+          <form action="#!/account" class="site-login" method="post">
+            <span class="sub-title">Login</span>
+            <label>Email</label>
+            <input type="email" placeholder="Please Enter Your Email"/>
+            <a href="#" class="forgot">Forgot Email?</a>
+            <label>Password</label>
+            <input type="password" placeholder="Please Enter Your Password"/>
+            <a class="forgot" href="#">Forgot Password?</a>
+            <label>
+              <input type="checkbox" class="rememberme"/> Remember Me
+            </label>
+            <br/>
+            <input type="submit" class="btn radius blue" value="Login">
+          </form>
+        </div>
+        <div class="register">
+          <span class="sub-title">Free Registration</span>
+          <form action="#!/account-new" class="user-registration">
+            <label>Email</label>
+            <input type="email" placeholder="Please Enter Your Email"/>
+
+            <label>Password</label>
+            <input type="password" placeholder="Please Enter Your Password"/>
+
+            <label>Re-enter Password</label>
+            <input type="password" placeholder="Please Repeat Password"/>
+
+            <label>
+              <input required type="checkbox" class="rememberme"/> I HAVE READ AND I'M AGREE WITH THE <a href="/terms-and-conditions.html">TERMS AND CONDITIONS</a>
+            </label>
+            <br/>
+            <input type="submit" class="btn radius blue" value="Register">
+          </form>
+
+        </div>
+      </section>
+    </div>
+  </section>
+</div>

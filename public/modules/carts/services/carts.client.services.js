@@ -9,9 +9,9 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             if (Authentication.user) {
 
-                this.byCustomer(Authentication.user.id).then(function(carts) {
+                this.byCustomer(Authentication.user.id).then(function (carts) {
 
-                    if(carts != null && carts.length > 0) {
+                    if (carts != null && carts.length > 0) {
                         $rootScope.cart = carts[0];
                         LoggerServices.success('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
 
@@ -39,18 +39,21 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 } else {
 
                     Cart.get({
-                        cartId: $cookies.anonymousCart
-                    }, function (data) {
+                            cartId: $cookies.anonymousCart
+                        }, function (data) {
 
-                        // This check is to avoid showing a user cart, that started as an anonymous cart.
-                        if (data.customerId != null) {
+                            // This check is to avoid showing a user cart, that started as an anonymous cart.
+                            if (data.customerId != null) {
+                                this.service.createAnonymous();
+                            } else {
+                                $rootScope.cart = data;
+                                LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                            }
+
+                        }.bind({service: this}),
+                        function (error) {
                             this.service.createAnonymous();
-                        } else {
-                            $rootScope.cart = data;
-                            LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
-                        }
-
-                    }.bind({service: this}));
+                        }.bind({service: this}));
                 }
             }
 

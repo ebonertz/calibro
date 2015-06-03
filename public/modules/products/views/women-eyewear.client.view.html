@@ -1,0 +1,46 @@
+<div class="slider-wrapper">
+	<div class="content-wrapper">
+		<section id="subpage-head">
+			<div class="subpage-hero">
+				<h1 class="subpage-title">Women's Eyewear</h1>
+				<img src="design/images/eyewear/women-eyewear.jpg"/>
+			</div>
+		</section>
+	</div>
+</div>
+<div class="content-wrapper">
+	<section id="breadcrumbs">
+		<div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> / 
+				<a class="bc-link" rel="v:url" property="v:title" href="/eyewear.html">Eyewear</a> / 
+				<span class="breadcrumb-last" rel="v:url" property="v:title">Women's Eyewear</span>
+			</span></span>
+		</div>
+	</section>
+	<section id="mens-eyewear" class="page page-head shop-head">
+		<div class="shop-intro-text">
+			<h1 class="page-title">Women's Eyewear</h1>
+			<div class="sorters">
+				<a href="#" id="by-name" class="sorting active">Sort by Name</a> <a href="#" id="by-price" class="sorting">Sort by Price</a>
+			</div>
+			<div class="category-filters">
+				<a href="#" class="cat-sort active" id="all">All</a>  <a href="#" class="cat-sort" id="frames">Frames</a>  <a href="#" class="cat-sort" id="frames-prescription">Frames + Prescription</a>
+			</div>
+		</div>
+	</section>
+	<section id="mens-eyewear-products" class="shop">
+		<div class="filters">
+			<div data-ng-include="'/modules/products/views/shop-filters.client.view.html'"></div>
+		</div>
+		<a href="#" id="show-filters" class="btn tblue block">Show Filters</a>
+		<div class="products" id="main">
+			<div data-ng-include="'/modules/products/views/products-grid.client.view.html'"></div>
+		</div>
+
+	</section>
+
+
+</div>

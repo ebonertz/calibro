@@ -1,0 +1,172 @@
+<div class="content-wrapper">
+	<section id="breadcrumbs">
+		<div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
+				<a class="bc-link" rel="v:url" property="v:title" href="/account.html">My Account</a> / 
+				<span class="breadcrumb-last" rel="v:url" property="v:title">My Addresses</span>
+			</span></span>
+		</div>
+	</section>
+	<section class="page" id="my-account">
+		<div class="content my-account">
+			<h1 class="page-title">My Addresses</h1>
+			<a href="#!/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
+			<hr/>
+			<h3>Saved Addresses</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+			
+			<table id="user-addressses">
+				<thead>
+					<th class="address">Address</th>
+					<th class="customer-name">Name</th>
+					<th class="customer-phone">Phone</th>
+					<th class="actions">Actions</th>
+				</thead>
+				<tbody>
+					<tr class="saved-address">
+						<td>
+							4120 Lenox Avenue<br/>
+							10035, New York City, NY<br/>
+							<span id="primary-address" class="badge blue pill tblue xsmall outline">Primary</span>
+						</td>
+						<td>
+							John Doe
+						</td>
+						<td>
+							+1 718 456681
+						</td>
+						<td>
+						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						</td>
+					</tr>
+					<tr class="saved-address">
+						<td>
+							4120 Lenox Avenue<br/>
+							10035, New York City, NY<br/>
+						</td>
+						<td>
+							John Doe
+						</td>
+						<td>
+							+1 718 456681
+						</td>
+						<td>
+						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						</td>
+					</tr>
+					<tr class="saved-address">
+						<td>
+							4120 Lenox Avenue<br/>
+							10035, New York City, NY<br/>
+						</td>
+						<td>
+							John Doe
+						</td>
+						<td>
+							+1 718 456681
+						</td>
+						<td>
+						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<h3>Add A New Address</h3>
+			<form id="add-address" action="#">
+				<div class="form-field-half">
+				<label>Full Name</label>
+				<input type="text" name="name" placeholder="Full Name" />
+				</div>
+				<div class="form-field-half">
+				<label>Phone</label>
+				<input type="tel" name="last-name" placeholder="Phone #" />
+				</div>
+				<label>Address</label>
+				<input type="text" name="address" placeholder="Address"/>
+				<div class="form-field-third">
+					<label>City</label>
+					<input type="text" name="city" placeholder="City"/>				
+				</div>
+				<div class="form-field-third">
+					<label>State/Province</label>
+					<input type="text" name="state" placeholder="State/Province" />
+				</div>
+				<div class="form-field-third">
+					<label>Zip/Postal</label>
+					<input type="text" name="zip" placeholder="ZIP/Postal" />
+				</div>
+				<div class="form-field-half-single">
+					<label for="country">Country</label>
+					<select name="country" id="country">
+						<option disabled selected>Please choose a country</option>
+						<option value="usa">United States</option>
+						<option value="canada">Canada</option>
+						<option value="uk">United Kingdom</option>
+					</select>
+				</div>
+				<input type="submit" class="btn blue radius" value="Save Address"/>
+			</form>
+		</div>
+						
+		<div id="cart-totals">
+			<h4>Your Cart</h4>
+			<hr/>
+			<table id="subtotals">
+				<span class="sub-title">Products</span>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Better View <span class="qty">x2</span>
+					</td>
+					<td class="amount">
+					$79.98
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Oculus <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$149.99
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Ray-Ban Aviator <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$99.99
+					</td>
+				</tr>
+				<tr class="subtotal">
+					<td class="concept">
+						Subtotal
+					</td>
+					<td id="sub-amount" class="amount">
+						$499.99
+					</td>
+				</tr>
+				<tr class="shipping">
+					<td class="concept">
+						Shipping
+					</td>
+					<td id="shipping-cost" class="amount">
+						free
+					</td>
+				</tr>
+				<tr id="final-order-price">
+					<td class="concept">
+						<b>Order Total</b>
+					</td>
+					<td id="price-total" class="amount">
+						$499.99
+					</td>
+				</tr>
+			</table>
+			<a class="btn block radius blue" href="/cart.html">Go to Cart</a>
+		</div>
+	</section>
+</div>

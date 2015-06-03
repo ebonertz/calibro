@@ -1,95 +1,74 @@
-<div class="container" data-ng-controller="HeaderController">
-	<div class="navbar-header">
-		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<a href="/#!/" class="navbar-brand">focali-mean</a>
-	</div>
-	<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
-		<ul class="nav navbar-nav" data-ng-if="menu.shouldRender(authentication.user);">
-			<li data-ng-repeat="item in menu.items | orderBy: 'position'" data-ng-if="item.shouldRender(authentication.user);" ng-switch="item.menuItemType" ui-route="{{item.uiRoute}}" class="{{item.menuItemClass}}" ng-class="{active: ($uiRoute)}" dropdown="item.menuItemType === 'dropdown'">
-				<a ng-switch-when="dropdown" class="dropdown-toggle">
-					<span data-ng-bind="item.title"></span>
-					<b class="caret"></b>
-				</a>
-				<ul ng-switch-when="dropdown" class="dropdown-menu">
-					<li data-ng-repeat="subitem in item.items | orderBy: 'position'" data-ng-if="subitem.shouldRender(authentication.user);" ui-route="{{subitem.uiRoute}}" ng-class="{active: $uiRoute}">
-						<a href="/#!/{{subitem.link}}" data-ng-bind="subitem.title"></a>
-					</li>
-				</ul>
-				<a ng-switch-default href="/#!/{{item.link}}" data-ng-bind="item.title"></a>
-			</li>
-		</ul>
+<div class="content-wrapper" ng-controller="HeaderController">
+    <header id="main">
+        <div class="brand">
+            <a href="/" rel="logo"><img src="design/images/focalilogo.png" alt="Focali" width="102" height="40"</a>
+        </div>
+        <nav id="primary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <ul class="main-navigation">
+                <li class="has-children">
+                    <a href="#">Men</a>
+                    <ul class="sub-menu">
+                        <li><a href="#!/men-eyewear">Men's Eyewear</a></li>
+                        <li><a href="#!/men-sunglasses">Men's Sunglasses</a></li>
+                        <li><a href="#!/men-summer">Men's Summer 2015</a></li>
+                    </ul>
+                </li>
+                <li class="has-children">
+                    <a href="#">Women</a>
+                    <ul class="sub-menu">
+                        <li><a href="#!/women-eyewear">Women's Eyewear</a></li>
+                        <li><a href="#!/women-sunglasses">Women's Sunglasses</a></li>
+                        <li><a href="#!/women-summer">Women's Summer 2015</a></li>
+                    </ul>
 
-		<ul class="nav navbar-nav navbar-right">
+                </li>
+                <li><a href="#!/locations">Locations</a></li>
+                <li><a href="#!/about-us">About Us</a></li>
+                <li><a href="#!/help">Help</a></li>
+            </ul>
+        </nav>
+        <div class="top-cart">
+            <div class="search">
+                <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="#">
+                    <meta itemprop="target" content="http://www.focali.com/search?q={query}"/>
+                    <input itemprop="query-input" type="text" name="query">
+                </form>
+            </div>
+            <a href="#!/login" class="site-login">Login</a>
+			<span class="cart-contents">
+				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
+                        class="cart-icon"></i> Cart <span class="items-in-cart">(0)</span></a>
+				<div class="cart-preview hidden">
+                    <table id="cart-preview">
+                        <thead>
+                        <th id="cp-product">Product</th>
+                        <th id="cp-qty">Quantity</th>
+                        <th id="cp-price">Price</th>
+                        </thead>
+                        <tbody>
+                        <tr class="product-preview">
+                            <td><a class="remove-product" href="#">X</a> Product Name</td>
+                            <td class="cp-qty-td">2</td>
+                            <td class="cp-price-td">$39.99</td>
+                        </tr>
+                        <tr class="product-preview">
+                            <td><a class="remove-product" href="#">X</a> Product Name</td>
+                            <td class="cp-qty-td">2</td>
+                            <td class="cp-price-td">$39.99</td>
+                        </tr>
+                        <tr class="product-preview">
+                            <td><a class="remove-product" href="#">X</a> Product Name</td>
+                            <td class="cp-qty-td">2</td>
+                            <td class="cp-price-td">$39.99</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="#!/cart" class="btn radius small outline thick blue">View Cart</a>
+                    <a href="#!/checkout" class="btn radius small blue">Checkout</a>
+                </div>
+			</span>
 
-			<li class="dropdown"  style="height: 49px;">
-				<a href="#" class="dropdown-toggle"><i class="glyphicon glyphicon-shopping-cart"></i></a>
-
-				<div ng-if="cart.lineItems.length > 0" style="background-color: #4253FF;height: 14px;width: 17px;position: relative;top: -37px;left: 30px;text-align: center">
-					<span style="font-size: 11px;color: white;position: relative;top: -5px;">{{cart.lineItems.length}}</span>
-				</div>
-				<ul class="dropdown-menu">
-					<li style="width: 515px;">
-
-						<div ng-repeat="item in cart.lineItems" style="margin-bottom: 5px;">
-							<button ng-click="removeFromCart(item)" class="btn btn-xs" style="margin-left: 10px;"><i class="glyphicon glyphicon-remove"></i> </button>
-							<span style="margin-left: 5px;font-size: 12px;"><b>{{item.id}}</b></span>
-						</div>
-
-						<div ng-if="cart.lineItems.length == 0" style="margin-bottom: 5px;">
-							<span style="position: relative;left: 12px;top: 3px;">There are no requests.</span>
-						</div>
-
-					</li>
-				</ul>
-			</li>
-
-		</ul>
-
-		<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
-			<li ui-route="/signin" ng-class="{active: $uiRoute}">
-				<a href="/#!/login">Login</a>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
-			<li>
-				<a href="/auth/signout">
-					<span>Signout</span>
-				</a>
-			</li>
-		</ul>
-		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
-			<li>
-				<a href="/#!/customer/profile">
-					<span>My Account</span>
-				</a>
-			</li>
-		</ul>
-<!-- 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					<span data-ng-bind="authentication.user.firstName"></span> <b class="caret"></b>
-				</a>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="/#!/customer/profile">My Account</a>
-					</li>
-					<li>
-						<a href="/#!/customer/addresses">My Addresses</a>
-					</li>
-					<li data-ng-show="authentication.user.provider === 'local'">
-						<a href="/#!/settings/password">Change Password</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a href="/auth/signout">Signout</a>
-					</li>
-				</ul>
-			</li>
-		</ul> -->
-	</nav>
+        </div>
+    </header>
 </div>
+

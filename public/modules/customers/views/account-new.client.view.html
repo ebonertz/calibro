@@ -1,0 +1,133 @@
+<hr class="nav-divider"/>
+<div class="content-wrapper">
+	<section id="breadcrumbs">
+		<div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
+				<span class="breadcrumb-last" rel="v:url" property="v:title">Account:Setup Account</span>
+			</span></span>
+		</div>
+	</section>
+	<section class="page" id="my-account">
+		<div class="content my-account">
+			<h1 class="page-title">My Account</h1>
+			<ul class="navigation">
+				<li><span class="current">My Personal Details</span></li>
+				<li><a href="/my-account/my-addresses.html">My Addresses</a></li>
+				<li><a href="/my-account/my-payment-methods.html">My Payment Methods</a></li>
+				<li><a href="/my-account/my-orders.html">My Orders</a></li>
+			</ul>
+			<hr/>
+			<div class="validation-alert">
+				There was an issue trying to save your data: Please use a valid email address
+			</div>
+			<h3>Personal Details</h3><br/>
+				<form action="#" id="change-details">
+				<div class="form-field-half">
+					<label>First Name*</label>
+					<input required type="text" class="half" id="first_name" placeholder="First Name"/>
+				</div>
+				<div class="form-field-half">
+				<label>Last Name*</label>
+				<input required type="text" class="half" id="last_name" placeholder="Last Name"/>
+				</div>
+				<div class="form-field-half">
+				<label>Email* (Click here to see validation fade out)</label>
+				<input required type="email" class="half error" id="first_name" placeholder="Email"/>
+				</div>
+				<div class="form-field-half">
+				<label>Phone*</label>
+				<input required type="tel" class="half" id="first_name" placeholder="Phone Number"/>
+				</div>
+				<br/><br/>
+				<!--Password Change-->
+				<span class="sub-title">Change Password</span>
+				<p>If you're changing other data and you don't want to change your password leave these fields blank</p>
+				<hr/>
+				<form id="password-change" action="" name="password-change">
+				<div class="form-field-half-single">
+					<label>Current Password</label>
+					<input type="password" class="user-password" value="" placeholder="Enter Your Password"/>
+				</div>
+				<div class="form-field-half">
+					<label>New Password</label>
+					<input type="password" name="new-password" value="" placeholder="Enter Your New Password" />
+				</div>
+				<div class="form-field-half">
+					<label>Repeat New Password</label>
+					<input type="password" name="repeat-new-password" value="" placeholder="Re-enter Your New Password" />
+				</div>
+				</form>
+				<br/>
+				<span class="sub-title">Email Preferences</span>
+				<hr/>
+				<label class="opt-in" >
+				<input type="checkbox" name="newsletter" value="signup-newsletter-true"/> Sign up to our newsletter
+				</label>
+				<label class="opt-in">
+				<input type="checkbox"  name="offers" value="signup-offers-true" /> Receive special offers to your inbox
+				</label>
+				<input type="submit" class="btn outline thick blue radius" value="Save Changes"/>
+				</form>
+				
+		</div>
+		<div id="cart-totals">
+			<h3>Your Cart</h3>
+			<hr/>
+			<table id="subtotals">
+				<span class="sub-title">Products</span>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Better View <span class="qty">x2</span>
+					</td>
+					<td class="amount">
+					$79.98
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Oculus <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$149.99
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Ray-Ban Aviator <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$99.99
+					</td>
+				</tr>
+				<tr class="subtotal">
+					<td class="concept">
+						Subtotal
+					</td>
+					<td id="sub-amount" class="amount">
+						$499.99
+					</td>
+				</tr>
+				<tr class="shipping">
+					<td class="concept">
+						Shipping
+					</td>
+					<td id="shipping-cost" class="amount">
+						free
+					</td>
+				</tr>
+				<tr id="final-order-price">
+					<td class="concept">
+						<b>Order Total</b>
+					</td>
+					<td id="price-total" class="amount">
+						$499.99
+					</td>
+				</tr>
+			</table>
+			<a class="btn block radius blue" href="/cart.html">Go to Cart</a>
+		</div>
+	</section>
+</div>

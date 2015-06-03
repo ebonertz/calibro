@@ -1,0 +1,166 @@
+<hr class="nav-divider"/>
+<div class="content-wrapper">
+	<section id="breadcrumbs">
+		<div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
+				<a class="bc-link" rel="v:url" property="v:title" href="/account.html">My Account</a> / 
+				<span class="breadcrumb-last" rel="v:url" property="v:title">My Payment Methods</span>
+			</span></span>
+		</div>
+	</section>
+	<section class="page" id="my-account">
+		<div class="content my-account">
+			<h1 class="page-title">My Payment Methods</h1>
+			<a href="#!/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
+			<hr/>
+			<h3>Saved Credit/Debit Cards</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+			
+			<table id="user-saved-payment">
+				<thead>
+					<th class="address">Card Number</th>
+					<th class="customer-name">Billing Address</th>
+					<th class="customer-phone">Type</th>
+					<th class="actions">Actions</th>
+				</thead>
+				<tbody>
+					<tr class="saved-payments">
+						<td>
+							Card Ending in <b>9875</b><br/>
+							John Doe<br/>
+							Expires: 12/2015<br/>
+							<span id="primary-address" class="badge blue pill tblue xsmall outline">Primary</span>
+						</td>
+						<td>
+							4120 Lenox Avenue<br/>
+							10035, New York City, NY<br/>
+						</td>
+						<td>
+							VISA
+						</td>
+						<td>
+						<a href="/my-account/edit-card.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						</td>
+					</tr>
+					<tr class="saved-payments expired">
+						<td>
+							Card Ending in <b>9965</b><br/>
+							Expires: 12/2014<br/>
+							John Doe<br/>
+							<span class="expired badge pill red xsmall">Expired</span>
+						</td>
+						<td>
+							4120 Lenox Avenue<br/>
+							10035, New York City, NY<br/>
+						</td>
+						<td>
+							VISA
+						</td>
+						<td>
+						<a href="/my-account/edit-card.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<br/>
+			<h4>Add A New Debit/Credit Card</h4>
+			<form id="add-card" action="#">
+				<div class="form-field-half">
+				<label>Card Number</label>
+				<input type="text" name="card-number" placeholder="Card Number" />
+				</div>
+				<div class="form-field-half">
+				<label>Name on card</label>
+				<input type="text" name="name-on-card" placeholder="Name On Card" />
+				</div>
+				<div class="form-field-half">
+				<label>Card Expiration</label>
+				<input type="text" name="card-expiration" placeholder="05/28" />
+				</div>
+				<div class="form-field-half">
+				<label>Card Security Code</label>
+				<input type="text" name="card-security-code" placeholder="Eg:249" />
+				</div>
+				<label>Billing Address</label>
+				<input type="text" name="billing-address" placeholder="Address"/>
+				<div class="form-field-third">
+					<label>City</label>
+					<input type="text" name="billing-city" placeholder="City"/>				
+				</div>
+				<div class="form-field-third">
+					<label>State/Province</label>
+					<input type="text" name="billing-state" placeholder="State/Province" />
+				</div>
+				<div class="form-field-third">
+					<label>Zip/Postal</label>
+					<input type="text" name="billing-zip" placeholder="ZIP/Postal" />
+				</div>
+				<label>
+					<input type="checkbox" name="primary" value="primary"/><b>Make Primary Card</b>
+				</label>
+				<input type="submit" class="btn blue radius" value="Save Card"/>
+			</form>
+		</div>
+						
+		<div id="cart-totals">
+			<h3>Your Cart</h3>
+			<hr/>
+			<table id="subtotals">
+				<span class="sub-title">Products</span>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Better View <span class="qty">x2</span>
+					</td>
+					<td class="amount">
+					$79.98
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Focali Oculus <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$149.99
+					</td>
+				</tr>
+				<tr class="product">				
+					<td class="product-name">
+					Ray-Ban Aviator <span class="qty">x1</span>
+					</td>
+					<td class="amount">
+					$99.99
+					</td>
+				</tr>
+				<tr class="subtotal">
+					<td class="concept">
+						Subtotal
+					</td>
+					<td id="sub-amount" class="amount">
+						$499.99
+					</td>
+				</tr>
+				<tr class="shipping">
+					<td class="concept">
+						Shipping
+					</td>
+					<td id="shipping-cost" class="amount">
+						free
+					</td>
+				</tr>
+				<tr id="final-order-price">
+					<td class="concept">
+						<b>Order Total</b>
+					</td>
+					<td id="price-total" class="amount">
+						$499.99
+					</td>
+				</tr>
+			</table>
+			<a class="btn block radius blue" href="/cart.html">Go to Cart</a>
+		</div>
+	</section>
+</div>
