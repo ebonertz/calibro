@@ -86,19 +86,27 @@ angular.module('core').directive('thumbnailWrapper', function () {
 });
 
 
-angular.module('core').directive('panelTrigger', function () {
+angular.module('core').directive('panelLoader', function () {
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
 
             $(element).click(function() {
-                $(element).parent('.select').removeClass('active');
-                $(this).parent('.select').addClass('active');
+                $('.select').removeClass('active');
+                $(element).parent('.select').addClass('active');
                 var target = $(this).data('target');
                 if(target)
-                    $(element).load('modules/products/views/content-panels/' + target + '.client.view.html');
+                    $('.product-panels').load('modules/products/views/content-panels/' + target + '.client.view.html');
                 return false;
             });
+        }
+    }
+});
+
+angular.module('core').directive('panelTrigger', function () {
+    return {
+        restrict: 'C',
+        link: function (scope, element, attrs) {
 
             $(element).click(function() {
                 $(this).parents('.ex-panel').toggleClass('active');
@@ -107,6 +115,7 @@ angular.module('core').directive('panelTrigger', function () {
         }
     }
 });
+
 
 angular.module('core').directive('blockRadio', function () {
     return {
