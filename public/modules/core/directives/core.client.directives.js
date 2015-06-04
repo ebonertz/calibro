@@ -132,3 +132,15 @@ angular.module('core').directive('error', function () {
     }
 });
 
+angular.module('core').directive('select', function () {
+    return {
+        restrict: 'E',
+        link: function (scope, element, attrs) {
+            $(element).on('change', function() {
+                $(this).addClass('active');
+            });
+
+        }
+    }
+});
+
