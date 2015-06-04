@@ -1,17 +1,43 @@
 <section data-ng-controller="ProductsController" data-ng-init="categoryAndSex()">
-    <div class="page-header">
-        <h1>{{sex}}'s {{category}}</h1>
+  <div class="page-header">
+    <h1>{{sex}}'s {{category}}</h1>
+  </div>
+  <div class="col-md-4">
+    <div class="filter-block" id="frame-filter">
+      <p class="filter-title">Frame Width</p><a href="#" class="clearfilter">Clear</a>
+      <label ng-repeat="term in facets['variants.attributes.width.key'].terms" class="check-option">
+        <input type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters.width[term.term]" name="{{term.term.toLowerCase()}}" ng-change="requestFilter()">
+        {{term.term | facets}} <span class="cat-amount">({{term.count}})</span>
+      </label>
     </div>
-    <div class="list-group">
-        <div data-ng-repeat="product in products" class="list-group-item" style="cursor: pointer;">
-            <div style="float:right" ng-click="addToCart(product)">Add to cart</div>
-            <a ng-href="/#!/products/{{product.id}}">{{product.name.en}}</a>
-            <small class="list-group-item-text">
-                <pre style="font-size: 12px;">{{product}}</pre>
-            </small>
-        </div>
+    <hr/>
+      <div class="filter-block" id="frame-shape-filter">
+        <p class="filter-title">Frame Shape</p><a href="#" class="clearfilter">Clear</a>
+          <label ng-repeat="term in facets['variants.attributes.frameShape.key'].terms" class="check-option">
+          <input type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters.frameShape[term.term]" name="{{term.term.toLowerCase()}}" ng-change="requestFilter()">
+          {{term.term | facets}} <span class="cat-amount">({{term.count}})</span>
+        </label>
+      </div>
+  </div>
+
+  <div class="list-group col-md-8">
+    <div data-ng-repeat="product in products" class="list-group-item" style="cursor: pointer;">
+      <div style="float:right" ng-click="addToCart(product)">Add to cart</div>
+      <a ng-href="/#!/products/{{product.id}}">{{product.name.en}}</a>
+      <small class="list-group-item-text">
+        <pre style="font-size: 12px;">{{product}}</pre>
+      </small>
     </div>
-    <div class="alert alert-warning text-center" data-ng-hide="!products.$resolved || products.length">
-      No Products yet, why don't you <a href="/#!/products/create">create one</a>?
+  </div>
+
+<!--   <hr>
+  <div class="list-group col-md-8">
+    <div data-ng-repeat="variant in variants" class="list-group-item" style="cursor: pointer;">
+      <div style="float:right" ng-click="addToCart(variant)">Add to cart</div>
+      <a ng-href="/#!/products/{{variant.id}}">{{variant.name.en}}</a>
+      <small class="list-group-item-text">
+        <pre style="font-size: 12px;">{{variant}}</pre>
+      </small>
     </div>
+  </div> -->
 </section>

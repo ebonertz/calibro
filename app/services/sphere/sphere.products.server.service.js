@@ -16,22 +16,27 @@ exports.list = function(callback) {
 	});
 };
 
-exports.getByCategory = function(categoryId, params, callback){
-  var fetcher = SphereClient.getClient().productProjections.filterByQuery('categories.id:"'+categoryId+'"')
+exports.getByCategory = function(categoryId, requestParams, callback){
+  var fetcher = SphereClient.getClient().productProjections
+    .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id') // Default byCategory
 
   // Structure parameters
   // TODO: Move to RequestParameters object
-  if(params){
-    _.forEach(params, function(value, key){
-      var query = filterKeys[key]+':"'+value.toUpperCase().split(";").join('","')+'"'
-      fetcher = fetcher.filter(query)
-    })
-  }
+  fetcher = requestParams.addByQueries(fetcher);
+  fetcher = requestParams.addFilters(fetcher);
+  fetcher = requestParams.addFacets(fetcher);
 
   fetcher.search().then(function(resultArray) {
-    var results = resultArray.body.results;
-    for(var i = 0; i < results.length; i++){
-      results[i] = new Product(results[i])
+    // Convert products
+    var products = resultArray.body.results;
+    for(var i = 0; i < products.length; i++){
+      products[i] = new Product(products[i])
+    }
+
+    // Return products and facets
+    var results = {
+      products: products,
+      facets: resultArray.body.facets
     }
     callback(null, results); 
   }).error(function(err) {
@@ -49,9 +54,4 @@ exports.byId = function(id, callback){
     console.log(err)
     callback(err, null);
   })
-}
-
-// TODO: Move to RequestParameters object (sphere-specific)
-var filterKeys = {
-  sex: "variants.attributes.sex.key"
 }
