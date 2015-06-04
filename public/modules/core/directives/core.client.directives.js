@@ -144,3 +144,20 @@ angular.module('core').directive('select', function () {
     }
 });
 
+angular.module('core').directive('tab', function () {
+    return {
+        restrict: 'C',
+        link: function (scope, element, attrs) {
+            $(element).click(function() {
+                var target = $(this).data('tab');
+                var openthis = '#' + target;
+                $('.tab').removeClass('active');
+                $('.tab-content').removeClass('active');
+                $(openthis).addClass('active');
+                $(element).addClass('active');
+                return false;
+            });
+
+        }
+    }
+});
