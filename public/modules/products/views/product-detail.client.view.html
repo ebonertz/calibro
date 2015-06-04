@@ -1,7 +1,8 @@
-<hr class="nav-divider" ng-controller="ProductsController"/>
-<div class="content-wrapper">
-	<section id="breadcrumbs">
-		<div class="breadcrumb">
+<hr class="nav-divider"/>
+<div ng-controller="ProductsController">
+    <div class="content-wrapper">
+        <section id="breadcrumbs">
+            <div class="breadcrumb">
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
@@ -10,193 +11,213 @@
 				<a class="bc-link" rel="v:url" property="v:title" href="/eyewear/women-eyewear.html">Women's Eyewear</a> / 
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Focali Better View</span>
 			</span></span>
-		</div>
-	</section>
-	<section id="product-details" itemscope itemtype="http://schema.org/Product">
-		<div class="product-images">
-			<div class="img-big">
-				<img itemprop="image" src="design/images/eyewear/eyewear-model-huge.jpg"/>
-			</div>
-			<div class="thumbnails">
-				<a class="thumbnail-wrapper active" href="#" data-url="design/images/eyewear/eyewear-model-huge.jpg">
-				<img class="thumbnail" src="design/images/eyewear/thumbnails/01.jpg" alt="focali-better-view-front"/>
-				</a>
-				<a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-02.jpg">
-				<img class="thumbnail" src="design/images/eyewear/thumbnails/02.jpg" alt="focali-better-view-front"/>
-				</a>
-				<a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-03.jpg">
-				<img class="thumbnail" src="design/images/eyewear/thumbnails/03.jpg" alt="focali-better-view-front"/>
-				</a>
-				<a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-04.jpg">
-				<img class="thumbnail" src="design/images/eyewear/thumbnails/04.jpg" alt="focali-better-view-front"/>
-				</a>
-			</div>
-		</div>
-		<div class="product-details">
-			<h1 itemprop="name" class="product-title">Focali Better View</h1>
-			<meta itemprop="url" content="http://www.focali.com/eyewear/mens-eyewear/focali-better-view/">
-			<meta itemprop="brand" content="Focali">
-			<meta itemprop="manufacturer" content="Focali Inc">
+            </div>
+        </section>
+        <section id="product-details" itemscope itemtype="http://schema.org/Product">
+            <div class="product-images">
+                <div class="img-big">
+                    <img itemprop="image" src="design/images/eyewear/eyewear-model-huge.jpg"/>
+                </div>
+                <div class="thumbnails">
+                    <a class="thumbnail-wrapper active" href="#"
+                       data-url="design/images/eyewear/eyewear-model-huge.jpg">
+                        <img class="thumbnail" src="design/images/eyewear/thumbnails/01.jpg"
+                             alt="focali-better-view-front"/>
+                    </a>
+                    <a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-02.jpg">
+                        <img class="thumbnail" src="design/images/eyewear/thumbnails/02.jpg"
+                             alt="focali-better-view-front"/>
+                    </a>
+                    <a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-03.jpg">
+                        <img class="thumbnail" src="design/images/eyewear/thumbnails/03.jpg"
+                             alt="focali-better-view-front"/>
+                    </a>
+                    <a class="thumbnail-wrapper" href="#" data-url="design/images/eyewear/eyewear-model-huge-04.jpg">
+                        <img class="thumbnail" src="design/images/eyewear/thumbnails/04.jpg"
+                             alt="focali-better-view-front"/>
+                    </a>
+                </div>
+            </div>
+            <div class="product-details">
+                <h1 itemprop="name" class="product-title">Focali Better View</h1>
+                <meta itemprop="url" content="http://www.focali.com/eyewear/mens-eyewear/focali-better-view/">
+                <meta itemprop="brand" content="Focali">
+                <meta itemprop="manufacturer" content="Focali Inc">
 			<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 				<meta itemprop="availability" content="In Stock">
 				<meta itemprop="itemCondition" content="New">
 				<span class="new-badge">New</span>
 				<span class="on-sale-badge">Sale</span>
 				<span class="no-stock-notice">Out of Stock</span>
-				<div class="price">				
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-				<span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="49.99" class="amount sale-price">49.99</span>
-				</ins>
-				</div>
+				<div class="price">
+                    <del>
+                        <span class="amount">$99.99</span>
+                    </del>
+                    <ins>
+                        <span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="49.99"
+                                                                                   class="amount sale-price">49.99</span>
+                    </ins>
+                </div>
 			</span>
-			<div class="selection">
-				<div class="selection-box">
-					<label for="color">Color</label>
-					<select id="color" name="color">
-						<option disabled selected value="">Color</option>
-						<option value="black">Black</option>
-						<option value="white">White</option>
-						<option value="silver">Silver</option>
-					</select>
-				</div>
-				<div class="selection-box">
-					<label for="size">Size</label>
-					<select id="size" name="size">
-						<option disabled selected value="">Size</option>
-						<option value="xs">Extra Small</option>
-						<option value="small">Small</option>
-						<option value="medium">Medium</option>
-						<option value="large">Large</option>
-					</select>
-				</div>
-			</div>
-			<div class="add-to-cart">
-				<button class="op" id="minus" onclick="removeItem();">&#45;</button>
-				<input type="text" min="1" id="item-amount" value="1">
-				<button class="op" id="more" onclick="addItem();">&#43;</button>
-				<button class="cart-add btn blue radius">Add to Cart</button>
-				<a id="whishlist" href="#" class="btn blue outline radius thick">&#43; Wishlist</a>
-			</div>
-			<div class="product-description" itemprop="description">
-			<p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum.</p>
-			</div>
-			<section class="meta">
-				<div class="social-block">
-					<span>Tell Friends</span>
-					<a class="social-share" href="#" onclick="#" id="facebook"></a>
-					<a class="social-share" href="#" onclick="#" id="google-plus"></a>
-					<a class="social-share" href="#" onclick="#" id="twitter"></a>
-					</div>
-				<div class="tags">
-					<span>Tags</span>
-					<div class="tag-cloud">Square, Rimless, Narrow, Acetate, Tortoise</div>
-				</div>
-			</section>
-		</div>
-		
-	</section>
-	<section id="product-extra">
-		<div class="tabs">
-			<a class="tab active" href="#" data-tab="features">Features</a>
-			<a class="tab" href="#" data-tab="sizing">Sizing</a>
-		</div>
-		<div class="tab-content active" id="features">
-				<section class="inner">
-					<div class="column" id="complimentary">
-						<p>Complimentary to</p>
-						<h4>Triangular Faces</h4>
-					</div>
-					<div class="column">
-						<h4>Lenses</h4>
-						<ul>
-							<li>Made from polycarbonate</li>
-							<li>Offer 100% UV protection</li>
-							<li>Anti-scratch and anti-reflective coating</li>
-						</ul>
-					</div>
-					<div class="column">
-						<h4>Materials</h4>
-						<ul>
-							<li>Made from custom cellulose acetate</li>
-							<li>Akulon-coated screws for durability</li>
-							<li>Cut from a single sheet of acetate</li>
-						</ul>
-					</div>
-				</section>
-		</div>
-		<div class="tab-content" id="sizing">
-			
-				<p>Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-		</div>
-	
-	</section>
-	<section class="related">
-		<div class="cross-sells">
-		<h3>Recommended Products</h3>
-		<section class="products cross-products">
-			<div class="product on-sale no-stock">
-				<div class="product-extras">
-					<span class="on-sale-badge">Sale</span>
-					<span class="no-stock-notice">Out of Stock</span>
-				</div>
-				<a href="#link-to-product" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-				<a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
+
+                <div class="selection">
+                    <div class="selection-box">
+                        <label for="color">Color</label>
+                        <select id="color" name="color">
+                            <option disabled selected value="">Color</option>
+                            <option value="black">Black</option>
+                            <option value="white">White</option>
+                            <option value="silver">Silver</option>
+                        </select>
+                    </div>
+                    <div class="selection-box">
+                        <label for="size">Size</label>
+                        <select id="size" name="size">
+                            <option disabled selected value="">Size</option>
+                            <option value="xs">Extra Small</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="add-to-cart">
+                    <button class="op" id="minus" onclick="removeItem();">&#45;</button>
+                    <input type="text" min="1" id="item-amount" value="1">
+                    <button class="op" id="more" onclick="addItem();">&#43;</button>
+                    <button class="cart-add btn blue radius">Add to Cart</button>
+                    <a id="whishlist" href="#" class="btn blue outline radius thick">&#43; Wishlist</a>
+                </div>
+                <div class="product-description" itemprop="description">
+                    <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo
+                        sit amet risus. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec ullamcorper nulla
+                        non metus auctor fringilla. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+                        Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet
+                        fermentum.</p>
+                </div>
+                <section class="meta">
+                    <div class="social-block">
+                        <span>Tell Friends</span>
+                        <a class="social-share" href="#" onclick="#" id="facebook"></a>
+                        <a class="social-share" href="#" onclick="#" id="google-plus"></a>
+                        <a class="social-share" href="#" onclick="#" id="twitter"></a>
+                    </div>
+                    <div class="tags">
+                        <span>Tags</span>
+
+                        <div class="tag-cloud">Square, Rimless, Narrow, Acetate, Tortoise</div>
+                    </div>
+                </section>
+            </div>
+
+        </section>
+        <section id="product-extra">
+            <div class="tabs">
+                <a class="tab active" href="#" data-tab="features">Features</a>
+                <a class="tab" href="#" data-tab="sizing">Sizing</a>
+            </div>
+            <div class="tab-content active" id="features">
+                <section class="inner">
+                    <div class="column" id="complimentary">
+                        <p>Complimentary to</p>
+                        <h4>Triangular Faces</h4>
+                    </div>
+                    <div class="column">
+                        <h4>Lenses</h4>
+                        <ul>
+                            <li>Made from polycarbonate</li>
+                            <li>Offer 100% UV protection</li>
+                            <li>Anti-scratch and anti-reflective coating</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Materials</h4>
+                        <ul>
+                            <li>Made from custom cellulose acetate</li>
+                            <li>Akulon-coated screws for durability</li>
+                            <li>Cut from a single sheet of acetate</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <div class="tab-content" id="sizing">
+
+                <p>Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor
+                    ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, vel scelerisque nisl
+                    consectetur et. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
+                    fermentum massa justo sit amet risus.</p>
+            </div>
+
+        </section>
+        <section class="related">
+            <div class="cross-sells">
+                <h3>Recommended Products</h3>
+                <section class="products cross-products">
+                    <div class="product on-sale no-stock">
+                        <div class="product-extras">
+                            <span class="on-sale-badge">Sale</span>
+                            <span class="no-stock-notice">Out of Stock</span>
+                        </div>
+                        <a href="#link-to-product" class="product-cover"><img
+                                src="design/images/eyewear/eyewear-model.jpg"/></a>
+                        <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
 				<span class="price">
 					<del>
-						<span class="amount">$99.99</span>				
-					</del>
+                        <span class="amount">$99.99</span>
+                    </del>
 					<ins>
-						<span class="amount sale-price">$49.99</span>
-					</ins>
+                        <span class="amount sale-price">$49.99</span>
+                    </ins>
 				</span>
-			</div>
-			<div class="product on-sale">
-				<div class="product-extras">
-					<span class="on-sale-badge">Sale</span>
-				</div>
-				<a href="#link-to-product" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-				<a href="#link-to-product" class="product-title"><b>Checking Double or more lines for title</b></a>
+                    </div>
+                    <div class="product on-sale">
+                        <div class="product-extras">
+                            <span class="on-sale-badge">Sale</span>
+                        </div>
+                        <a href="#link-to-product" class="product-cover"><img
+                                src="design/images/eyewear/eyewear-model.jpg"/></a>
+                        <a href="#link-to-product" class="product-title"><b>Checking Double or more lines for title</b></a>
 				<span class="price">
 					<del>
-						<span class="amount">$99.99</span>				
-					</del>
+                        <span class="amount">$99.99</span>
+                    </del>
 					<ins>
-						<span class="amount sale-price">$49.99</span>
-					</ins>
+                        <span class="amount sale-price">$49.99</span>
+                    </ins>
 				</span>
-			</div>
-			<div class="product">
-				<a href="#link-to-product" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-				<a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
+                    </div>
+                    <div class="product">
+                        <a href="#link-to-product" class="product-cover"><img
+                                src="design/images/eyewear/eyewear-model.jpg"/></a>
+                        <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
 				<span class="price">
 					<del>
-						<span class="amount">$99.99</span>				
-					</del>
+                        <span class="amount">$99.99</span>
+                    </del>
 					<ins>
-						<span class="amount sale-price">$49.99</span>
-					</ins>
+                        <span class="amount sale-price">$49.99</span>
+                    </ins>
 				</span>
-			</div>
-			<div class="product on-sale no-stock">
-				<div class="product-extras">
-					<span class="on-sale-badge">Sale</span>
-					<span class="no-stock-notice">Out of Stock</span>
-				</div>
-				<a href="#link-to-product" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-				<a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
+                    </div>
+                    <div class="product on-sale no-stock">
+                        <div class="product-extras">
+                            <span class="on-sale-badge">Sale</span>
+                            <span class="no-stock-notice">Out of Stock</span>
+                        </div>
+                        <a href="#link-to-product" class="product-cover"><img
+                                src="design/images/eyewear/eyewear-model.jpg"/></a>
+                        <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
 				<span class="price">
 					<del>
-						<span class="amount">$99.99</span>				
-					</del>
+                        <span class="amount">$99.99</span>
+                    </del>
 					<ins>
-						<span class="amount sale-price">$49.99</span>
-					</ins>
+                        <span class="amount sale-price">$49.99</span>
+                    </ins>
 				</span>
-			</div>
-		</section>
-		</div>
-	</section>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </div>
 </div>

@@ -1,215 +1,228 @@
-<div class="slider-wrapper">
-	<div class="content-wrapper">
-		<section id="subpage-head">
-			<div class="subpage-hero">
-				<h1 class="subpage-title">Eyewear</h1>
-				<img src="design/images/eyewear/eyewear-hero.jpg"/>
-			</div>
-		</section>
-	</div>
-</div>
-<div class="content-wrapper">
-	<section id="breadcrumbs">
-		<div class="breadcrumb">
+<div ng-controller="ProductsController">
+    <div class="slider-wrapper">
+        <div class="content-wrapper">
+            <section id="subpage-head">
+                <div class="subpage-hero">
+                    <h1 class="subpage-title">Eyewear</h1>
+                    <img src="design/images/eyewear/eyewear-hero.jpg"/>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <section id="breadcrumbs">
+            <div class="breadcrumb">
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> / 
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Eyewear</span>
 			</span></span>
-		</div>
-	</section>
-	<section id="eyewear" class="page">
-		<div class="sub-page-intro-text">
-			<h1 class="page-title">Eyeweatr Ipsum Dolor</h1>
-			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>
-			
-		</div>
-	</section>
-	<hr/>
-	<section id="gender-select" class="page">
-		<div class="selection">
-			<div id="eyewear-gender-selection">
-			<div id="men" class="select active">
-				<a href="#men-eyewear-products" data-target="men-eyewear-panel" class="panel-trigger" panelTrigger>
-				<img src="design/images/eyewear/men-thumbnail.jpg"/>
-				<h5>Men's Eyewear</h5>
-				</a>
-			</div>
-			<div id="women" class="select">
-				<a href="#women-eyewear-products" data-target="women-eyewear-panel" class="panel-trigger" panelTrigger>
-				<img src="design/images/eyewear/women-thumbnail.jpg"/>
-				<h5>Women's Eyewear</h5>
-				</a>
-			</div>
-			</div>
-		</div>
-	</section>	
-</div><!--close wrapper for full width backgroud-->
-<div class="gender-product-preview-wrapper">
-	<div class="content-wrapper">
-		<section class="product-panels">
-			<div class="eyewear panel" id="men">
-				<div class="description">
-					<h2>The All New Men's Enditatem</h2>
-					<span class="no-stock-notice">Out Of Stock</span>
+            </div>
+        </section>
+        <section id="eyewear" class="page">
+            <div class="sub-page-intro-text">
+                <h1 class="page-title">Eyeweatr Ipsum Dolor</h1>
+
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam.</p>
+
+            </div>
+        </section>
+        <hr/>
+        <section id="gender-select" class="page">
+            <div class="selection">
+                <div id="eyewear-gender-selection">
+                    <div id="men" class="select active">
+                        <a href="#men-eyewear-products" data-target="men-eyewear-panel" class="panel-trigger"
+                           panelTrigger>
+                            <img src="design/images/eyewear/men-thumbnail.jpg"/>
+                            <h5>Men's Eyewear</h5>
+                        </a>
+                    </div>
+                    <div id="women" class="select">
+                        <a href="#women-eyewear-products" data-target="women-eyewear-panel" class="panel-trigger"
+                           panelTrigger>
+                            <img src="design/images/eyewear/women-thumbnail.jpg"/>
+                            <h5>Women's Eyewear</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!--close wrapper for full width backgroud-->
+    <div class="gender-product-preview-wrapper">
+        <div class="content-wrapper">
+            <section class="product-panels">
+                <div class="eyewear panel" id="men">
+                    <div class="description">
+                        <h2>The All New Men's Enditatem</h2>
+                        <span class="no-stock-notice">Out Of Stock</span>
 					<span class="price">
 						<del>
-							<span class="amount">$99.99</span>				
-						</del>
+                            <span class="amount">$99.99</span>
+                        </del>
 						<ins>
-							<span class="amount sale-price large">$49.99</span>
-						</ins>
+                            <span class="amount sale-price large">$49.99</span>
+                        </ins>
 					</span>
-					<p>Lorem ipsum dolor sit amet, consectetur Hadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-					<a href="/eyewear/men-eyewear/product-detail.html" class="btn blue radius thick">SHOP NOW</a>  <a href="/eyewear/men-eyewear.html" class="btn blue outline radius thick">Shop All Men's Eyewear</a>
-				</div>
-				<div class="section-cover">
-					<img src="design/images/eyewear/product-image.jpg"/>
-				</div>
-			</div>
-		</section>
-	</div>
-</div>
-<div class="products-wrapper">
-	<section class="products" id="men-eyewear-products">
-		<div class="products-head">
-			<h3>Shop Latest Men's Eyewear Products</h3>
-			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
-			tempor invidunt ut labore et dolore magna aliquyam.</p>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-				<span class="no-stock-notice">Out of Stock</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-				<span class="no-stock-notice">Out of Stock</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-	</section>
-	<section class="all-link"><!--has to be a section for clearfix-->
-		<a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear</a>
-	</section>
-	<hr/>
-	<section class="products" id="women-eyewear-products">
-		<div class="products-head">
-			<h3>Shop Latest Women's Eyewear Products</h3>
-			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
-			tempor invidunt ut labore et dolore magna aliquyam.</p>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-				<span class="no-stock-notice">Out of Stock</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-		<div class="product">
-			<div class="product-extras">
-				<span class="on-sale-badge">Sale</span>
-				<span class="no-stock-notice">Out of Stock</span>
-			</div>
-			<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-			<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-					<span class="amount">$99.99</span>				
-				</del>
-				<ins>
-					<span class="amount sale-price">$49.99</span>
-				</ins>
-			</span>
-		</div>
-	</section>
-	<section class="all-link"><!--has to be a section for clearfix-->
-		<a href="/eyewear/mens-eyewear/" class="btn blue radius">Shop All Women's Eyewear</a>
-	</section>
 
+                        <p>Lorem ipsum dolor sit amet, consectetur Hadipisicing elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna aliqua.</p>
+                        <a href="/eyewear/men-eyewear/product-detail.html" class="btn blue radius thick">SHOP NOW</a> <a
+                            href="/eyewear/men-eyewear.html" class="btn blue outline radius thick">Shop All Men's
+                        Eyewear</a>
+                    </div>
+                    <div class="section-cover">
+                        <img src="design/images/eyewear/product-image.jpg"/>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="products-wrapper">
+        <section class="products" id="men-eyewear-products">
+            <div class="products-head">
+                <h3>Shop Latest Men's Eyewear Products</h3>
+
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam.</p>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                    <span class="no-stock-notice">Out of Stock</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                    <span class="no-stock-notice">Out of Stock</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+        </section>
+        <section class="all-link"><!--has to be a section for clearfix-->
+            <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear</a>
+        </section>
+        <hr/>
+        <section class="products" id="women-eyewear-products">
+            <div class="products-head">
+                <h3>Shop Latest Women's Eyewear Products</h3>
+
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam.</p>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                    <span class="no-stock-notice">Out of Stock</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+            <div class="product">
+                <div class="product-extras">
+                    <span class="on-sale-badge">Sale</span>
+                    <span class="no-stock-notice">Out of Stock</span>
+                </div>
+                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
+                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
+			<span class="price">
+				<del>
+                    <span class="amount">$99.99</span>
+                </del>
+				<ins>
+                    <span class="amount sale-price">$49.99</span>
+                </ins>
+			</span>
+            </div>
+        </section>
+        <section class="all-link"><!--has to be a section for clearfix-->
+            <a href="/eyewear/mens-eyewear/" class="btn blue radius">Shop All Women's Eyewear</a>
+        </section>
+
+    </div>
 </div>

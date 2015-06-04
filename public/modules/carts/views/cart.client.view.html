@@ -1,164 +1,164 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper">
-	<section id="breadcrumbs">
-		<div class="breadcrumb">
+<div class="content-wrapper" ng-controller="CartController">
+    <section id="breadcrumbs">
+        <div class="breadcrumb">
 
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Cart</span>
 			</span></span>
-		</div>
-	</section>
-	<section id="cart">
-		<div class="cart-alerts not-showing"></div>
-		<div id="cart-contents">
-			<h1 class="page-title">Your Shopping Cart</h1>
-			<table id="cart">
-				<thead>
-				<th>Product</th>
-				<th>Price</th>
-				<th>Quantity</th>
-				<th>Total</th>
-				<th class="remove"></th>
-				</thead>
-				<tbody>
-				<tr class="product-row">
-					<td class="product-image">
-						<img src="design/images/eyewear/eyewear-model.jpg"/>
-						<span class="product-name">Focali Better View</span>
-					</td>
-					<td class="product-price">
-						$49.99
-					</td>
-					<td class="edit-quantity">
-						<button class="op" id="minus">&#45;</button>
-						<input type="text" id="item-amount" value="1">
-						<button class="op" id="more">&#43;</button>
-					</td>
-					<td class="item-total">
-						<div class="item-cart-price">
+        </div>
+    </section>
+    <section id="cart">
+        <div class="cart-alerts not-showing"></div>
+        <div id="cart-contents">
+            <h1 class="page-title">Your Shopping Cart</h1>
+            <table id="cart">
+                <thead>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th class="remove"></th>
+                </thead>
+                <tbody>
+                <tr class="product-row">
+                    <td class="product-image">
+                        <img src="design/images/eyewear/eyewear-model.jpg"/>
+                        <span class="product-name">Focali Better View</span>
+                    </td>
+                    <td class="product-price">
+                        $49.99
+                    </td>
+                    <td class="edit-quantity">
+                        <button class="op" id="minus">&#45;</button>
+                        <input type="text" id="item-amount" value="1">
+                        <button class="op" id="more">&#43;</button>
+                    </td>
+                    <td class="item-total">
+                        <div class="item-cart-price">
 
-						</div>
-					</td>
-					<td class="remove-item">
-						<a href="#" class="remove-from-cart"></a>
-					</td>
-				</tr>
-				<tr class="product-row">
-					<td class="product-image">
-						<img src="design/images/eyewear/eyewear-model.jpg"/>
-						<span class="product-name">Focali Even Better. Testing More than one line here</span>
-					</td>
-					<td class="product-price">
-						$79.99
-					</td>
-					<td class="edit-quantity">
-						<button class="op" id="minus">&#45;</button>
-						<input type="text" id="item-amount" value="1">
-						<button class="op" id="more">&#43;</button>
-					</td>
-					<td class="item-total">
+                        </div>
+                    </td>
+                    <td class="remove-item">
+                        <a href="#" class="remove-from-cart"></a>
+                    </td>
+                </tr>
+                <tr class="product-row">
+                    <td class="product-image">
+                        <img src="design/images/eyewear/eyewear-model.jpg"/>
+                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
+                    </td>
+                    <td class="product-price">
+                        $79.99
+                    </td>
+                    <td class="edit-quantity">
+                        <button class="op" id="minus">&#45;</button>
+                        <input type="text" id="item-amount" value="1">
+                        <button class="op" id="more">&#43;</button>
+                    </td>
+                    <td class="item-total">
 
-					</td>
-					<td class="remove-item">
-						<a href="#" class="remove-from-cart"></a>
-					</td>
-				</tr>
-				<tr class="product-row">
-					<td class="product-image">
-						<img src="design/images/eyewear/eyewear-model.jpg"/>
-						<span class="product-name">Focali Even Better. Testing More than one line here</span>
-					</td>
-					<td class="product-price">
-						$29.99
-					</td>
-					<td class="edit-quantity">
-						<button class="op" id="minus">&#45;</button>
-						<input type="text" id="item-amount" value="1">
-						<button class="op" id="more">&#43;</button>
-					</td>
-					<td class="item-total">
+                    </td>
+                    <td class="remove-item">
+                        <a href="#" class="remove-from-cart"></a>
+                    </td>
+                </tr>
+                <tr class="product-row">
+                    <td class="product-image">
+                        <img src="design/images/eyewear/eyewear-model.jpg"/>
+                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
+                    </td>
+                    <td class="product-price">
+                        $29.99
+                    </td>
+                    <td class="edit-quantity">
+                        <button class="op" id="minus">&#45;</button>
+                        <input type="text" id="item-amount" value="1">
+                        <button class="op" id="more">&#43;</button>
+                    </td>
+                    <td class="item-total">
 
-					</td>
-					<td class="remove-item">
-						<a href="#" class="remove-from-cart"></a>
-					</td>
-				</tr>
-				<tr class="product-row">
-					<td class="product-image">
-						<img src="design/images/eyewear/eyewear-model.jpg"/>
-						<span class="product-name">Focali Even Better. Testing More than one line here</span>
-					</td>
-					<td class="product-price">
-						$119.99
-					</td>
-					<td class="edit-quantity">
-						<button class="op" id="minus">&#45;</button>
-						<input type="text" id="item-amount" value="1">
-						<button class="op" id="more">&#43;</button>
-					</td>
-					<td class="item-total">
+                    </td>
+                    <td class="remove-item">
+                        <a href="#" class="remove-from-cart"></a>
+                    </td>
+                </tr>
+                <tr class="product-row">
+                    <td class="product-image">
+                        <img src="design/images/eyewear/eyewear-model.jpg"/>
+                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
+                    </td>
+                    <td class="product-price">
+                        $119.99
+                    </td>
+                    <td class="edit-quantity">
+                        <button class="op" id="minus">&#45;</button>
+                        <input type="text" id="item-amount" value="1">
+                        <button class="op" id="more">&#43;</button>
+                    </td>
+                    <td class="item-total">
 
-					</td>
-					<td class="remove-item">
-						<a href="#" class="remove-from-cart"></a>
-					</td>
-				</tr>
+                    </td>
+                    <td class="remove-item">
+                        <a href="#" class="remove-from-cart"></a>
+                    </td>
+                </tr>
 
-				</tbody>
+                </tbody>
 
-			</table>
-		</div>
-		<div id="cart-totals">
-			<h3>Cart Totals</h3>
-			<hr/>
-			<table id="subtotals">
-				<tr class="subtotal">
-					<td class="concept">
-						Subtotal
-					</td>
-					<td id="sub-amount" class="amount">
+            </table>
+        </div>
+        <div id="cart-totals">
+            <h3>Cart Totals</h3>
+            <hr/>
+            <table id="subtotals">
+                <tr class="subtotal">
+                    <td class="concept">
+                        Subtotal
+                    </td>
+                    <td id="sub-amount" class="amount">
 
-					</td>
-				</tr>
-				<tr class="shipping">
-					<td class="concept">
-						Shipping
-					</td>
-					<td id="shipping-cost" class="amount">
-						free
-					</td>
-				</tr>
-				<tr id="final-order-price">
-					<td class="concept">
-						<b>Order Total</b>
-					</td>
-					<td id="price-total" class="amount">
+                    </td>
+                </tr>
+                <tr class="shipping">
+                    <td class="concept">
+                        Shipping
+                    </td>
+                    <td id="shipping-cost" class="amount">
+                        free
+                    </td>
+                </tr>
+                <tr id="final-order-price">
+                    <td class="concept">
+                        <b>Order Total</b>
+                    </td>
+                    <td id="price-total" class="amount">
 
-					</td>
-				</tr>
-			</table>
-			<a href="#!/checkout" class="btn block radius blue">Proceed To Checkout</a>
+                    </td>
+                </tr>
+            </table>
+            <a href="#!/checkout" class="btn block radius blue">Proceed To Checkout</a>
 
-			<div id="cart-coupon" class="coupons">
-				<h6>Have a Coupon?</h6>
-				<input type="text" placeholder="Type your coupon code"/>
-				<button class="btn block outline thick radius blue" type="submit">Apply Coupon</button>
-			</div>
-			<div id="order-shipping">
-				<h6>Calculate Shipping</h6>
-				<select id="countries">
-					<option disabled selected>Choose Your Country</option>
-					<option value="usa">United States</option>
-					<option value="canada">Canada</option>
-					<option value="mexico">Mexico</option>
-				</select>
-				<input type="text" id="state-province" placeholder="State, Province"/>
-				<input type="text" id="zip" placeholder="ZIP, Postcode"/>
-				<button class="btn block outline thick blue radius">Update Cart Totals</button>
-			</div>
-		</div>
+            <div id="cart-coupon" class="coupons">
+                <h6>Have a Coupon?</h6>
+                <input type="text" placeholder="Type your coupon code"/>
+                <button class="btn block outline thick radius blue" type="submit">Apply Coupon</button>
+            </div>
+            <div id="order-shipping">
+                <h6>Calculate Shipping</h6>
+                <select id="countries">
+                    <option disabled selected>Choose Your Country</option>
+                    <option value="usa">United States</option>
+                    <option value="canada">Canada</option>
+                    <option value="mexico">Mexico</option>
+                </select>
+                <input type="text" id="state-province" placeholder="State, Province"/>
+                <input type="text" id="zip" placeholder="ZIP, Postcode"/>
+                <button class="btn block outline thick blue radius">Update Cart Totals</button>
+            </div>
+        </div>
 
-	</section>
+    </section>
 </div>

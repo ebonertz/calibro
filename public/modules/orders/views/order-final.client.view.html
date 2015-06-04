@@ -1,66 +1,67 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper">
-	<section id="breadcrumbs">
-		<div class="breadcrumb">
+<div class="content-wrapper" ng-controller="OrdersController">
+    <section id="breadcrumbs">
+        <div class="breadcrumb">
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Order Placed</span>
 			</span></span>
-		</div>
-	</section>
-	<section class="page">
-	<div class="content">
-		<h1 class="page-title">Thank you for your order</h1>
-		<b>Order ID</b> <span class="badge radius outline tblue xsmall">#FCL-001-0003</span> <span class="badge radius outline yellow xsmall">Processing</span>
-		<hr/>
-		<section class="placed-order">
-			<div class="checkout-totals" id="billing">
-				<h6>Payment Information</h6>
-				<b>John Doe</b><br/>
-				XXXX-XXXX-XXXX-3874<br/>
-				10035, New York City, NY<br/>
-				08/2015
-				
-			</div>
-			<div class="checkout-totals" id="shipping">
-				<h6>Shipping Information</h6>
-				<b>Fox Mulder</b><br/>
-				345E 58th Street<br/>
-				10035, New York City, NY<br/>
-				+1 718 456681
-				<hr/>
-				<p>
-				<b>Shipping Carrier:</b> DHL <br/>
-				<b>Shipping Cost:</b> free <br/>
-				<b>Arrives:</b> 6-10 Days
-				</p>
-			</div>
-			<div class="checkout-totals" id="order-total">
-				<h6>Totals</h6>
-				<table id="final-totals">
-					<tbody>
-						<tr>
-							<td>Sub Total</td>
-							<td>149.99</td>
-						</tr>
-						<tr>
-							<td>Shipping</td>
-							<td>free</td>
-						</tr>
-						<tr>
-							<td><h6>Order Total</h6></td>
-							<td><h6>149.99</h6></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</section>
-		<hr/>
-		<div class="center">
-			<a class="btn creme round" href="/my-account/order-details.html">See More Details for this order</a>
-		</div>
-	</div>
-	</section>
+        </div>
+    </section>
+    <section class="page">
+        <div class="content">
+            <h1 class="page-title">Thank you for your order</h1>
+            <b>Order ID</b> <span class="badge radius outline tblue xsmall">#FCL-001-0003</span> <span
+                class="badge radius outline yellow xsmall">Processing</span>
+            <hr/>
+            <section class="placed-order">
+                <div class="checkout-totals" id="billing">
+                    <h6>Payment Information</h6>
+                    <b>John Doe</b><br/>
+                    XXXX-XXXX-XXXX-3874<br/>
+                    10035, New York City, NY<br/>
+                    08/2015
+
+                </div>
+                <div class="checkout-totals" id="shipping">
+                    <h6>Shipping Information</h6>
+                    <b>Fox Mulder</b><br/>
+                    345E 58th Street<br/>
+                    10035, New York City, NY<br/>
+                    +1 718 456681
+                    <hr/>
+                    <p>
+                        <b>Shipping Carrier:</b> DHL <br/>
+                        <b>Shipping Cost:</b> free <br/>
+                        <b>Arrives:</b> 6-10 Days
+                    </p>
+                </div>
+                <div class="checkout-totals" id="order-total">
+                    <h6>Totals</h6>
+                    <table id="final-totals">
+                        <tbody>
+                        <tr>
+                            <td>Sub Total</td>
+                            <td>149.99</td>
+                        </tr>
+                        <tr>
+                            <td>Shipping</td>
+                            <td>free</td>
+                        </tr>
+                        <tr>
+                            <td><h6>Order Total</h6></td>
+                            <td><h6>149.99</h6></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <hr/>
+            <div class="center">
+                <a class="btn creme round" href="/my-account/order-details.html">See More Details for this order</a>
+            </div>
+        </div>
+    </section>
 </div>

@@ -1,163 +1,164 @@
 <div class="filter-block" id="price-filter">
-	<p class="filter-title">Filter by Price</p><a href="#" class="clearfilter">Clear</a>
-	<label class="radio-price">
-	<input type="radio" name="price" value="99">
-	Below $100
-	</label><br/>
-	<label class="radio-price">
-	<input type="radio" name="price" value="100-200">$100 - $200
-	</label><br/>
-	<label class="radio-price">
-	<input type="radio" name="price" value="200-500">$200 - $500
-	</label><br/>
-	<div id="range">
-		<div id="price-range" price-range></div>
-		$ <input type="number" min="0" max="499" id="range-number-min"/> - $ 
-		<input type="number" min="1" max="500" id="range-number-max"/>
-		<button type="submit" id="apply-price">Filter</button>
-	</div>	
+    <p class="filter-title">Filter by Price</p><a href="#" class="clearfilter">Clear</a>
+    <label class="radio-price">
+        <input type="radio" name="price" value="99">
+        Below $100
+    </label><br/>
+    <label class="radio-price">
+        <input type="radio" name="price" value="100-200">$100 - $200
+    </label><br/>
+    <label class="radio-price">
+        <input type="radio" name="price" value="200-500">$200 - $500
+    </label><br/>
+
+    <div id="range">
+        <div id="price-range" price-range></div>
+        $ <input type="number" min="0" max="499" id="range-number-min"/> - $
+        <input type="number" min="1" max="500" id="range-number-max"/>
+        <button type="submit" id="apply-price">Filter</button>
+    </div>
 </div>
 <hr/>
 <div class="filter-block" id="shape-filter">
-	<p class="filter-title">Filter by Shape</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="angled">
-		Angled Face <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="triangular">
-		Triangular Face <span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="oval">
-		Oval Face <span class="cat-amount">(34)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="round">
-		Round Face <span class="cat-amount">(45)</span>
-	</label>
+    <p class="filter-title">Filter by Shape</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="angled">
+        Angled Face <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="triangular">
+        Triangular Face <span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="oval">
+        Oval Face <span class="cat-amount">(34)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="round">
+        Round Face <span class="cat-amount">(45)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="frame-filter">
-	<p class="filter-title">Frame Width</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="narrow">
-		Narrow Face <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="medium">
-		Medium <span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="wide">
-		Wide <span class="cat-amount">(34)</span>
-	</label>
+    <p class="filter-title">Frame Width</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="narrow">
+        Narrow Face <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="medium">
+        Medium <span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="wide">
+        Wide <span class="cat-amount">(34)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="frame-type-filter">
-	<p class="filter-title">Frame Type</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="rimless">
-		Rimless <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="full-rim">
-		Full-Rim <span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="half-rim">
-		Half-Rim <span class="cat-amount">(34)</span>
-	</label>
+    <p class="filter-title">Frame Type</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="rimless">
+        Rimless <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="full-rim">
+        Full-Rim <span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="half-rim">
+        Half-Rim <span class="cat-amount">(34)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="frame-shape-filter">
-	<p class="filter-title">Frame Shape</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="square-frame">
-		Square <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="round-frame">
-		Round <span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="rectangle-frame">
-		Rectangle <span class="cat-amount">(34)</span>
-	</label>
+    <p class="filter-title">Frame Shape</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="square-frame">
+        Square <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="round-frame">
+        Round <span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="rectangle-frame">
+        Rectangle <span class="cat-amount">(34)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="frame-material">
-	<p class="filter-title">Frame Material</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="acetate">
-		Acetate <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="metal">
-		Metal<span class="cat-amount">(23)</span>
-	</label>
+    <p class="filter-title">Frame Material</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="acetate">
+        Acetate <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="metal">
+        Metal<span class="cat-amount">(23)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="color">
-	<p class="filter-title">Color</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="black">
-		Black <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="blue">
-		blue<span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="brown">
-		Brown <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="crystal">
-		Chrystal<span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="gold">
-		Gold <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="green">
-		Green<span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="grey">
-		Grey <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="purple">
-		Purple<span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="red">
-		Red <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="silver">
-		Silver<span class="cat-amount">(23)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="tortoise">
-		Tortoise <span class="cat-amount">(12)</span>
-	</label>
-	<label class="check-option">
-		<input type="checkbox" uicheckbox value="two-tone">
-		Two-Tone<span class="cat-amount">(23)</span>
-	</label>
+    <p class="filter-title">Color</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="black">
+        Black <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="blue">
+        blue<span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="brown">
+        Brown <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="crystal">
+        Chrystal<span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="gold">
+        Gold <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="green">
+        Green<span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="grey">
+        Grey <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="purple">
+        Purple<span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="red">
+        Red <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="silver">
+        Silver<span class="cat-amount">(23)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="tortoise">
+        Tortoise <span class="cat-amount">(12)</span>
+    </label>
+    <label class="check-option">
+        <input type="checkbox" uicheckbox value="two-tone">
+        Two-Tone<span class="cat-amount">(23)</span>
+    </label>
 </div>
 <hr/>
 <div class="filter-block" id="categories">
-	<p class="filter-title">Category</p><a href="#" class="clearfilter">Clear</a>
-	<label class="check-option checked">
-		<input type="checkbox" uicheckbox value="frames" checked>
-		Frames <span class="cat-amount">(345)</span>
-	</label>
-	<label class="check-option checked">
-		<input type="checkbox" uicheckbox value="framesprescription" checked>
-			Frames + Prescription <span class="cat-amount">(204)</span>
-	</label>
+    <p class="filter-title">Category</p><a href="#" class="clearfilter">Clear</a>
+    <label class="check-option checked">
+        <input type="checkbox" uicheckbox value="frames" checked>
+        Frames <span class="cat-amount">(345)</span>
+    </label>
+    <label class="check-option checked">
+        <input type="checkbox" uicheckbox value="framesprescription" checked>
+        Frames + Prescription <span class="cat-amount">(204)</span>
+    </label>
 </div>

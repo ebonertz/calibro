@@ -1,68 +1,72 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper">
-	<section id="breadcrumbs">
-		<div class="breadcrumb">
+<div class="content-wrapper" ng-controller="LocationsController">
+    <section id="breadcrumbs">
+        <div class="breadcrumb">
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Locations</span>
 			</span></span>
-		</div>
-	</section>
-	<section class="page">
-		<div class="content locations-page">
-			<h1 class="page-title">Our Locations</h1>
-			<div class="map">
-				<iframe  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11989308.386202984!2d-96.53181252499999!3d42.80785373333131!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f60d0da4da15%3A0x942a359e1828feee!2sLenox+Ave%2C+New+York%2C+NY%2C+USA!5e0!3m2!1sen!2s!4v1433180428113" width="1140" height="400" scrolling="false" frameborder="0" style="border:0"></iframe>
-			</div>
-		</div>
-	</section>
-	<section id="locations-list">
-		<div class="locations">
-			<div class="location">
-			<h6>Headquarters</h6>
-			4120 LENOX AVENUE<br/>
-			NEW YORK, NY<br/>
-			<img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
-			<img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
-			</div>
-			<div class="location">
-			<h6>Columbus</h6>
-			4120 LENOX AVENUE<br/>
-			NEW YORK, NY<br/>
-			<img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
-			<img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
-			</div>
-			<div class="location">
-			<h6>Los Angeles</h6>
-			4120 LENOX AVENUE<br/>
-			NEW YORK, NY<br/>
-			<img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
-			<img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
-			</div>
-			<div class="location">
-			<h6>Miami</h6>
-			4120 LENOX AVENUE<br/>
-			NEW YORK, NY<br/>
-			<img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
-			<img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
-			</div>
-		</div>
-	</section>
-	<hr/>
-	<section id="contact">
-		<div class="contact-form">
-			<h4>Drop Us A Line <span class="sub-title pull-right">required fields *</span></h4>
-			<form action="#" id="contact" name="contact">
-				<label>Full Name*</label>
-				<input required type="text" name="full-name" id="full-name" placeholder="Full Name">
-				<label>Email*</label>
-				<input required type="email" name="email" id="email" placeholder="Your Email">
-				<label>Your Message *</label>
-				<textarea required name="message" id="message"></textarea>
-				<input type="submit" class="btn blue radius"name="submit" value="Send Message" height="300" placeholder="Your Message" />
-			</form>
-		</div>
-	</section>
+        </div>
+    </section>
+    <section class="page">
+        <div class="content locations-page">
+            <h1 class="page-title">Our Locations</h1>
+
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11989308.386202984!2d-96.53181252499999!3d42.80785373333131!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f60d0da4da15%3A0x942a359e1828feee!2sLenox+Ave%2C+New+York%2C+NY%2C+USA!5e0!3m2!1sen!2s!4v1433180428113"
+                        width="1140" height="400" scrolling="false" frameborder="0" style="border:0"></iframe>
+            </div>
+        </div>
+    </section>
+    <section id="locations-list">
+        <div class="locations">
+            <div class="location">
+                <h6>Headquarters</h6>
+                4120 LENOX AVENUE<br/>
+                NEW YORK, NY<br/>
+                <img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
+                <img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
+            </div>
+            <div class="location">
+                <h6>Columbus</h6>
+                4120 LENOX AVENUE<br/>
+                NEW YORK, NY<br/>
+                <img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
+                <img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
+            </div>
+            <div class="location">
+                <h6>Los Angeles</h6>
+                4120 LENOX AVENUE<br/>
+                NEW YORK, NY<br/>
+                <img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
+                <img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
+            </div>
+            <div class="location">
+                <h6>Miami</h6>
+                4120 LENOX AVENUE<br/>
+                NEW YORK, NY<br/>
+                <img src="design/images/homepage/phone-icon.png"><a href="tel:3454354353"> +48 543765234</a><br/>
+                <img src="design/images/homepage/email-icon.png"><a href="mailto:info@focali.com"> info@focali.com</a>
+            </div>
+        </div>
+    </section>
+    <hr/>
+    <section id="contact">
+        <div class="contact-form">
+            <h4>Drop Us A Line <span class="sub-title pull-right">required fields *</span></h4>
+
+            <form action="#" id="contact" name="contact">
+                <label>Full Name*</label>
+                <input required type="text" name="full-name" id="full-name" placeholder="Full Name">
+                <label>Email*</label>
+                <input required type="email" name="email" id="email" placeholder="Your Email">
+                <label>Your Message *</label>
+                <textarea required name="message" id="message"></textarea>
+                <input type="submit" class="btn blue radius" name="submit" value="Send Message" height="300"
+                       placeholder="Your Message"/>
+            </form>
+        </div>
+    </section>
 </div>
