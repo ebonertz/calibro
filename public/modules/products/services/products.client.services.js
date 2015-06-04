@@ -14,5 +14,17 @@ angular.module('products').service('ProductService', ['$http', '$q',
 
 			return deferred.promise;
 		}
+
+		this.getByCategorySlug = function(slug, sex) {
+			var deferred = $q.defer();
+
+			var url = (sex ? '/categories/'+slug+'?sex='+sex : '/categories/'+slug);
+
+			$http.get(url).success(function (data) {
+				deferred.resolve(data);
+			});
+
+			return deferred.promise;
+		}
 	}
 ]);

@@ -1,7 +1,9 @@
 'use strict';
 
 var ProductService = require('../services/sphere/sphere.products.server.service.js'),
-	ContentfulProductService = require('../services/contentful/contentful.products.server.service.js');
+	ContentfulProductService = require('../services/contentful/contentful.products.server.service.js'),
+	CommonService = require('../services/sphere/sphere.commons.server.service'),
+	CategoriesService = require('../services/sphere/sphere.categories.server.service')
 
 
 exports.listContentful = function(req, res) {
@@ -22,7 +24,7 @@ exports.byId = function(req, res){
 	var id = req.params.id
 
 	if(!id)
-		return res.status(404);
+		return res.status(400);
 
 	ProductService.byId(id, function(err, result){
 		if (err) {
@@ -30,5 +32,32 @@ exports.byId = function(req, res){
 		} else {
 			res.json(result);
 		}
+	})
+}
+
+exports.fetchCategoryProducts = function(req,res){
+	var slug = req.params.slug;
+
+	if(!slug)
+		return res.status(400);
+
+	// TODO: Assign req.query to RequestParameters here to send to ProductService
+
+	new Promise(function(resolve, reject){
+		CategoriesService.getId(slug, function(err, resultId){
+			if(err){
+				return res.status(400).send({message: err.message})
+			}else{
+				resolve(resultId)
+			}
+		})
+  }).then(function(categoryId){
+		ProductService.getByCategory(categoryId, req.query, function(err, result){
+			if (err) {
+				return res.status(400);
+			} else {
+				res.json(result);
+			}
+		})
 	})
 }

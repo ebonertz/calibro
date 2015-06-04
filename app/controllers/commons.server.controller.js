@@ -37,6 +37,9 @@ exports.byCustomer = function (req, res) {
 exports.byId = function (req, res) {
     var id = req.param('id');
 
+    if(!id)
+        return res.status(400);
+
     CommonService.byId(this.entity, id, function (err, result) {
         if (err) {
             return res.sendStatus(400);

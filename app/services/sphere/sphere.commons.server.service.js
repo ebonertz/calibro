@@ -28,6 +28,15 @@ exports.byId = function (entity, id, callback) {
     });
 };
 
+exports.getBySlug = function (entity, slug, callback) {
+    SphereClient.getClient()[entity].where('slug(en = "'+slug+'")').fetch().then(function (result) {
+        callback(null, result.body);
+    }).error(function (err) {
+        console.log(err);
+        callback(err, null);
+    });
+}
+
 exports.byCustomer = function (entity, customerId, callback) {
     SphereClient.getClient()[entity].where('customerId="' + customerId + '"').fetch().then(function (result) {
         callback(null, result.body.results);
