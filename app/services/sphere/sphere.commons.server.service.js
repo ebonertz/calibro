@@ -19,6 +19,33 @@ exports.create = function (entity, object, callback) {
     });
 };
 
+exports.delete = function (entity, id,  callback) {
+    SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
+        SphereClient.getClient()[entity].byId(id).delete(result.body.version).then(function (result) {
+            console.log('Deleted ' + entity + ' ID ' + id);
+            if(callback)
+                callback(null, result.body)
+        }).error(function (err) {
+            console.log(err);
+            if(callback)
+                callback(err, null);
+        });
+    });
+};
+
+exports.deleteAll = function (entity,  callback) {
+    SphereClient.getClient()[entity].all().fetch().then(function (resultArray) {
+        for(var i = 0; i < resultArray.body.results.length; i++) {
+            exports.delete(entity, resultArray.body.results[i].id);
+        }
+        callback(null, {});
+    }).error(function (err) {
+        console.log(err);
+        callback(err);
+    });
+};
+
+
 exports.byId = function (entity, id, callback) {
     SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
         callback(null, result.body);

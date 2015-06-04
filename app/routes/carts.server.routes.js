@@ -10,10 +10,12 @@ var carts = require('../controllers/carts.server.controller.js'),
 module.exports = function (app) {
     app.route('/carts')
         .get(commons.list.bind({entity: entity}))
-        .post(commons.create.bind({entity: entity}));
+        .post(commons.create.bind({entity: entity}))
+        .delete(commons.deleteAll.bind({entity: entity}))
 
     app.route('/carts/:id')
-        .get(commons.byId.bind({entity: entity}));
+        .get(commons.byId.bind({entity: entity}))
+        .delete(commons.delete.bind({entity: entity}))
 
     app.route('/carts/byCustomer/:customerId')
         .get(commons.byCustomer.bind({entity: entity}));

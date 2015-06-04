@@ -37,10 +37,36 @@ exports.byCustomer = function (req, res) {
 exports.byId = function (req, res) {
     var id = req.param('id');
 
-    if(!id)
-        return res.status(400);
+    if (!id)
+        return res.sendStatus(400);
 
     CommonService.byId(this.entity, id, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.delete = function (req, res) {
+    var id = req.param('id');
+
+    if (!id)
+        return res.sendStatus(400);
+
+    CommonService.delete(this.entity, id, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.deleteAll = function (req, res) {
+
+    CommonService.deleteAll(this.entity, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
