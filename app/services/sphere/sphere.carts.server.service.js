@@ -9,7 +9,7 @@ var actions = {
     addCustomLineItem: 'addCustomLineItem',
     setShippingAddress: 'setShippingAddress',
     setBillingAddress: 'setBillingAddress',
-    setShippingMethod: 'setShippingMethod'
+    setShippingMethod: 'setShippingMethod',
 }
 
 exports.addLineItem = function (cartId, payload, callback) {
@@ -56,4 +56,14 @@ exports.setShippingMethod = function (cartId, payload, callback) {
         callback(err, result);
     });
 }
+
+exports.changeLineItemQuantity = function (cartId, payload, callback) {
+    if (payload)
+        payload.action = actions.changeLineItemQuantity;
+
+    CommonService.update(entity, cartId, [payload], function (err, result) {
+        callback(err, result);
+    });
+}
+
 

@@ -80,6 +80,8 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 quantity: 1
             }
 
+            $rootScope.cart.lineItems = [];
+
             this.addLineItem($rootScope.cart.id, payload).then(function (result) {
                 LoggerServices.success('Added to Sphere Cart ' + result);
                 $rootScope.cart = result;
@@ -95,11 +97,19 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 lineItemId: item.id
             }
 
+            /*for (var i in $rootScope.cart.lineItems) {
+                if ($rootScope.cart.lineItems[i].id === item.id) {
+                    $rootScope.cart.lineItems.splice(i, 1);
+                }
+            }*/
+
+            $rootScope.cart.lineItems = [];
+
             this.removeLineItem($rootScope.cart.id, payload).then(function (result) {
                 LoggerServices.success('Remove from Sphere Cart ' + result);
                 $rootScope.cart = result;
             }, function (error) {
-                LoggerServices.success('Error while removing to Sphere Cart');
+                LoggerServices.success('Error while removing to Sphere Cart. Restoring previous one.');
             });
 
         }
@@ -128,6 +138,46 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             var deferred = $q.defer();
 
             $http.get(urlString + '/byCustomer/' + customerId).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.setShippingAddress = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/setShippingAddress/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.setBillingAddress = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/setBillingAddress/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.setShippingMethod = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/setShippingMethod/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.changeLineItemQuantity = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/changeLineItemQuantity/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
             });
 

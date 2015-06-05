@@ -64,3 +64,17 @@ exports.setShippingMethod = function (req, res) {
         }
     });
 };
+
+exports.changeLineItemQuantity = function (req, res) {
+    var cartId = req.param('cartId'),
+        payload = req.body;
+
+    CartService.changeLineItemQuantity(cartId, payload, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+

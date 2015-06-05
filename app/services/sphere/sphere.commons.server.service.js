@@ -1,7 +1,7 @@
 var SphereClient = require('../../clients/sphere.server.client.js');
 
 exports.list = function (entity, callback) {
-    SphereClient.getClient()[entity].all().fetch().then(function (resultArray) {
+    SphereClient.getClient()[entity].all().expand('taxCategory').fetch().then(function (resultArray) {
         callback(null, resultArray.body.results);
     }).error(function (err) {
         console.log(err);

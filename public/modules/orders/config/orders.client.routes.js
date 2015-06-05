@@ -9,9 +9,9 @@ angular.module('orders').config(['$stateProvider',
                 url: '/orders',
                 templateUrl: 'modules/orders/views/orders.client.view.html'
             }).
-            state('order-final', {
-                url: '/order-final',
-                templateUrl: 'modules/orders/views/order-final.client.view.html'
+            state('view-order', {
+                url: '/orders/:orderId',
+                templateUrl: 'modules/orders/views/view-order.client.view.html'
             });
         ;
     }

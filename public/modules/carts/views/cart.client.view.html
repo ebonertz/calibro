@@ -23,89 +23,28 @@
                 <th class="remove"></th>
                 </thead>
                 <tbody>
-                <tr class="product-row">
+                <tr ng-repeat="lineItem in cart.lineItems" class="product-row">
                     <td class="product-image">
-                        <img src="design/images/eyewear/eyewear-model.jpg"/>
-                        <span class="product-name">Focali Better View</span>
+                        <img ng-src="{{lineItem.variant.images[0].url}}"/>
+                        <span class="product-name">{{lineItem.name.en}}</span>
                     </td>
                     <td class="product-price">
-                        $49.99
+                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount / 100}}
                     </td>
                     <td class="edit-quantity">
-                        <button class="op" id="minus">&#45;</button>
-                        <input type="text" id="item-amount" value="1">
-                        <button class="op" id="more">&#43;</button>
+                        <button ng-click="decreaseLineItemQuantity(lineItem)" class="op" id="minus">&#45;</button>
+                        <input type="text" id="item-amount" ng-model="lineItem.quantity" value="{{lineItem.quantity}}">
+                        <button ng-click="increaseLineItemQuantity(lineItem)" class="op" id="more">&#43;</button>
                     </td>
                     <td class="item-total">
                         <div class="item-cart-price">
-
+                            {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
                         </div>
                     </td>
                     <td class="remove-item">
-                        <a href="#" class="remove-from-cart"></a>
+                        <a ng-click="removeFromCart(lineItem)" href="" class="remove-from-cart"></a>
                     </td>
                 </tr>
-                <tr class="product-row">
-                    <td class="product-image">
-                        <img src="design/images/eyewear/eyewear-model.jpg"/>
-                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
-                    </td>
-                    <td class="product-price">
-                        $79.99
-                    </td>
-                    <td class="edit-quantity">
-                        <button class="op" id="minus">&#45;</button>
-                        <input type="text" id="item-amount" value="1">
-                        <button class="op" id="more">&#43;</button>
-                    </td>
-                    <td class="item-total">
-
-                    </td>
-                    <td class="remove-item">
-                        <a href="#" class="remove-from-cart"></a>
-                    </td>
-                </tr>
-                <tr class="product-row">
-                    <td class="product-image">
-                        <img src="design/images/eyewear/eyewear-model.jpg"/>
-                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
-                    </td>
-                    <td class="product-price">
-                        $29.99
-                    </td>
-                    <td class="edit-quantity">
-                        <button class="op" id="minus">&#45;</button>
-                        <input type="text" id="item-amount" value="1">
-                        <button class="op" id="more">&#43;</button>
-                    </td>
-                    <td class="item-total">
-
-                    </td>
-                    <td class="remove-item">
-                        <a href="#" class="remove-from-cart"></a>
-                    </td>
-                </tr>
-                <tr class="product-row">
-                    <td class="product-image">
-                        <img src="design/images/eyewear/eyewear-model.jpg"/>
-                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
-                    </td>
-                    <td class="product-price">
-                        $119.99
-                    </td>
-                    <td class="edit-quantity">
-                        <button class="op" id="minus">&#45;</button>
-                        <input type="text" id="item-amount" value="1">
-                        <button class="op" id="more">&#43;</button>
-                    </td>
-                    <td class="item-total">
-
-                    </td>
-                    <td class="remove-item">
-                        <a href="#" class="remove-from-cart"></a>
-                    </td>
-                </tr>
-
                 </tbody>
 
             </table>
@@ -119,7 +58,7 @@
                         Subtotal
                     </td>
                     <td id="sub-amount" class="amount">
-
+                        {{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}
                     </td>
                 </tr>
                 <tr class="shipping">
@@ -135,7 +74,7 @@
                         <b>Order Total</b>
                     </td>
                     <td id="price-total" class="amount">
-
+                        {{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}
                     </td>
                 </tr>
             </table>

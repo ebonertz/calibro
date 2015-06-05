@@ -37,7 +37,7 @@
             <a href="#!/login" class="site-login">Login</a>
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
-                        class="cart-icon"></i> Cart <span class="items-in-cart">(0)</span></a>
+                        class="cart-icon"></i> Cart <span class="items-in-cart">({{cart.lineItems.length}})</span></a>
 				<div class="cart-preview hidden">
                     <table id="cart-preview">
                         <thead>
@@ -46,20 +46,10 @@
                         <th id="cp-price">Price</th>
                         </thead>
                         <tbody>
-                        <tr class="product-preview">
-                            <td><a class="remove-product" href="#">X</a> Product Name</td>
-                            <td class="cp-qty-td">2</td>
-                            <td class="cp-price-td">$39.99</td>
-                        </tr>
-                        <tr class="product-preview">
-                            <td><a class="remove-product" href="#">X</a> Product Name</td>
-                            <td class="cp-qty-td">2</td>
-                            <td class="cp-price-td">$39.99</td>
-                        </tr>
-                        <tr class="product-preview">
-                            <td><a class="remove-product" href="#">X</a> Product Name</td>
-                            <td class="cp-qty-td">2</td>
-                            <td class="cp-price-td">$39.99</td>
+                        <tr ng-repeat="lineItem in cart.lineItems" class="product-preview">
+                            <td><a ng-click="removeFromCart(lineItem)" class="remove-product" href="">X</a> {{lineItem.name.en}}</td>
+                            <td class="cp-qty-td">{{lineItem.quantity}}</td>
+                            <td class="cp-price-td">&euro;{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>
                         </tr>
                         </tbody>
                     </table>

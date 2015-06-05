@@ -123,7 +123,13 @@ angular.module('core').directive('blockRadio', function () {
         link: function (scope, element, attrs) {
 
             $(element).click(function() {
-                $('.block-radio').removeClass('checked');
+
+                var radios = $(this).parent().children();
+
+                for(var i = 0; i < radios.length; i++) {
+                    $(radios[i]).removeClass('checked');
+                }
+
                 $(this).addClass('checked');
             });
         }

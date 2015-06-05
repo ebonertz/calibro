@@ -11,7 +11,7 @@ module.exports = function (app) {
         .get(commons.list.bind({entity: entity}))
         .post(commons.create.bind({entity: entity}));
 
-    app.route('/orders/:orderId')
+    app.route('/orders/:id')
         .get(commons.byId.bind({entity: entity}));
 
     app.route('/orders/byCustomer/:customerId')

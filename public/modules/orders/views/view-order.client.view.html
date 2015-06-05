@@ -1,5 +1,5 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper" ng-controller="OrdersController">
+<div class="content-wrapper" ng-controller="OrdersController" ng-init="findOne()">
     <section id="breadcrumbs">
         <div class="breadcrumb">
 		
@@ -13,24 +13,23 @@
     <section class="page">
         <div class="content">
             <h1 class="page-title">Thank you for your order</h1>
-            <b>Order ID</b> <span class="badge radius outline tblue xsmall">#FCL-001-0003</span> <span
-                class="badge radius outline yellow xsmall">Processing</span>
+            <b>Order ID</b> <span class="badge radius outline tblue xsmall">#{{order.id}}</span> <span
+                class="badge radius outline yellow xsmall">{{order.orderState}}</span>
             <hr/>
             <section class="placed-order">
                 <div class="checkout-totals" id="billing">
                     <h6>Payment Information</h6>
-                    <b>John Doe</b><br/>
+                    <b>{{order.billingAddress.firstName}} {{order.billingAddress.lastName}}</b><br/>
                     XXXX-XXXX-XXXX-3874<br/>
-                    10035, New York City, NY<br/>
-                    08/2015
+                    08/2015<br/>
+                    {{order.billingAddress.streetName}} {{order.billingAddress.streetNumber}}
 
                 </div>
                 <div class="checkout-totals" id="shipping">
                     <h6>Shipping Information</h6>
-                    <b>Fox Mulder</b><br/>
-                    345E 58th Street<br/>
-                    10035, New York City, NY<br/>
-                    +1 718 456681
+                    <b>{{order.shippingAddress.firstName}} {{order.shippingAddress.lastName}}</b><br/>
+                    {{order.shippingAddress.streetName}} {{order.shippingAddress.streetNumber}}<br/>
+                    {{order.shippingAddress.phone}}
                     <hr/>
                     <p>
                         <b>Shipping Carrier:</b> DHL <br/>
@@ -44,15 +43,15 @@
                         <tbody>
                         <tr>
                             <td>Sub Total</td>
-                            <td>149.99</td>
+                            <td>{{order.taxedPrice.totalNet.currencyCode}} {{order.taxedPrice.totalNet.centAmount / 100}}</td>
                         </tr>
                         <tr>
-                            <td>Shipping</td>
-                            <td>free</td>
+                            <td>Taxes</td>
+                            <td>{{order.taxedPrice.totalNet.currencyCode}} {{(order.taxedPrice.totalGross.centAmount - order.taxedPrice.totalNet.centAmount) / 100}}</td>
                         </tr>
                         <tr>
                             <td><h6>Order Total</h6></td>
-                            <td><h6>149.99</h6></td>
+                            <td><h6>{{order.totalPrice.currencyCode}} {{order.totalPrice.centAmount / 100}}</h6></td>
                         </tr>
                         </tbody>
                     </table>

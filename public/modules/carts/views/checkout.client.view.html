@@ -53,36 +53,43 @@
                                     <h6>Add A New Address</h6>
 
                                     <form id="add-address" action="#">
-                                        <label>Full Name</label>
-                                        <input type="text" name="name" placeholder="Full Name"/>
+                                        <label>First Name</label>
+                                        <input type="text" name="name" placeholder="First Name" ng-model="shippingAddress.firstName"/>
+                                        <label>Last Name</label>
+                                        <input type="text" name="name" placeholder="First Name" ng-model="shippingAddress.lastName"/>
                                         <label>Phone</label>
-                                        <input type="tel" name="last-name" placeholder="Phone #"/>
-                                        <label>Address</label>
-                                        <input type="text" name="address" placeholder="Address"/>
+                                        <input type="tel" name="last-name" placeholder="Phone #" ng-model="shippingAddress.phone"/>
+                                        <div class="form-field-big-quarter">
+                                            <label>Address</label>
+                                            <input type="text" name="address" placeholder="Address" ng-model="shippingAddress.streetName"/>
+                                        </div>
+                                        <div class="form-field-small-quarter">
+                                            <label>#</label>
+                                            <input type="text" name="address" placeholder="#" ng-model="shippingAddress.streetNumber"/>
+                                        </div>
                                         <label>City</label>
-                                        <input type="text" name="city" placeholder="City"/>
+                                        <input type="text" name="city" placeholder="City" ng-model="shippingAddress.city"/>
                                         <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province"/>
+                                        <input type="text" name="state" placeholder="State/Province" ng-model="shippingAddress.stater"/>
                                         <label>Zip/Postal</label>
-                                        <input type="text" name="zip" placeholder="ZIP/Postal"/>
+                                        <input type="text" name="zip" placeholder="ZIP/Postal" ng-model="shippingAddress.postalCode"/>
                                         <label for="country">Country</label>
-                                        <select name="country" id="country">
+                                        <select name="country" id="country"  ng-model="shippingAddress.country">
                                             <option disabled selected>Please choose a country</option>
-                                            <option value="usa">United States</option>
-                                            <option value="canada">Canada</option>
-                                            <option value="uk">United Kingdom</option>
+                                            <option value="US">US</option>
+                                            <option value="DE">DE</option>
                                         </select>
                                         <input type="submit" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
                                 <div class="continue">
-                                    <a href="#" class="btn outline green radius block">Continue</a>
+                                    <a ng-click="setShippingAddress(shippingAddress)" href="" class="btn outline green radius block">Continue</a>
                                     <hr/>
                                 </div>
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel">
+                    <div class="ex-panel {{shippingMethodClass}}">
                         <h4><a class="panel-trigger" href="#" id="orders">Shipping Method</a></h4>
 
                         <div class="panel-content">
@@ -92,33 +99,12 @@
 
                                     <form>
 
-                                        <label class="block-radio">
+                                        <label ng-repeat="shippingMethod in shippingMethods" ng-click="selectShippingMethod(shippingMethod)" class="block-radio">
                                             <div class="shipping-logo">
-                                                <img src="/design/images/shipping-logos/dhl.jpg" alt=""/>
+                                                <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg" alt=""/>
                                             </div>
-                                            <b>DHL</b><br/>
+                                            <b>{{shippingMethod.name}}</b><br/>
                                             <input type="radio" name="shipping" value="1">
-                                        </label>
-                                        <label class="block-radio">
-                                            <div class="shipping-logo">
-                                                <img src="/design/images/shipping-logos/ups.jpg" alt=""/>
-                                            </div>
-                                            <b>UPS</b><br/>
-                                            <input type="radio" name="shipping" value="2">
-                                        </label>
-                                        <label class="block-radio">
-                                            <div class="shipping-logo">
-                                                <img src="/design/images/shipping-logos/usps.jpg" alt=""/>
-                                            </div>
-                                            <b>USPS</b><br/>
-                                            <input type="radio" name="shipping" value="3">
-                                        </label>
-                                        <label class="block-radio">
-                                            <div class="shipping-logo">
-                                                <img src="/design/images/shipping-logos/fedex.jpg" alt=""/>
-                                            </div>
-                                            <b>FEDEX</b><br/>
-                                            <input type="radio" name="shipping" value="3">
                                         </label>
 
                                     </form>
@@ -142,13 +128,13 @@
 
                                 </div>
                                 <div class="continue">
-                                    <a href="#" class="btn outline green radius block">Continue</a>
+                                    <a ng-click="setShippingMethod()" href="" class="btn outline green radius block">Continue</a>
                                     <hr/>
                                 </div>
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel">
+                    <div class="ex-panel {{billingAddressClass}}">
                         <h4><a class="panel-trigger" href="#" id="orders">Payment Method</a></h4>
 
                         <div class="panel-content">
@@ -200,46 +186,43 @@
                                     <h6>Add A New Card</h6>
 
                                     <form id="add-card-checkout" action="#">
-                                        <label>Full Name</label>
-                                        <input type="text" name="name" placeholder="Full Name"/>
-                                        <label>Card Number</label>
-                                        <input type="tel" name="last-name" placeholder="Phone #"/>
-                                        <label>Billing Address</label>
-                                        <input type="text" name="address" placeholder="Address"/>
+                                        <label>First Name</label>
+                                        <input type="text" name="name" placeholder="First Name" ng-model="billingAddress.firstName"/>
+                                        <label>Last Name</label>
+                                        <input type="text" name="name" placeholder="First Name" ng-model="billingAddress.lastName"/>
+                                        <label>Phone</label>
+                                        <input type="tel" name="last-name" placeholder="Phone #" ng-model="billingAddress.phone"/>
+                                        <div class="form-field-big-quarter">
+                                            <label>Address</label>
+                                            <input type="text" name="address" placeholder="Address" ng-model="billingAddress.streetName"/>
+                                        </div>
+                                        <div class="form-field-small-quarter">
+                                            <label>#</label>
+                                            <input type="text" name="address" placeholder="#" ng-model="billingAddress.streetNumber"/>
+                                        </div>
                                         <label>City</label>
-                                        <input type="text" name="city" placeholder="City"/>
+                                        <input type="text" name="city" placeholder="City" ng-model="billingAddress.city"/>
                                         <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province"/>
+                                        <input type="text" name="state" placeholder="State/Province" ng-model="billingAddress.stater"/>
                                         <label>Zip/Postal</label>
-                                        <input type="text" name="zip" placeholder="ZIP/Postal"/>
-
-                                        <div class="form-field-half">
-                                            <label for="security-code">Security Code</label>
-                                            <input type="text" name="zip" placeholder="111"/>
-
-                                        </div>
-                                        <div class="form-field-half">
-                                            <label for="valid">Expiration Date</label>
-                                            <input type="text" name="valid" placeholder="12/2022"/>
-                                        </div>
+                                        <input type="text" name="zip" placeholder="ZIP/Postal" ng-model="billingAddress.postalCode"/>
                                         <label for="country">Country</label>
-                                        <select name="country" id="country">
+                                        <select name="country" id="country"  ng-model="billingAddress.country">
                                             <option disabled selected>Please choose a country</option>
-                                            <option value="usa">United States</option>
-                                            <option value="canada">Canada</option>
-                                            <option value="uk">United Kingdom</option>
+                                            <option value="US">US</option>
+                                            <option value="DE">DE</option>
                                         </select>
                                         <input type="submit" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
                                 <div class="continue">
-                                    <a href="#" class="btn outline green radius block">Continue</a>
+                                    <a ng-click="setBillingAddress(billingAddress)" href="" class="btn outline green radius block">Continue</a>
                                     <hr/>
                                 </div>
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel">
+                    <div class="ex-panel {{reviewOrderClass}}">
                         <h4><a class="panel-trigger" href="#" id="review">Review Order</a></h4>
 
                         <div class="panel-content">
@@ -252,34 +235,19 @@
                                 <th>Total</th>
                                 </thead>
                                 <tbody>
-                                <tr class="product-row">
+                                <tr ng-repeat="lineItem in cart.lineItems" class="product-row">
                                     <td class="product-image">
-                                        <img src="/design/images/eyewear/eyewear-model.jpg"/>
-                                        <span class="product-name">Focali Better View</span>
+                                        <img ng-src="{{lineItem.variant.images[0].url}}"/>
+                                        <span class="product-name">{{lineItem.name.en}}</span>
                                     </td>
                                     <td class="product-price">
-                                        $49.99
+                                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount / 100}}
                                     </td>
                                     <td class="quantity">
-                                        2
+                                        {{lineItem.quantity}}
                                     </td>
                                     <td class="item-total-checkout">
-                                        $99.98
-                                    </td>
-                                </tr>
-                                <tr class="product-row">
-                                    <td class="product-image">
-                                        <img src="/design/images/eyewear/eyewear-model.jpg"/>
-                                        <span class="product-name">Focali Even Better. Testing More than one line here</span>
-                                    </td>
-                                    <td class="product-price">
-                                        $79.99
-                                    </td>
-                                    <td class="quantity">
-                                        1
-                                    </td>
-                                    <td class="item-total-checkout">
-                                        $79.99
+                                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -288,18 +256,18 @@
                             <section id="order-totals-checkout">
                                 <div class="checkout-totals" id="billing">
                                     <h6>Payment Information</h6>
-                                    <b>John Doe</b><br/>
+                                    <b>{{cart.billingAddress.firstName}} {{cart.billingAddress.lastName}}</b><br/>
                                     XXXX-XXXX-XXXX-3874<br/>
-                                    10035, New York City, NY<br/>
-                                    08/2015
+                                    08/2015<br/>
+                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}
 
                                 </div>
                                 <div class="checkout-totals" id="shipping">
                                     <h6>Shipping Information</h6>
-                                    <b>Fox Mulder</b><br/>
-                                    345E 58th Street<br/>
-                                    10035, New York City, NY<br/>
-                                    +1 718 456681
+                                    <b>{{cart.shippingAddress.firstName}} {{cart.shippingAddress.lastName}}</b><br/>
+                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.streetNumber}}<br/>
+                                    {{cart.shippingAddress.phone}}
+
                                 </div>
                                 <div class="checkout-totals" id="order-total">
                                     <h6>Totals</h6>
@@ -307,7 +275,7 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>149.99</td>
+                                            <td>{{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
@@ -315,14 +283,14 @@
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>149.99</h6></td>
+                                            <td><h6>{{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="place-order">
                                     <br/>
-                                    <a href="#!/order-final" class="btn block blue outline radius">Place Order</a>
+                                    <a ng-click="createOrder()" href="" class="btn block blue outline radius">Place Order</a>
                                 </div>
                             </section>
                         </div>

@@ -35,4 +35,7 @@ module.exports = function (app) {
     app.route('/carts/setShippingMethod/:cartId')
         .post(carts.setShippingMethod);
 
+    app.route('/carts/changeLineItemQuantity/:cartId')
+        .post(carts.changeLineItemQuantity);
+
 };
