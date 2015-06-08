@@ -25,6 +25,7 @@ exports.getByCategory = function(categoryId, requestParams, callback){
   fetcher = requestParams.addByQueries(fetcher);
   fetcher = requestParams.addFilters(fetcher);
   fetcher = requestParams.addFacets(fetcher);
+  fetcher = requestParams.addSorts(fetcher);
 
   fetcher.search().then(function(resultArray) {
     // Convert products

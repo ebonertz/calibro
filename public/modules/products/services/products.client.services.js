@@ -15,7 +15,8 @@ angular.module('products').service('ProductService', ['$http', '$q',
 			return deferred.promise;
 		}
 
-		this.getByCategorySlug = function(slug, query, facets, byQuery) {
+		// TODO: Change parameters to options = {filters: ..., facets: ..., ...}
+		this.getByCategorySlug = function(slug, query, facets, sort, byQuery) {
 			var deferred = $q.defer();
 
 			var queryString = ""
@@ -37,6 +38,15 @@ angular.module('products').service('ProductService', ['$http', '$q',
 
 				for(var i = 0; i < byQuery.length; i++){
 					queryString = queryString + byQuery[i] + ";"
+				}
+
+				queryString = queryString.slice(0,-1).concat('&')
+			}
+
+			if(Object.keys(sort).length > 0){
+				queryString = queryString + "sort="
+				for(var sortName in sort){
+					queryString = queryString + sortName + ":" + sort[sortName] + ";"
 				}
 			}
 			

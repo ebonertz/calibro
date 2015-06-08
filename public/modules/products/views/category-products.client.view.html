@@ -1,5 +1,5 @@
 <section data-ng-controller="ProductsController" data-ng-init="categoryAndSex()">
-  <div class="page-header">
+<!--   <div class="page-header">
     <h1>{{sex}}'s {{category}}</h1>
   </div>
   <div class="col-md-4">
@@ -28,7 +28,7 @@
         <pre style="font-size: 12px;">{{product}}</pre>
       </small>
     </div>
-  </div>
+  </div> -->
 
 <!--   <hr>
   <div class="list-group col-md-8">
@@ -40,4 +40,67 @@
       </small>
     </div>
   </div> -->
+
+
+<!-- <div ng-controller="ProductsController" data-ng-init="categoryAndSex()"> -->
+    <div class="slider-wrapper">
+        <div class="content-wrapper">
+            <section id="subpage-head">
+                <div class="subpage-hero">
+                    <h1 class="subpage-title">{{pageTitle}}</h1>
+                    <img src="design/images/eyewear/mens-eyewear.jpg"/>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <section id="breadcrumbs">
+            <div class="breadcrumb">
+
+      <span xmlns:v="http://rdf.data-vocabulary.org/#">
+      <span typeof="v:Breadcrumb" ng-if="sex">
+        <a class="bc-link" rel="v:url" property="v:title" href="/#!">Home</a> /
+        <a class="bc-link" rel="v:url" property="v:title" href="/#!/categories/{{category}}">{{category}}</a> /
+        <span class="breadcrumb-last" rel="v:url" property="v:title">{{pageTitle}}</span>
+      </span>
+      <span typeof="v:Breadcrumb" ng-if="!sex">
+        <a class="bc-link" rel="v:url" property="v:title" href="/#!">Home</a> /
+        <span class="breadcrumb-last" rel="v:url" property="v:title">{{category}}</span>
+      </span>
+
+        </span>
+            </div>
+        </section>
+        <section id="{{sex}}s-{{category}}" class="page page-head shop-head">
+            <div class="shop-intro-text">
+                <h1 class="page-title">{{pageTitle}}</h1>
+
+                <div class="sorters">
+                    <a href="#" ng-click="sortBy('name'); $event.preventDefault()" id="by-name" class="sorting active">Sort by Name <span ng-show="sort.name">{{sort.name == "ASC" ? "^" : "V"}}</span></a> 
+                    <a href="#" ng-click="sortBy('price'); $event.preventDefault()" id="by-price" class="sorting">Sort by Price <span ng-show="sort.price">{{sort.price == "ASC" ? "^" : "V"}}</span></a>
+                </div>
+                <div class="category-filters">
+                    <a href="#" class="cat-sort active" id="all">All</a> <a href="#" class="cat-sort"
+                                                                            id="frames">Frames</a> <a href="#"
+                                                                                                      class="cat-sort"
+                                                                                                      id="frames-prescription">Frames
+                    + Prescription</a>
+                </div>
+            </div>
+        </section>
+        <section id="mens-eyewear-products" class="shop">
+            <div class="filters">
+                <div data-ng-include="'/modules/products/views/shop-filters.client.view.html'"></div>
+            </div>
+            <a href="#" id="show-filters" class="btn tblue block">Show Filters</a>
+
+            <div class="products" id="main">
+                <div data-ng-include="'/modules/products/views/products-grid.client.view.html'"></div>
+            </div>
+
+        </section>
+
+
+    </div>
+</div>
 </section>

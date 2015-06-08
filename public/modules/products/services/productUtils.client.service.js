@@ -1,5 +1,7 @@
 'use strict';
 
+var LANG = 'en';
+
 angular.module('products').factory('ProductUtils', [
   function(){
     return {
@@ -25,6 +27,22 @@ angular.module('products').factory('ProductUtils', [
             break;
         }
         return result;
+      },
+
+      attrKey: function(facetKey, attrConfig){
+        var key = 'variants.attributes.'+facetKey
+
+        switch(attrConfig.type){
+          case 'lenum':
+            key += ".key";
+            break;
+          case 'ltext':
+            key += "."+LANG;
+            break;
+        }
+        console.log(key)
+
+        return key;
       }
     }
   }

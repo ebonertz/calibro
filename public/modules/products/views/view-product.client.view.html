@@ -1,0 +1,16 @@
+<section data-ng-controller="ProductsController" data-ng-init="view()">
+  <div class="page-header">
+    <h1 data-ng-bind="product.name[lang]"></h1>
+  </div>
+  <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants" ng-change="selectVariantFromKey"></select>
+  <small class="list-group-item-text">
+    <pre style="font-size: 12px;">{{currentVariant}}</pre>
+  </small>
+  <div ng-hide="currentVariant.availability.isOnStock">Out of stock!</div>
+  <img ng-src="{{currentVariant.images[0]['url']}}" />
+  <div data-ng-bind="price"></div>
+  <div data-ng-bind="product.description[lang]"></div>
+
+  <h2>Features</h2>
+
+</section>

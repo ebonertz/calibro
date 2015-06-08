@@ -4,6 +4,8 @@ angular.module('products').filter('facets', function(){
   return function(input){
     if(terms.hasOwnProperty(input)){
       return terms[input]
+    }else{
+      return input
     }
   }
 });

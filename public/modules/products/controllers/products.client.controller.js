@@ -5,9 +5,29 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
   function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils) {
     $scope.authentication = Authentication;
 
+    $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
-    $scope.utils = ProductUtils
-    $scope.facetsArray = ["width", "frameShape"];
+    $scope.$utils = ProductUtils
+    $scope.facetConfig = {
+      'lensColor': {
+        'type': 'lenum',
+        'title': 'Lens Color'
+      },
+      'width': {
+        'type': 'lenum',
+        'title': 'Frame Width'
+      },
+      'frameShape': {
+        'type': 'lenum',
+        'title': 'Frame Shape'
+      },
+      'frameMaterial': {
+        'type': 'ltext',
+        'title': 'Frame Material'
+      },
+
+    }
+    $scope.lenumFacets = ["width", "frameShape", "frameMaterial"];
 
     // Find a list of Products
     $scope.find = function () {
@@ -17,49 +37,50 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     };
 
     $scope.categoryAndSex = function (){
+      // Makes sure no other fetches are being executed at the same time
+      if($scope.FETCHING)
+        return
+      $scope.FETCHING = true;
+
       var slug = $stateParams.slug
-
+      $scope.category = slug; 
+      
       var sex = $stateParams.sex;
-      $scope.category = slug;
-      $scope.sex = sex;
-      $scope.productFilters = {sex: {MEN: true, UNISEX: true}};
+      if(sex){
+        $scope.sex = sex;
 
-      // Both sexes will include unisex products 
-      var query = {
-        sex: sex+";unisex"
+        // Both sexes will include unisex products 
+        $scope.productFilters = {sex: {MEN: true, UNISEX: true}};
+        var query = {
+          sex: sex+";unisex"
+        }
+
+        $scope.byQuery = ['sex']
       }
 
-      $scope.byQuery = ['sex']
+      $scope.sort = {name: "ASC"}
+      $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
 
-      var facets = $scope.facetsArray
-      ProductService.getByCategorySlug(slug, query, facets, $scope.byQuery).then(function(resultsArray){
+      var facets = Object.keys($scope.facetConfig)
+      ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery).then(function(resultsArray){
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
-        // $scope.variants = []
-        // for(var i = 0; i < resultsArray.products.length; i++){
-        //   var product = resultsArray.products[i]
+        var variants = []
+        for(var i = 0; i < resultsArray.products.length; i++){
+          variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+        }
+        $scope.variants = variants;
 
-        //   if(product.masterVariant){
-        //     // Allow the variant to access the product
-        //     product.masterVariant.name = product.name;
-        //     product.masterVariant.description = product.description;
-        //     $scope.variants.push(product.masterVariant)
-        //   }
-        //   if(product.variants.length > 0){
-        //     for(var i = 0; i < product.variants.length; i++){
-        //       product.variants[i] = product;
-        //       product.variants[i].name = product.name;
-        //       product.variants[i].description = product.description;
-        //     }
-        //     $scope.variants = $scope.variants.concat(resultsArray.products[i].variants)
-        //   }
-        // }
-        // console.log($scope.variants)
+        $scope.FETCHING = false;
       })
     }
 
     $scope.requestFilter = function(){
+      // Makes sure no other fetches are being executed at the same time
+      if($scope.FETCHING)
+        return
+      $scope.FETCHING = true;
 
       // Build query object
       var query = {}
@@ -80,20 +101,35 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         }
       }
 
-      ProductService.getByCategorySlug($scope.category, query, $scope.facetsArray, $scope.byQuery).then(function(resultsArray){
+      ProductService.getByCategorySlug($scope.category, query, Object.keys($scope.facetConfig), $scope.sort, $scope.byQuery).then(function(resultsArray){
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
-        // $scope.variants = []
-        // for(var i = 0; i < resultsArray.products; i++){
-        //   if(resultsArray.products[i].masterVariant){
-        //     $scope.variants = $scope.variants.push(resultsArray.products[i].masterVariant)
-        //   }
-        //   if(resultsArray.products[i].variants.length > 0){
-        //     $scope.variants = $scope.variants.concat(resultsArray.products[i].variants)
-        //   }
-        // }
+        var variants = []
+        for(var i = 0; i < resultsArray.products.length; i++){
+          variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+        }
+        $scope.variants = variants
+
+        $scope.FETCHING = false;
       })
+    }
+
+    $scope.clearFilter = function(filterName){
+      delete $scope.productFilters[filterName]
+      $scope.requestFilter();
+      return false;
+    }
+
+    $scope.sortBy = function(sortName){
+      if($scope.FETCHING) // Avoid queing sort requests
+        return
+
+      var value = ($scope.sort[sortName] == "ASC" ? "DESC" : "ASC")
+      $scope.sort = {}
+      $scope.sort[sortName] = value
+      $scope.requestFilter()
+      return false;
     }
 
     // Find existing Product
@@ -126,5 +162,29 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         
       })
     };
+
+    // TODO: Move to service
+    var variantsFromProduct = function(product){
+      var variants = []
+      var productCopy = angular.copy(product)
+
+      delete productCopy.masterVariant
+      delete productCopy.variants
+
+      if(product.masterVariant){
+        // Allow the variant to access the product
+        product.masterVariant.product = productCopy
+        product.masterVariant.priceString = ProductUtils.renderPrice(product.masterVariant, 'EUR')
+        variants.push(product.masterVariant)
+      }
+      if(product.variants.length > 0){
+        for(var i = 0; i < product.variants.length; i++){
+          product.variants[i].product = productCopy
+          product.variants[i].priceString = ProductUtils.renderPrice(product.variants[i], 'EUR')
+        }
+        variants = variants.concat(product.variants)
+      }
+      return variants;
+    }
   }
 ]);
