@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses) {
         $scope.authentication = Authentication;
 
         $rootScope.cart;
@@ -23,7 +23,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
-            CartService.setShippingAddress($rootScope.cart.id, {address: shippingAddress}).then(function (result) {
+            var finalShippingAddress = shippingAddress;
+
+            if($scope.selectedShippingAddress) {
+                finalShippingAddress = $scope.selectedShippingAddress;
+            }
+
+            CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
                 $rootScope.cart = result;
                 $scope.shippingMethodClass = 'active';
             });
@@ -66,6 +72,21 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 console.log(errorResponse);
             });
         }
+
+        $scope.addCustomerAddress = function (address) {
+
+            var address = new Addresses(address);
+
+            address.$save(function (response) {
+                Authentication.user = response.body;
+                $scope.customer = angular.copy(Authentication.user);
+                console.log("success address");
+            }, function (response) {
+                $scope.error = response.data.message;
+            });
+
+        };
+
 
     }
 ]);

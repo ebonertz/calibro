@@ -25,26 +25,11 @@
 
                                     <form>
 
-                                        <label class="block-radio">
-                                            <b>John Doe</b><br/>
-                                            4120 Lenox Avenue<br/>
-                                            10035, New York City, NY<br/>
-                                            +1 718 456681
+                                        <label ng-repeat="address in authentication.user.addresses" ng-click="selectShippingAddress(address)" class="block-radio">
+                                            <b>{{address.firstName}} {{address.lastName}}</b><br/>
+                                            {{address.streetName}} {{address.streetNumber}}<br/>
+                                            {{address.phone}}
                                             <input type="radio" name="address" value="1">
-                                        </label>
-                                        <label class="block-radio">
-                                            <b>Fox Mulder</b><br/>
-                                            345E 58th Street<br/>
-                                            10035, New York City, NY<br/>
-                                            +1 718 456681
-                                            <input type="radio" name="address" value="2">
-                                        </label>
-                                        <label class="block-radio">
-                                            <b>Sledge Hammer</b><br/>
-                                            4120 Lenox Avenue<br/>
-                                            10035, New York City, NY<br/>
-                                            +1 718 456681
-                                            <input type="radio" name="address" value="3">
                                         </label>
 
                                     </form>
@@ -79,7 +64,7 @@
                                             <option value="US">US</option>
                                             <option value="DE">DE</option>
                                         </select>
-                                        <input type="submit" class="btn blue radius small" value="Save Address"/>
+                                        <input ng-click="addCustomerAddress(shippingAddress)" type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
                                 <div class="continue">
