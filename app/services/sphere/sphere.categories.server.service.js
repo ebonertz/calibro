@@ -10,15 +10,18 @@ exports.getId = function(slug, callback){
     callback(null,categories[slug])
   }else{
     CommonService.getBySlug('categories', slug, function(err, result){
-      var id = result.results[0].id
+      
       if(err){
         callback(err)
-      }else if(id){
-        categories[slug] = result.results[0].id
-        callback(null, id)
       }else{
-        callback(new Error("No id found for that slug"))
-      }
+        var id = result.results[0]['id']
+        if(id){
+          categories[slug] = result.results[0].id
+          callback(null, id)
+        }else{
+          callback(new Error("No id found for that slug"))
+        }
+      }        
     })
   }
 }

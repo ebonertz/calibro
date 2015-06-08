@@ -24,7 +24,7 @@ angular.module('products').service('ProductService', ['$http', '$q',
 				queryString = queryString + queryName + "=" + query[queryName] + "&"
 			}
 
-			if(facets.length > 0){
+			if(facets && facets.length > 0){
 				queryString = queryString + "facets="
 
 				for(var i = 0; i < facets.length; i++){
@@ -33,7 +33,7 @@ angular.module('products').service('ProductService', ['$http', '$q',
 				queryString = queryString.slice(0,-1).concat('&')
 			}
 
-			if(byQuery.length > 0){
+			if(byQuery && byQuery.length > 0){
 				queryString = queryString + "byQuery="
 
 				for(var i = 0; i < byQuery.length; i++){
