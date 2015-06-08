@@ -40,7 +40,6 @@ angular.module('products').factory('ProductUtils', [
             key += "."+LANG;
             break;
         }
-        console.log(key)
 
         return key;
       }

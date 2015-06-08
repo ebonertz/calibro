@@ -13,6 +13,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         'type': 'lenum',
         'title': 'Lens Color'
       },
+      'frameColor': {
+        'type': 'lenum',
+        'title': 'Frame Color'
+      },
       'width': {
         'type': 'lenum',
         'title': 'Frame Width'

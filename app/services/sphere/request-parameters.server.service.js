@@ -117,6 +117,7 @@ var sphereKeys = {
   frameShape: "variants.attributes.frameShape.key",
   frameMaterial: "variants.attributes.frameMaterial.en",
   lensColor: "variants.attributes.lensColor.key",
+  frameColor: "variants.attributes.frameColor.key",
   name: "name.en",
   price: "price"
 }
