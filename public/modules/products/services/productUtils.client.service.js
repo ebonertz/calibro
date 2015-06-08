@@ -5,12 +5,12 @@ var LANG = 'en';
 angular.module('products').factory('ProductUtils', [
   function(){
     return {
-      renderPrice: function(variant, currencyCode, country){
+      renderPrice: function(prices, currencyCode, country){
         var price;
-        if(variant.prices.hasOwnProperty(currencyCode+'-'+country)){
-          price = variant.prices[currencyCode+'-'+country]
-        }else if(variant.prices.hasOwnProperty(currencyCode)){
-          price = variant.prices[currencyCode]
+        if(prices.hasOwnProperty(currencyCode+'-'+country)){
+          price = prices[currencyCode+'-'+country]
+        }else if(prices.hasOwnProperty(currencyCode)){
+          price = prices[currencyCode]
         }else{
           return new Error("No price with that currency.")
         }

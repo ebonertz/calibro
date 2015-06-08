@@ -13,6 +13,9 @@ var Product = function(options){
   this.description = options.description;
   this.categories = options.categories;
 
+  if(options.displayVariant)
+    this.displayVariant = options.displayVariant
+
   // Variants
   this.variants = []
   for(var i = 0; i < options.variants.length; i++){

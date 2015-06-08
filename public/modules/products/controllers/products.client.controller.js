@@ -66,11 +66,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
-        var variants = []
         for(var i = 0; i < resultsArray.products.length; i++){
-          variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+          $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
+          // variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
         }
-        $scope.variants = variants;
+        // var variants = []
+        // for(var i = 0; i < resultsArray.products.length; i++){
+        //   variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+        // }
+        // $scope.variants = variants;
 
         $scope.FETCHING = false;
       })
@@ -105,11 +109,16 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
-        var variants = []
         for(var i = 0; i < resultsArray.products.length; i++){
-          variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+          $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
+          // variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
         }
-        $scope.variants = variants
+
+        // var variants = []
+        // for(var i = 0; i < resultsArray.products.length; i++){
+        //   variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
+        // }
+        // $scope.variants = variants
 
         $scope.FETCHING = false;
       })
