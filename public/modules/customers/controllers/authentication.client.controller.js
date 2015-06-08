@@ -24,7 +24,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				// And redirect to the index page
 				$location.path('/');
 			}).error(function(response) {
-				$scope.register.error = response.message;
+				$scope.register_error = response.message;
 			});
 		};
 
@@ -38,7 +38,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				// And redirect to the index page
 				$location.path('/');
 			}).error(function(response) {
-				$scope.login.error = response.message;
+				$scope.login_error = response.message;
 			});
 		};
 	}

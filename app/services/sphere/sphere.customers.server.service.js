@@ -8,6 +8,15 @@ var updateCustomer = function(customer_id, actions){
   return SphereClient.getClient().customers.byId(customer_id).update(actions)
 }
 
+exports.create = function (customer, callback) {
+    SphereClient.getClient().customers.create(customer).then(function (result) {
+        callback(null, result.body.customer);
+    }).error(function (err) {
+        console.log(err);
+        callback(err, null);
+    });
+};
+
 exports.login = function (email, password, anonymousCartId, callback) {
     var customer = {
         "email": email,

@@ -14,38 +14,46 @@
     <div class="content login-register">
       <h1 class="page-title">Login / Register</h1>
       <section class="inner">
-        <div class="login">
-          <form action="#!/account" class="site-login" method="post">
-            <span class="sub-title">Login</span>
-            <label>Email</label>
-            <input type="email" placeholder="Please Enter Your Email"/>
-            <a href="#" class="forgot">Forgot Email?</a>
-            <label>Password</label>
-            <input type="password" placeholder="Please Enter Your Password"/>
-            <a class="forgot" href="#">Forgot Password?</a>
-            <label>
-              <input type="checkbox" class="rememberme"/> Remember Me
-            </label>
-            <br/>
-            <input type="submit" class="btn radius blue" value="Login">
-          </form>
-        </div>
+        <form data-ng-submit="signin()" class="signin form-horizontal" autocomplete="off" >
+          <div class="login">
+            <form action="#!/account" class="site-login" method="post">
+              <span class="sub-title">Login</span>
+              <label>Email</label>
+              <input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Please Enter Your Email">
+              <a href="#" class="forgot">Forgot Email?</a>
+              <label>Password</label>
+              <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Please Enter Your Password">
+              <a class="forgot" href="#">Forgot Password?</a>
+              <label>
+                <input type="checkbox" class="rememberme"/> Remember Me
+              </label>
+              <br/>
+              <div data-ng-show="login_error" class="text-center text-danger">
+                <div class="notice outline red small" data-ng-bind="login_error"></div>
+              </div>
+              <input type="submit" class="btn radius blue" value="Login">
+            </form>
+          </div>
+        </form>
         <div class="register">
           <span class="sub-title">Free Registration</span>
-          <form action="#!/account-new" class="user-registration" method="POST">
-            <label>Email</label>
-            <input type="email" placeholder="Please Enter Your Email"/>
+          <form name="userForm" data-ng-submit="register()" class="user-registration" method="POST" autocomplete="off">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" data-ng-model="register.email" placeholder="Please Enter Your Email" required>
 
-            <label>Password</label>
-            <input type="password" placeholder="Please Enter Your Password"/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" data-ng-model="register.password" placeholder="Please Enter Your Password" required>
 
-            <label>Re-enter Password</label>
-            <input type="password" placeholder="Please Repeat Password"/>
+            <label for="repeatPassword">Re-enter Password</label>
+            <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" data-ng-model="register.repeatPassword" placeholder="Please Repeat Password" required>
 
             <label>
-              <input required type="checkbox" class="rememberme"/> I HAVE READ AND I'M AGREE WITH THE <a href="/terms-and-conditions.html">TERMS AND CONDITIONS</a>
+              <input required type="checkbox" class="rememberme" required/> I HAVE READ AND I'M AGREE WITH THE <a href="/terms-and-conditions.html">TERMS AND CONDITIONS</a>
             </label>
             <br/>
+              <div data-ng-show="register_error" class="text-center text-danger">
+                <div class="notice outline red small" data-ng-bind="register_error"></div>
+              </div>
             <input type="submit" class="btn radius blue" value="Register">
           </form>
 
