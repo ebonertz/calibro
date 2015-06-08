@@ -37,34 +37,34 @@
                                 <div class="add-address-checkout">
                                     <h6>Add A New Address</h6>
 
-                                    <form id="add-address" action="#">
+                                    <form id="add-address" name="addAddress" action="#">
                                         <label>First Name</label>
-                                        <input type="text" name="name" placeholder="First Name" ng-model="shippingAddress.firstName"/>
+                                        <input class="{{addAddress.firstName.$valid ? '' : 'error'}}" type="text" name="firstName" placeholder="First Name" ng-model="shippingAddress.firstName" required/>
                                         <label>Last Name</label>
-                                        <input type="text" name="name" placeholder="First Name" ng-model="shippingAddress.lastName"/>
+                                        <input class="{{addAddress.lastName.$valid ? '' : 'error'}}" type="text" name="lastName" placeholder="Last Name" ng-model="shippingAddress.lastName" required/>
                                         <label>Phone</label>
                                         <input type="tel" name="last-name" placeholder="Phone #" ng-model="shippingAddress.phone"/>
                                         <div class="form-field-big-quarter">
                                             <label>Address</label>
-                                            <input type="text" name="address" placeholder="Address" ng-model="shippingAddress.streetName"/>
+                                            <input class="{{addAddress.streetName.$valid ? '' : 'error'}}" type="text" name="streetName" placeholder="Street Name" ng-model="shippingAddress.streetName" required/>
                                         </div>
                                         <div class="form-field-small-quarter">
                                             <label>#</label>
-                                            <input type="text" name="address" placeholder="#" ng-model="shippingAddress.streetNumber"/>
+                                            <input class="{{addAddress.streetNumber.$valid ? '' : 'error'}}" type="text" name="streetNumber" placeholder="#" ng-model="shippingAddress.streetNumber" required/>
                                         </div>
                                         <label>City</label>
-                                        <input type="text" name="city" placeholder="City" ng-model="shippingAddress.city"/>
+                                        <input class="{{addAddress.city.$valid ? '' : 'error'}}" type="text" name="city" placeholder="City" ng-model="shippingAddress.city" required/>
                                         <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province" ng-model="shippingAddress.stater"/>
+                                        <input class="{{addAddress.stater.$valid ? '' : 'error'}}" type="text" name="stater" placeholder="State/Province" ng-model="shippingAddress.stater" required/>
                                         <label>Zip/Postal</label>
-                                        <input type="text" name="zip" placeholder="ZIP/Postal" ng-model="shippingAddress.postalCode"/>
+                                        <input class="{{addAddress.postalCode.$valid ? '' : 'error'}}" type="text" name="postalCode" placeholder="ZIP/Postal" ng-model="shippingAddress.postalCode" required/>
                                         <label for="country">Country</label>
-                                        <select name="country" id="country"  ng-model="shippingAddress.country">
+                                        <select class="{{addAddress.country.$valid ? '' : 'error'}}" name="country" id="country"  ng-model="shippingAddress.country" required>
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">US</option>
                                             <option value="DE">DE</option>
                                         </select>
-                                        <input ng-click="addCustomerAddress(shippingAddress)" type="button" class="btn blue radius small" value="Save Address"/>
+                                        <input ng-click="addCustomerAddress(shippingAddress, addAddress.$valid)" type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
                                 <div class="continue">

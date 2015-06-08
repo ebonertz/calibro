@@ -73,7 +73,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             });
         }
 
-        $scope.addCustomerAddress = function (address) {
+        $scope.addCustomerAddress = function (address, valid) {
+            console.log(valid);
 
             var address = new Addresses(address);
 
