@@ -103,8 +103,6 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 }
             }*/
 
-            $rootScope.cart.lineItems = [];
-
             this.removeLineItem($rootScope.cart.id, payload).then(function (result) {
                 LoggerServices.success('Remove from Sphere Cart ' + result);
                 $rootScope.cart = result;

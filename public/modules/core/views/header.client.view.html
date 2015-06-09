@@ -47,7 +47,7 @@
                         <th id="cp-price">Price</th>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="lineItem in cart.lineItems" class="product-preview">
+                        <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-preview">
                             <td><a ng-click="removeFromCart(lineItem)" class="remove-product" href="">X</a> {{lineItem.name.en}}</td>
                             <td class="cp-qty-td">{{lineItem.quantity}}</td>
                             <td class="cp-price-td">&euro;{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>

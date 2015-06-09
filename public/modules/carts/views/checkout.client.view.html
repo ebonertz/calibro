@@ -25,7 +25,7 @@
 
                                     <form>
 
-                                        <label ng-repeat="address in authentication.user.addresses" ng-click="selectShippingAddress(address)" class="block-radio">
+                                        <label ng-repeat="address in authentication.user.addresses track by address.id" ng-click="selectShippingAddress(address)" class="block-radio">
                                             <b>{{address.firstName}} {{address.lastName}}</b><br/>
                                             {{address.streetName}} {{address.streetNumber}}<br/>
                                             {{address.phone}}

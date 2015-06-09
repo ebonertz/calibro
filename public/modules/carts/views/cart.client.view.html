@@ -23,7 +23,7 @@
                 <th class="remove"></th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="lineItem in cart.lineItems" class="product-row">
+                <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
                     <td class="product-image">
                         <img ng-src="{{lineItem.variant.images[0].url}}"/>
                         <span class="product-name">{{lineItem.name.en}}</span>
