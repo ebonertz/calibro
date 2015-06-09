@@ -18,15 +18,15 @@ var init = require('./config/init')(),
 
 	
 // Bootstrap db connection
-var db = mongoose.connect(config.db, function(err) {
+/*var db = mongoose.connect(config.db, function(err) {
 	if (err) {
 		console.error(chalk.red('Could not connect to MongoDB!'));
 		console.log(chalk.red(err));
 	}
-});
+});*/
 
 // Init the express application
-var app = require('./config/express')(db);
+var app = require('./config/express')(null);
 
 // Bootstrap passport config
 require('./config/passport')();
