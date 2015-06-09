@@ -4,7 +4,8 @@ var ProductService = require('../services/sphere/sphere.products.server.service.
 	ContentfulProductService = require('../services/contentful/contentful.products.server.service.js'),
 	CommonService = require('../services/sphere/sphere.commons.server.service'),
 	CategoriesService = require('../services/sphere/sphere.categories.server.service'),
-	RequestParameters = require('../services/sphere/request-parameters.server.service.js');
+	RequestParameters = require('../services/sphere/request-parameters.server.service.js'),
+	PostFilterService = require('../services/sphere/postfilters.server.service.js');
 
 
 exports.listContentful = function(req, res) {
@@ -45,6 +46,7 @@ exports.fetchCategoryProducts = function(req,res){
 	// TODO: Assign req.query to RequestParameters here to send to ProductService
 	var params = new RequestParameters(req.query)
 
+	// Fetch category
 	new Promise(function(resolve, reject){
 		CategoriesService.getId(slug, function(err, resultId){
 			if(err){
@@ -53,11 +55,15 @@ exports.fetchCategoryProducts = function(req,res){
 				resolve(resultId)
 			}
 		})
-  }).then(function(categoryId){
+  })
+  
+	// Fetch products
+  .then(function(categoryId){
 		ProductService.getByCategory(categoryId, params, function(err, result){
 			if (err) {
 				return res.status(400);
 			} else {
+				result.products = PostFilterService.variantDisplay(result.products, params);
 				res.json(result);
 			}
 		})

@@ -80,6 +80,23 @@ var RequestParameters = function(query){
   // TODO
   this.getPageSize = function(){}
 
+
+  this.getFilter = function(filterName){
+    if(requestparams._filters.hasOwnProperty(filterName)){
+      return requestparams._filters[filterName]
+    }else{
+      return null
+    }
+  }
+
+  this.getByQuery = function(filterName){
+    if(requestparams._byQueries.hasOwnProperty(filterName)){
+      return requestparams._byQueries[filterName]
+    }else{
+      return null
+    }
+  }
+
   this._toSphereString = function(key, valueArray){
     var query = sphereKeys[key]
 
@@ -100,6 +117,7 @@ var sphereKeys = {
   frameShape: "variants.attributes.frameShape.key",
   frameMaterial: "variants.attributes.frameMaterial.en",
   lensColor: "variants.attributes.lensColor.key",
+  frameColor: "variants.attributes.frameColor.key",
   name: "name.en",
   price: "price"
 }

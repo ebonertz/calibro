@@ -1,8 +1,8 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('products').service('ProductService', ['$http', '$q',
-	function ($http, $q) {
+angular.module('products').service('ProductService', ['$http', '$q', '$location',
+	function ($http, $q, $location) {
 		var urlString = '/products';
 
 		this.list = function () {
@@ -52,9 +52,10 @@ angular.module('products').service('ProductService', ['$http', '$q',
 			
 			queryString = queryString.slice(0,-1);
 
-			var url = (queryString.length > 0 ? '/categories/'+slug+'?'+queryString : '/categories/'+slug);
+			var get_url = (queryString.length > 0 ? '/categories/'+slug+'?'+queryString : '/categories/'+slug);
+			// var local_url = '/'+location.hash.split('?')[0]+'?'+queryString; 
 
-			$http.get(url).success(function (data) {
+			$http.get(get_url).success(function (data) {
 				deferred.resolve(data);
 			});
 

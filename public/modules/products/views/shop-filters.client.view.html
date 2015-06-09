@@ -167,8 +167,8 @@
 <div ng-repeat-start="(facetKey, facetOptions) in facetConfig" class="filter-block" id="{{facetKey}}-filter" >
   <p class="filter-title">{{facetOptions.title}}</p><a class="clearfilter" ng-click="clearFilter(facetKey)">Clear</a>
   <label ng-repeat="term in facets[$utils.attrKey(facetKey, facetOptions)].terms" class="check-option">
-  <input type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="requestFilter()">
-  {{term.term | facets}} <span class="cat-amount">({{term.count}})</span>
+  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="categoryPage()">
+  {{term.term | facets}} <!--<span class="cat-amount">({{term.count}})</span>-->
   </label>
 </div>
 <hr ng-repeat-end/>
