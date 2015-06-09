@@ -9,6 +9,15 @@ exports.list = function (entity, callback) {
     });
 };
 
+exports.all = function (entity, callback){
+    SphereClient.getClient()[entity].all().fetch().then(function (resultArray) {
+        callback(null, resultArray.body.results);
+    }).error(function (err) {
+        console.log(err);
+        callback(err, null);
+    });   
+}
+
 
 exports.create = function (entity, object, callback) {
     SphereClient.getClient()[entity].save(object).then(function (result) {

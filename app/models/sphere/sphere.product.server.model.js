@@ -1,5 +1,7 @@
 "use strict";
 
+var CategoriesService = require('../../services/sphere/sphere.categories.server.service');
+
 var Product = function(options){
 
   // Product data
@@ -11,7 +13,14 @@ var Product = function(options){
 
   this.name = options.name;
   this.description = options.description;
-  this.categories = options.categories;
+
+  // Add slug to categories
+  this.categories = options.categories
+  for(var i = 0; i < this.categories.length; i++){
+    var slug = CategoriesService.getSlug(this.categories[i].id)
+    this.categories[i].slug = slug;
+  }
+  
 
   if(options.displayVariant)
     this.displayVariant = options.displayVariant

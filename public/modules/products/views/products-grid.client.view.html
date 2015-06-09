@@ -1,5 +1,5 @@
 <section class="inner">
-	<div data-ng-repeat="product in products" class="product on-sale no-stock">
+	<div data-ng-repeat="product in products track by product.id" class="product on-sale no-stock">
 		<div class="product-extras">
 			<div class="product-extras">
 				<span class="on-sale-badge">Sale</span>

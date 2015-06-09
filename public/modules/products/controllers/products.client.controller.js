@@ -108,7 +108,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       return query;
     }
 
-    $scope.categoryPage = function(filterName){
+    $scope.clearFilter = function(filterName){
       delete $scope.productFilters[filterName]
       $scope.requestFilter();
       return false;
@@ -147,11 +147,23 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.product.variants.unshift($scope.product.masterVariant);
         $scope.selectedColor = $scope.currentVariant.attr.color[$scope.lang];
 
+        // Breadcrumbs
+        $scope.breadcrumbs = {}
+        $scope.breadcrumbs.category = $scope.product.categories[0].slug;
+
+        if($scope.product.masterVariant.attr.sex){
+          $scope.breadcrumbs.sub_category = {
+            show: true,
+            name: ($scope.product.masterVariant.attr.sex.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
+            url: ("/#!/"+$scope.breadcrumbs.category+"/"+$scope.product.masterVariant.attr.sex.key).toLowerCase()
+          }
+        }
+
         // TODO: Fix price update when changing variant
-        $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
-        $scope.$watch(currentVariant, function(){
-          $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
-        })
+        $scope.price = ProductUtils.renderPrice($scope.currentVariant.prices, 'EUR');
+        // $scope.$watch(currentVariant, function(){
+        //   $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
+        // })
         
       })
     };
