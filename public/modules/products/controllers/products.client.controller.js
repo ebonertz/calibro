@@ -40,27 +40,33 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       })
     };
 
-    $scope.categoryAndSex = function (){
+    $scope.categoryPage = function (){
       // Makes sure no other fetches are being executed at the same time
-      if($scope.FETCHING)
+      if($scope.FETCHING){
+        console.log('Already fetching')
         return
+      }
       $scope.FETCHING = true;
 
+      var slug, query, sex;
+
+      // Get category slug
       var slug = $stateParams.slug
       $scope.category = slug; 
+      $scope.productFilters = $scope.productFilters || {} // Init by default
       
-      var sex = $stateParams.sex;
-      if(sex){
+      // Add sex to filters if found in stateParams (url)
+      if($stateParams.sex){
+        sex = $stateParams.sex;
         $scope.sex = sex;
 
-        // Both sexes will include unisex products 
-        $scope.productFilters = {sex: {MEN: true, UNISEX: true}};
-        var query = {
-          sex: sex+";unisex"
-        }
-
-        $scope.byQuery = ['sex']
+        // Both sexes will include unisex products
+        $scope.productFilters.sex = {} 
+        $scope.productFilters.sex['UNISEX'] = true;
+        $scope.productFilters.sex[sex.toUpperCase()] = true;
       }
+
+      query = buildQuery();
 
       $scope.sort = {name: "ASC"}
       $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
@@ -70,26 +76,16 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
+        // Default displayVariant is masterVariant, but server might return other if color filters are being applied
         for(var i = 0; i < resultsArray.products.length; i++){
           $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
-          // variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
         }
-        // var variants = []
-        // for(var i = 0; i < resultsArray.products.length; i++){
-        //   variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
-        // }
-        // $scope.variants = variants;
 
         $scope.FETCHING = false;
       })
     }
 
-    $scope.requestFilter = function(){
-      // Makes sure no other fetches are being executed at the same time
-      if($scope.FETCHING)
-        return
-      $scope.FETCHING = true;
-
+    var buildQuery = function(){
       // Build query object
       var query = {}
       $scope.byQuery = []
@@ -109,26 +105,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         }
       }
 
-      ProductService.getByCategorySlug($scope.category, query, Object.keys($scope.facetConfig), $scope.sort, $scope.byQuery).then(function(resultsArray){
-        $scope.products = resultsArray.products
-        $scope.facets = resultsArray.facets
-
-        for(var i = 0; i < resultsArray.products.length; i++){
-          $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
-          // variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
-        }
-
-        // var variants = []
-        // for(var i = 0; i < resultsArray.products.length; i++){
-        //   variants = variants.concat(variantsFromProduct(resultsArray.products[i]))
-        // }
-        // $scope.variants = variants
-
-        $scope.FETCHING = false;
-      })
+      return query;
     }
 
-    $scope.clearFilter = function(filterName){
+    $scope.categoryPage = function(filterName){
       delete $scope.productFilters[filterName]
       $scope.requestFilter();
       return false;
@@ -141,7 +121,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       var value = ($scope.sort[sortName] == "ASC" ? "DESC" : "ASC")
       $scope.sort = {}
       $scope.sort[sortName] = value
-      $scope.requestFilter()
+      $scope.categoryPage()
       return false;
     }
 
