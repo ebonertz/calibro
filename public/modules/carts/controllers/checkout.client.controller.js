@@ -79,8 +79,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             var address = new Addresses(address);
 
             address.$save(function (response) {
-                Authentication.user = response.body;
-                $scope.customer = angular.copy(Authentication.user);
+                Authentication.user = response;
                 console.log("success address");
             }, function (response) {
                 $scope.error = response.data.message;
