@@ -260,11 +260,11 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}</td>
+                                            <td>{{cart.totalPrice.currencyCode}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
-                                            <td>free</td>
+                                            <td>{{cart.shippingInfo.shippingRate.price.currencyCode}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}</td>
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
@@ -290,28 +290,12 @@
             <hr/>
             <table id="subtotals">
                 <span class="sub-title">Products</span>
-                <tr class="product">
+                <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
                     <td class="product-name">
-                        Focali Better View <span class="qty">x2</span>
+                        {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>
                     </td>
                     <td class="amount">
-                        $79.98
-                    </td>
-                </tr>
-                <tr class="product">
-                    <td class="product-name">
-                        Focali Oculus <span class="qty">x1</span>
-                    </td>
-                    <td class="amount">
-                        $149.99
-                    </td>
-                </tr>
-                <tr class="product">
-                    <td class="product-name">
-                        Ray-Ban Aviator <span class="qty">x1</span>
-                    </td>
-                    <td class="amount">
-                        $99.99
+                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
                     </td>
                 </tr>
                 <tr class="subtotal">
@@ -319,7 +303,7 @@
                         Subtotal
                     </td>
                     <td id="sub-amount" class="amount">
-                        $499.99
+                        {{cart.totalPrice.currencyCode}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}
                     </td>
                 </tr>
                 <tr class="shipping">
@@ -327,7 +311,7 @@
                         Shipping
                     </td>
                     <td id="shipping-cost" class="amount">
-                        free
+                        {{cart.shippingInfo.shippingRate.price.currencyCode}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
                     </td>
                 </tr>
                 <tr id="final-order-price">
@@ -335,7 +319,7 @@
                         <b>Order Total</b>
                     </td>
                     <td id="price-total" class="amount">
-                        $499.99
+                        {{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}
                     </td>
                 </tr>
             </table>

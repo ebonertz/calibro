@@ -58,7 +58,7 @@
                         Subtotal
                     </td>
                     <td id="sub-amount" class="amount">
-                        {{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}
+                        {{cart.totalPrice.currencyCode}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}
                     </td>
                 </tr>
                 <tr class="shipping">
@@ -66,7 +66,7 @@
                         Shipping
                     </td>
                     <td id="shipping-cost" class="amount">
-                        free
+                        {{cart.shippingInfo.shippingRate.price.currencyCode}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
                     </td>
                 </tr>
                 <tr id="final-order-price">

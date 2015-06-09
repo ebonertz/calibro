@@ -1,6 +1,7 @@
 'use strict';
 
-var CommonService = require('./sphere.commons.server.service.js');
+var CommonService = require('./sphere.commons.server.service.js'),
+    Promise = require('promise');
 
 var LANG = 'en';
 
