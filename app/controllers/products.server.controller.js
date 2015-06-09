@@ -48,25 +48,13 @@ exports.fetchCategoryProducts = function(req,res){
 
   // Fetch category
   var categoryId = CategoriesService.getId(slug)
-  // new Promise(function(resolve, reject){
-  //   CategoriesService.getId(slug, function(err, resultId){
-  //     if(err){
-  //       return res.status(400).send({message: err.message})
-  //     }else{
-  //       resolve(resultId)
-  //     }
-  //   })
-  // })
-  
-  // // Fetch products
-  // .then(function(categoryId){
-    ProductService.getByCategory(categoryId, params, function(err, result){
-      if (err) {
-        return res.status(400);
-      } else {
-        result.products = PostFilterService.variantDisplay(result.products, params);
-        res.json(result);
-      }
-    })
-  // })
+
+  ProductService.getByCategory(categoryId, params, function(err, result){
+    if (err) {
+      return res.status(400);
+    } else {
+      result.products = PostFilterService.variantDisplay(result.products, params);
+      res.json(result);
+    }
+  })
 }

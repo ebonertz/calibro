@@ -9,6 +9,7 @@ var RequestParameters = function(query){
   requestparams._byQueries = {}
   requestparams._filters = {}
   requestparams._sorts = {}
+  requestparams._page = {}
 
   if(query.byQuery){
     _.forEach(query.byQuery.split(";"), function(key){
@@ -38,6 +39,10 @@ var RequestParameters = function(query){
         requestparams._sorts[sortSplit[0]] = ascending;
       }
         
+    }else if(key == "page"){
+      requestparams._page.num = value;
+    }else if(key == "pageSize"){
+      requestparams._page.size = value;
     }else if(key != "byQuery"){ 
       if(requestparams._byQueries.hasOwnProperty(key)){
         requestparams._byQueries[key] = value.split(";")
@@ -76,10 +81,16 @@ var RequestParameters = function(query){
     })
     return sphereQuery
   }
+  this.addPaging = function(sphereQuery){
+    if(requestparams._page.num){
+      sphereQuery = sphereQuery.page(requestparams._page.num)
+    }
+    if(requestparams._page.size){
+      sphereQuery = sphereQuery.perPage(requestparams._page.size)
+    }
 
-  // TODO
-  this.getPageSize = function(){}
-
+    return sphereQuery;
+  }
 
   this.getFilter = function(filterName){
     if(requestparams._filters.hasOwnProperty(filterName)){

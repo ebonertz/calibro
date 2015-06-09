@@ -18,138 +18,8 @@
     <button type="submit" id="apply-price">Filter</button>
   </div>
 </div>
-<!-- <hr/>
-<div class="filter-block" id="shape-filter">
-  <p class="filter-title">Filter by Shape</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="angled">
-    Angled Face <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="triangular">
-    Triangular Face <span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="oval">
-    Oval Face <span class="cat-amount">(34)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="round">
-    Round Face <span class="cat-amount">(45)</span>
-  </label>
-</div>
-<hr/>
-<div class="filter-block" id="frame-filter">
-  <p class="filter-title">Frame Width</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="narrow">
-    Narrow Face <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="medium">
-    Medium <span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="wide">
-    Wide <span class="cat-amount">(34)</span>
-  </label>
-</div>
-<hr/>
-<div class="filter-block" id="frame-type-filter">
-  <p class="filter-title">Frame Type</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="rimless">
-    Rimless <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="full-rim">
-    Full-Rim <span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="half-rim">
-    Half-Rim <span class="cat-amount">(34)</span>
-  </label>
-</div>
-<hr/>
-<div class="filter-block" id="frame-shape-filter">
-  <p class="filter-title">Frame Shape</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="square-frame">
-    Square <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="round-frame">
-    Round <span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="rectangle-frame">
-    Rectangle <span class="cat-amount">(34)</span>
-  </label>
-</div>
-<hr/>
-<div class="filter-block" id="frame-material">
-  <p class="filter-title">Frame Material</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="acetate">
-    Acetate <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="metal">
-    Metal<span class="cat-amount">(23)</span>
-  </label>
-</div>
-<hr/>
-<div class="filter-block" id="color">
-  <p class="filter-title">Color</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="black">
-    Black <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="blue">
-    blue<span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="brown">
-    Brown <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="crystal">
-    Chrystal<span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="gold">
-    Gold <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="green">
-    Green<span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="grey">
-    Grey <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="purple">
-    Purple<span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="red">
-    Red <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="silver">
-    Silver<span class="cat-amount">(23)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="tortoise">
-    Tortoise <span class="cat-amount">(12)</span>
-  </label>
-  <label class="check-option">
-    <input type="checkbox" uicheckbox value="two-tone">
-    Two-Tone<span class="cat-amount">(23)</span>
-  </label>
-</div>
+
+<!--
 <hr/>
 <div class="filter-block" id="categories">
   <p class="filter-title">Category</p><a href="#" class="clearfilter">Clear</a>
@@ -166,7 +36,7 @@
 
 <div ng-repeat-start="(facetKey, facetOptions) in facetConfig" class="filter-block" id="{{facetKey}}-filter" >
   <p class="filter-title">{{facetOptions.title}}</p><a class="clearfilter" ng-click="clearFilter(facetKey)">Clear</a>
-  <label ng-repeat="term in facets[$utils.attrKey(facetKey, facetOptions)].terms" class="check-option">
+  <label ng-repeat="term in facets[$utils.attrKey(facetKey, facetOptions)].terms track by term.term" class="check-option">
   <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="categoryPage()">
   {{term.term | facets}} <!--<span class="cat-amount">({{term.count}})</span>-->
   </label>

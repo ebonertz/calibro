@@ -69,10 +69,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       query = buildQuery();
 
       $scope.sort = {name: "ASC"}
+      $scope.pageSize = $scope.pageSize || 1;
+      $scope.pageNum = $scope.pageNum || 1; 
+
       $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
 
       var facets = Object.keys($scope.facetConfig)
-      ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery).then(function(resultsArray){
+      ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function(resultsArray){
         $scope.products = resultsArray.products
         $scope.facets = resultsArray.facets
 
