@@ -167,9 +167,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     }
 
     $scope.addToCart = function () {
-       CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.quantity );
+      CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.quantity );
     };
-
     $scope.view = function(id){
       if(!id)
         id = $stateParams.id
