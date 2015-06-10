@@ -1,6 +1,8 @@
 'use strict';
 
-var LANG = 'en';
+var LANG = 'en',
+    currencyCodeMap = {EUR: '€',
+                       USD: '$'}
 
 angular.module('products').factory('ProductUtils', [
   function(){
@@ -18,18 +20,26 @@ angular.module('products').factory('ProductUtils', [
         var amount = (price.centAmount/100).toFixed(2)
         var result;
 
-        switch(price.currencyCode){
-          case 'EUR':
-            result = amount+'€'
-            break;
-          case 'USD':
-            result = '$'+amount
-            break;
-        }
+        result = amount+ currencyCodeMap[price.currencyCode]
+
         return result;
       },
 
-      attrKey: function(facetKey, attrConfig){
+      toPriceString: function(price){
+          if(price == null)
+            return '?';
+
+          if(price.value != null)
+              return currencyCodeMap[price.value.currencyCode] + ' ' + ((price.value.centAmount/100).toFixed(2));
+          else
+              return currencyCodeMap[price.currencyCode] + ' ' + ((price.centAmount/100).toFixed(2));
+
+      },
+       getCurrencySimbol: function(currencyCode){
+            return currencyCodeMap[currencyCode];
+        },
+
+        attrKey: function(facetKey, attrConfig){
         var key = 'variants.attributes.'+facetKey
 
         switch(attrConfig.type){
