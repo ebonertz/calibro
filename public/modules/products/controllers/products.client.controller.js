@@ -55,16 +55,16 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
         // Get category slug
         var slug = $stateParams.slug
-        $scope.category = slug; 
+        $scope.category = slug;
         $scope.productFilters = $scope.productFilters || {} // Init by default
-        
+
         // Add sex to filters if found in stateParams (url)
         if($stateParams.sex){
           sex = $stateParams.sex;
           $scope.sex = sex;
 
           // Both sexes will include unisex products
-          $scope.productFilters.sex = {} 
+          $scope.productFilters.sex = {}
           $scope.productFilters.sex['UNISEX'] = true;
           $scope.productFilters.sex[sex.toUpperCase()] = true;
         }
@@ -73,7 +73,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
         $scope.sort = {name: "ASC"}
         $scope.pageSize = $scope.pageSize || 1;
-        $scope.pageNum = options.pageNum || 1; 
+        $scope.pageNum = options.pageNum || 1;
 
         $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
 
@@ -94,7 +94,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
           }
 
-          
+
         })
       }catch(e){
         console.log(e)
@@ -155,8 +155,19 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       });
     };
 
-    $scope.addToCart = function (product) {
-      CartService.addToCart(product);
+    $scope.quantity = 1;
+
+    $scope.incrementQuantity = function(){
+      $scope.quantity ++;
+    }
+
+    $scope.decrementQuantity = function(){
+      if($scope.quantity > 1)
+        $scope.quantity --;
+    }
+
+    $scope.addToCart = function () {
+       CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.quantity );
     };
 
     $scope.view = function(id){
@@ -187,7 +198,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         // $scope.$watch(currentVariant, function(){
         //   $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
         // })
-        
+
       })
     };
 
