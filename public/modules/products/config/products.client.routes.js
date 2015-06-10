@@ -56,7 +56,11 @@ angular.module('products').config(['$stateProvider',
     state('categoryProducts',{
       url: '/categories/:slug',
       templateUrl: 'modules/products/views/category-products.client.view.html'
-    });
+    }).
+        state('test-products',{
+            url: '/test-products',
+            templateUrl: 'modules/products/views/test-products.client.view.html'
+        });
   }
 ]);
 
