@@ -139,9 +139,7 @@
 	</div> -->
 </section>
 <div class="pagination">
-	<a class="arrow" id="prev" href="#" rel="prev"></a>
-	<span class="current">1</span>
-	<a id="page-2" class="indexed-link" href="#">2</a>
-	<a id="page-3" class="indexed-link" href="#">3</a>
-	<a class="arrow" id="next" href="#" rel="next"></a>
+	<a class="arrow" id="prev" rel="prev" ng-show="$parent.pageNum > 1" ng-click="categoryPage({pageNum: pageNum-1})"></a>	
+	<a id='page-{{$index+1}}' ng-repeat="page in pageRange track by $index" ng-class="$parent.pageNum == $index+1 ? 'current':'indexed-link'" ng-click="categoryPage({pageNum: $index+1})">{{$index+1}}</a>
+	<a class="arrow" id="next" rel="next" ng-show="$parent.pageNum < totalPages" ng-click="categoryPage({pageNum: pageNum+1})"></a>
 </div>

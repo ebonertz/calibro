@@ -35,6 +35,7 @@ var Product = function(options){
 }
 
 var Variant = function(options){
+  this.id = options.id;
   this.availability = options.availability;
   this.images = options.images;
 
