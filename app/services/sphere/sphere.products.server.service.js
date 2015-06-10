@@ -20,8 +20,7 @@ exports.getByCategory = function(categoryId, requestParams, callback){
   var fetcher = SphereClient.getClient().productProjections
     .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id') // Default byCategory
 
-  // Structure parameters
-  // TODO: Move to RequestParameters object
+  // Query parameters
   fetcher = requestParams.addByQueries(fetcher);
   fetcher = requestParams.addFilters(fetcher);
   fetcher = requestParams.addFacets(fetcher);
@@ -35,10 +34,17 @@ exports.getByCategory = function(categoryId, requestParams, callback){
       products[i] = new Product(products[i])
     }
 
+    var pageInfo = requestParams.getPageInfo()
+
     // Return products and facets
     var results = {
       products: products,
-      facets: resultArray.body.facets
+      facets: resultArray.body.facets,
+      pages:{
+        total: Math.ceil(resultArray.body.total / pageInfo.perPage),
+        current: pageInfo.current,
+        perPage: pageInfo.perPage
+      } 
     }
     callback(null, results); 
   }).error(function(err) {

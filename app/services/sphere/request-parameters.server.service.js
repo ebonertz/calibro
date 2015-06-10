@@ -40,10 +40,22 @@ var RequestParameters = function(query){
       }
         
     }else if(key == "page"){
-      requestparams._page.num = value;
+      // TODO: Convert value to int
+      requestparams._page.num = parseInt(value);
     }else if(key == "pageSize"){
-      requestparams._page.size = value;
+      requestparams._page.size = parseInt(value);
+    }else if(key == "price"){
+      // Price filter
+      var queryType = requestparams._byQueries.hasOwnProperty(key) ? "_byQueries" : "_filters"
+      var priceSplit = value.split("-");
+      requestparams[queryType].price = {
+        min: parseInt(priceSplit[0])*100,
+        max: parseInt(priceSplit[1])*100
+      }
+      // requestparams[queryType].price = "range ("+parseInt(priceSplit[0])*100+" to "+parseInt(priceSplit[1])*100+")"
+      
     }else if(key != "byQuery"){ 
+      // Default filter
       if(requestparams._byQueries.hasOwnProperty(key)){
         requestparams._byQueries[key] = value.split(";")
       }else{
@@ -83,9 +95,11 @@ var RequestParameters = function(query){
   }
   this.addPaging = function(sphereQuery){
     if(requestparams._page.num){
+      console.log('.page('+requestparams._page.num+')')
       sphereQuery = sphereQuery.page(requestparams._page.num)
     }
     if(requestparams._page.size){
+      console.log('.perPage('+requestparams._page.size+')')
       sphereQuery = sphereQuery.perPage(requestparams._page.size)
     }
 
@@ -108,10 +122,19 @@ var RequestParameters = function(query){
     }
   }
 
+  this.getPageInfo = function(){
+    return {
+      current: requestparams._page.num,
+      perPage: requestparams._page.size
+    }
+  }
+
   this._toSphereString = function(key, valueArray){
     var query = sphereKeys[key]
 
-    if(valueArray){
+    if(key == 'price'){
+      query = query +':range ('+valueArray.min+' to '+valueArray.max+')'
+    }else if(typeof valueArray === 'object'){
       var is_enum = (sphereKeys[key].slice(-3) == "key")
       var values = (is_enum ? valueArray.join('","').toUpperCase() : valueArray.join('","'))
 
@@ -130,7 +153,7 @@ var sphereKeys = {
   lensColor: "variants.attributes.lensColor.key",
   frameColor: "variants.attributes.frameColor.key",
   name: "name.en",
-  price: "price"
+  price: "variants.price.centAmount"
 }
 
 

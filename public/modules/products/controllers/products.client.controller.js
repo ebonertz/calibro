@@ -40,52 +40,67 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       })
     };
 
-    $scope.categoryPage = function (){
+    $scope.categoryPage = function (options){
+      options = options || {}
+
       // Makes sure no other fetches are being executed at the same time
       if($scope.FETCHING){
         console.log('Already fetching')
         return
       }
-      $scope.FETCHING = true;
+      try {
+        $scope.FETCHING = true;
 
-      var slug, query, sex;
+        var slug, query, sex;
 
-      // Get category slug
-      var slug = $stateParams.slug
-      $scope.category = slug; 
-      $scope.productFilters = $scope.productFilters || {} // Init by default
-      
-      // Add sex to filters if found in stateParams (url)
-      if($stateParams.sex){
-        sex = $stateParams.sex;
-        $scope.sex = sex;
+        // Get category slug
+        var slug = $stateParams.slug
+        $scope.category = slug; 
+        $scope.productFilters = $scope.productFilters || {} // Init by default
+        
+        // Add sex to filters if found in stateParams (url)
+        if($stateParams.sex){
+          sex = $stateParams.sex;
+          $scope.sex = sex;
 
-        // Both sexes will include unisex products
-        $scope.productFilters.sex = {} 
-        $scope.productFilters.sex['UNISEX'] = true;
-        $scope.productFilters.sex[sex.toUpperCase()] = true;
-      }
-
-      query = buildQuery();
-
-      $scope.sort = {name: "ASC"}
-      $scope.pageSize = $scope.pageSize || 1;
-      $scope.pageNum = $scope.pageNum || 1; 
-
-      $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
-
-      var facets = Object.keys($scope.facetConfig)
-      ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function(resultsArray){
-        $scope.products = resultsArray.products
-        $scope.facets = resultsArray.facets
-
-        // Default displayVariant is masterVariant, but server might return other if color filters are being applied
-        for(var i = 0; i < resultsArray.products.length; i++){
-          $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
+          // Both sexes will include unisex products
+          $scope.productFilters.sex = {} 
+          $scope.productFilters.sex['UNISEX'] = true;
+          $scope.productFilters.sex[sex.toUpperCase()] = true;
         }
 
+        query = buildQuery();
+
+        $scope.sort = {name: "ASC"}
+        $scope.pageSize = $scope.pageSize || 1;
+        $scope.pageNum = options.pageNum || 1; 
+
+        $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
+
+        var facets = Object.keys($scope.facetConfig)
+        ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function(resultsArray){
+          $scope.products = resultsArray.products
+          $scope.facets = resultsArray.facets
+
+          $scope.pageSize = resultsArray.pages.perPage || $scope.pageSize;
+          $scope.pageNum = resultsArray.pages.current || $scope.pageNum;
+          $scope.totalPages = resultsArray.pages.total;
+
+          // For ng-repeat
+          $scope.pageRange = new Array($scope.totalPages);
+
+          // Default displayVariant is masterVariant, but server might return other if color filters are being applied
+          for(var i = 0; i < resultsArray.products.length; i++){
+            $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
+          }
+
+          
+        })
+      }catch(e){
+        console.log(e)
+      }finally{
         $scope.FETCHING = false;
-      })
+      }
     }
 
     var buildQuery = function(){
@@ -95,14 +110,19 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       for(var filterKey in $scope.productFilters){
         var filter = $scope.productFilters[filterKey];
 
-        for(var value in filter){
-          // Add filter to query object if it has any true value
-          if(filter[value]){
-            if(query.hasOwnProperty(filterKey)){
-              query[filterKey] = query[filterKey] + ";" + value
-            }else{
-              query[filterKey] = value
-              $scope.byQuery.push(filterKey)
+        if(typeof filter === "string"){
+          query[filterKey] = filter;
+          $scope.byQuery.push(filterKey)
+        }else{
+          for(var value in filter){
+            // Add filter to query object if it has any true value
+            if(filter[value]){
+              if(query.hasOwnProperty(filterKey)){
+                query[filterKey] = query[filterKey] + ";" + value
+              }else{
+                query[filterKey] = value
+                $scope.byQuery.push(filterKey)
+              }
             }
           }
         }
@@ -113,7 +133,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
     $scope.clearFilter = function(filterName){
       delete $scope.productFilters[filterName]
-      $scope.requestFilter();
+      $scope.categoryPage();
       return false;
     }
 
