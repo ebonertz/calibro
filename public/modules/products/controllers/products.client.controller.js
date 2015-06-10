@@ -5,6 +5,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
   function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils) {
     $scope.authentication = Authentication;
 
+    var PER_PAGE = 20;
+
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
     $scope.$utils = ProductUtils
@@ -72,7 +74,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         query = buildQuery();
 
         $scope.sort = {name: "ASC"}
-        $scope.pageSize = $scope.pageSize || 1;
+        $scope.pageSize = $scope.pageSize || PER_PAGE;
         $scope.pageNum = options.pageNum || 1; 
 
         $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
