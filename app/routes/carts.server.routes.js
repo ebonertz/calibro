@@ -38,4 +38,7 @@ module.exports = function (app) {
     app.route('/carts/changeLineItemQuantity/:cartId')
         .post(carts.changeLineItemQuantity);
 
+    app.route('/carts/addDiscountCode/:cartId')
+        .post(carts.addDiscountCode);
+
 };

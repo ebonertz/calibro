@@ -180,5 +180,15 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             return deferred.promise;
         }
 
+        this.addDiscountCode = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/addDiscountCode/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
     }
 ]);

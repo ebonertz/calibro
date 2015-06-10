@@ -38,7 +38,7 @@
                     </td>
                     <td class="item-total">
                         <div class="item-cart-price">
-                            {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
+                            {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}} <span ng-if="lineItem.discountedPrice" class="discount-text">(-{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>
                         </div>
                     </td>
                     <td class="remove-item">
@@ -82,8 +82,8 @@
 
             <div id="cart-coupon" class="coupons">
                 <h6>Have a Coupon?</h6>
-                <input type="text" placeholder="Type your coupon code"/>
-                <button class="btn block outline thick radius blue" type="submit">Apply Coupon</button>
+                <input ng-model="code" type="text" placeholder="Type your coupon code"/>
+                <button ng-click="addDiscountCode(code)" class="btn block outline thick radius blue">Apply Coupon</button>
             </div>
             <div id="order-shipping">
                 <h6>Calculate Shipping</h6>
