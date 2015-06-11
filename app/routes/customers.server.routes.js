@@ -22,4 +22,8 @@ module.exports = function(app) {
   app.route('/addresses').post(customers.addAddress)
   app.route('/addresses/:id')
     .delete(customers.deleteAddress);
+
+  app.route('/subscribe').post(customers.subscribe);
+  app.route('/unsubscribe').post(customers.unsubscribe);
+  app.route('/issubscribed').post(customers.isSubscribed);
 };

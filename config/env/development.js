@@ -50,5 +50,9 @@ module.exports = {
         accessToken: 'a4df0e89344a2951b7c2b91f86a16ef93044baf5125f17689505a380f773fa38',
         secure: true,
         host: 'cdn.contentful.com'
+    },
+    mailchimp: {
+        key: '9ec9ac7d7489e242cac5c26d0333aaeb-us11',
+        listID: '363d286358' 
     }
 };
