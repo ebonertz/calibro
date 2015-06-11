@@ -14,7 +14,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				var customer = new Customers($scope.customer);
 
 				customer.$update(function(response) {
-					$scope.success = true;
+					$scope.success = "Profile updated successfully.";
 					Authentication.user = response;
 					$scope.customer = angular.copy(Authentication.user);
 				}, function(response) {
@@ -76,6 +76,32 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				console.log("No address to delete.")
 				return false;
 			}
+		}
+
+		$scope.fetchSubscription = function(){
+			$http.get('/issubscribed').success(function(result){
+				$scope.newsletterSubscription = (result.toLowerCase() === 'true')
+			})
+		}
+
+		$scope.updateSubscription = function(){
+			// TODO prevent abuse
+			var urlString = ($scope.newsletterSubscription ? '/unsubscribe' : '/subscribe');
+			var params;
+			$http.post(urlString, params).success(function(result){
+				var status = (result.toLowerCase() === 'true');
+				$scope.error = ""
+				if(status)
+					$scope.success = "An email has been sent to you to complete the subscription"
+				else
+					$scope.success = "Unsubscribed successfully"
+
+				$scope.newsletterSubscription = status;
+			}).error(function(e){
+				$scope.success = null
+				$scope.error = e.error
+				$scope.newsletterSubscription = false;
+			})
 		}
 	}
 ]);

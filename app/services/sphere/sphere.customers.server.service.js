@@ -26,7 +26,7 @@ exports.login = function (email, password, anonymousCartId, callback) {
 
     console.log("anonymousCartId " + anonymousCartId)
 
-    SphereClient.getClient().authentication.save(customer).then(function (result) {
+    SphereClient.getClient().customers._save('/login',customer).then(function (result) {
       var customer = new Customer(result.body.customer)
       callback(null, customer, result.body.cart);
     }).error(function (err) {
