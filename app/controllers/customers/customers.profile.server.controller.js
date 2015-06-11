@@ -6,7 +6,8 @@
 var _ = require('lodash'),
   errorHandler = require('../errors.server.controller.js'),
   CustomerService = require('../../services/sphere/sphere.customers.server.service.js'),
-  Address = require('../../models/sphere/sphere.address.server.model.js');
+  Address = require('../../models/sphere/sphere.address.server.model.js'),
+  MailchimpService = require('../../services/mailchimp.server.service.js');
 
 /**
  * Update user details
@@ -33,13 +34,22 @@ exports.update = function(req, res) {
           message: err.message
         });
       } else {
-        req.login(result, function(err) {
-          if (err) {
-            return res.status(400).send(err);
-          } else {
-            return res.json(result);
-          }
-        });
+        if(updateValues.email){
+          // TODO retry on fail?
+          MailchimpService.updateMember(customer.email, updateValues.email, function(err){
+            if(err){
+              console.log(err.error)
+              return res.status(400).send({
+                message: "Could not update newsletter status."
+              })
+            }
+            
+            
+            return loginAndSend(req, res, result)
+          })
+        }else{
+          return loginAndSend(req, res, result)
+        }
       }
     })
   } else {
@@ -48,6 +58,16 @@ exports.update = function(req, res) {
     });
   }
 };
+
+var loginAndSend = function(req, res, user){
+  req.login(user, function(err) {
+    if (err) {
+      return res.status(400).send(err);
+    } else {
+      return res.json(user);
+    }
+  });
+}
 
 exports.changePassword = function(req, res){
   var customer = req.user;

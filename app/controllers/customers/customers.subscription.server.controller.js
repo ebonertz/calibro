@@ -9,12 +9,16 @@ var MailchimpService = require('../../services/mailchimp.server.service.js');
  */
 
 exports.isSubscribed = function(req, res){
-	var email = req.body.email
+	var user = req.user;
+	if(!user)
+		return res.status(400)
+
+	var email = user.email
 	MailchimpService.isSubscribed(email, function(err, result){
 		if(err){
-    	return res.status(400).send(err);
+		return res.status(400).send(err);
 		} else {
-      res.json(result);
+	  res.json(result);
 	  }
 	})
 }
@@ -24,13 +28,22 @@ exports.isSubscribed = function(req, res){
  */
 
 exports.subscribe = function (req, res) {
-	var email = req.body.email
+	var user = req.user;
+	if(!user)
+		return res.status(400)
+
+	var email = user.email
+	var firstName = user.firstName
+	var lastName = user.lastName
 	MailchimpService.subscribe(email, function(err, result){
 		if(err){
-      return res.status(400).send(err);
+	  	return res.status(400).send(err);
 		} else {
-      res.json(result);
-    }
+			if(result.email && result.euid && result.leid)
+	  		res.json(true);
+	  	else
+	  		res.json(false);
+		}
 	})
 }
 
@@ -39,12 +52,16 @@ exports.subscribe = function (req, res) {
  */
 
 exports.unsubscribe = function (req, res) {
-	var email = req.body.email
+	var user = req.user;
+	if(!user)
+		return res.status(400)
+
+	var email = user.email
 	MailchimpService.unsubscribe(email, function(err, result){
 		if(err){
-      return res.status(400).send(err);
+	  	return res.status(400).send(err);
 		} else {
-      res.json(result);
-    }
+	  	res.json(result);
+		}
 	})
 }

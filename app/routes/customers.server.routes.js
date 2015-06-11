@@ -25,5 +25,5 @@ module.exports = function(app) {
 
   app.route('/subscribe').post(customers.subscribe);
   app.route('/unsubscribe').post(customers.unsubscribe);
-  app.route('/issubscribed').post(customers.isSubscribed);
+  app.route('/issubscribed').get(customers.isSubscribed);
 };

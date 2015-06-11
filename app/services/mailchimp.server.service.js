@@ -12,7 +12,7 @@ exports.isSubscribed = function(email, callback){
 			email: email
 		}]
 	}, function(result){
-		var subscribed = result.data[0].status == "subscribed"
+		var subscribed = result.data.length > 0 && result.data[0].status == "subscribed"
 		callback(null, subscribed)
 	}, function(err){
 		console.log(err)
@@ -24,33 +24,55 @@ exports.isSubscribed = function(email, callback){
 exports.subscribe = function(email, callback){
 	MailchimpClient.getClient().lists.subscribe(
 		{
-			id: MailchimpClient.listID,
-			email: {
-				email: email
-			}
+			"id": MailchimpClient.listID,
+			"email": {
+				"email": email
+			},
+			"update_existing": true,
 		},
 		function(result){
 			callback(null, result)
 		},
-		function(error){
-			console.log(error)
+		function(err){
+			console.log(err)
+			callback(err)
 		}
 	)
 }
 
 exports.unsubscribe = function(email, callback){
 	MailchimpClient.getClient().lists.unsubscribe(
-		{
-			id: MailchimpClient.listID,
-			email: {
-				email: email
-			}
-		},
-		function(result){
-			callback(null, result)
-		},
-		function(error){
-			console.log(error)
+	{
+		id: MailchimpClient.listID,
+		email: {
+			email: email
 		}
-	)
+	},
+	function(result){
+		callback(null, result)
+	},
+	function(err){
+		console.log(err)
+		callback(err)
+	})
+}
+
+exports.updateMember = function(oldemail, newemail, callback){
+	MailchimpClient.getClient().lists.updateMember(
+	{
+		id: MailchimpClient.listID,
+		email: {
+			email: oldemail
+		},
+		merge_vars: {
+			"new-email": newemail
+		}
+	},
+	function(result){
+		callback(null, result)
+	},
+	function(err){
+		console.log(err)
+			callback(err)
+	})
 }
