@@ -106,84 +106,14 @@
 
                         <div class="panel-content">
                             <section class="inner">
-                                <div class="saved-addresses-checkout">
-                                    <h6>Saved Cards</h6>
-
-                                    <form>
-
-                                        <label class="block-radio">
-                                            <b>John Doe</b><br/>
-                                            XXXX-XXXX-XXXX-3874<br/>
-                                            10035, New York City, NY<br/>
-                                            08/2015
-                                            <input type="radio" name="payment-method" value="1">
-                                        </label>
-                                        <label class="block-radio">
-                                            <b>Fox Mulder</b><br/>
-                                            XXXX-XXXX-XXXX-4474<br/>
-                                            10035, New York City, NY<br/>
-                                            01/2015<br/>
-                                            <span class="badge xsmall red outline radius no-margin">Expired</span>
-                                            <input type="radio" name="payment-method" value="2">
-                                        </label>
-                                        <label class="block-radio">
-                                            <b>Sledge Hammer</b><br/>
-                                            4120 Lenox Avenue<br/>
-                                            10035, New York City, NY<br/>
-                                            +1 718 456681
-                                            <input type="radio" name="payment-method" value="3">
-                                        </label>
-
-                                    </form>
-                                    <h6>Other Payment Methods</h6>
-                                    <label class="block-radio">
-                                        <b>Paypal</b><br/>
-                                        <input type="radio" name="payment-method" value="3">
-                                    </label>
-                                    <label class="block-radio">
-                                        <b>Check</b><br/>
-                                        <input type="radio" name="payment-method" value="3">
-                                    </label>
-                                    <label class="block-radio">
-                                        <b>Deposit</b><br/>
-                                        <input type="radio" name="payment-method" value="3">
-                                    </label>
-                                </div>
                                 <div class="add-card-checkout">
                                     <h6>Add A New Card</h6>
 
-                                    <form id="add-card-checkout" action="#">
-                                        <label>First Name</label>
-                                        <input type="text" name="name" placeholder="First Name" ng-model="billingAddress.firstName"/>
-                                        <label>Last Name</label>
-                                        <input type="text" name="name" placeholder="First Name" ng-model="billingAddress.lastName"/>
-                                        <label>Phone</label>
-                                        <input type="tel" name="last-name" placeholder="Phone #" ng-model="billingAddress.phone"/>
-                                        <div class="form-field-big-quarter">
-                                            <label>Address</label>
-                                            <input type="text" name="address" placeholder="Address" ng-model="billingAddress.streetName"/>
-                                        </div>
-                                        <div class="form-field-small-quarter">
-                                            <label>#</label>
-                                            <input type="text" name="address" placeholder="#" ng-model="billingAddress.streetNumber"/>
-                                        </div>
-                                        <label>City</label>
-                                        <input type="text" name="city" placeholder="City" ng-model="billingAddress.city"/>
-                                        <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province" ng-model="billingAddress.stater"/>
-                                        <label>Zip/Postal</label>
-                                        <input type="text" name="zip" placeholder="ZIP/Postal" ng-model="billingAddress.postalCode"/>
-                                        <label for="country">Country</label>
-                                        <select name="country" id="country"  ng-model="billingAddress.country">
-                                            <option disabled selected>Please choose a country</option>
-                                            <option value="US">US</option>
-                                            <option value="DE">DE</option>
-                                        </select>
-                                        <input type="submit" class="btn blue radius small" value="Save Address"/>
-                                    </form>
+                                    <div id="paymentNetworks"></div>
+
                                 </div>
                                 <div class="continue">
-                                    <a ng-click="setBillingAddress(billingAddress)" href="" class="btn outline green radius block">Continue</a>
+                                    <button id="submitBtn" ng-click="setBillingAddress(billingAddress)" href="" class="btn outline green radius block">Continue</button>
                                     <hr/>
                                 </div>
                             </section>

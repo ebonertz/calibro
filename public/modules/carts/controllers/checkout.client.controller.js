@@ -98,5 +98,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         };
 
 
+        $(document).ready(function() {
+            $('#paymentNetworks').checkoutList(
+                {
+                    payButton: "submitBtn",
+                    listUrl: "https://api.sandbox.oscato.com/pci/v1/557a027ee4b088681feeb4b3l",
+                    smartSwitch: true
+                }
+            );
+        });
+
+
     }
 ]);

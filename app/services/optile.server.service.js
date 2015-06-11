@@ -1,38 +1,49 @@
-var https = require("https");
+var https = require("https"),
+    config = require('../../config/config');
 
-exports.list = function () {
+var merchantCode = 'COMMERCETOOLS',
+    sanboxToken = 'gcgc91ghu6jnosk6aeve9fgv660dsolc6oglmb9s';
 
-    var payload = {transaction: {
-        "transactionId": "tr101",
-        "country": "DE",
-        "integration": "HOSTED",
-        "customer": {
-            "number": "42",
-            "email": "walter.smith@optile.de"
-        },
-        "payment": {
-            "amount": 19.99,
-            "currency": "EUR",
-            "reference": "ubuy 101/20-03-2013"
-        },
-        "callback": {
-            "returnUrl": "http://www.google.com",
-            "cancelUrl": "http://www.google.com",
-            "notificationUrl": "http://www.google.com"
+exports.list = function (country, customer, payment, callback) {
+
+    exports.listPost(country, customer, payment, function(err, data) {
+
+        if(err) {
+            callback(err, null);
+        } else {
+            callback(null, data.links.self);
         }
-    }};
+
+    });
+
+}
+
+exports.listPost = function (country, customer, payment, callback) {
+
+    var payload = {
+        "transactionId": "tr101156153",
+        "country": country,
+        "customer": customer,
+        "payment": payment,
+        "callback": {
+            "returnUrl": config.serverPath + '/optile/return',
+            "cancelUrl": config.serverPath + '/optile/cancel',
+            "notificationUrl": config.serverPath + '/optile/notification'
+        }
+    };
 
     var req_data = JSON.stringify(payload);
 
     var headers = {
-        'Authorization': 'Basic VUJVWS9CQnRYYTd5dWJSOGlwdVQ=',
-        'Content-Type': "application/json"
+        'Authorization': 'Basic ' + new Buffer(merchantCode + '/' + sanboxToken + ':').toString('base64'),
+        'Content-Type': 'application/vnd.optile.payment.enterprise-v1-extensible+json',
+        'Accept': 'application/vnd.optile.payment.enterprise-v1-extensible+json'
     };
 
     var endpoint = {
-        "host": "api.live.oscato.com",
+        "host": "api.sandbox.oscato.com",
         "port": 443,
-        "path": "/lists",
+        "path": "/api/lists",
         "method": "POST",
         "headers": headers
     };
@@ -42,14 +53,16 @@ exports.list = function () {
 
         res.on('data', function (d) {
             console.log(d);
+            callback(null, JSON.parse(d.toString()));
         });
     });
 
-    post_req.write(req_data)
+    post_req.write(req_data);
     post_req.end();
 
     post_req.on('error', function (e) {
         console.error(e);
+        callback(e, null);
     });
 
 }

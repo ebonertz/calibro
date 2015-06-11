@@ -2,6 +2,7 @@
 
 module.exports = {
     db: 'mongodb://localhost/focali-mean-dev',
+    serverPath: 'http://localhost:3000',
     app: {
         title: 'focali-mean - Development Environment'
     },
@@ -53,6 +54,6 @@ module.exports = {
     },
     mailchimp: {
         key: '9ec9ac7d7489e242cac5c26d0333aaeb-us11',
-        listID: '363d286358' 
+        listID: '363d286358'
     }
 };
