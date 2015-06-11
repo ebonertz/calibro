@@ -5,7 +5,7 @@
 				<span class="on-sale-badge">Sale</span>
 				<span class="no-stock-notice">Out of Stock</span>
 			</div>
-			<a href="/#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0]['url']}}" /></a>
+			<a href="/#!/products/{{product.id}}" class="product-cover"><img ng-src="{{variant.images[0] ? variant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
 			<a href="/#!/products/{{product.id}}" class="product-title"><b>{{product.name.en}}</b></a>
 			<span class="price">
 				<del>

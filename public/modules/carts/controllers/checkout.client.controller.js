@@ -1,10 +1,9 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart) {
         $scope.authentication = Authentication;
-
-        $rootScope.cart;
+        $scope.$utils = ProductUtils;
 
         ShippingMethods.query(function (data) {
             $scope.shippingMethods = data;
@@ -66,6 +65,17 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             order.$save(function (response) {
                 console.log('Order created.');
+
+                var cart = new Cart({
+                    "currency": "EUR",
+                    "customerId": Authentication.user.id
+                });
+
+                cart.$save(function (sphereCart) {
+                    $rootScope.cart = sphereCart;
+                    LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
+                });
+
                 $location.path('orders/' + response.id);
 
             }, function (errorResponse) {

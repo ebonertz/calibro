@@ -72,15 +72,13 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
         }
 
-        this.addToCart = function (item) {
+        this.addToCart = function (productId, variantId, quantity) {
 
             var payload = {
-                productId: item.id,
-                variantId: item.masterData.current.masterVariant.id,
-                quantity: 1
+                productId: productId,
+                variantId: variantId,
+                quantity: quantity
             }
-
-            $rootScope.cart.lineItems = [];
 
             this.addLineItem($rootScope.cart.id, payload).then(function (result) {
                 LoggerServices.success('Added to Sphere Cart ' + result);
@@ -176,6 +174,16 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             var deferred = $q.defer();
 
             $http.post(urlString + '/changeLineItemQuantity/' + cartId, payload).success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.addDiscountCode = function (cartId, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/addDiscountCode/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
             });
 

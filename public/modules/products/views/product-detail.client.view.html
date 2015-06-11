@@ -56,10 +56,10 @@
           </div>
         </div>
         <div class="add-to-cart">
-          <button class="op" id="minus" onclick="removeItem();">&#45;</button>
-          <input type="text" min="1" id="item-amount" value="1">
-          <button class="op" id="more" onclick="addItem();">&#43;</button>
-          <button class="cart-add btn blue radius">Add to Cart</button>
+          <button ng-click="decrementQuantity()" class="op" id="minus">&#45;</button>
+          <input type="text" min="1" id="item-amount" value="{{quantity}}">
+          <button ng-click="incrementQuantity()" class="op" id="more">&#43;</button>
+          <button ng-click="addToCart(product)" class="cart-add btn blue radius">Add to Cart</button>
         </div>
         <div class="product-description" itemprop="description">
           <p data-ng-bind="product.description[lang]"></p>

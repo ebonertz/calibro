@@ -226,13 +226,13 @@
                                         <span class="product-name">{{lineItem.name.en}}</span>
                                     </td>
                                     <td class="product-price">
-                                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount / 100}}
+                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount / 100}}
                                     </td>
                                     <td class="quantity">
                                         {{lineItem.quantity}}
                                     </td>
                                     <td class="item-total-checkout">
-                                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
+                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -260,15 +260,16 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{cart.totalPrice.currencyCode}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}</td>
+                                            <td>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}</td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
-                                            <td>{{cart.shippingInfo.shippingRate.price.currencyCode}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}</td>
+                                            <td ng-if="cart.shippingInfo">{{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}</td>
+                                            <td ng-if="!cart.shippingInfo">-</td>
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>{{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}</h6></td>
+                                            <td><h6>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount / 100}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -295,7 +296,7 @@
                         {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>
                     </td>
                     <td class="amount">
-                        {{lineItem.price.value.currencyCode}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
+                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}}
                     </td>
                 </tr>
                 <tr class="subtotal">
@@ -303,15 +304,18 @@
                         Subtotal
                     </td>
                     <td id="sub-amount" class="amount">
-                        {{cart.totalPrice.currencyCode}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}
+                        {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}
                     </td>
                 </tr>
                 <tr class="shipping">
                     <td class="concept">
                         Shipping
                     </td>
-                    <td id="shipping-cost" class="amount">
-                        {{cart.shippingInfo.shippingRate.price.currencyCode}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+                    <td ng-if="cart.shippingInfo" id="shipping-cost" class="amount">
+                        {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}} {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+                    </td>
+                    <td ng-if="!cart.shippingInfo" id="shipping-cost" class="amount">
+                        -
                     </td>
                 </tr>
                 <tr id="final-order-price">
@@ -319,7 +323,7 @@
                         <b>Order Total</b>
                     </td>
                     <td id="price-total" class="amount">
-                        {{cart.totalPrice.currencyCode}} {{cart.totalPrice.centAmount / 100}}
+                        {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount / 100}}
                     </td>
                 </tr>
             </table>

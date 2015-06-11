@@ -10,6 +10,7 @@ var actions = {
     setShippingAddress: 'setShippingAddress',
     setBillingAddress: 'setBillingAddress',
     setShippingMethod: 'setShippingMethod',
+    addDiscountCode: 'addDiscountCode'
 }
 
 exports.addLineItem = function (cartId, payload, callback) {
@@ -66,4 +67,11 @@ exports.changeLineItemQuantity = function (cartId, payload, callback) {
     });
 }
 
+exports.addDiscountCode = function (cartId, payload, callback) {
+    if (payload)
+        payload.action = actions.addDiscountCode;
 
+    CommonService.update(entity, cartId, [payload], function (err, result) {
+        callback(err, result);
+    });
+}

@@ -1,6 +1,8 @@
-var CommonService = require('../services/sphere/sphere.commons.server.service.js');
+var CommonService = require('../services/sphere/sphere.commons.server.service.js'),
+    OptileService = require('../services/optile.server.service.js');
 
 exports.list = function (req, res) {
+    //OptileService.list();
     CommonService.list(this.entity, function (err, resultArray) {
         if (err) {
             return res.sendStatus(400);
