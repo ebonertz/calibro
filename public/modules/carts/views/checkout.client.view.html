@@ -74,17 +74,17 @@
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel {{shippingMethodClass}}">
+                    <div class="ex-panel {{shippingMethodClass}}" id="shippingMethod">
                         <h4><a class="panel-trigger" href="#" id="orders">Shipping Method</a></h4>
 
                         <div class="panel-content">
                             <section class="inner">
-                                <div class="shipping-left">
+                                <div class="shipping-full"">
                                     <h6>Shipping Carriers</h6>
 
                                     <form>
 
-                                        <label ng-repeat="shippingMethod in shippingMethods" ng-click="selectShippingMethod(shippingMethod)" class="block-radio">
+                                        <label ng-repeat="shippingMethod in shippingMethods" ng-click="selectShippingMethod(shippingMethod)" class="block-radio" style="max-width: 100%;">
                                             <div class="shipping-logo">
                                                 <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg" alt=""/>
                                             </div>
@@ -94,24 +94,6 @@
 
                                     </form>
                                 </div>
-                                <div class="shipping-right">
-                                    <h6>Shipping OPtions for this Carrier</h6>
-                                    <label class="block-radio">
-                                        <b>Free Shipping</b><span class="badge xsmall tblue radius outline pull-right">6 - 10 days</span>
-                                        <input type="radio" name="shipping-price" value="1">
-                                    </label>
-                                    <label class="block-radio">
-                                        <b>Expedited $19.99</b><span
-                                            class="badge xsmall tblue radius outline pull-right">2 days</span>
-                                        <input type="radio" name="shipping-price" value="19.99">
-                                    </label>
-                                    <label class="block-radio">
-                                        <b>Same Day $49.99</b><span
-                                            class="badge xsmall tblue radius outline pull-right">1 day</span>
-                                        <input type="radio" name="shipping-price" value="3">
-                                    </label>
-
-                                </div>
                                 <div class="continue">
                                     <a ng-click="setShippingMethod()" href="" class="btn outline green radius block">Continue</a>
                                     <hr/>
@@ -119,7 +101,7 @@
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel {{billingAddressClass}}">
+                    <div class="ex-panel {{billingAddressClass}}" id="billingAddress">
                         <h4><a class="panel-trigger" href="#" id="orders">Payment Method</a></h4>
 
                         <div class="panel-content">
@@ -207,7 +189,7 @@
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel {{reviewOrderClass}}">
+                    <div class="ex-panel {{reviewOrderClass}}" id="reviewOrder">
                         <h4><a class="panel-trigger" href="#" id="review">Review Order</a></h4>
 
                         <div class="panel-content">
