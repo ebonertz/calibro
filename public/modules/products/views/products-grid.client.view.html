@@ -12,7 +12,7 @@
 					<span class="amount">2000.00</span>
 				</del>
 				<ins>
-					<span class="amount sale-price">{{$utils.renderPrice(product.displayVariant.prices,'EUR')}}</span>
+					<span class="amount sale-price">{{product.displayVariant.prices['EUR'] | spherePrice}}</span>
 				</ins>
 			</span>
 		</div>

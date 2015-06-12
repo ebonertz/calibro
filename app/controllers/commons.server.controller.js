@@ -34,6 +34,21 @@ exports.byCustomer = function (req, res) {
     });
 };
 
+exports.byCustomerOwn = function (req, res) {
+    var customerId = req.user.id;
+
+    if(!customerId)
+        return res.sendStatus(400);
+
+    CommonService.byCustomer(this.entity, customerId, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
 exports.byId = function (req, res) {
     var id = req.param('id');
 
