@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$location', 'Customers', 'Authentication', 'Addresses',
-	function($scope, $http, $location, Customers, Authentication, Addresses) {
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils',
+	function($scope, $http, $location, Customers, Authentication, Addresses, ProductUtils) {
 		$scope.customer = angular.copy(Authentication.user);
 
 		// If user is not signed in then redirect back home
@@ -118,6 +118,23 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				$scope.success = null
 				$scope.error = e.error
 				$scope.newsletterSubscription = false;
+			})
+		}
+
+		/*
+		 * Order History
+		 */
+
+		$scope.fetchOrders = function(){
+			$scope.orders = []
+			$scope.$utils = ProductUtils;
+			
+			$http.get('/orders/own').success(function(result){
+				console.log(result)
+				$scope.orders = result;
+			})
+			.error(function(error){
+				console.log(error)
 			})
 		}
 	}
