@@ -43,17 +43,25 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			});
 		};
 
+		/*
+		 * Addresses
+		 */
+
 		$scope.addCustomerAddress = function(isValid){
 			if(isValid){
 				$scope.success = $scope.error = null;
 				var address = new Addresses($scope.newAddress);
 
-				address.$create(function(response) {
+				address.$save(function(response) {
 					$scope.success = true;
-					Authentication.user = response.body;
+					Authentication.user = response;
 					$scope.customer = angular.copy(Authentication.user);
-				}, function(response) {
-					$scope.error = response.data.message;
+					$scope.newAddress = {};
+
+					$scope.addAddressError = null;
+					$scope.addAddressSuccess = "Address added successfully"
+				}, function(error) {
+					$scope.addAddressError = error.data.message;
 				});
 			}else{
 				$scope.submitted = true;
@@ -69,14 +77,23 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 					$scope.success = true;
 					Authentication.user = response;
 					$scope.customer = angular.copy(Authentication.user);
-				}, function(response) {
-					$scope.error = response.data.message;
+				}, function(error) {
+					$scope.addAddressError = error.data.message;
 				});
 			}else{
 				console.log("No address to delete.")
 				return false;
 			}
 		}
+
+		$scope.defaultAddress = function(){
+			$scope.newAddress = {}
+			$scope.newAddress.country = ''
+		}
+
+		/*
+		 * Newsletter subscription
+		 */
 
 		$scope.fetchSubscription = function(){
 			$http.get('/issubscribed').success(function(result){
