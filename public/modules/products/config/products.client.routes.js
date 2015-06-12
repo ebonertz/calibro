@@ -5,6 +5,8 @@ angular.module('products').config(['$stateProvider',
     function ($stateProvider) {
     // Products state routing
     $stateProvider.
+
+    // Static
     state('eyewear', {
       url: '/eyewear',
       templateUrl: 'modules/products/views/eyewear.client.view.html'
@@ -41,6 +43,8 @@ angular.module('products').config(['$stateProvider',
       url: '/products',
       templateUrl: 'modules/products/views/list-products.client.view.html'
     }).
+
+    // Should go away
     state('createProduct', {
       url: '/products/create',
       templateUrl: 'modules/products/views/create-product.client.view.html'
@@ -49,18 +53,22 @@ angular.module('products').config(['$stateProvider',
       url: '/products/:id',
       templateUrl: 'modules/products/views/product-detail.client.view.html'
     }).
-    state('categorySexProducts',{
-      url: '/categories/:sex/:slug',
-      templateUrl: 'modules/products/views/category-products.client.view.html'
-    }).
+
+    // Categories
     state('categoryProducts',{
       url: '/categories/:slug',
+      templateUrl: 'modules/products/views/category-home.client.view.html'
+    }).
+    state('categoryGenderProducts',{
+      url: '/categories/:gender/:slug',
       templateUrl: 'modules/products/views/category-products.client.view.html'
     }).
-        state('test-products',{
-            url: '/test-products',
-            templateUrl: 'modules/products/views/test-products.client.view.html'
-        });
+
+    // Test
+    state('test-products',{
+        url: '/test-products',
+        templateUrl: 'modules/products/views/test-products.client.view.html'
+    });
   }
 ]);
 

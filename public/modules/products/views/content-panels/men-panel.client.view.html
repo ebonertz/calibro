@@ -1,6 +1,6 @@
-<div class="eyewear panel" id="men">
+<div ng-class="category" class="panel" id="men" data-ng-controller="ProductsController">
 	<div class="description">
-		<h2>The All New Men's Enditatem</h2>
+		<h2 ng-data-bind="$parent.products.men[0].title">{{products.men[0].title}}</h2>
 		<span class="no-stock-notice">Out Of Stock</span>
 		<span class="price">
 			<del>

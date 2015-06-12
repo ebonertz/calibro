@@ -19,6 +19,9 @@ angular.module('products').filter('facets', function(){
 .filter('spherePrice', function(){
   return function(price){
 
+    if(!price)
+      return
+
     var amount = (price.centAmount/100).toFixed(2)
     var result;
 

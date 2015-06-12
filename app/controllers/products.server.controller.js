@@ -49,7 +49,7 @@ exports.fetchCategoryProducts = function(req,res){
   // Fetch category
   var categoryId = CategoriesService.getId(slug)
 
-  ProductService.getByCategory(categoryId, params, function(err, result){
+  ProductService.searchByCategory(categoryId, params, function(err, result){
     if (err) {
       return res.status(400);
     } else {

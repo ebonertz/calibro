@@ -42,7 +42,7 @@
             <span class="amount">$99.99</span>
           </del>
           <ins>
-            <span data-ng-bind="price"></span>
+            <span data-ng-bind="currentVariant.prices['EUR'] | spherePrice"></span>
             <!-- <span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="49.99"
                                            class="amount sale-price">49.99</span> -->
           </ins>

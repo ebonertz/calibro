@@ -146,14 +146,15 @@ var RequestParameters = function(query){
 
 // TODO: Move to config/constants
 var sphereKeys = {
-  sex: "variants.attributes.sex.key",
+  gender: "variants.attributes.sex.key",
   width: "variants.attributes.width.key",
   frameShape: "variants.attributes.frameShape.key",
   frameMaterial: "variants.attributes.frameMaterial.en",
   lensColor: "variants.attributes.lensColor.key",
   frameColor: "variants.attributes.frameColor.key",
   name: "name.en",
-  price: "variants.price.centAmount"
+  price: "variants.price.centAmount",
+  createdAt: "createdAt"
 }
 
 

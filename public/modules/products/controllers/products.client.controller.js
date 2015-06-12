@@ -7,6 +7,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
+    $scope.currency = 'EUR';
+    
     $scope.$utils = ProductUtils
     $scope.facetConfig = {
       'lensColor': {
@@ -51,31 +53,31 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       try {
         $scope.FETCHING = true;
 
-        var slug, query, sex;
+        var slug, query, gender;
 
         // Get category slug
         var slug = $stateParams.slug
         $scope.category = slug;
         $scope.productFilters = $scope.productFilters || {} // Init by default
 
-        // Add sex to filters if found in stateParams (url)
-        if($stateParams.sex){
-          sex = $stateParams.sex;
-          $scope.sex = sex;
+        // Add gender to filters if found in stateParams (url)
+        if($stateParams.gender){
+          gender = $stateParams.gender;
+          $scope.gender = gender;
 
-          // Both sexes will include unisex products
-          $scope.productFilters.sex = {}
-          $scope.productFilters.sex['UNISEX'] = true;
-          $scope.productFilters.sex[sex.toUpperCase()] = true;
+          // Both genders will include unisex products
+          $scope.productFilters.gender = {}
+          $scope.productFilters.gender['UNISEX'] = true;
+          $scope.productFilters.gender[gender.toUpperCase()] = true;
         }
 
         query = buildQuery();
 
-        $scope.sort = {name: "ASC"}
-        $scope.pageSize = $scope.pageSize || 1;
+        $scope.sort = $scope.sort || {name: "ASC"}
+        $scope.pageSize = $scope.pageSize || 20; // TODO: Move to config
         $scope.pageNum = options.pageNum || 1;
 
-        $scope.pageTitle = $scope.sex ? $scope.sex+"'s "+$scope.category : $scope.category;
+        $scope.pageTitle = $scope.gender ? $scope.gender+"'s "+$scope.category : $scope.category;
 
         var facets = Object.keys($scope.facetConfig)
         ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function(resultsArray){
@@ -100,6 +102,27 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         console.log(e)
       }finally{
         $scope.FETCHING = false;
+      }
+    }
+
+    $scope.setCategory = function(){
+      var slug = $stateParams.slug
+      $scope.category = slug;
+    }
+
+    $scope.latestProducts = function(category, gender){
+      $scope.products = {men: [], women: []}
+      var genders = ['men', 'women']
+      
+      $scope.sort = {}
+      $scope.pageSize = 5;
+      for(var i = 0; i < genders.length; i++){
+        ProductService.getByCategorySlug(category, {gender: genders[i]}, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
+          if(resultsArray.products.length > 0){
+            var gender = resultsArray.products[0].masterVariant.attr.sex.key.toLowerCase()
+            $scope.products[gender] = resultsArray.products
+          }
+        })
       }
     }
 

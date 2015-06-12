@@ -5,7 +5,7 @@
 				<span class="on-sale-badge">Sale</span>
 				<span class="no-stock-notice">Out of Stock</span>
 			</div>
-			<a href="/#!/products/{{product.id}}" class="product-cover"><img ng-src="{{variant.images[0] ? variant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
+			<a href="/#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
 			<a href="/#!/products/{{product.id}}" class="product-title"><b>{{product.name.en}}</b></a>
 			<span class="price">
 				<del>
@@ -17,126 +17,6 @@
 			</span>
 		</div>
 	</div>
-
-	<!--
-
-	<div class="product on-sale no-stock">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-			<span class="no-stock-notice">Out of Stock</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	
-	<div class="product on-sale">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-			<span class="no-stock-notice">Out of Stock</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<div class="product-extras">
-			<span class="no-stock-notice">Out of Stock</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-		<span class="price">
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div>
-	<div class="product">
-		<div class="product-extras">
-			<span class="on-sale-badge">Sale</span>
-		</div>
-		<a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model-big.jpg"/></a>
-		<a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-		<span class="price">
-			<del>
-				<span class="amount">$99.99</span>
-			</del>
-			<ins>
-				<span class="amount sale-price">$49.99</span>
-			</ins>
-		</span>
-	</div> -->
 </section>
 <div class="pagination">
 	<a class="arrow" id="prev" rel="prev" ng-show="$parent.pageNum > 1" ng-click="categoryPage({pageNum: pageNum-1})"></a>	

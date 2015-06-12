@@ -1,10 +1,11 @@
-<div ng-controller="ProductsController" ng-init="setCategory();">
+<div ng-controller="ProductsController" ng-init="setCategory(); latestProducts(category); selectedGender = 'men'">
     <div class="slider-wrapper">
         <div class="content-wrapper">
             <section id="subpage-head">
                 <div class="subpage-hero">
-                    <h1 class="subpage-title">Eyewear</h1>
-                    <img src="design/images/{{category}}/{{category}}-hero.jpg"/>
+                    <h1 class="subpage-title">{{category}}</h1>
+                    <img src="design/images/eyewear/eyewear-hero.jpg"/>
+                    <!-- <img ng-src="design/images/{{category}}/{{category}}-hero.jpg"/>  -->
                 </div>
             </section>
         </div>
@@ -16,13 +17,13 @@
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> / 
-				<span class="breadcrumb-last" rel="v:url" property="v:title">Eyewear</span>
+				<span class="breadcrumb-last" rel="v:url" property="v:title">{{category}}</span>
 			</span></span>
             </div>
         </section>
         <section id="eyewear" class="page">
             <div class="sub-page-intro-text">
-                <h1 class="page-title">Eyeweatr Ipsum Dolor</h1>
+                <h1 class="page-title">{{category}} Ipsum Dolor</h1>
 
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                     labore et dolore magna aliquyam.</p>
@@ -33,18 +34,23 @@
         <section id="gender-select" class="page">
             <div class="selection">
                 <div id="eyewear-gender-selection">
-                    <div id="men" class="select active">
-                        <a href="#" data-target="men-eyewear-panel" class="panel-loader"
-                           panelTrigger>
+                    <div id="men" class="select active" ng-class="{active: selectedGender == 'men'}">
+                        <!-- <a href="#" data-target="men-panel" class="panel-loader"
+                           panelTrigger> -->
+                        <!-- <a href="#" class="panel-loader"> -->
+                        <a ng-click="selectedGender = 'men'">
                             <img src="design/images/eyewear/men-thumbnail.jpg"/>
-                            <h5>Men's Eyewear</h5>
+                            <!-- <img src="design/images/{{category}}/men-thumbnail.jpg"/> -->
+                            <h5>Men's {{category}}</h5>
                         </a>
                     </div>
-                    <div id="women" class="select">
-                        <a href="#" data-target="women-eyewear-panel" class="panel-loader"
-                           panelTrigger>
+                    <div id="women" class="select"  ng-class="{active: selectedGender == 'women'}">
+                        <!-- <a href="#" data-target="women-panel" class="panel-loader" panelTrigger> -->
+                        <!-- <a href="#" class="panel-loader"> -->
+                        <a ng-click="selectedGender = 'women'">
                             <img src="design/images/eyewear/women-thumbnail.jpg"/>
-                            <h5>Women's Eyewear</h5>
+                            <!-- <img src="design/images/{{category}}/women-thumbnail.jpg"/> -->
+                            <h5>Women's {{category}}</h5>
                         </a>
                     </div>
                 </div>
@@ -55,27 +61,26 @@
     <div class="gender-product-preview-wrapper">
         <div class="content-wrapper">
             <section class="product-panels">
-                <div class="eyewear panel" id="men">
+                <div ng-class="category" class="panel" id="men">
                     <div class="description">
-                        <h2>The All New Men's Enditatem</h2>
-                        <span class="no-stock-notice">Out Of Stock</span>
+                        <h2 id="test-panel">{{products[selectedGender][0].name[lang]}}</h2>
+                        <span class="no-stock-notice" ng-hide="products[selectedGender][0].masterVariant.availability.isOnStock">Out Of Stock</span>
 					<span class="price">
 						<del>
                             <span class="amount">$99.99</span>
                         </del>
 						<ins>
-                            <span class="amount sale-price large">$49.99</span>
+                            <span class="amount sale-price large">{{products[selectedGender][0].masterVariant.prices[currency] | spherePrice}}</span>
                         </ins>
 					</span>
 
-                        <p>Lorem ipsum dolor sit amet, consectetur Hadipisicing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua.</p>
-                        <a href="/eyewear/men-eyewear/product-detail.html" class="btn blue radius thick">SHOP NOW</a> <a
-                            href="/eyewear/men-eyewear.html" class="btn blue outline radius thick">Shop All Men's
-                        Eyewear</a>
+                        <p>{{products[selectedGender][0].description[lang]}}</p>
+                        <a href="#!/products/{{products[selectedGender][0].id}}" class="btn blue radius thick">SHOP NOW</a> <a
+                            href="/eyewear/men-eyewear.html" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
                     </div>
                     <div class="section-cover">
-                        <img src="design/images/eyewear/product-image.jpg"/>
+                        <img ng-src="{{products[selectedGender][0].masterVariant.images[0]['url']}}" />
+                        <!-- <img src="design/images/eyewear/product-image.jpg"/> -->
                     </div>
                 </div>
             </section>
@@ -89,23 +94,23 @@
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                     tempor invidunt ut labore et dolore magna aliquyam.</p>
             </div>
-            <div class="product">
+            <div class="product" ng-repeat="product in products.men.slice(1)">
                 <div class="product-extras">
                     <span class="on-sale-badge">Sale</span>
                     <span class="no-stock-notice">Out of Stock</span>
                 </div>
-                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-                    <span class="amount">$99.99</span>
-                </del>
-				<ins>
-                    <span class="amount sale-price">$49.99</span>
-                </ins>
-			</span>
+                <a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
+                <a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+    			<span class="price">
+    				<del>
+                        <span class="amount">TODO</span>
+                    </del>
+    				<ins>
+                        <span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>
+                    </ins>
+    			</span>
             </div>
-            <div class="product">
+            <!-- <div class="product">
                 <div class="product-extras">
                     <span class="on-sale-badge">Sale</span>
                 </div>
@@ -147,7 +152,7 @@
                     <span class="amount sale-price">$49.99</span>
                 </ins>
 			</span>
-            </div>
+            </div> -->
         </section>
         <section class="all-link"><!--has to be a section for clearfix-->
             <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear</a>
@@ -160,64 +165,21 @@
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                     tempor invidunt ut labore et dolore magna aliquyam.</p>
             </div>
-            <div class="product">
+            <div class="product" ng-repeat="product in products.women.slice(1)">
                 <div class="product-extras">
                     <span class="on-sale-badge">Sale</span>
                     <span class="no-stock-notice">Out of Stock</span>
                 </div>
-                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-                    <span class="amount">$99.99</span>
-                </del>
-				<ins>
-                    <span class="amount sale-price">$49.99</span>
-                </ins>
-			</span>
-            </div>
-            <div class="product">
-                <div class="product-extras">
-                    <span class="on-sale-badge">Sale</span>
-                </div>
-                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-                <a href="#!/product-detail/1" class="product-title"><b>Checking Double or more lines for title</b></a>
-			<span class="price">
-				<del>
-                    <span class="amount">$99.99</span>
-                </del>
-				<ins>
-                    <span class="amount sale-price">$49.99</span>
-                </ins>
-			</span>
-            </div>
-            <div class="product">
-                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-                    <span class="amount">$99.99</span>
-                </del>
-				<ins>
-                    <span class="amount sale-price">$49.99</span>
-                </ins>
-			</span>
-            </div>
-            <div class="product">
-                <div class="product-extras">
-                    <span class="on-sale-badge">Sale</span>
-                    <span class="no-stock-notice">Out of Stock</span>
-                </div>
-                <a href="#!/product-detail/1" class="product-cover"><img src="design/images/eyewear/eyewear-model.jpg"/></a>
-                <a href="#!/product-detail/1" class="product-title"><b>Focali Better View 2015</b></a>
-			<span class="price">
-				<del>
-                    <span class="amount">$99.99</span>
-                </del>
-				<ins>
-                    <span class="amount sale-price">$49.99</span>
-                </ins>
-			</span>
+                <a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
+                <a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+                <span class="price">
+                    <del>
+                        <span class="amount">TODO</span>
+                    </del>
+                    <ins>
+                        <span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>
+                    </ins>
+                </span>
             </div>
         </section>
         <section class="all-link"><!--has to be a section for clearfix-->

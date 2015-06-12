@@ -43,7 +43,7 @@ angular.module('products').service('ProductService', ['$http', '$q', '$location'
         queryString = queryString.slice(0,-1).concat('&')
       }
 
-      if(Object.keys(sort).length > 0){
+      if(sort && Object.keys(sort).length > 0){
         queryString = queryString + "sort="
         for(var sortName in sort){
           queryString = queryString + sortName + ":" + sort[sortName] + ";"

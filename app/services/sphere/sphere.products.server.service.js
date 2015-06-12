@@ -16,7 +16,7 @@ exports.list = function(callback) {
 	});
 };
 
-exports.getByCategory = function(categoryId, requestParams, callback){
+exports.searchByCategory = function(categoryId, requestParams, callback){
   var fetcher = SphereClient.getClient().productProjections
     .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id') // Default byCategory
 

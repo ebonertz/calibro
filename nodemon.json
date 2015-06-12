@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "ignore": ["*.test.js", "public/*"],
+  "execMap": {
+    "js": "node --debug"
+  },
+  "env": {
+  	"NODE_ENV": "development"
+  }
+}
