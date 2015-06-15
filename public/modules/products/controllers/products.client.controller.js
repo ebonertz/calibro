@@ -7,7 +7,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
-    $scope.currency = 'EUR';
+    $scope.currency = 'USD';
     
     $scope.$utils = ProductUtils
     $scope.facetConfig = {
@@ -223,29 +223,5 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
       })
     };
-
-    // TODO: Move to service
-    var variantsFromProduct = function(product){
-      var variants = []
-      var productCopy = angular.copy(product)
-
-      delete productCopy.masterVariant
-      delete productCopy.variants
-
-      if(product.masterVariant){
-        // Allow the variant to access the product
-        product.masterVariant.product = productCopy
-        product.masterVariant.priceString = ProductUtils.renderPrice(product.masterVariant, 'EUR')
-        variants.push(product.masterVariant)
-      }
-      if(product.variants.length > 0){
-        for(var i = 0; i < product.variants.length; i++){
-          product.variants[i].product = productCopy
-          product.variants[i].priceString = ProductUtils.renderPrice(product.variants[i], 'EUR')
-        }
-        variants = variants.concat(product.variants)
-      }
-      return variants;
-    }
   }
 ]);

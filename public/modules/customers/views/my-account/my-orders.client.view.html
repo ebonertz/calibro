@@ -48,7 +48,6 @@
 						{{order.totalPrice | spherePrice }}
 					</td>
 					<td class="order-date">
-						<!-- 05/30/2015 -->
 						{{order.createdAt | sphereDate | localeDate}}
 					</td>
 					<td class="order-payment-method">
@@ -57,7 +56,6 @@
 					</td>
 					<td class="order-status">
 						<span class="badge small radius" ng-class="order.orderState | statusColor">{{order.orderState}}<span>
-						<!-- <span class="badge small yellow radius">Processing</span> -->
 					</td>
 				</tr>
 			</tbody>

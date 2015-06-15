@@ -146,7 +146,7 @@ var RequestParameters = function(query){
 
 // TODO: Move to config/constants
 var sphereKeys = {
-  gender: "variants.attributes.sex.key",
+  gender: "variants.attributes.gender.key",
   width: "variants.attributes.width.key",
   frameShape: "variants.attributes.frameShape.key",
   frameMaterial: "variants.attributes.frameMaterial.en",

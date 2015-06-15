@@ -344,13 +344,24 @@
           }
         ]
       },
-      "name": "sex",
+      "name": "gender",
       "label": {
-        "en": "Sex"
+        "en": "Gender"
       },
       "isRequired": false,
       "attributeConstraint": "SameForAll",
       "isSearchable": true
+    },
+    {
+      "type": {
+        "name": "money"
+      },
+      "name": "basePrice",
+      "label": {
+        "en": "Base Price"
+      },
+      "isRequired": false,
+      "isSearchable": false
     }
   ]
 }
