@@ -5,8 +5,8 @@
 				<span class="on-sale-badge" ng-if="product.displayVariant.attr.basePrice">Sale</span>
 				<span class="no-stock-notice" ng-if="!product.displayVariant.isOnStock">Out of Stock</span>
 			</div>
-			<a href="/#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
-			<a href="/#!/products/{{product.id}}" class="product-title"><b>{{product.name.en}}</b></a>
+			<a href="/#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
+			<a href="/#!/products/{{product.slug}}" class="product-title"><b>{{product.name.en}}</b></a>
 			<span class="price">
 				<del>
 					<span class="amount" ng-if="product.displayVariant.attr.basePrice">{{product.displayVariant.attr.basePrice | spherePrice}}</span>

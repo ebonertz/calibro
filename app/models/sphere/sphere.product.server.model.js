@@ -2,6 +2,8 @@
 
 var CategoriesService = require('../../services/sphere/sphere.categories.server.service');
 
+var lang = 'en';
+
 var Product = function(options){
 
   // Product data
@@ -13,6 +15,7 @@ var Product = function(options){
 
   this.name = options.name;
   this.description = options.description;
+  this.slug = options.slug[lang]
 
   // Add slug to categories
   this.categories = options.categories

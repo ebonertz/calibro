@@ -66,3 +66,13 @@ exports.byId = function(id, callback){
     callback(err, null);
   })
 }
+
+exports.bySlug = function(slug, callback){
+  SphereClient.getClient().productProjections.staged(false).where('slug(en = "'+slug+'")').fetch().then(function (result) {
+    var product = new Product(result.body.results[0])
+    callback(null, product);
+  }).error(function(err){
+    console.log(err)
+    callback(err, null);
+  })
+}

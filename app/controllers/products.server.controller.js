@@ -37,6 +37,20 @@ exports.byId = function(req, res){
   })
 }
 
+exports.bySlug = function(req, res){
+  var slug = req.params.slug
+
+  if(!slug)
+    return res.status(400)
+
+  ProductService.bySlug(slug, function(err, result){
+    if (err) {
+      return res.status(400);
+    } else {
+      res.json(result);
+    }
+  })
+}
 
 exports.fetchCategoryProducts = function(req,res){
   var slug = req.params.slug;
