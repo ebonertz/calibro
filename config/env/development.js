@@ -54,6 +54,9 @@ module.exports = {
     },
     mailchimp: {
         key: '9ec9ac7d7489e242cac5c26d0333aaeb-us11',
-        listID: '363d286358'
+        lists: {
+            'newsletter': '363d286358',
+            'offers': 'f79541374a'
+        }
     }
 };

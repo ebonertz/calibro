@@ -39,7 +39,7 @@
 				<input required type="tel" class="half" value="614-644598" id="first_name" placeholder="Phone Number"/>
 				</div> -->
 				<br/><br/>
-				<!--Password Change-->
+
 				<span class="sub-title">Change Password</span>
 				<p>If you're changing other data and you don't want to change your password leave these fields blank</p>
 				<hr/>
@@ -61,10 +61,10 @@
 				<span class="sub-title">Email Preferences</span>
 				<hr/>
 				<label class="opt-in" >
-				<input type="checkbox" name="newsletter" ng-model="newsletterSubscription" ng-init="fetchSubscription()" ng-click="updateSubscription()" /> Sign up to our newsletter
+				<input type="checkbox" name="newsletter" ng-model="newsletterSubscription" ng-init="fetchSubscription('newsletter')" ng-click="updateSubscription('newsletter')" /> Sign up to our newsletter
 				</label>
 				<label class="opt-in">
-				<input type="checkbox"  checked name="offers" value="signup-offers-true" /> Receive special offers to your inbox
+				<input type="checkbox" name="offers" ng-model="offersSubscription" ng-init="fetchSubscription('offers')" ng-click="updateSubscription('offers')" /> Receive special offers to your inbox
 				</label>
 				<div data-ng-show="error" class="notice outline red small">
 					<p data-ng-bind="error"></p>

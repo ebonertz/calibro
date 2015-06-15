@@ -10,4 +10,4 @@ exports.getClient = function() {
     return client;
 }
 
-exports.listID =  config.mailchimp.listID
+exports.lists = config.mailchimp.lists

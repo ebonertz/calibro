@@ -43,8 +43,7 @@ exports.update = function(req, res) {
                 message: "Could not update newsletter status."
               })
             }
-            
-            
+              
             return loginAndSend(req, res, result)
           })
         }else{

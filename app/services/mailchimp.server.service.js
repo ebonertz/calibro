@@ -1,13 +1,16 @@
 'use strict';
 
-var MailchimpClient = require('../clients/mailchimp.server.client.js')
+var MailchimpClient = require('../clients/mailchimp.server.client.js'),
+	_ = require('lodash');
 
 // Mailchimp services
+// TODO: Check that the list exists before requesting
 
-exports.isSubscribed = function(email, callback){
+exports.isSubscribed = function(email, list, callback){
 	console.log(email)
+
 	MailchimpClient.getClient().lists.memberInfo({
-		id: MailchimpClient.listID,
+		id: MailchimpClient.lists[list],
 		emails: [{
 			email: email
 		}]
@@ -21,10 +24,10 @@ exports.isSubscribed = function(email, callback){
 	
 }
 
-exports.subscribe = function(email, callback){
+exports.subscribe = function(email, list, callback){
 	MailchimpClient.getClient().lists.subscribe(
 		{
-			"id": MailchimpClient.listID,
+			"id": MailchimpClient.lists[list],
 			"email": {
 				"email": email
 			},
@@ -40,10 +43,10 @@ exports.subscribe = function(email, callback){
 	)
 }
 
-exports.unsubscribe = function(email, callback){
+exports.unsubscribe = function(email, list, callback){
 	MailchimpClient.getClient().lists.unsubscribe(
 	{
-		id: MailchimpClient.listID,
+		id: MailchimpClient.lists[list],
 		email: {
 			email: email
 		}
@@ -58,21 +61,32 @@ exports.unsubscribe = function(email, callback){
 }
 
 exports.updateMember = function(oldemail, newemail, callback){
-	MailchimpClient.getClient().lists.updateMember(
-	{
-		id: MailchimpClient.listID,
-		email: {
-			email: oldemail
+	var totalLists = MailchimpClient.lists.length;
+	var count = 0;
+
+	_.forEach(MailchimpClient.lists, function(listId, listName){
+		MailchimpClient.getClient().lists.updateMember(
+		{
+			id: listId,
+			email: {
+				email: oldemail
+			},
+			merge_vars: {
+				"new-email": newemail
+			}
 		},
-		merge_vars: {
-			"new-email": newemail
-		}
-	},
-	function(result){
-		callback(null, result)
-	},
-	function(err){
-		console.log(err)
+		function(result){
+			console.log("Updated member for "+listName)
+			if(count >= totalLists -1){
+				callback(null, result)
+			}else{
+				count++
+			}
+		},
+		function(err){
+			console.log("updateMember: "+listName)
+			console.log(err)
 			callback(err)
+		})
 	})
 }

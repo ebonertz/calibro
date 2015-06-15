@@ -23,7 +23,7 @@ module.exports = function(app) {
   app.route('/addresses/:id')
     .delete(customers.deleteAddress);
 
-  app.route('/subscribe').post(customers.subscribe);
-  app.route('/unsubscribe').post(customers.unsubscribe);
-  app.route('/issubscribed').get(customers.isSubscribed);
+  app.route('/subscribe/:listName').post(customers.subscribe);
+  app.route('/unsubscribe/:listName').post(customers.unsubscribe);
+  app.route('/issubscribed/:listName').get(customers.isSubscribed);
 };

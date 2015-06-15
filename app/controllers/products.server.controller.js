@@ -37,6 +37,7 @@ exports.byId = function(req, res){
   })
 }
 
+
 exports.fetchCategoryProducts = function(req,res){
   var slug = req.params.slug;
 

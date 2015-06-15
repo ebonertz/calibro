@@ -95,15 +95,15 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 		 * Newsletter subscription
 		 */
 
-		$scope.fetchSubscription = function(){
-			$http.get('/issubscribed').success(function(result){
-				$scope.newsletterSubscription = (result.toLowerCase() === 'true')
+		$scope.fetchSubscription = function(list){
+			$http.get('/issubscribed/'+list).success(function(result){
+				$scope[list+"Subscription"] = (result.toLowerCase() === 'true')
 			})
 		}
 
-		$scope.updateSubscription = function(){
+		$scope.updateSubscription = function(list){
 			// TODO prevent abuse
-			var urlString = ($scope.newsletterSubscription ? '/unsubscribe' : '/subscribe');
+			var urlString = ($scope[list+"Subscription"] ? '/unsubscribe/'+list : '/subscribe/'+list);
 			var params;
 			$http.post(urlString, params).success(function(result){
 				var status = (result.toLowerCase() === 'true');
@@ -113,11 +113,11 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				else
 					$scope.success = "Unsubscribed successfully"
 
-				$scope.newsletterSubscription = status;
+				$scope[list+"Subscription"] = status;
 			}).error(function(e){
 				$scope.success = null
 				$scope.error = e.error
-				$scope.newsletterSubscription = false;
+				$scope[list+"Subscription"] = false;
 			})
 		}
 
