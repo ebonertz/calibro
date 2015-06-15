@@ -7,7 +7,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
-    $scope.currency = 'USD';
+    $scope.currency = 'EUR';
     
     $scope.$utils = ProductUtils
     $scope.facetConfig = {
@@ -119,7 +119,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       for(var i = 0; i < genders.length; i++){
         ProductService.getByCategorySlug(category, {gender: genders[i]}, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
           if(resultsArray.products.length > 0){
-            var gender = resultsArray.products[0].masterVariant.attr.sex.key.toLowerCase()
+            var gender = resultsArray.products[0].masterVariant.attr.gender.key.toLowerCase()
             $scope.products[gender] = resultsArray.products
           }
         })
@@ -207,7 +207,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.breadcrumbs = {}
         $scope.breadcrumbs.category = $scope.product.categories[0].slug;
 
-        if($scope.product.masterVariant.attr.sex){
+        if($scope.product.masterVariant.attr.gender){
           $scope.breadcrumbs.sub_category = {
             show: true,
             name: ($scope.product.masterVariant.attr.sex.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
@@ -216,7 +216,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         }
 
         // TODO: Fix price update when changing variant
-        $scope.price = ProductUtils.renderPrice($scope.currentVariant.prices, 'EUR');
+        $scope.price = ProductUtils.renderPrice($scope.currentVariant.prices, $scope.currency);
         // $scope.$watch(currentVariant, function(){
         //   $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
         // })

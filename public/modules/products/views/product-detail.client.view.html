@@ -20,7 +20,7 @@
           <img itemprop="image" ng-src="{{currentVariant.images[0]['url']}}"/>
         </div>
         <div class="thumbnails">
-          <a ng-repeat="image in currentVariant.images" class="thumbnail-wrapper active" href="#" data-url="{{image.url}}">
+          <a ng-repeat="image in currentVariant.images track by image.url" class="thumbnail-wrapper active" href="#" data-url="{{image.url}}">
             <img class="thumbnail" ng-src="{{image.url}}"
                alt="{{image.label}}"/>
           </a>
@@ -35,14 +35,14 @@
         <meta itemprop="availability" content="In Stock">
         <meta itemprop="itemCondition" content="New">
         <span class="new-badge">New</span>
-        <span class="on-sale-badge">Sale</span>
-        <span class="no-stock-notice" ng-hide="currentVariant.availability.isOnStock">Out of Stock</span>
+        <span class="on-sale-badge" ng-if="currentVariant.attr.basePrice">Sale</span>
+        <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
           <del>
-            <span class="amount">$99.99</span>
+            <span class="amount" ng-if="currentVariant.attr.basePrice">{{currentVariant.attr.basePrice | spherePrice}}</span>
           </del>
           <ins>
-            <span data-ng-bind="currentVariant.prices['EUR'] | spherePrice"></span>
+            <span data-ng-bind="currentVariant.prices[currency] | spherePrice"></span>
             <!-- <span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="49.99"
                                            class="amount sale-price">49.99</span> -->
           </ins>
@@ -52,7 +52,7 @@
         <div class="selection">
           <div class="selection-box">
             <label for="color">Color</label>
-            <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants" ng-change="selectVariantFromKey"></select>
+            <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>
           </div>
         </div>
         <div class="add-to-cart">

@@ -88,8 +88,8 @@ var RequestParameters = function(query){
   }
   this.addSorts = function(sphereQuery){
     _.forEach(requestparams._sorts, function(value, key){
-      console.log('.sort('+requestparams._toSphereString(key)+','+value.toString()+')')
-      sphereQuery = sphereQuery.sort(requestparams._toSphereString(key), value)
+      console.log('.sort('+sphereKeys["sort"+key]+','+value.toString()+')')
+      sphereQuery = sphereQuery.sort(sphereKeys["sort"+key], value)
     })
     return sphereQuery
   }
@@ -154,7 +154,10 @@ var sphereKeys = {
   frameColor: "variants.attributes.frameColor.key",
   name: "name.en",
   price: "variants.price.centAmount",
-  createdAt: "createdAt"
+  createdAt: "createdAt",
+
+  sortname: "name.en",
+  sortprice: "price"
 }
 
 
