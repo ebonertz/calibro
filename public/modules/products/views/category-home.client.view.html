@@ -1,4 +1,4 @@
-<div ng-controller="ProductsController" ng-init="setCategory(); latestProducts(category); selectedGender = 'men'">
+<div ng-controller="ProductsController" ng-init="category = getCategory(); products = latestProducts(category); selectedGender = 'men'">
 	<div class="slider-wrapper">
 		<div class="content-wrapper">
 			<section id="subpage-head">
@@ -35,9 +35,6 @@
 			<div class="selection">
 				<div id="eyewear-gender-selection">
 					<div id="men" class="select active" ng-class="{active: selectedGender == 'men'}">
-						<!-- <a href="#" data-target="men-panel" class="panel-loader"
-						   panelTrigger> -->
-						<!-- <a href="#" class="panel-loader"> -->
 						<a ng-click="selectedGender = 'men'">
 							<img src="design/images/eyewear/men-thumbnail.jpg"/>
 							<!-- <img src="design/images/{{category}}/men-thumbnail.jpg"/> -->
@@ -45,8 +42,6 @@
 						</a>
 					</div>
 					<div id="women" class="select"  ng-class="{active: selectedGender == 'women'}">
-						<!-- <a href="#" data-target="women-panel" class="panel-loader" panelTrigger> -->
-						<!-- <a href="#" class="panel-loader"> -->
 						<a ng-click="selectedGender = 'women'">
 							<img src="design/images/eyewear/women-thumbnail.jpg"/>
 							<!-- <img src="design/images/{{category}}/women-thumbnail.jpg"/> -->
@@ -74,8 +69,8 @@
 						</ins>
 					</span>
 						<p>{{products[selectedGender][0].description[lang]}}</p>
-						<a href="#!/products/{{products[selectedGender][0].id}}" class="btn blue radius thick">SHOP NOW</a> <a
-							href="/eyewear/men-eyewear.html" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
+						<a ng-href="#!/products/{{products[selectedGender][0].slug}}" class="btn blue radius thick">SHOP NOW</a> 
+						<a ng-href="#!/categories/{{selectedGender}}/{{category}}" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
 					</div>
 					<div class="section-cover">
 						<img ng-src="{{products[selectedGender][0].masterVariant.images[0]['url']}}" ng-show="products[selectedGender][0].masterVariant.images.length > 0" />
@@ -97,8 +92,8 @@
 					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
 					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
 				</div>
-				<a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}" /></a>
-				<a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+				<a ng-href="#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}" /></a>
+				<a ng-href="#!/products/{{product.slug}}" class="product-title"><b>{{product.name[lang]}}</b></a>
 				<span class="price">
 					<del ng-if="product.masterVariant.basePrices[currency]">
 						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>
@@ -125,8 +120,8 @@
 					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
 					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
 				</div>
-				<a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
-				<a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+				<a ng-href="#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
+				<a ng-href="#!/products/{{product.slug}}" class="product-title"><b>{{product.name[lang]}}</b></a>
 				<span class="price">
 					<del ng-if="product.masterVariant.basePrices[currency]">
 						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>

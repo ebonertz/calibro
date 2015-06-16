@@ -105,25 +105,27 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       }
     }
 
-    $scope.setCategory = function(){
+    $scope.getCategory = function(){
       var slug = $stateParams.slug
-      $scope.category = slug;
+      return slug
     }
 
-    $scope.latestProducts = function(category, gender){
-      $scope.products = {men: [], women: []}
+    $scope.latestProducts = function(category, gender, pageSize){
+      var products = {men: [], women: []}
       var genders = ['men', 'women']
       
       $scope.sort = {}
-      $scope.pageSize = 5;
+      $scope.pageSize = pageSize || 5;
       for(var i = 0; i < genders.length; i++){
         ProductService.getByCategorySlug(category, {gender: genders[i]}, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
           if(resultsArray.products.length > 0){
             var gender = resultsArray.products[0].masterVariant.attr.gender.key.toLowerCase()
-            $scope.products[gender] = resultsArray.products
+            products[gender] = resultsArray.products
           }
         })
       }
+
+      return products;
     }
 
     var buildQuery = function(){
