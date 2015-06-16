@@ -39,7 +39,7 @@
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
                         class="cart-icon"></i> Cart <span class="items-in-cart">({{cart.lineItems.length}})</span></a>
-				<div class="cart-preview hidden">
+				<div ng-if="cart.lineItems" class="cart-preview hidden">
                     <table id="cart-preview">
                         <thead>
                         <th id="cp-product">Product</th>

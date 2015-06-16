@@ -90,3 +90,17 @@ exports.addDiscountCode = function (req, res) {
         }
     });
 };
+
+exports.createOrder = function (req, res) {
+    var cartId = req.param('cartId'),
+        payload = req.body;
+
+    CartService.createOrder(cartId, payload, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.redirect('/#!/orders/' + result.id)
+        }
+    });
+};
+

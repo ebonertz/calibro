@@ -11,7 +11,12 @@ exports.list = function (country, customer, payment, callback) {
         if(err) {
             callback(err, null);
         } else {
-            callback(null, data.links.self);
+            if(data == null || data.links == null) {
+                callback(new Error('Something wrong.'), null);
+            } else {
+                callback(null, data.links.self);
+            }
+
         }
 
     });
@@ -52,7 +57,6 @@ exports.listPost = function (country, customer, payment, callback) {
         console.log("statusCode: ", res.statusCode);
 
         res.on('data', function (d) {
-            console.log(d);
             callback(null, JSON.parse(d.toString()));
         });
     });
@@ -61,7 +65,6 @@ exports.listPost = function (country, customer, payment, callback) {
     post_req.end();
 
     post_req.on('error', function (e) {
-        console.error(e);
         callback(e, null);
     });
 

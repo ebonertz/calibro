@@ -1,9 +1,14 @@
 'use strict';
 
-angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', 'ProductUtils',
-    function ($scope, Authentication, CartService, $rootScope, ProductUtils) {
+angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', 'ProductUtils', '$location',
+    function ($scope, Authentication, CartService, $rootScope, ProductUtils, $location) {
         $scope.$utils = ProductUtils;
         $scope.authentication = Authentication;
+
+        $scope.proceedToCheckout = function() {
+            if($rootScope.cart.lineItems != null && $rootScope.cart.lineItems > 0)
+                $location.path('/checkout');
+        }
 
         $scope.removeFromCart = function (item) {
             CartService.removeFromCart(item);

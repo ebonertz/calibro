@@ -1,7 +1,23 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService) {
+
+        setTimeout(function () {
+            if ($rootScope.cart!= null && $rootScope.cart.shippingInfo != null) {
+                AuthorizeNetService.get($rootScope.cart.taxedPrice.totalNet.centAmount / 100).then(function (data) {
+                    $scope.authorizeNet = data;
+
+                    for(var i = 0; i < $scope.shippingMethods.length; i++) {
+                        if($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
+                            $scope.shippingMethods[i].selected = true;
+                        }
+                    }
+
+                });
+            }
+        }, 3000);
+
         $scope.authentication = Authentication;
         $scope.$utils = ProductUtils;
 
@@ -24,13 +40,14 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.setShippingAddress = function (shippingAddress) {
             var finalShippingAddress = shippingAddress;
 
-            if($scope.selectedShippingAddress) {
+            if ($scope.selectedShippingAddress) {
                 finalShippingAddress = $scope.selectedShippingAddress;
             }
 
             CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
                 $rootScope.cart = result;
                 $scope.shippingMethodClass = 'active';
+                //optileList();
             });
         }
 
@@ -52,36 +69,60 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }).then(function (result) {
                     $rootScope.cart = result;
                     $scope.billingAddressClass = 'active';
+
+                    AuthorizeNetService.get($rootScope.cart.taxedPrice.totalNet.centAmount / 100).then(function (data) {
+                        $scope.authorizeNet = data;
+                    });
                 });
-                ;
+
             }
         }
 
-        $scope.createOrder = function () {
-            var order = new Order({
-                id: $rootScope.cart.id,
-                version: $rootScope.cart.version
-            });
+        /*        var optileList = function () {
+         OptileService.list($rootScope.cart.shippingAddress.country,
+         {email: Authentication.user.email},
+         {
+         amount: $rootScope.cart.taxedPrice.totalNet.centAmount / 100,
+         currency: $rootScope.cart.taxedPrice.totalNet.currencyCode,
+         reference: $rootScope.cart.id
+         }).then(function (listUrl) {
+         $('#paymentNetworks').checkoutList(
+         {
+         payButton: "submitBtn",
+         listUrl: listUrl,
+         smartSwitch: true
+         }
+         );
+         });
+         }
 
-            order.$save(function (response) {
-                console.log('Order created.');
 
-                var cart = new Cart({
-                    "currency": "EUR",
-                    "customerId": Authentication.user.id
-                });
+         $scope.createOrder = function () {
+         var order = new Order({
+         id: $rootScope.cart.id,
+         version: $rootScope.cart.version
+         });
 
-                cart.$save(function (sphereCart) {
-                    $rootScope.cart = sphereCart;
-                    LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
-                });
+         order.$save(function (response) {
+         console.log('Order created.');
 
-                $location.path('orders/' + response.id);
+         var cart = new Cart({
+         "currency": "EUR",
+         "customerId": Authentication.user.id
+         });
 
-            }, function (errorResponse) {
-                console.log(errorResponse);
-            });
-        }
+         cart.$save(function (sphereCart) {
+         $rootScope.cart = sphereCart;
+         LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
+         });
+
+         $location.path('orders/' + response.id);
+
+         }, function (errorResponse) {
+         console.log(errorResponse);
+         });
+         }
+         */
 
         $scope.addCustomerAddress = function (address, valid) {
             console.log(valid);
@@ -96,18 +137,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             });
 
         };
-
-
-        $(document).ready(function() {
-            $('#paymentNetworks').checkoutList(
-                {
-                    payButton: "submitBtn",
-                    listUrl: "https://api.sandbox.oscato.com/pci/v1/557a027ee4b088681feeb4b3l",
-                    smartSwitch: true
-                }
-            );
-        });
-
 
     }
 ]);

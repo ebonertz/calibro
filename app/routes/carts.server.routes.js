@@ -41,4 +41,7 @@ module.exports = function (app) {
     app.route('/carts/addDiscountCode/:cartId')
         .post(carts.addDiscountCode);
 
+    app.route('/carts/createOrder/:cartId')
+        .post(carts.createOrder);
+
 };

@@ -18,7 +18,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                     } else {
 
                         var cart = new Cart({
-                            "currency": "EUR",
+                            "currency": "USD",
                             "customerId": Authentication.user.id
                         });
 
@@ -61,7 +61,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
         this.createAnonymous = function () {
             var cart = new Cart({
-                "currency": "EUR"
+                "currency": "USD"
             });
 
             cart.$save(function (sphereCart) {

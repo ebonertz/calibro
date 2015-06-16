@@ -78,24 +78,12 @@
                     </td>
                 </tr>
             </table>
-            <a href="#!/checkout" class="btn block radius blue">Proceed To Checkout</a>
+            <a ng-click="proceedToCheckout()" href="" class="btn block radius blue">Proceed To Checkout</a>
 
             <div id="cart-coupon" class="coupons">
                 <h6>Have a Coupon?</h6>
                 <input ng-model="code" type="text" placeholder="Type your coupon code"/>
                 <button ng-click="addDiscountCode(code)" class="btn block outline thick radius blue">Apply Coupon</button>
-            </div>
-            <div id="order-shipping">
-                <h6>Calculate Shipping</h6>
-                <select id="countries">
-                    <option disabled selected>Choose Your Country</option>
-                    <option value="usa">United States</option>
-                    <option value="canada">Canada</option>
-                    <option value="mexico">Mexico</option>
-                </select>
-                <input type="text" id="state-province" placeholder="State, Province"/>
-                <input type="text" id="zip" placeholder="ZIP, Postcode"/>
-                <button class="btn block outline thick blue radius">Update Cart Totals</button>
             </div>
         </div>
 
