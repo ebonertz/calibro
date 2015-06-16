@@ -7,7 +7,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
-    $scope.currency = 'EUR';
+    $scope.currency = 'USD';
     
     $scope.$utils = ProductUtils
     $scope.facetConfig = {
@@ -210,8 +210,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         if($scope.product.masterVariant.attr.gender){
           $scope.breadcrumbs.sub_category = {
             show: true,
-            name: ($scope.product.masterVariant.attr.sex.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
-            url: ("/#!/"+$scope.breadcrumbs.category+"/"+$scope.product.masterVariant.attr.sex.key).toLowerCase()
+            name: ($scope.product.masterVariant.attr.gender.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
+            url: ("/#!/"+$scope.breadcrumbs.category+"/"+$scope.product.masterVariant.attr.gender.key).toLowerCase()
           }
         }
 

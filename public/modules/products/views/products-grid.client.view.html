@@ -2,14 +2,15 @@
 	<div data-ng-repeat="product in products track by product.id" class="product on-sale no-stock">
 		<div class="product-extras">
 			<div class="product-extras">
-				<span class="on-sale-badge" ng-if="product.displayVariant.attr.basePrice">Sale</span>
-				<span class="no-stock-notice" ng-if="!product.displayVariant.isOnStock">Out of Stock</span>
+				<span class="on-sale-badge" ng-if="product.displayVariant.basePrices[currency]">Sale</span>
+				<!-- Sphere bug: No availability return on product search -->
+				<!-- <span class="no-stock-notice" ng-if="!product.displayVariant.isOnStock">Out of Stock</span> -->
 			</div>
 			<a href="/#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
 			<a href="/#!/products/{{product.slug}}" class="product-title"><b>{{product.name.en}}</b></a>
 			<span class="price">
 				<del>
-					<span class="amount" ng-if="product.displayVariant.attr.basePrice">{{product.displayVariant.attr.basePrice | spherePrice}}</span>
+					<span class="amount" ng-if="product.displayVariant.basePrices[currency]">{{product.displayVariant.basePrices[currency] | spherePrice}}</span>
 				</del>
 				<ins>
 					<span class="amount sale-price">{{product.displayVariant.prices[currency] | spherePrice}}</span>

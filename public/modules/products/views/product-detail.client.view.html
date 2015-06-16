@@ -8,7 +8,7 @@
       <!-- TODO, missing information on how to structure this -->
       <span typeof="v:Breadcrumb">
         <a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> / 
-        <a class="bc-link" rel="v:url" property="v:title" ng-href="/#!/{{breadcrumbs.category}}">{{breadcrumbs.category}}</a> / 
+        <a class="bc-link" rel="v:url" property="v:title" ng-href="/#!/categories/{{breadcrumbs.category}}">{{breadcrumbs.category}}</a> / 
         <a class="bc-link" rel="v:url" property="v:title" ng-show="breadcrumbs.sub_category.show" ng-href="{{breadcrumbs.sub_category.url}}">{{breadcrumbs.sub_category.name}}</a> <span ng-show="breadcrumbs.sub_category.show"> / </span>
         <span class="breadcrumb-last" rel="v:url" property="v:title">{{product.name[lang]}}</span>
       </span></span>
@@ -35,16 +35,14 @@
         <meta itemprop="availability" content="In Stock">
         <meta itemprop="itemCondition" content="New">
         <span class="new-badge">New</span>
-        <span class="on-sale-badge" ng-if="currentVariant.attr.basePrice">Sale</span>
+        <span class="on-sale-badge" ng-if="currentVariant.basePrices[currency]">Sale</span>
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
           <del>
-            <span class="amount" ng-if="currentVariant.attr.basePrice">{{currentVariant.attr.basePrice | spherePrice}}</span>
+            <span class="amount" ng-if="currentVariant.basePrices[currency]">{{currentVariant.basePrices[currency] | spherePrice}}</span>
           </del>
           <ins>
             <span data-ng-bind="currentVariant.prices[currency] | spherePrice"></span>
-            <!-- <span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="49.99"
-                                           class="amount sale-price">49.99</span> -->
           </ins>
         </div>
       </span>

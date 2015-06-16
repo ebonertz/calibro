@@ -66,8 +66,8 @@
 						<h2 id="test-panel">{{products[selectedGender][0].name[lang]}}</h2>
 						<span class="no-stock-notice" ng-hide="products[selectedGender][0].masterVariant.availability.isOnStock">Out Of Stock</span>
 					<span class="price">
-						<del ng-show="products[selectedGender][0].masterVariant.attr.basePrice">
-							<span class="amount">{{products[selectedGender][0].masterVariant.attr.basePrice | spherePrice}}</span>
+						<del ng-show="products[selectedGender][0].masterVariant.basePrices[currency]">
+							<span class="amount">{{products[selectedGender][0].masterVariant.basePrices[currency] | spherePrice}}</span>
 						</del>
 						<ins>
 							<span class="amount sale-price large">{{products[selectedGender][0].masterVariant.prices[currency] | spherePrice}}</span>
@@ -85,7 +85,7 @@
 		</div>
 	</div>
 	<div class="products-wrapper">
-		<section class="products" id="men-eyewear-products">
+		<section class="products" id="men-{{category}}-products">
 			<div class="products-head">
 				<h3>Shop Latest Men's {{category}} Products</h3>
 
@@ -94,14 +94,14 @@
 			</div>
 			<div class="product" ng-repeat="product in products.men.slice(1)">
 				<div class="product-extras">
-					<span class="on-sale-badge" ng-if="product.masterVariant.attr.basePrice">Sale</span>
+					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
 					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
 				</div>
 				<a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}" /></a>
 				<a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
 				<span class="price">
-					<del ng-if="product.masterVariant.attr.basePrice">
-						<span class="amount">{{product.masterVariant.attr.basePrice | spherePrice}}</span>
+					<del ng-if="product.masterVariant.basePrices[currency]">
+						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>
 					</del>
 					<ins>
 						<span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>
@@ -113,7 +113,7 @@
 			<a ng-href="#!/categories/men/{{category}}" class="btn blue radius">Shop All Men's {{category}}</a>
 		</section>
 		<hr/>
-		<section class="products" id="women-eyewear-products">
+		<section class="products" id="women-{{category}}-products">
 			<div class="products-head">
 				<h3>Shop Latest Women's {{category}} Products</h3>
 
@@ -122,14 +122,14 @@
 			</div>
 			<div class="product" ng-repeat="product in products.women.slice(1)">
 				<div class="product-extras">
-					<span class="on-sale-badge">Sale</span>
-					<span class="no-stock-notice">Out of Stock</span>
+					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
+					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
 				</div>
 				<a ng-href="#!/products/{{product.id}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
 				<a ng-href="#!/products/{{product.id}}" class="product-title"><b>{{product.name[lang]}}</b></a>
 				<span class="price">
-					<del ng-if="product.masterVariant.attr.basePrice">
-						<span class="amount">{{product.masterVariant.attr.basePrice | spherePrice}}</span>
+					<del ng-if="product.masterVariant.basePrices[currency]">
+						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>
 					</del>
 					<ins>
 						<span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>

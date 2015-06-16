@@ -45,7 +45,12 @@ var Variant = function(options){
   this.attr = {}
   for(var i = 0; i < options.attributes.length; i++){
     var opt = options.attributes[i]
-    this.attr[opt.name] = opt.value;
+
+    if(opt.name != "basePrices"){ // BasePrices will be added to the variant's root
+      this.attr[opt.name] = opt.value;
+    }else{
+      options.basePrices = opt.value;
+    }
   }
 
   this.prices = {}
@@ -53,6 +58,16 @@ var Variant = function(options){
     var price = options.prices[i]
     var name = (price.country ? price.value.currencyCode+'-'+price.country : price.value.currencyCode);
     this.prices[name] = price.value;
+  }
+
+  // BasePrices has been moved to root above
+  if(options.basePrices){
+    this.basePrices = {}
+    for(var i = 0; i < options.basePrices.length; i++){
+      var basePrice = options.basePrices[i]
+      var name = (basePrice.country ? basePrice.currencyCode+'-'+basePrice.country : basePrice.currencyCode);
+      this.basePrices[name] = basePrice;
+    }
   }
 
   return this;

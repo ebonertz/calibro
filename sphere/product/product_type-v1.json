@@ -68,7 +68,7 @@
           }
         ]
       },
-      "name": "FrameColor",
+      "name": "frameColor",
       "label": {
         "en": "Search Color Frame"
       },
@@ -124,7 +124,7 @@
           }
         ]
       },
-      "name": "LensColor",
+      "name": "lensColor",
       "label": {
         "en": "Search Color Lens"
       },
@@ -354,11 +354,14 @@
     },
     {
       "type": {
-        "name": "money"
+        "name": "set",
+        "elementType": {
+          "name": "money"
+        }
       },
-      "name": "basePrice",
+      "name": "basePrices",
       "label": {
-        "en": "Base Price"
+        "en": "Base Prices"
       },
       "isRequired": false,
       "isSearchable": false

@@ -8,6 +8,6 @@ export AUTH=_Authorization Token_
 
 # Step 3: Call the endpoint
 curl https://api.sphere.io/reactionsphere-test/product-types \
-\       -X POST \
-\       -H "Authorization: Bearer $AUTH" \
-\       -d @sphere/product/product_type-v1.json
+    -X POST \
+    -H "Authorization: Bearer $AUTH" \
+    -d @sphere/product/product_type-v1.json
