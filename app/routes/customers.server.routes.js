@@ -26,4 +26,6 @@ module.exports = function(app) {
   app.route('/subscribe/:listName').post(customers.subscribe);
   app.route('/unsubscribe/:listName').post(customers.unsubscribe);
   app.route('/issubscribed/:listName').get(customers.isSubscribed);
+
+  app.route('/contactUs/').post(customers.contactUs);
 };

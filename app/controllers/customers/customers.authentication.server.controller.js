@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-  passport = require('passport');
+  passport = require('passport'),
+  MandrillService = require('../../services/mandrill.server.service.js');
 
 /**
  * Signup
@@ -34,6 +35,17 @@ exports.signup = function(req, res) {
       // Remove sensitive data before login
       delete customer.password;
 
+      // Send welcome email
+      MandrillService.welcome(customer.email).then(
+        function(){
+          console.log('Welcome email sent to '+customer.email)
+        }, function(error){
+          console.log('Error sending welcome email to '+customer.email)
+          console.log(error)
+        }
+      )
+
+      // Login
       req.login(customer, function(err) {
         if (err) {
           return res.status(400).send(err);

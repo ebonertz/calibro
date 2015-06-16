@@ -58,5 +58,17 @@ module.exports = {
             'newsletter': '363d286358',
             'offers': 'f79541374a'
         }
+    },
+    mandrill: {
+        key: 'G2aMt_7XNEFriFTfs1Otnw',
+        options: {
+            from_email: 'focali.dev@gmail.com',
+            from_name: 'Focali',
+            contactus_email: 'focali.dev@gmail.com',      
+        },
+        templates: {
+            welcome: 'welcome',
+            contactus: 'contactus'
+        }
     }
 };

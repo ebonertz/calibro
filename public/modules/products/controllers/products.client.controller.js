@@ -243,7 +243,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
           $scope.breadcrumbs.sub_category = {
             show: true,
             name: ($scope.product.masterVariant.attr.gender.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
-            url: ("/#!/"+$scope.breadcrumbs.category+"/"+$scope.product.masterVariant.attr.gender.key).toLowerCase()
+            url: ("/#!/"+$scope.product.masterVariant.attr.gender.key+"/"+$scope.breadcrumbs.category).toLowerCase()
           }
         }
 

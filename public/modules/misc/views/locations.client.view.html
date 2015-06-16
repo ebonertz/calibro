@@ -54,18 +54,31 @@
     </section>
     <hr/>
     <section id="contact">
+        <!-- TODO: Move ng-invalid styling to css -->
+        <style>
+            input.ng-invalid.ng-dirty, textarea.ng-invalid.ng-dirty{
+                border: 1px solid red !important;
+            }
+        </style>
         <div class="contact-form">
             <h4>Drop Us A Line <span class="sub-title pull-right">required fields *</span></h4>
 
-            <form action="#" id="contact" name="contact">
+            <form data-ng-submit="contactUsSubmit(contactForm.$valid)" id="contactForm" name="contactForm" novalidate>
                 <label>Full Name*</label>
-                <input required type="text" name="full-name" id="full-name" placeholder="Full Name">
+                <input required type="text" name="full-name" id="full-name" placeholder="Full Name" ng-model="contactUs.name" required>
                 <label>Email*</label>
-                <input required type="email" name="email" id="email" placeholder="Your Email">
+                <input required type="email" name="email" id="email" placeholder="Your Email" ng-model="contactUs.email" required>
                 <label>Your Message *</label>
-                <textarea required name="message" id="message"></textarea>
-                <input type="submit" class="btn blue radius" name="submit" value="Send Message" height="300"
-                       placeholder="Your Message"/>
+                <textarea required name="message" id="message" ng-model="contactUs.message" placeholder="Your Message"></textarea>
+            
+                <div data-ng-show="contactError" class="text-center text-danger">
+                    <div class="notice outline red small" data-ng-bind="contactError"></div>
+                </div>
+                <div data-ng-show="contactSuccess" class="text-center text-danger">
+                    <div class="notice outline green small" data-ng-bind="contactSuccess"></div>
+                </div>
+
+                <input type="submit" class="btn blue radius" name="submit" value="Send Message" height="300" />
             </form>
         </div>
     </section>

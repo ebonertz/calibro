@@ -1,3 +1,5 @@
+'use strict';
+
 var MailchimpClient,
     client,
     config = require('../../config/config'),

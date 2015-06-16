@@ -1,6 +1,7 @@
 'use strict';
 
-var MailchimpService = require('../../services/mailchimp.server.service.js');
+var MailchimpService = require('../../services/mailchimp.server.service.js'),
+	MandrillService = require('../../services/mandrill.server.service.js');
 
 // TODO add security
 
@@ -69,5 +70,19 @@ exports.unsubscribe = function (req, res) {
 		} else {
 	  		res.json(result);
 		}
+	})
+}
+
+exports.contactUs = function (req, res) {
+	var email = req.body.email,
+		name = req.body.name,
+		message = req.body.message;
+
+	MandrillService.contactUs(email, name, message).then(function(result){
+		return res.json({
+			status: result[0].status
+		})
+	}, function(error){
+		return res.status(400).send(error)
 	})
 }
