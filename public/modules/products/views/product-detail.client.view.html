@@ -116,74 +116,11 @@
       </div>
 
     </section>
-    <section class="related"  ng-init="products = latestProducts(category);">
+    <section class="related">
       <div class="cross-sells">
         <h3>Recommended Products</h3>
         <section class="products cross-products">
-          <div class="product on-sale no-stock" ng-repeat="product in products track by product.id">
-            <div class="product-extras">
-              <span class="on-sale-badge" ng-if="currentVariant.basePrices[currency]">Sale</span>
-              <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
-            </div>
-            <a href="#link-to-product" class="product-cover"><img
-                src="design/images/eyewear/eyewear-model.jpg"/></a>
-            <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
-            <span class="price">
-              <del>
-                <span class="amount">$99.99</span>
-              </del>
-              <ins>
-                <span class="amount sale-price">$49.99</span>
-              </ins>
-            </span>
-          </div>
-
-          <!-- <div class="product on-sale">
-            <div class="product-extras">
-              <span class="on-sale-badge">Sale</span>
-            </div>
-            <a href="#link-to-product" class="product-cover"><img
-                src="design/images/eyewear/eyewear-model.jpg"/></a>
-            <a href="#link-to-product" class="product-title"><b>Checking Double or more lines for title</b></a>
-        <span class="price">
-          <del>
-            <span class="amount">$99.99</span>
-          </del>
-          <ins>
-            <span class="amount sale-price">$49.99</span>
-          </ins>
-        </span>
-          </div>
-          <div class="product">
-            <a href="#link-to-product" class="product-cover"><img
-                src="design/images/eyewear/eyewear-model.jpg"/></a>
-            <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
-        <span class="price">
-          <del>
-            <span class="amount">$99.99</span>
-          </del>
-          <ins>
-            <span class="amount sale-price">$49.99</span>
-          </ins>
-        </span>
-          </div>
-          <div class="product on-sale no-stock">
-            <div class="product-extras">
-              <span class="on-sale-badge">Sale</span>
-              <span class="no-stock-notice">Out of Stock</span>
-            </div>
-            <a href="#link-to-product" class="product-cover"><img
-                src="design/images/eyewear/eyewear-model.jpg"/></a>
-            <a href="#link-to-product" class="product-title"><b>Focali Better View 2015</b></a>
-        <span class="price">
-          <del>
-            <span class="amount">$99.99</span>
-          </del>
-          <ins>
-            <span class="amount sale-price">$49.99</span>
-          </ins>
-        </span>
-          </div> -->
+          <product-thumbnail product="product" data-ng-repeat="product in recommendedProducts track by product.id"></product-thumbnail>
         </section>
       </div>
     </section>

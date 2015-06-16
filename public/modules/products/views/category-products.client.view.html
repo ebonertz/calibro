@@ -32,8 +32,8 @@
                 <h1 class="page-title">{{pageTitle}}</h1>
 
                 <div class="sorters">
-                    <a href="#" ng-click="sortBy('name'); $event.preventDefault()" id="by-name" class="sorting active">Sort by Name <span ng-show="sort.name">{{sort.name == "ASC" ? "^" : "V"}}</span></a> 
-                    <a href="#" ng-click="sortBy('price'); $event.preventDefault()" id="by-price" class="sorting">Sort by Price <span ng-show="sort.price">{{sort.price == "ASC" ? "^" : "V"}}</span></a>
+                    <a ng-click="sortBy('name');" id="by-name" class="sorting active">Sort by Name <span ng-show="sort.name">{{sort.name == "ASC" ? "^" : "V"}}</span></a> 
+                    <a ng-click="sortBy('price');" id="by-price" class="sorting">Sort by Price <span ng-show="sort.price">{{sort.price == "ASC" ? "^" : "V"}}</span></a>
                 </div>
                 <div class="category-filters">
                     <a href="#" class="cat-sort active" id="all">All</a> <a href="#" class="cat-sort"

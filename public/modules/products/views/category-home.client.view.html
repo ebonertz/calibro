@@ -87,22 +87,7 @@
 				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
 					tempor invidunt ut labore et dolore magna aliquyam.</p>
 			</div>
-			<div class="product" ng-repeat="product in products.men.slice(1)">
-				<div class="product-extras">
-					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
-					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
-				</div>
-				<a ng-href="#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}" /></a>
-				<a ng-href="#!/products/{{product.slug}}" class="product-title"><b>{{product.name[lang]}}</b></a>
-				<span class="price">
-					<del ng-if="product.masterVariant.basePrices[currency]">
-						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>
-					</del>
-					<ins>
-						<span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>
-					</ins>
-				</span>
-			</div>
+			<product-thumbnail product="product" data-ng-repeat="product in products.men.slice(1) track by product.id"></product-thumbnail>
 		</section>
 		<section class="all-link"><!--has to be a section for clearfix-->
 			<a ng-href="#!/categories/men/{{category}}" class="btn blue radius">Shop All Men's {{category}}</a>
@@ -115,22 +100,7 @@
 				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
 					tempor invidunt ut labore et dolore magna aliquyam.</p>
 			</div>
-			<div class="product" ng-repeat="product in products.women.slice(1)">
-				<div class="product-extras">
-					<span class="on-sale-badge" ng-if="product.masterVariant.basePrices[currency]">Sale</span>
-					<span class="no-stock-notice" ng-if="product.masterVariant.availability.isOnStock">Out of Stock</span>
-				</div>
-				<a ng-href="#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.masterVariant.images[0]['url']}}"/></a>
-				<a ng-href="#!/products/{{product.slug}}" class="product-title"><b>{{product.name[lang]}}</b></a>
-				<span class="price">
-					<del ng-if="product.masterVariant.basePrices[currency]">
-						<span class="amount">{{product.masterVariant.basePrices[currency] | spherePrice}}</span>
-					</del>
-					<ins>
-						<span class="amount sale-price">{{product.masterVariant.prices[currency] | spherePrice}}</span>
-					</ins>
-				</span>
-			</div>
+			<product-thumbnail product="product" data-ng-repeat="product in products.women.slice(1) track by product.id"></product-thumbnail>
 		</section>
 		<section class="all-link"><!--has to be a section for clearfix-->
 			<a ng-href="#!/categories/women/{{category}}" class="btn blue radius">Shop All Women's {{category}}</a>

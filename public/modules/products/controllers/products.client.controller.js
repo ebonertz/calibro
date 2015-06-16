@@ -128,6 +128,34 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       return products;
     }
 
+    $scope.fetchRecommendedProducts = function(category, gender, pageSize){
+      var promise = new Promise(function(resolve, reject){
+        var products = {}
+
+        if(!category){
+          return
+        }
+
+        if(gender){
+          $scope.query = {gender: gender}
+        }else{
+          $scope.query = {}
+        }
+        
+        $scope.sort = {}
+        $scope.pageSize = pageSize || 5;
+        ProductService.getByCategorySlug(category, $scope.query, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
+          if(resultsArray.products.length > 0){
+            products = resultsArray.products
+          }
+
+          resolve(products)
+        })
+      })
+
+      return promise;
+    }
+
     var buildQuery = function(){
       // Build query object
       var query = {}
@@ -198,6 +226,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       if(!id)
         id = $stateParams.id
 
+      $scope.recommendedProducts = []
+
       var products = new Products({id: id})
       products.$get({id: id}, function(result){
         $scope.product = result;
@@ -217,12 +247,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
           }
         }
 
-        // TODO: Fix price update when changing variant
-        $scope.price = ProductUtils.renderPrice($scope.currentVariant.prices, $scope.currency);
-        // $scope.$watch(currentVariant, function(){
-        //   $scope.price = ProductUtils.renderPrice($scope.currentVariant, 'EUR');
-        // })
-
+        $scope.fetchRecommendedProducts($scope.product.categories[0].slug, $scope.product.masterVariant.attr.gender.key)
+        .then(function(result){
+          $scope.$apply(function(){
+            $scope.recommendedProducts = result
+          })
+        })
       })
     };
   }
