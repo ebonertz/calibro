@@ -106,7 +106,12 @@ exports.addAddress = function(req, res){
     var address = new Address(req.body);
     address.streetNumber = address.streetNumber.toString()
 
-    CustomerService.addAddress(customer, address, function(err, result){
+    var actions = [{
+      "action": "addAddress",
+      "address": address
+    }]
+
+    CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})
       }else{
@@ -130,12 +135,12 @@ exports.deleteAddress = function(req, res){
     if(!addressId)
       return res.status(400).send({message: "No address id"})
 
-    // Verify the address belongs to the user
-    if(_.findIndex(customer.addresses, 'id', addressId) < 0){
-      return res.status(403);
-    }
+    var actions = [{
+      action: "removeAddress",
+      addressId: addressId,
+    }]
 
-    CustomerService.deleteAddress(customer, addressId, function(err, result){
+    CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})
       }else{
@@ -163,13 +168,13 @@ exports.updateAddress = function(req, res){
     }
     if(!allowed) return res.status(403)
 
-    var action = [{
+    var actions = [{
       "action": "changeAddress",
       "addressId": addressId,
       "address": address
     }]
 
-    CommonService.update('customers', customer.id, action, function(err, result){
+    CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})
       }else{

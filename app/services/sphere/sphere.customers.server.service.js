@@ -77,39 +77,3 @@ exports.updateProfile = function(customer, updateValues, callback){
 exports.changePassword = function(customer, currentPassword, newPassword, callback){
   callback(new Error("Not yet implemented"), null)
 }
-
-exports.addAddress = function(customer, address, callback){
-  var actions = {
-    version: customer.version,
-    actions: [{
-      action: 'addAddress',
-      address: address
-    }]
-  }
-
-  updateCustomer(customer.id, actions).then(function(result){
-    var customer = new Customer(result.body);
-    callback(null, customer);
-  }).error(function(err){
-    console.log(err);
-    callback(err, null);
-  })
-}
-
-exports.deleteAddress = function(customer, addressId, callback){
-  var actions = {
-    version: customer.version,
-    actions: [{
-      action: "removeAddress",
-      addressId: addressId
-    }]
-  }
-
-  updateCustomer(customer.id, actions).then(function(result){
-    var customer = new Customer(result.body);
-    callback(null, customer);
-  }).error(function(err){
-    console.log(err);
-    callback(err, null);
-  })
-}

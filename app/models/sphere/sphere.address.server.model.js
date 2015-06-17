@@ -4,6 +4,7 @@ var Address = function(opt){
   this.firstName = opt.firstName,
   this.lastName = opt.lastName,
   this.phone = opt.phone,
+  this.company = opt.company,
 
   this.streetName = opt.streetName,
   this.streetNumber = opt.streetNumber.toString(),
