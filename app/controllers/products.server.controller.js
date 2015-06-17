@@ -1,22 +1,10 @@
 'use strict';
 
 var ProductService = require('../services/sphere/sphere.products.server.service.js'),
-  ContentfulProductService = require('../services/contentful/contentful.products.server.service.js'),
   CommonService = require('../services/sphere/sphere.commons.server.service'),
   CategoriesService = require('../services/sphere/sphere.categories.server.service'),
   RequestParameters = require('../services/sphere/request-parameters.server.service.js'),
   PostFilterService = require('../services/sphere/postfilters.server.service.js');
-
-
-exports.listContentful = function(req, res) {
-  ContentfulProductService.list(function(err, resultArray) {
-    if (err) {
-      return res.sendStatus(400);
-    } else {
-      res.json(resultArray);
-    }
-  });
-};
 
 /**
  *  Product detail page

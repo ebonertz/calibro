@@ -17,7 +17,4 @@ module.exports = function(app) {
 
   // Categories
   app.route('/categories/:slug').get(products.fetchCategoryProducts);
-
-  app.route('/products/contentful')
-    .get(products.listContentful);
 };
