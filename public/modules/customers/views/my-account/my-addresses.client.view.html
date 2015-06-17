@@ -13,7 +13,7 @@
 	<section class="page" id="my-account">
 		<div class="content my-account">
 			<h1 class="page-title">My Addresses</h1>
-			<a href="#!/my-addresses" class="btn tblue xsmall outline radius">&larr; Back to Your Saved Addresses</a>
+			<a href="#!/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
 			<hr/>
 			<h3>Saved Addresses</h3>
           	<div data-ng-show="getUpdateStatus().message" class="text-center">
@@ -58,42 +58,8 @@
 				}
 			</style>
 			<form id="addAddressform" ng-init="defaultAddress()" name="addAddressform" data-ng-submit="addCustomerAddress(addAddressform)" novalidate>
-				<div class="form-field-half">
-					<label for="firstName">First Name*</label>
-					<input type="text" id="firstName" name="firstName" placeholder="First Name" data-ng-model="newAddress.firstName" required />
-				</div>
-				<div class="form-field-half">
-					<label for="lastName">Last Name*</label>
-					<input type="text" id="lastName" name="lastName" placeholder="Last Name" data-ng-model="newAddress.lastName" required/>
-				</div>
-				<div class="form-field-half">
-					<label for="phone">Phone*</label>
-					<input type="text" id="phone" name="phone" data-ng-model="newAddress.phone" placeholder="Phone #" />
-				</div>
-				<br />
-				<div class="form-field-half">
-					<label for="streetName">Street Name*</label>
-					<input type="text" id="streetName" name="streetName" class="form-control" data-ng-model="newAddress.streetName" placeholder="Street Name" required>
-				</div>
-				<div class="form-field-half">
-					<label for="streetNumber">Street Number*</label>
-					<input type="number" id="streetNumber" name="streetNumber" class="form-control" data-ng-model="newAddress.streetNumber" placeholder="Street Number" required>
-				</div>
-
-				<div class="form-field-third">
-					<label for="city">City</label>
-					<input type="text" id="city" name="city" placeholder="City" data-ng-model="newAddress.city" required/>				
-				</div>
-				<div class="form-field-third">
-					<label for="state">State/Province</label>
-					<input type="text" name="state" id="state" placeholder="State/Province" data-ng-model="newAddress.state" required />
-				</div>
-				<div class="form-field-third">
-					<label for="postalCode">Zip/Postal</label>
-					<input type="text" name="postalCode" id="postalCode" placeholder="ZIP/Postal" data-ng-model="newAddress.postalCode" required />
-				</div>
-				<div class="form-field-half-single">
-					<label for="country">Country</label>
+				<div class="form-field">
+					<label for="country">Country*</label>
 					<select name="country" id="country" data-ng-model="newAddress.country" required>
 						<option disabled selected value="">Please choose a country</option>
 						<option value="US">United States</option>
@@ -101,9 +67,49 @@
 						<option value="GB">United Kingdom</option>
 					</select>
 				</div>
+				<br />
+				<div class="form-field-half">
+					<label for="firstName">First Name*</label>
+					<input type="text" id="firstName" name="firstName" placeholder="First Name" data-ng-model="newAddress.firstName" required />
+				</div>
+				<div class="form-field-half">
+					<label for="lastName">Last Name*</label>
+					<input type="text" id="lastName" name="lastName" placeholder="Last Name" data-ng-model="newAddress.lastName" required/>
+				</div> 
+				<br />
+				<div class="form-field">
+					<label for="company">Company</label>
+					<input type="text" id="company" name="company" placeholder="Company" data-ng-model="newAddress.company" />
+				</div> 
+				<div class="form-field-half">
+					<label for="streetName">Street Name*</label>
+					<input type="text" id="streetName" name="streetName" data-ng-model="newAddress.streetName" placeholder="Street Name" required />
+				</div>
+				<div class="form-field-half">
+					<label for="streetNumber">Street Number*</label>
+					<input type="text" id="streetNumber" name="streetNumber" data-ng-model="newAddress.streetNumber" placeholder="Street Number" required />
+				</div>
+				<div class="form-field">
+					<label for="city">City*</label>
+					<input type="text" id="city" name="city" placeholder="City" data-ng-model="newAddress.city" required />				
+				</div>
+				<br />
+				<div class="form-field-half">
+					<label for="state">State/Province*</label>
+					<input type="text" name="state" id="state" placeholder="State/Province" data-ng-model="newAddress.state" required />
+				</div>
+				<div class="form-field-half">
+					<label for="postalCode">Zip/Postal*</label>
+					<input type="text" name="postalCode" id="postalCode" placeholder="ZIP/Postal" data-ng-model="newAddress.postalCode" required />
+				</div>
+				<div class="form-field-half">
+					<label for="phone">Phone*</label>
+					<input type="text" id="phone" name="phone" data-ng-model="newAddress.phone" placeholder="Phone #" />
+				</div>
 				<div data-ng-show="addAddressError" class="text-center text-danger">
                 	<div class="notice outline red small" data-ng-bind="addAddressError"></div>
               	</div>
+              	<br />
 				<input type="submit" class="btn blue radius" value="Save Address"/>
 			</form>
 		</div>

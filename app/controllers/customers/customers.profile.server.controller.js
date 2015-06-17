@@ -103,12 +103,13 @@ exports.addAddress = function(req, res){
   if(customer){
 
     var address = new Address(req.body);
-    address.streetNumber = address.streetNumber.toString()
 
     var actions = [{
       "action": "addAddress",
       "address": address
     }]
+
+    console.log(actions)
 
     CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
@@ -157,6 +158,8 @@ exports.updateAddress = function(req, res){
       "addressId": addressId,
       "address": address
     }]
+
+    console.log(actions)
 
     CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
