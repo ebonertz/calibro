@@ -99,7 +99,6 @@ exports.changePassword = function(req, res){
 
 exports.addAddress = function(req, res){
   var customer = req.user;
-  var message = null;
 
   if(customer){
 
@@ -119,21 +118,15 @@ exports.addAddress = function(req, res){
       }
     })
   } else {
-    res.status(400).send({
-      message: 'User is not signed in'
-    });
+    res.status(400);
   }
 }
 
 exports.deleteAddress = function(req, res){
-  var customer = req.user;
-  var message = null;
+  var customer = req.user,
+    addressId = req.params.id;
 
-  if(customer){
-
-    var addressId = req.params.id;
-    if(!addressId)
-      return res.status(400).send({message: "No address id"})
+  if(customer && addressId){
 
     var actions = [{
       action: "removeAddress",
@@ -148,9 +141,7 @@ exports.deleteAddress = function(req, res){
       }
     })
   } else {
-    res.status(400).send({
-      message: 'User is not signed in'
-    });
+    res.status(400);
   }
 }
 
@@ -159,14 +150,7 @@ exports.updateAddress = function(req, res){
   var addressId = req.body.id;
   var address = new Address(req.body);
 
-  if(customer){
-
-    // Security
-    var allowed = false;
-    for(var i = 0; i < customer.addresses.length; i++){
-      if(customer.addresses[i].id = addressId) allowed = true
-    }
-    if(!allowed) return res.status(403)
+  if(customer && addressId){
 
     var actions = [{
       "action": "changeAddress",
@@ -182,9 +166,7 @@ exports.updateAddress = function(req, res){
       }
     })
   } else {
-    res.status(400).send({
-      message: 'User is not signed in'
-    });
+    res.status(400);
   }
 }
 
