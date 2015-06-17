@@ -19,21 +19,21 @@
             <section class="placed-order">
                 <div class="checkout-totals" id="billing">
                     <h6>Payment Information</h6>
-                    <b>{{order.billingAddress.firstName}} {{order.billingAddress.lastName}}</b><br/>
-                    XXXX-XXXX-XXXX-3874<br/>
-                    08/2015<br/>
-                    {{order.billingAddress.streetName}} {{order.billingAddress.streetNumber}}
+                    <b>{{paymentInfo.value.x_first_name}} {{paymentInfo.value.x_last_name}}</b><br/>
+                    {{paymentInfo.value.x_card_type}} {{paymentInfo.value.x_account_number}}<br/>
+                    Authorization {{paymentInfo.value.x_auth_code}}<br/>
+                    {{paymentInfo.value.x_address}} {{paymentInfo.value.x_city}} {{paymentInfo.value.x_country}}
 
                 </div>
                 <div class="checkout-totals" id="shipping">
                     <h6>Shipping Information</h6>
                     <b>{{order.shippingAddress.firstName}} {{order.shippingAddress.lastName}}</b><br/>
-                    {{order.shippingAddress.streetName}} {{order.shippingAddress.streetNumber}}<br/>
+                    {{order.shippingAddress.streetName}} {{order.shippingAddress.streetNumber}} {{order.shippingAddress.city}} {{order.shippingAddress.country}}<br/>
                     {{order.shippingAddress.phone}}
                     <hr/>
                     <p>
-                        <b>Shipping Carrier:</b> DHL <br/>
-                        <b>Shipping Cost:</b> free <br/>
+                        <b>Shipping Carrier:</b> {{order.shippingInfo.shippingMethodName}} <br/>
+                        <b>Shipping Cost:</b> {{$utils.getCurrencySimbol(order.shippingInfo.price.currencyCode)}} {{order.shippingInfo.price.centAmount / 100}} <br/>
                         <b>Arrives:</b> 6-10 Days
                     </p>
                 </div>

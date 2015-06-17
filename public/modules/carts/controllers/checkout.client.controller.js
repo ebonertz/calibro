@@ -5,7 +5,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         setTimeout(function () {
             if ($rootScope.cart!= null && $rootScope.cart.shippingInfo != null) {
-                AuthorizeNetService.get($rootScope.cart.taxedPrice.totalNet.centAmount / 100).then(function (data) {
+                AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                     $scope.authorizeNet = data;
 
                     for(var i = 0; i < $scope.shippingMethods.length; i++) {
@@ -26,11 +26,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         });
 
         $scope.selectShippingAddress = function (shippingAddress) {
-            $scope.selectedShippingAddress = shippingAddress;
-        }
-
-        $scope.selectBillingAddress = function (billingAddress) {
-            $scope.selectedBillingAddress = billingAddress;
+                $scope.selectedShippingAddress = shippingAddress;
+            $rootScope.cart.shippingAddress = shippingAddress;
         }
 
         $scope.selectShippingMethod = function (shippingMethod) {
@@ -51,14 +48,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             });
         }
 
-        $scope.setBillingAddress = function (billingAddress) {
-            CartService.setBillingAddress($rootScope.cart.id, {address: billingAddress}).then(function (result) {
-                $rootScope.cart = result;
-                $scope.reviewOrderClass = 'active';
-            });
-        }
-
-
         $scope.setShippingMethod = function () {
             if ($scope.selectedShippingMethod) {
                 CartService.setShippingMethod($rootScope.cart.id, {
@@ -68,9 +57,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }
                 }).then(function (result) {
                     $rootScope.cart = result;
-                    $scope.billingAddressClass = 'active';
+                    $scope.reviewOrderClass = 'active';
 
-                    AuthorizeNetService.get($rootScope.cart.taxedPrice.totalNet.centAmount / 100).then(function (data) {
+                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                         $scope.authorizeNet = data;
                     });
                 });

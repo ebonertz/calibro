@@ -33,7 +33,7 @@
                                         </label>
                                     </form>
 
-                                    <div !ng-if="authentication.user" class="text-center text-danger" style="position: relative;top: 32px;">
+                                    <div ng-if="!authentication.user" class="text-center text-danger" style="position: relative;top: 32px;">
                                         <div class="notice outline red small">No addresses. Please log in.</div>
                                     </div>
 
@@ -133,7 +133,7 @@
             <th>Total</th>
             </thead>
             <tbody>
-            <tr ng-repeat="lineItem in cart.lineItems" class="product-row">
+            <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
                 <td class="product-image">
                     <img ng-src="{{lineItem.variant.images[0].url}}"/>
                     <span class="product-name">{{lineItem.name.en}}</span>
@@ -177,6 +177,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Taxes</td>
+                        <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
+                            {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Shipping</td>
                         <td ng-if="cart.shippingInfo">
                             {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
@@ -207,7 +213,7 @@
                 <INPUT type='hidden' name='x_receipt_link_url' value='http://localhost:3000/carts/createOrder/{{cart.id}}' />
                 <div class="place-order">
                     <br/>
-                    <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Place Order"/>
+                    <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Pay with Authorize.net"/>
                 </div>
             </FORM>
 
@@ -232,6 +238,14 @@
             <td class="amount">
                 {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
                 lineItem.quantity / 100}}
+            </td>
+        </tr>
+        <tr class="subtotal">
+            <td class="concept">
+                Taxes <span style="font-size: 10px;">(included)</span>
+            </td>
+            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions" id="sub-amount" class="amount">
+                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
             </td>
         </tr>
         <tr class="subtotal">
