@@ -13,9 +13,15 @@
 	<section class="page" id="my-account">
 		<div class="content my-account">
 			<h1 class="page-title">My Addresses</h1>
-			<a href="#!/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
+			<a href="#!/my-addresses" class="btn tblue xsmall outline radius">&larr; Back to Your Saved Addresses</a>
 			<hr/>
 			<h3>Saved Addresses</h3>
+          	<div data-ng-show="getUpdateStatus().message" class="text-center">
+            	<div class="notice outline green small" data-ng-bind="getUpdateStatus().message"></div>
+          	</div>
+          	<div data-ng-show="addAddressSuccess" class="text-center text-danger">
+            	<div class="notice outline green small" data-ng-bind="addAddressSuccess"></div>
+          	</div>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
 			
 			<table id="user-addressses">
@@ -30,7 +36,6 @@
 						<td>
 							{{address.streetNumber}} {{address.streetName}}e<br/>
 							{{address.postalCode}}, {{address.city}}, {{address.state}}<br/>
-							<span id="primary-address" class="badge blue pill tblue xsmall outline" ng-if="$index == 0">Primary</span>
 						</td>
 						<td>
 							{{address.firstName}} {{address.lastName}}
@@ -39,7 +44,7 @@
 							{{address.phone}}
 						</td>
 						<td>
-						<a href="/my-account/edit-address.html" class="edit-item"></a><a  ng-click="deleteAddress(address)" class="remove-from-list"></a>
+						<a ng-click="editAddress(address)" class="edit-item"></a><a  ng-click="deleteAddress(address)" class="remove-from-list"></a>
 						</td>
 					</tr>
 				</tbody>
@@ -52,7 +57,7 @@
 					border: 1px solid red !important;
 				}
 			</style>
-			<form id="addAddressform" ng-init="defaultAddress()" name="addAddressform" data-ng-submit="addCustomerAddress(addAddressform.$valid)" novalidate>
+			<form id="addAddressform" ng-init="defaultAddress()" name="addAddressform" data-ng-submit="addCustomerAddress(addAddressform)" novalidate>
 				<div class="form-field-half">
 					<label for="firstName">First Name*</label>
 					<input type="text" id="firstName" name="firstName" placeholder="First Name" data-ng-model="newAddress.firstName" required />
@@ -91,16 +96,13 @@
 					<label for="country">Country</label>
 					<select name="country" id="country" data-ng-model="newAddress.country" required>
 						<option disabled selected value="">Please choose a country</option>
-						<option value="USA">United States</option>
-						<option value="CAN">Canada</option>
-						<option value="GBR">United Kingdom</option>
+						<option value="US">United States</option>
+						<option value="CA">Canada</option>
+						<option value="GB">United Kingdom</option>
 					</select>
 				</div>
 				<div data-ng-show="addAddressError" class="text-center text-danger">
                 	<div class="notice outline red small" data-ng-bind="addAddressError"></div>
-              	</div>
-              	<div data-ng-show="addAddressSuccess" class="text-center text-danger">
-                	<div class="notice outline green small" data-ng-bind="addAddressSuccess"></div>
               	</div>
 				<input type="submit" class="btn blue radius" value="Save Address"/>
 			</form>

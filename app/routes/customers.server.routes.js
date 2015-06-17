@@ -21,6 +21,7 @@ module.exports = function(app) {
 
   app.route('/addresses').post(customers.addAddress)
   app.route('/addresses/:id')
+    .put(customers.updateAddress)
     .delete(customers.deleteAddress);
 
   app.route('/subscribe/:listName').post(customers.subscribe);

@@ -1,5 +1,5 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper">
+<div class="content-wrapper" data-ng-controller="ProfileController">
 	<section id="breadcrumbs">
 		<div class="breadcrumb">
 		
@@ -19,104 +19,63 @@
 			<hr/>
 			<h3>Edit Address</h3>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-		<form id="add-address" action="#">
+			
+			<div data-ng-show="error" class="text-center text-danger">
+            	<div class="notice outline red small" data-ng-bind="error"></div>
+          	</div>
+			<form id="editAddressform" name="editAddressform" ng-init="editAddress = fetchOwnAddressPerId()" data-ng-submit="updateCustomerAddress(editAddressform)" novalidate>
 				<div class="form-field-half">
-				<label>Full Name</label>
-				<input type="text" name="name" placeholder="Full Name" value="John Doe" />
+					<label for="firstName">First Name*</label>
+					<input type="text" id="firstName" name="firstName" placeholder="First Name" data-ng-model="editAddress.firstName" required />
 				</div>
 				<div class="form-field-half">
-				<label>Phone</label>
-				<input type="tel" name="last-name" placeholder="Phone #" value="+1 718 456681" />
+					<label for="lastName">Last Name*</label>
+					<input type="text" id="lastName" name="lastName" placeholder="Last Name" data-ng-model="editAddress.lastName" required/>
 				</div>
-				<label>Address</label>
-				<input type="text" name="address" placeholder="Address" value="4120 Lenox Avenue"/>
+				<div class="form-field-half">
+					<label for="phone">Phone*</label>
+					<input type="text" id="phone" name="phone" data-ng-model="editAddress.phone" placeholder="Phone #" />
+				</div>
+				<br />
+				<div class="form-field-half">
+					<label for="streetName">Street Name*</label>
+					<input type="text" id="streetName" name="streetName" class="form-control" data-ng-model="editAddress.streetName" placeholder="Street Name" required>
+				</div>
+				<div class="form-field-half">
+					<label for="streetNumber">Street Number*</label>
+					<input type="number" id="streetNumber" name="streetNumber" class="form-control" data-ng-model="editAddress.streetNumber" placeholder="Street Number" required>
+				</div>
+
 				<div class="form-field-third">
-					<label>City</label>
-					<input type="text" name="city" placeholder="City" value="New York City"/>				
+					<label for="city">City</label>
+					<input type="text" id="city" name="city" placeholder="City" data-ng-model="editAddress.city" required/>				
 				</div>
 				<div class="form-field-third">
-					<label>State/Province</label>
-					<input type="text" name="state" placeholder="State/Province" value="NY" />
+					<label for="state">State/Province</label>
+					<input type="text" name="state" id="state" placeholder="State/Province" data-ng-model="editAddress.state" required />
 				</div>
 				<div class="form-field-third">
-					<label>Zip/Postal</label>
-					<input type="text" name="zip" placeholder="ZIP/Postal" value="10035"/>
+					<label for="postalCode">Zip/Postal</label>
+					<input type="text" name="postalCode" id="postalCode" placeholder="ZIP/Postal" data-ng-model="editAddress.postalCode" required />
 				</div>
 				<div class="form-field-half-single">
 					<label for="country">Country</label>
-					<select name="country" id="country">
-						<option disabled selected>Please choose a country</option>
-						<option value="usa">United States</option>
-						<option value="canada">Canada</option>
-						<option value="uk">United Kingdom</option>
+					<select name="country" id="country" data-ng-model="editAddress.country" required>
+						<!-- <option disabled value="">Please choose a country</option> -->
+						<option value="US">United States</option>
+						<option value="CA">Canada</option>
+						<option value="GB">United Kingdom</option>
 					</select>
 				</div>
-				<label>
-					<input type="checkbox" name="primary" value="primary" checked /><b>Make Primary Address</b>
-				</label>
-
+				<div data-ng-show="updateAddressError" class="text-center text-danger">
+        	<div class="notice outline red small" data-ng-bind="updateAddressError"></div>
+      	</div>
+      	<div data-ng-show="updateAddressSuccess" class="text-center text-danger">
+        	<div class="notice outline green small" data-ng-bind="updateAddressSuccess"></div>
+      	</div>
 				<input type="submit" class="btn blue radius" value="Save Address"/>
-				<a href="/my-account/my-addresses.html" class="btn outline radius red thick">Cancel</a>
+				<a href="#!/my-addresses" class="btn outline radius red thick">Cancel</a>
 			</form>
-			<hr/>
-			<h5>Current Saved Addresses</h5>
-			<br/>
-			<table id="user-addressses">
-				<thead>
-					<th class="address">Address</th>
-					<th class="customer-name">Name</th>
-					<th class="customer-phone">Phone</th>
-					<th class="actions">Actions</th>
-				</thead>
-				<tbody>
-					<tr class="saved-address">
-						<td>
-							4120 Lenox Avenue<br/>
-							10035, New York City, NY<br/>
-							<span class="badge radius outline red xsmall">Currently Editing</span>
-						</td>
-						<td>
-							John Doe
-						</td>
-						<td>
-							+1 718 456681
-						</td>
-						<td>
-						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
-						</td>
-					</tr>
-					<tr class="saved-address">
-						<td>
-							4120 Lenox Avenue<br/>
-							10035, New York City, NY
-						</td>
-						<td>
-							John Doe
-						</td>
-						<td>
-							+1 718 456681
-						</td>
-						<td>
-						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
-						</td>
-					</tr>
-					<tr class="saved-address">
-						<td>
-							4120 Lenox Avenue<br/>
-							10035, New York City, NY
-						</td>
-						<td>
-							John Doe
-						</td>
-						<td>
-							+1 718 456681
-						</td>
-						<td>
-						<a href="/my-account/edit-address.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 						
 		<div id="cart-totals">

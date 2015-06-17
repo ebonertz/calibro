@@ -22,7 +22,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				$scope.authentication.user = response;
 
 				// And redirect to the index page
-				$location.path('/');
+				$location.path('#!/account');
 			}).error(function(response) {
 				$scope.register_error = response.message;
 			});

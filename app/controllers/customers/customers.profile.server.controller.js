@@ -7,7 +7,8 @@ var _ = require('lodash'),
   errorHandler = require('../errors.server.controller.js'),
   CustomerService = require('../../services/sphere/sphere.customers.server.service.js'),
   Address = require('../../models/sphere/sphere.address.server.model.js'),
-  MailchimpService = require('../../services/mailchimp.server.service.js');
+  MailchimpService = require('../../services/mailchimp.server.service.js'),
+  CommonService = require('../../services/sphere/sphere.commons.server.service.js');
 
 /**
  * Update user details
@@ -135,6 +136,40 @@ exports.deleteAddress = function(req, res){
     }
 
     CustomerService.deleteAddress(customer, addressId, function(err, result){
+      if(err){
+        return res.status(400).send({message: err.message})
+      }else{
+        return res.json(result);
+      }
+    })
+  } else {
+    res.status(400).send({
+      message: 'User is not signed in'
+    });
+  }
+}
+
+exports.updateAddress = function(req, res){
+  var customer = req.user;
+  var addressId = req.body.id;
+  var address = new Address(req.body);
+
+  if(customer){
+
+    // Security
+    var allowed = false;
+    for(var i = 0; i < customer.addresses.length; i++){
+      if(customer.addresses[i].id = addressId) allowed = true
+    }
+    if(!allowed) return res.status(403)
+
+    var action = [{
+      "action": "changeAddress",
+      "addressId": addressId,
+      "address": address
+    }]
+
+    CommonService.update('customers', customer.id, action, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})
       }else{

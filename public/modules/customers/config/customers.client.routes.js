@@ -18,7 +18,7 @@ angular.module('customers').config(['$stateProvider',
                 templateUrl: 'modules/customers/views/account-new.client.view.html'
             }).
             state('edit-address', {
-                url: '/edit-address',
+                url: '/edit-address/:id',
                 templateUrl: 'modules/customers/views/my-account/edit-address.client.view.html'
             }).
             state('edit-card', {

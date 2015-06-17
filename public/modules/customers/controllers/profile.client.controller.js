@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils',
-	function($scope, $http, $location, Customers, Authentication, Addresses, ProductUtils) {
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus',
+	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus) {
 		$scope.customer = angular.copy(Authentication.user);
 
 		// If user is not signed in then redirect back home
@@ -47,8 +47,8 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 		 * Addresses
 		 */
 
-		$scope.addCustomerAddress = function(isValid){
-			if(isValid){
+		$scope.addCustomerAddress = function(form){
+			if(form.$valid){
 				$scope.success = $scope.error = null;
 				var address = new Addresses($scope.newAddress);
 
@@ -60,6 +60,9 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 
 					$scope.addAddressError = null;
 					$scope.addAddressSuccess = "Address added successfully"
+					updateStatus = {}
+
+					form.$setPristine();
 				}, function(error) {
 					$scope.addAddressError = error.data.message;
 				});
@@ -77,6 +80,10 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 					$scope.success = true;
 					Authentication.user = response;
 					$scope.customer = angular.copy(Authentication.user);
+
+					$scope.addAddressError = null;
+					$scope.addAddressSuccess = "Address deleted successfully"
+					updateStatus = {}
 				}, function(error) {
 					$scope.addAddressError = error.data.message;
 				});
@@ -86,9 +93,48 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			}
 		}
 
+		$scope.editAddress = function(address){
+			if(address){
+				$location.path('/edit-address/'+address.id);
+			}
+		}
+
+		$scope.updateCustomerAddress = function(form){
+			if(form.$valid){
+				var address = new Addresses($scope.editAddress)
+
+				address.$update(function(response){
+					$location.path('/my-addresses')
+					updateStatus.message = "Address updated successfully"
+				}, function(error){
+					$scope.updateError = "Error updating the address"
+				});				
+			}
+		}
+
+		$scope.fetchOwnAddressPerId = function(){
+			var id = $stateParams.id
+
+			var addresses = $scope.customer.addresses
+			for(var i = 0; i < addresses.length; i++){
+				if(addresses[i].id == id){
+					// Convert streetNumber or it won't get set
+					addresses[i].streetNumber = parseInt(addresses[i].streetNumber)
+					return addresses[i]
+				}
+			}
+
+			// If no address is found
+			$scope.error = "Address not found"
+		}
+
 		$scope.defaultAddress = function(){
 			$scope.newAddress = {}
 			$scope.newAddress.country = ''
+		}
+
+		$scope.getUpdateStatus = function(){
+			return updateStatus;
 		}
 
 		/*

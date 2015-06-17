@@ -1,7 +1,9 @@
 'use strict';
 
 // Users service used for communicating with the users REST endpoint
-angular.module('customers').factory('Addresses', ['$resource',
+var module = angular.module('customers')
+
+module.factory('Addresses', ['$resource',
   function($resource) {
     return $resource('addresses/:id', {id: "@id"}, {
       save: {
@@ -13,7 +15,18 @@ angular.module('customers').factory('Addresses', ['$resource',
       },
       delete: {
         method: 'DELETE'
+      },
+      get: {
+        method: 'GET'
       }
     });
   }
-]);
+])
+
+// Persistance on update address status when changing route
+.factory('updateStatus', function(){
+  var status;
+
+  status = status || {}
+  return status
+})
