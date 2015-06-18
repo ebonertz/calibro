@@ -47,9 +47,9 @@ exports.searchByCategory = function(categoryId, requestParams, callback){
         total: Math.ceil(resultArray.body.total / pageInfo.perPage),
         current: pageInfo.current,
         perPage: pageInfo.perPage
-      } 
+      }
     }
-    callback(null, results); 
+    callback(null, results);
   }).error(function(err) {
     console.log(err);
     callback(err, null);
@@ -74,5 +74,24 @@ exports.bySlug = function(slug, callback){
   }).error(function(err){
     console.log(err)
     callback(err, null);
+  })
+}
+
+exports.bySku = function(skuArray, callback){
+  var query = 'variants.sku:';
+
+  for(var i = 0; i < skuArray.length; i++) {
+    if(i > 0)
+      query += ',';
+
+    query += '"' + skuArray[i] + '"';
+  }
+    console.log(query);
+
+  SphereClient.getClient().productProjections.filterByQuery(query).search().then(function (result) {
+      callback(null, result.body.results);
+  }).error(function(err){
+      console.log(err)
+      callback(err, null);
   })
 }

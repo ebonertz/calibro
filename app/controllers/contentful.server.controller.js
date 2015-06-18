@@ -9,3 +9,33 @@ exports.home = function (req, res) {
         }
     });
 };
+
+exports.eyewear = function (req, res) {
+    ContentfulService.eyewear(function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.menSummer = function (req, res) {
+    ContentfulService.menSummer(function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.womenSummer = function (req, res) {
+    ContentfulService.womenSummer(function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};

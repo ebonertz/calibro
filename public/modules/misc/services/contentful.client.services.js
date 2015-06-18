@@ -15,5 +15,35 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
             return deferred.promise;
         }
 
+        this.eyewear = function () {
+            var deferred = $q.defer();
+
+            $http.get(urlString + '/eyewear').success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.menSummer = function () {
+            var deferred = $q.defer();
+
+            $http.get(urlString + '/men/summer').success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
+        this.womenSummer = function () {
+            var deferred = $q.defer();
+
+            $http.get(urlString + '/women/summer').success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
     }
 ]);

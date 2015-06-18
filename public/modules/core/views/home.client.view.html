@@ -5,14 +5,14 @@
                 <div class="hero slider" hero>
                     <ul>
                         <li>
-                            <img src="design/images/slider/slide-1.jpg"/>
+                            <img ng-src="{{contentfulData.slide1.fields.file.url}}"/>
 
                             <div class="content">
                                 <h2>Men's Eyewear 2015</h2>
                                 <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear 2015</a>
                             </div>
                         </li>
-                        <li><img src="design/images/slider/slide-2.jpg"/></li>
+                        <li><img ng-src="{{contentfulData.slide2.fields.file.url}}"/></li>
                     </ul>
                 </div>
             </section>
@@ -37,12 +37,12 @@
             <div class="eyewear-gender">
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img src="design/images/homepage/glasses.jpg" width="362" height="226"/>
+                <img src="{{contentfulData.eyewearImage1.fields.file.url}}" width="362" height="226"/>
                 <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear</a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
-                <img src="design/images/homepage/glasses.jpg" width="362" height="226"/>
+                <img ng-src="{{contentfulData.eyewearImage2.fields.file.url}}" width="362" height="226"/>
                 <a href="/eyewear/women-eyewear.html" class="btn blue radius">Shop All Women's Eyewear</a>
             </div>
         </section>
@@ -56,12 +56,12 @@
             <div class="eyewear-gender">
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img src="design/images/homepage/sunglasses.jpg" width="362" height="226"/>
+                <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
                 <a href="/sunglasses/men-sunglasses.html" class="btn blue radius">Shop All Men's Sunglasses</a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
-                <img src="design/images/homepage/sunglasses.jpg" width="362" height="226"/>
+                <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
                 <a href="/sunglasses/women-sunglasses.html" class="btn blue radius">Shop All Women's Sunglassesr</a>
             </div>
             <div class="sunglasses-cover">
