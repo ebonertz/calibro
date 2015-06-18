@@ -34,25 +34,24 @@
             </form>
           </div>
         </form>
-        <form data-ng-submit="requestPasswordReset()" class="signin form-horizontal" ng-show="resetPasswordForm" ng-controller="PasswordController">
+        <form data-ng-submit="requestPasswordReset()" class="signin form-horizontal" ng-show="resetPasswordForm">
           <div class="login">
             <form action="#!/account" class="site-login" method="post">
               <span class="sub-title">Forgot Password?</span>
               <label>Please enter your email to reset password</label>
               <input type="email" id="email" name="email" class="form-control" data-ng-model="reset.email" placeholder="Please Enter Your Email" tabindex=1>
-<!--               <a href="#" class="forgot">Forgot Email?</a>
-              <label>Password</label>
-              <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Please Enter Your Password" tabindex=2>
-              <a class="forgot" href="#">Forgot Password?</a>
-              <label>
-                <input type="checkbox" class="rememberme"/> Remember Me
-              </label> -->
               <br/>
               <div data-ng-show="reset_result" class="text-center text-danger">
                 <div class="notice outline small" ng-class="reset_result.status == 'success' ? 'green' : 'red'" data-ng-bind="reset_result.message"></div>
               </div>
-              <input type="submit" class="btn radius blue" value="Send">
-              <button ng-click="resetPasswordForm = false" class="btn outline radius red thick">Cancel</button>
+              <span ng-hide="reset_result.status == 'success'">
+                <input type="submit" class="btn radius blue" value="Send">
+                <button type='button' ng-click="resetPasswordForm = false" class="btn outline radius red thick">Cancel</button>
+              </span>
+              <span ng-show="reset_result.status == 'success'">
+                <button type='button' ng-click="resetPasswordForm = false" class="btn outline radius blue thick">Back</button>
+              </span>
+
             </form>
           </div>
         </form>

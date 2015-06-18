@@ -42,5 +42,22 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				$scope.login_error = response.message;
 			});
 		};
+
+		$scope.requestPasswordReset = function(){
+			$scope.reset_result = null;
+
+			$http.post('/customers/password-token', $scope.reset).success(function(response){
+				$scope.reset_result = {
+					status: "success",
+					message: "An email has been sent to reset the password"
+				}
+				$scope.reset = {}
+			}).error(function(error){
+				$scope.reset_result = {
+					status: "error",
+					message: "We couldn't find that email in our database"
+				}				
+			})
+		}
 	}
 ]);

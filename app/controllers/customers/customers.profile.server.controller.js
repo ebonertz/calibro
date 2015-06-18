@@ -73,7 +73,7 @@ var loginAndSend = function(req, res, user){
 
 exports.resetPasswordEmail = function(req, res){
   var email = req.body.email,
-    path = config.serverPath+'#!/password/reset/'
+    path = config.serverPath+'/#!/password/reset/'
 
   CommonService.post('customers', '/customers/password-token', {email: email}, function(err, result){
     if(err){
