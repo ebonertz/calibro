@@ -15,6 +15,7 @@
             <h1 class="page-title">Thank you for your order</h1>
             <b>Order ID</b> <span class="badge radius outline tblue xsmall">#{{order.id}}</span> <span
                 class="badge radius outline yellow xsmall">{{order.orderState}}</span>
+            <span ng-if="order.paymentState == 'Paid'" class="badge radius outline green xsmall">Paid</span>
             <hr/>
             <section class="placed-order">
                 <div class="checkout-totals" id="billing">
@@ -57,10 +58,6 @@
                     </table>
                 </div>
             </section>
-            <hr/>
-            <div class="center">
-                <a class="btn creme round" href="/my-account/order-details.html">See More Details for this order</a>
-            </div>
         </div>
     </section>
 </div>

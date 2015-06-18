@@ -4,12 +4,12 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
     function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService) {
 
         setTimeout(function () {
-            if ($rootScope.cart!= null && $rootScope.cart.shippingInfo != null) {
+            if ($rootScope.cart != null && $rootScope.cart.shippingInfo != null) {
                 AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                     $scope.authorizeNet = data;
 
-                    for(var i = 0; i < $scope.shippingMethods.length; i++) {
-                        if($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
+                    for (var i = 0; i < $scope.shippingMethods.length; i++) {
+                        if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
                             $scope.shippingMethods[i].selected = true;
                         }
                     }
@@ -26,7 +26,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         });
 
         $scope.selectShippingAddress = function (shippingAddress) {
-                $scope.selectedShippingAddress = shippingAddress;
+            $scope.selectedShippingAddress = shippingAddress;
             $rootScope.cart.shippingAddress = shippingAddress;
         }
 
@@ -84,34 +84,22 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
          );
          });
          }
-
-
-         $scope.createOrder = function () {
-         var order = new Order({
-         id: $rootScope.cart.id,
-         version: $rootScope.cart.version
-         });
-
-         order.$save(function (response) {
-         console.log('Order created.');
-
-         var cart = new Cart({
-         "currency": "EUR",
-         "customerId": Authentication.user.id
-         });
-
-         cart.$save(function (sphereCart) {
-         $rootScope.cart = sphereCart;
-         LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
-         });
-
-         $location.path('orders/' + response.id);
-
-         }, function (errorResponse) {
-         console.log(errorResponse);
-         });
-         }
          */
+
+        $scope.createOrder = function () {
+            var order = new Order({
+                id: $rootScope.cart.id,
+                version: $rootScope.cart.version
+            });
+
+            order.$save(function (response) {
+                console.log('Order created.');
+                $('#authorizeNetForm').submit();
+            }, function (errorResponse) {
+                console.log(errorResponse);
+            });
+        }
+
 
         $scope.addCustomerAddress = function (address, valid) {
             console.log(valid);
