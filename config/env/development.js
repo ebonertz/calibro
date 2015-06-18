@@ -77,7 +77,8 @@ module.exports = {
         },
         templates: {
             welcome: 'welcome',
-            contactus: 'contactus'
+            contactus: 'contactus',
+            passwordtoken: 'password-token'
         }
     }
 };

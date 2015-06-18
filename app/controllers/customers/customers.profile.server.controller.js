@@ -8,7 +8,9 @@ var _ = require('lodash'),
   CustomerService = require('../../services/sphere/sphere.customers.server.service.js'),
   Address = require('../../models/sphere/sphere.address.server.model.js'),
   MailchimpService = require('../../services/mailchimp.server.service.js'),
-  CommonService = require('../../services/sphere/sphere.commons.server.service.js');
+  MandrillService = require('../../services/mandrill.server.service.js'),
+  CommonService = require('../../services/sphere/sphere.commons.server.service.js'),
+  config = require('../../../config/config');
 
 /**
  * Update user details
@@ -69,6 +71,48 @@ var loginAndSend = function(req, res, user){
   });
 }
 
+exports.resetPasswordEmail = function(req, res){
+  var email = req.body.email,
+    path = config.serverPath+'#!/password/reset/'
+
+  CommonService.post('customers', '/customers/password-token', {email: email}, function(err, result){
+    if(err){
+      return res.status(400).send({message: err.message})
+    }else{
+      MandrillService.sendPasswordToken(email, path+result.value).then(function(result){
+        return res.json(result);
+      }, function(err){
+        res.status(400).send({message: "We could not send the email, please try again"})
+      })
+    }
+  })
+}
+
+exports.requestPasswordReset = function(req, res){
+  var token = req.body.token,
+    password = req.body.password
+
+  CommonService.get('customers', '/customers/?token='+token, function(err, result){
+    if(err)
+      return res.status(400).send({message: "Token no longer valid"})
+
+    var payload = {
+      id: result.id,
+      version: result.version,
+      tokenValue: token,
+      newPassword: password
+    }
+
+    CommonService.post('customers', '/customers/password/reset', payload, function(err, result){
+      if(err){
+        return res.status(400).send({message: err.message})
+      }else{
+        return res.json(result);
+      }
+    })
+  })  
+}
+
 exports.changePassword = function(req, res){
   var customer = req.user;
   var message = null;
@@ -108,8 +152,6 @@ exports.addAddress = function(req, res){
       "action": "addAddress",
       "address": address
     }]
-
-    console.log(actions)
 
     CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){

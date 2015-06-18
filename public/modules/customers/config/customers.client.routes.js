@@ -40,6 +40,10 @@ angular.module('customers').config(['$stateProvider',
             state('order-details', {
                 url: '/order-details',
                 templateUrl: 'modules/customers/views/my-account/order-details.client.view.html'
+            }).
+            state('reset-password', {
+                url: '/password/reset/:token',
+                templateUrl: 'modules/customers/views/reset-password.client.view.html'
             });
     }
 ]);

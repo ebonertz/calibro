@@ -79,3 +79,21 @@ exports.contactUs = function(email, name, message){
 	}
 	return exports.send_one(options)
 }
+
+exports.sendPasswordToken = function(email, link){
+	var options = {
+		email: email,
+		template: 'passwordtoken',
+		template_content: [
+			{
+				"name": "email",
+				"content": email
+			},
+			{
+				"name": "link",
+				"content": link
+			}
+		]
+	}
+	return exports.send_one(options)
+}

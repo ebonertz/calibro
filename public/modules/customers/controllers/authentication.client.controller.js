@@ -13,10 +13,11 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				return false
 			}
 
-      var createValues = {
-        email: $scope.register.email,
-        password: $scope.register.password
-      }
+		  var createValues = {
+				email: $scope.register.email,
+				password: $scope.register.password
+			}
+
 			$http.post('/auth/signup', createValues).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;

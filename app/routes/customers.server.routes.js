@@ -12,7 +12,11 @@ module.exports = function(app) {
 	app.route('/customers')
     .put(customers.update)
     .get(commons.list.bind({entity: entity}));
-  app.route('/customers/password').post(customers.changePassword);
+
+  app.route('/customers/password-token').post(customers.resetPasswordEmail);
+  app.route('/customers/password/reset').post(customers.requestPasswordReset);
+
+  app.route('/customers/password/update').put(customers.changePassword);
   app.route('/customers/:id').get(commons.byId.bind({entity: entity}));
 
   app.route('/auth/signup').post(customers.signup);

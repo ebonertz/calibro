@@ -4,6 +4,7 @@
 angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils',
   function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils) {
     $scope.authentication = Authentication;
+    $scope.$location = $location;
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
