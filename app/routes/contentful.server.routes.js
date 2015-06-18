@@ -9,8 +9,11 @@ module.exports = function (app) {
     app.route('/contentful/home')
         .get(contentful.home);
 
-    app.route('/contentful/eyewear')
+    app.route('/contentful/category/eyewear')
         .get(contentful.eyewear);
+
+    app.route('/contentful/category/sunglasses')
+        .get(contentful.sunglasses);
 
     app.route('/contentful/summer/men')
         .get(contentful.menSummer);

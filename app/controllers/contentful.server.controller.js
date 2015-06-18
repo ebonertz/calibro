@@ -20,6 +20,16 @@ exports.eyewear = function (req, res) {
     });
 };
 
+exports.sunglasses = function (req, res) {
+    ContentfulService.sunglasses(function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
 exports.menSummer = function (req, res) {
     ContentfulService.menSummer(function (err, result) {
         if (err) {

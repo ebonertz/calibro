@@ -42,6 +42,48 @@ exports.home = function (callback) {
 exports.eyewear = function (callback) {
     var entityId = 'voZfsMgZlQOgykUm66gmy';
 
+    category(entityId, function(err, data) {
+        if(err)
+            callback(err, null);
+        else
+            callback(null, data);
+    })
+};
+
+exports.sunglasses = function (callback) {
+    var entityId = '5TG6wlAVIQCiuGmsecsWkC';
+
+    category(entityId, function(err, data) {
+        if(err)
+            callback(err, null);
+        else
+            callback(null, data);
+    })
+};
+
+exports.menSummer = function (callback) {
+    var entityId = '1RSBBWPySY08Wc2ScOWMwI';
+
+    summer(entityId, function(err, data) {
+        if(err)
+            callback(err, null);
+        else
+            callback(null, data);
+    })
+};
+
+exports.womenSummer = function (callback) {
+    var entityId = '3iDQHkMHa80WYCmYAoiggu';
+
+    summer(entityId, function(err, data) {
+        if(err)
+            callback(err, null);
+         else
+            callback(null, data);
+    })
+};
+
+var category = function (entityId, callback) {
     exports.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
@@ -61,34 +103,7 @@ exports.eyewear = function (callback) {
     });
 };
 
-
-exports.menSummer = function (callback) {
-    var entityId = '1RSBBWPySY08Wc2ScOWMwI';
-
-    exports.byId(entityId, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            var entity = entries[0].fields,
-                eyewearIds = entity.eyewearProducts.split(','),
-                sunglassesIds = entity.sunglassesProducts.split(',');
-
-            // TODO: Populate products.
-            ProductService.bySku(eyewearIds, function(err, result){
-                entity.eyewearProducts = result;
-
-                ProductService.bySku(sunglassesIds, function(err, result){
-                    entity.sunglassesProducts = result;
-                    callback(null, entity);
-                });
-            });
-        }
-    });
-};
-
-exports.womenSummer = function (callback) {
-    var entityId = '3iDQHkMHa80WYCmYAoiggu';
-
+var summer = function (entityId, callback) {
     exports.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
