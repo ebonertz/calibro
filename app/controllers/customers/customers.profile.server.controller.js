@@ -159,8 +159,6 @@ exports.updateAddress = function(req, res){
       "address": address
     }]
 
-    console.log(actions)
-
     CommonService.update('customers', customer.id, actions, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})

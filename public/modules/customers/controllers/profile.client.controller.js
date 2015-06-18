@@ -104,8 +104,9 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				var address = new Addresses($scope.editAddress)
 
 				address.$update(function(response){
-					$location.path('/my-addresses')
-					updateStatus.message = "Address updated successfully"
+					Authentication.user = response;
+					$location.path('/my-addresses');
+					updateStatus.message = "Address updated successfully";
 				}, function(error){
 					$scope.updateError = "Error updating the address"
 				});				

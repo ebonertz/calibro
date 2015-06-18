@@ -18,6 +18,12 @@
 			<a href="#!/my-addresses" class="btn tblue xsmall outline radius">&larr; Back to Your Saved Addresses</a>
 			<hr/>
 			<h3>Edit Address</h3>
+			<!-- TODO: Move ng-invalid styling to css -->
+			<style>
+				input.ng-invalid.ng-dirty, select.ng-invalid.ng-dirty{
+					border: 1px solid red !important;
+				}
+			</style>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
 			
 			<div data-ng-show="error" class="text-center text-danger">
