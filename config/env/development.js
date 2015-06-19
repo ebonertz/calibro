@@ -3,6 +3,7 @@
 module.exports = {
     db: 'mongodb://localhost/focali-mean-dev',
     serverPath: 'http://localhost:3000',
+    rememberMeKey: 'CmzvV20rf32IwFeReDhXBCzHtrB64qm8',
     app: {
         title: 'focali-mean - Development Environment'
     },

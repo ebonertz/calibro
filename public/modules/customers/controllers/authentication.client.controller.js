@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customers').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$rootScope',
-	function($scope, $http, $location, Authentication, $rootScope) {
+angular.module('customers').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$rootScope', 'CustomerService',
+	function($scope, $http, $location, Authentication, $rootScope, CustomerService) {
 		$scope.authentication = Authentication;
 
 		// If user is signed in then redirect back home
@@ -31,10 +31,15 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 
 		$scope.signin = function() {
 			$scope.credentials.anonymousCartId = $rootScope.cart.id;
+
 			$http.post('/auth/signin', $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response.customer;
 				$rootScope.cart = response.cart;
+
+				if(response.hasOwnProperty('remember')){
+					CustomerService.setCookie(response.remember.rem, response.remember.rid)
+				}
 
 				// And redirect to the index page
 				$location.path('/');
