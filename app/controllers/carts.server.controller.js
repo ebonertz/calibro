@@ -1,5 +1,17 @@
 var CartService = require('../services/sphere/sphere.carts.server.service.js');
 
+exports.byCustomer = function (req, res) {
+    var customerId = req.param('customerId');
+
+    CartService.byCustomer(customerId, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
 exports.addLineItem = function (req, res) {
     var cartId = req.param('cartId'),
         payload = req.body;

@@ -43,6 +43,8 @@ module.exports = {
         }
     },
     sphere: {
+        "api_url": "api.sphere.io",
+        "auth_url": "auth.sphere.io",
         "project_key": "reactionsphere-test",
         "client_id": "r_IHigKd7TDtvC7nX_XDIQYB",
         "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw"

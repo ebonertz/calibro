@@ -18,7 +18,7 @@ module.exports = function (app) {
         .delete(commons.delete.bind({entity: entity}))
 
     app.route('/carts/byCustomer/:customerId')
-        .get(commons.byCustomer.bind({entity: entity}));
+        .get(carts.byCustomer);
 
     app.route('/carts/addLineItem/:cartId')
         .post(carts.addLineItem);

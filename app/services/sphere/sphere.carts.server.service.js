@@ -13,6 +13,19 @@ var actions = {
     addDiscountCode: 'addDiscountCode'
 }
 
+
+exports.byCustomer = function (customerId, callback) {
+    var path = '?customerId=' + customerId;
+
+    CommonService.GET_ApiCall(entity, path, function (err, data) {
+        if (err)
+            callback(err, null)
+        else
+            callback(null, data)
+    });
+};
+
+
 exports.addLineItem = function (cartId, payload, callback) {
     if (payload)
         payload.action = actions.addLineItem;

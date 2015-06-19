@@ -9,10 +9,10 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             if (Authentication.user) {
 
-                this.byCustomer(Authentication.user.id).then(function (carts) {
+                this.byCustomer(Authentication.user.id).then(function (cart) {
 
-                    if (carts != null && carts.length > 0) {
-                        $rootScope.cart = carts[0];
+                    if (cart != null) {
+                        $rootScope.cart = cart;
                         LoggerServices.success('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
 
                     } else {
