@@ -113,62 +113,7 @@
 				<input type="submit" class="btn blue radius" value="Save Address"/>
 			</form>
 		</div>
-						
-		<div id="cart-totals">
-			<h4>Your Cart</h4>
-			<hr/>
-			<table id="subtotals">
-				<span class="sub-title">Products</span>
-				<tr class="product">				
-					<td class="product-name">
-					Focali Better View <span class="qty">x2</span>
-					</td>
-					<td class="amount">
-					$79.98
-					</td>
-				</tr>
-				<tr class="product">				
-					<td class="product-name">
-					Focali Oculus <span class="qty">x1</span>
-					</td>
-					<td class="amount">
-					$149.99
-					</td>
-				</tr>
-				<tr class="product">				
-					<td class="product-name">
-					Ray-Ban Aviator <span class="qty">x1</span>
-					</td>
-					<td class="amount">
-					$99.99
-					</td>
-				</tr>
-				<tr class="subtotal">
-					<td class="concept">
-						Subtotal
-					</td>
-					<td id="sub-amount" class="amount">
-						$499.99
-					</td>
-				</tr>
-				<tr class="shipping">
-					<td class="concept">
-						Shipping
-					</td>
-					<td id="shipping-cost" class="amount">
-						free
-					</td>
-				</tr>
-				<tr id="final-order-price">
-					<td class="concept">
-						<b>Order Total</b>
-					</td>
-					<td id="price-total" class="amount">
-						$499.99
-					</td>
-				</tr>
-			</table>
-			<a class="btn block radius blue" href="/cart.html">Go to Cart</a>
-		</div>
+
+		<div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
 	</section>
 </div>

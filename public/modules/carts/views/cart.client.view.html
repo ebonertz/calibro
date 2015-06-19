@@ -49,43 +49,7 @@
 
             </table>
         </div>
-        <div id="cart-totals">
-            <h3>Cart Totals</h3>
-            <hr/>
-            <table id="subtotals">
-                <tr class="subtotal">
-                    <td class="concept">
-                        Subtotal
-                    </td>
-                    <td id="sub-amount" class="amount">
-                        {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100}}
-                    </td>
-                </tr>
-                <tr class="shipping">
-                    <td class="concept">
-                        Shipping
-                    </td>
-                    <td id="shipping-cost" class="amount">
-                        {{cart.shippingInfo.shippingRate ? $utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode) : ''}} {{cart.shippingInfo.shippingRate ? cart.shippingInfo.shippingRate.price.centAmount / 100 : ''}}
-                    </td>
-                </tr>
-                <tr id="final-order-price">
-                    <td class="concept">
-                        <b>Order Total</b>
-                    </td>
-                    <td id="price-total" class="amount">
-                        {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount / 100}}
-                    </td>
-                </tr>
-            </table>
-            <a ng-click="proceedToCheckout()" href="" class="btn block radius blue">Proceed To Checkout</a>
-
-            <div id="cart-coupon" class="coupons">
-                <h6>Have a Coupon?</h6>
-                <input ng-model="code" type="text" placeholder="Type your coupon code"/>
-                <button ng-click="addDiscountCode(code)" class="btn block outline thick radius blue">Apply Coupon</button>
-            </div>
-        </div>
+        <div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
 
     </section>
 </div>

@@ -84,38 +84,7 @@
 				<hr/>
 				<a href="#!/my-orders" class="btn radius tblue outline thick">&larr; Back to My Orders</a>
 		</div>
-		<div id="cart-totals">
-			<h3>Your Cart</h3>
-			<hr/>
-			<table id="subtotals">
-				<span class="sub-title">Products</span>
-				<tr class="subtotal">
-					<td class="concept">
-						Subtotal
-					</td>
-					<td id="sub-amount" class="amount">
-						$499.99
-					</td>
-				</tr>
-				<tr class="shipping">
-					<td class="concept">
-						Shipping
-					</td>
-					<td id="shipping-cost" class="amount">
-						free
-					</td>
-				</tr>
-				<tr id="final-order-price">
-					<td class="concept">
-						<b>Order Total</b>
-					</td>
-					<td id="price-total" class="amount">
-						$499.99
-					</td>
-				</tr>
-			</table>
-			<a class="btn block radius red" href="/cart.html">Repeat Order</a>
-		</div>
+		<div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
 	
 	</section>
 </div>

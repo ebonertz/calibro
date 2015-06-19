@@ -226,58 +226,8 @@
 </div>
 <!--close steps column-->
 <!--checkout side column-->
-<div id="cart-totals">
-    <h3>Your Cart</h3>
-    <hr/>
-    <table id="subtotals">
-        <span class="sub-title">Products</span>
-        <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
-            <td class="product-name">
-                {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>
-            </td>
-            <td class="amount">
-                {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
-                lineItem.quantity / 100}}
-            </td>
-        </tr>
-        <tr class="subtotal">
-            <td class="concept">
-                Taxes <span style="font-size: 10px;">(included)</span>
-            </td>
-            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions" id="sub-amount" class="amount">
-                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
-            </td>
-        </tr>
-        <tr class="subtotal">
-            <td class="concept">
-                Subtotal
-            </td>
-            <td id="sub-amount" class="amount">
-                {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
-                cart.shippingInfo.shippingRate.price.centAmount) / 100}}
-            </td>
-        </tr>
-        <tr class="shipping">
-            <td class="concept">
-                Shipping
-            </td>
-            <td ng-if="cart.shippingInfo" id="shipping-cost" class="amount">
-                {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
-                {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
-            </td>
-            <td ng-if="!cart.shippingInfo" id="shipping-cost" class="amount">
-                -
-            </td>
-        </tr>
-        <tr id="final-order-price">
-            <td class="concept">
-                <b>Order Total</b>
-            </td>
-            <td id="price-total" class="amount">
-                {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount / 100}}
-            </td>
-        </tr>
-    </table>
-</div>
+
+<div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
+
 </section>
 </div>
