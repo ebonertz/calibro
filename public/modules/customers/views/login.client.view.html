@@ -25,7 +25,7 @@
               <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Please Enter Your Password" tabindex=2>
               <a class="forgot" ng-click="resetPasswordForm = true;">Forgot Password?</a>
               <label>
-                <input type="checkbox" class="rememberme"/> Remember Me
+                <input type="checkbox" class="rememberme" data-ng-model="credentials.rememberme"/> Remember Me
               </label>
               <div data-ng-show="login_error" class="text-center text-danger">
                 <div class="notice outline red small" data-ng-bind="login_error"></div>

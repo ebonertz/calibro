@@ -5,7 +5,9 @@
  */
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js');
+    CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js'),
+    CommonService = require('../../app/services/sphere/sphere.commons.server.service.js'),
+    RememberService = require('../../app/services/remember.server.service.js');
 
 module.exports = function () {
 
@@ -21,7 +23,27 @@ module.exports = function () {
                     return done(err);
                 }
 
-                return done(null, customer, cart);
+                var info = {cart: cart}
+
+                // Return remember info
+                if(req.body.rememberme){
+                    var rem = RememberService.getToken(customer.id),
+                        remember = {
+                            rem: rem,
+                            rid: RememberService.encodeId(customer.id, rem)
+                        },
+                        rememberCustomObject = {
+                            container: 'RememberMe',
+                            key: remember.rem,
+                            value: customer.id
+                        }
+
+                    // Create customobject with remember info
+                    CommonService.create('customObjects', rememberCustomObject);
+                    info.remember = remember;
+                }
+
+                return done(null, customer, info);
             });
         }
     ));

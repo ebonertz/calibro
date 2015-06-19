@@ -8,8 +8,9 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	function($locationProvider) {
 		$locationProvider.hashPrefix('!');
 	}
-]).run(function ($rootScope, CartService) {
+]).run(function ($rootScope, CartService, CustomerService) {
 	CartService.pageLoad();
+	CustomerService.checkCookieAndLogin();
 	//console.log(Authentication)
 	//$rootScope.cart = CartService.createAnonymous();
 
