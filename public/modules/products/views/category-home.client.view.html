@@ -1,11 +1,10 @@
-<div ng-controller="ProductsController" ng-init="category = getCategory(); products = latestProducts(category); selectedGender = 'men'">
+<div ng-controller="HomeController"  ng-init="loadContent(slug); selectedGender = 'men'" id="wrapper">
 	<div class="slider-wrapper">
 		<div class="content-wrapper">
 			<section id="subpage-head">
 				<div class="subpage-hero">
-					<h1 class="subpage-title">{{category}}</h1>
-					<img src="design/images/eyewear/eyewear-hero.jpg"/>
-					<!-- <img ng-src="design/images/{{category}}/{{category}}-hero.jpg"/>  -->
+					<h1 class="subpage-title" data-ng-bind="contentfulData.title"></h1>
+					<img ng-src="{{contentfulData.mainImage.fields.file.url}}" alt="{{contentfulData.mainImage.fields.title}}"/>
 				</div>
 			</section>
 		</div>
@@ -17,16 +16,15 @@
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> / 
-				<span class="breadcrumb-last" rel="v:url" property="v:title">{{category}}</span>
+				<span class="breadcrumb-last" rel="v:url" property="v:title" data-ng-bind="contentfulData.title"></span>
 			</span></span>
 			</div>
 		</section>
 		<section id="eyewear" class="page">
 			<div class="sub-page-intro-text">
-				<h1 class="page-title">{{category}} Ipsum Dolor</h1>
+				<h1 class="page-title" data-ng-bind="contentfulData.section1Title"></h1>
 
-				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-					labore et dolore magna aliquyam.</p>
+				<p data-ng-bind="contentfulData.section1Description"></p>
 
 			</div>
 		</section>

@@ -1,4 +1,4 @@
-<div ng-controller="HomeController">
+<div ng-controller="HomeController" ng-init="loadContent('home')">
     <div class="slider-wrapper">
         <div class="content-wrapper">
             <section id="home-slider">
@@ -9,7 +9,7 @@
 
                             <div class="content">
                                 <h2>Men's Eyewear 2015</h2>
-                                <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear 2015</a>
+                                <a href="/#!/categories/men/eyewear" class="btn blue radius">Shop All Men's Eyewear 2015</a>
                             </div>
                         </li>
                         <li><img ng-src="{{contentfulData.slide2.fields.file.url}}"/></li>
@@ -38,12 +38,12 @@
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
                 <img src="{{contentfulData.eyewearImage1.fields.file.url}}" width="362" height="226"/>
-                <a href="/eyewear/men-eyewear.html" class="btn blue radius">Shop All Men's Eyewear</a>
+                <a href="/#!/categories/men/eyewear" class="btn blue radius">Shop All Men's Eyewear</a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
                 <img ng-src="{{contentfulData.eyewearImage2.fields.file.url}}" width="362" height="226"/>
-                <a href="/eyewear/women-eyewear.html" class="btn blue radius">Shop All Women's Eyewear</a>
+                <a href="/#!/categories/women/eyewear" class="btn blue radius">Shop All Women's Eyewear</a>
             </div>
         </section>
         <!--Sunglasses-->
@@ -57,12 +57,12 @@
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
                 <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
-                <a href="/sunglasses/men-sunglasses.html" class="btn blue radius">Shop All Men's Sunglasses</a>
+                <a href="/#!/categories/men/sunglasses" class="btn blue radius">Shop All Men's Sunglasses</a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
                 <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
-                <a href="/sunglasses/women-sunglasses.html" class="btn blue radius">Shop All Women's Sunglassesr</a>
+                <a href="/#!/categories/women/sunglasses" class="btn blue radius">Shop All Women's Sunglassesr</a>
             </div>
             <div class="sunglasses-cover">
                 <img class="circle" src="design/images/homepage/eyewear-main.jpg" width="364" height="361" alt="Focali Eyewear"/>
@@ -79,7 +79,7 @@
                         <h4>Our Locations</h4>
 
                         <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                        <a href="/locations.html">Learn More...</a>
+                        <a href="/#!/locations">Learn More...</a>
                     </div>
                 </section>
             </div>
@@ -92,7 +92,7 @@
                         <h4>About Us</h4>
 
                         <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                        <a href="/about-us.html">Learn More...</a>
+                        <a href="/about-us">Learn More...</a>
                     </div>
                 </section>
             </div>
@@ -105,7 +105,7 @@
                         <h4>Help</h4>
 
                         <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                        <a href="/help.html">Learn More...</a>
+                        <a href="/help">Learn More...</a>
                     </div>
                 </section>
             </div>

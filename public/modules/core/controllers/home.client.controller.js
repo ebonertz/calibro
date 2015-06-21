@@ -1,14 +1,25 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'ContentfulService',
-	function($scope, Authentication, ContentfulService) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'ContentfulService', '$stateParams',
+	function($scope, Authentication, ContentfulService, $stateParams) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 
-		ContentfulService.home().then(function(data) {
-			$scope.contentfulData = data;
-		});
+		if ($stateParams.hasOwnProperty('gender')) {
+			$scope.gender = $stateParams.gender;
+		}
+
+		if ($stateParams.hasOwnProperty('slug')){
+			$scope.slug = $stateParams.slug
+		}
+
+		$scope.loadContent = function(page, args){
+			console.log('Loading contentful data: '+page+'('+args+')')
+			ContentfulService[page](args).then(function(data) {
+				$scope.contentfulData = data;
+			});
+		}
 
 	}
 ]);

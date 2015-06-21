@@ -3,8 +3,8 @@
     <span class="on-sale-badge" ng-if="product.displayVariant.basePrices.hasOwnProperty(currency)">Sale</span>
     <!-- <span class="no-stock-notice" ng-if="!product.displayVariant.availability.isOnStock">Out of Stock</span> -->
   </div>
-  <a href="/#!/products/{{product.slug}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
-  <a ng-href="#!/products/{{product.slug}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+  <a href="/#!/products/{{product.slug[lang]}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
+  <a ng-href="#!/products/{{product.slug[lang]}}" class="product-title"><b>{{product.name[lang]}}</b></a>
   <span class="price">
     <del ng-if="product.displayVariant.basePrices.hasOwnProperty(currency)">
       <span class="amount">{{product.displayVariant.basePrices[currency] | spherePrice}}</span>

@@ -89,7 +89,12 @@ exports.bySku = function(skuArray, callback){
     console.log(query);
 
   SphereClient.getClient().productProjections.filterByQuery(query).search().then(function (result) {
-      callback(null, result.body.results);
+      var products = result.body.results;
+      for(var i = 0; i < products.length; i++){
+          products[i] = new Product(products[i])
+      }
+
+      callback(null, products);
   }).error(function(err){
       console.log(err)
       callback(err, null);

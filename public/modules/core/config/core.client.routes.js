@@ -11,6 +11,10 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		state('home', {
 			url: '/',
 			templateUrl: 'modules/core/views/home.client.view.html'
+		}).
+		state('landingSummer', {
+			url: '/landing/summer/:gender',
+			templateUrl: 'modules/core/views/landing-summer.client.view.html'
 		});
 	}
 ]);

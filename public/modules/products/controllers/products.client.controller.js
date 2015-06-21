@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils',
-  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService',
+  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService) {
     $scope.authentication = Authentication;
     $scope.$location = $location;
 

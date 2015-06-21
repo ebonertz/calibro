@@ -15,7 +15,7 @@ var Product = function(options){
 
   this.name = options.name;
   this.description = options.description;
-  this.slug = options.slug[lang]
+  this.slug = options.slug
 
   // Add slug to categories
   this.categories = options.categories

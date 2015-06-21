@@ -35,20 +35,10 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
             return deferred.promise;
         }
 
-        this.menSummer = function () {
+        this.summer = function (gender) {
             var deferred = $q.defer();
 
-            $http.get(urlString + '/men/summer').success(function (data) {
-                deferred.resolve(data);
-            });
-
-            return deferred.promise;
-        }
-
-        this.womenSummer = function () {
-            var deferred = $q.defer();
-
-            $http.get(urlString + '/women/summer').success(function (data) {
+            $http.get(urlString + '/summer/'+gender).success(function (data) {
                 deferred.resolve(data);
             });
 
