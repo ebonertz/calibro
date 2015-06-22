@@ -51,8 +51,7 @@
 						{{order.createdAt | sphereDate | localeDate}}
 					</td>
 					<td class="order-payment-method">
-						TODO
-						<!-- Credit <span class="badge gray outline radius xsmall card-paid">9987</span> -->
+						<span class="badge small radius" ng-class="order.paymentState | statusColor">{{order.paymentState}}<span>
 					</td>
 					<td class="order-status">
 						<span class="badge small radius" ng-class="order.orderState | statusColor">{{order.orderState}}<span>

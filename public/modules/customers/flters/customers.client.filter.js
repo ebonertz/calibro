@@ -16,6 +16,9 @@ angular.module('customers').filter('totalItems', function () {
 		var color;
 
 		switch(status){
+			case "Paid":
+				color = "green";
+				break;
 			case "Open":
 				color = "yellow";
 				break;

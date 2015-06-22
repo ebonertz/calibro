@@ -23,8 +23,12 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     }
 
+                    $rootScope.loading = true;
+
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                         $scope.shippingMethods = data;
+
+                        $rootScope.loading = false;
 
                         if ($rootScope.cart.shippingInfo != null) {
                             AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
@@ -85,20 +89,26 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 finalShippingAddress = $scope.selectedShippingAddress;
             }
 
+            $rootScope.loading = true;
             CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
+
                 $rootScope.cart = result;
                 $scope.shippingMethodClass = 'active';
+                LoggerServices.success('Shipping address updated');
 
                 ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                     $scope.shippingMethods = data;
+                    $rootScope.loading = false;
                 });
 
                 //optileList();
             });
+
         }
 
         $scope.setShippingMethod = function () {
             if ($scope.selectedShippingMethod) {
+                $rootScope.loading = true;
                 CartService.setShippingMethod($rootScope.cart.id, {
                     shippingMethod: {
                         id: $scope.selectedShippingMethod.id,
@@ -107,33 +117,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }).then(function (result) {
                     $rootScope.cart = result;
                     $scope.reviewOrderClass = 'active';
+                    LoggerServices.success('Shipping method updated');
 
                     AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                         $scope.authorizeNet = data;
+                        $rootScope.loading = false;
                     });
                 });
 
             }
         }
-
-        /*        var optileList = function () {
-         OptileService.list($rootScope.cart.shippingAddress.country,
-         {email: Authentication.user.email},
-         {
-         amount: $rootScope.cart.taxedPrice.totalNet.centAmount / 100,
-         currency: $rootScope.cart.taxedPrice.totalNet.currencyCode,
-         reference: $rootScope.cart.id
-         }).then(function (listUrl) {
-         $('#paymentNetworks').checkoutList(
-         {
-         payButton: "submitBtn",
-         listUrl: listUrl,
-         smartSwitch: true
-         }
-         );
-         });
-         }
-         */
 
         $scope.createOrder = function () {
             var order = new Order({
@@ -154,12 +147,17 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             console.log(valid);
 
             var address = new Addresses(address);
+            $rootScope.loading = true;
 
             address.$save(function (response) {
                 Authentication.user = response;
+                LoggerServices.success('Address added');
+                $rootScope.loading = false;
                 console.log("success address");
             }, function (response) {
                 $scope.error = response.data.message;
+                $rootScope.loading = false;
+                LoggerServices.error(response);
             });
 
         };

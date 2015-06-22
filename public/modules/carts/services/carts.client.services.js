@@ -7,14 +7,16 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
         this.pageLoad = function () {
 
+            $rootScope.loading = true;
+
             if (Authentication.user) {
 
                 this.byCustomer(Authentication.user.id).then(function (cart) {
 
                     if (cart != null) {
                         $rootScope.cart = cart;
-                        LoggerServices.success('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
-
+                        console.log('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
+                        $rootScope.loading = false;
                     } else {
                         this.service.createCart(Authentication.user.id);
                     }
@@ -38,7 +40,8 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                                 this.service.createCart(null);
                             } else {
                                 $rootScope.cart = data;
-                                LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                                console.log('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                                $rootScope.loading = false;
                             }
 
                         }.bind({service: this}),
@@ -51,6 +54,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
         }
 
         this.createCart = function (customerId) {
+            $rootScope.loading = true;
             var cart = new Cart({
                 "currency": "USD",
                 "customerId": customerId
@@ -58,9 +62,10 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             cart.$save(function (sphereCart) {
                 $rootScope.cart = sphereCart;
-                if(customerId == null)
+                if (customerId == null)
                     $cookies.anonymousCart = sphereCart.id;
-                LoggerServices.success('New Cart created in Sphere. ID: ' + $rootScope.cart.id + ' ' + (customerId ? ' User ' + customerId : ' Anonymous'));
+                console.log('New Cart created in Sphere. ID: ' + $rootScope.cart.id + ' ' + (customerId ? ' User ' + customerId : ' Anonymous'));
+                $rootScope.loading = false;
             });
         }
 
@@ -72,11 +77,15 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 quantity: quantity
             }
 
+            $rootScope.loading = true;
+
             this.addLineItem($rootScope.cart.id, payload).then(function (result) {
-                LoggerServices.success('Added to Sphere Cart ' + result);
+                LoggerServices.success('Product added');
                 $rootScope.cart = result;
+                $rootScope.loading = false;
             }, function (error) {
-                LoggerServices.success('Error while adding to Sphere Cart');
+                LoggerServices.error('Error while adding to Sphere Cart');
+                $rootScope.loading = false;
             });
 
         }
@@ -87,17 +96,15 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 lineItemId: item.id
             }
 
-            /*for (var i in $rootScope.cart.lineItems) {
-                if ($rootScope.cart.lineItems[i].id === item.id) {
-                    $rootScope.cart.lineItems.splice(i, 1);
-                }
-            }*/
+            $rootScope.loading = true;
 
             this.removeLineItem($rootScope.cart.id, payload).then(function (result) {
-                LoggerServices.success('Remove from Sphere Cart ' + result);
+                LoggerServices.success('Product removed');
                 $rootScope.cart = result;
+                $rootScope.loading = false;
             }, function (error) {
                 LoggerServices.success('Error while removing to Sphere Cart. Restoring previous one.');
+                $rootScope.loading = false;
             });
 
         }
@@ -127,7 +134,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             $http.get(urlString + '/byCustomer/' + customerId).success(function (data) {
                 deferred.resolve(data);
-            }).error(function(error) {
+            }).error(function (error) {
                 deferred.reject(error);
             });
 
@@ -179,7 +186,9 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             $http.post(urlString + '/addDiscountCode/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
-            });
+            }).error(function (error) {
+                deferred.reject(error);
+            });;
 
             return deferred.promise;
         }

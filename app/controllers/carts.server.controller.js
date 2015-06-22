@@ -101,7 +101,7 @@ exports.addDiscountCode = function (req, res) {
 
     CartService.addDiscountCode(cartId, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }

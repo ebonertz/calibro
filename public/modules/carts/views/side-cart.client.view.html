@@ -3,6 +3,7 @@
     <hr/>
     <table id="subtotals">
         <span class="sub-title">Products</span>
+        <tr ng-if="!cart.lineItems">(No products yet)</tr>
         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
             <td class="product-name">
                 {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>
@@ -25,8 +26,7 @@
                 Subtotal
             </td>
             <td id="sub-amount" class="amount">
-                {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
-                cart.shippingInfo.shippingRate.price.centAmount) / 100}}
+                {{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + (cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100 : '-'}}
             </td>
         </tr>
         <tr class="shipping">
@@ -46,8 +46,17 @@
                 <b>Order Total</b>
             </td>
             <td id="price-total" class="amount">
-                {{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount / 100}}
+                {{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + cart.totalPrice.centAmount / 100 : '-'}}
             </td>
         </tr>
     </table>
+    <div ng-controller="CartController">
+        <a ng-click="proceedToCheckout()" href="" class="btn block radius blue">Proceed To Checkout</a>
+
+        <div id="cart-coupon" class="coupons">
+            <h6>Have a Coupon?</h6>
+            <input ng-model="code" type="text" placeholder="Type your coupon code"/>
+            <button ng-click="addDiscountCode(code)" class="btn block outline thick radius blue">Apply Coupon</button>
+        </div>
+    </div>
 </div>
