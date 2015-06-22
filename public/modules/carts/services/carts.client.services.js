@@ -58,7 +58,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             cart.$save(function (sphereCart) {
                 $rootScope.cart = sphereCart;
-                if(customerId != null)
+                if(customerId == null)
                     $cookies.anonymousCart = sphereCart.id;
                 LoggerServices.success('New Cart created in Sphere. ID: ' + $rootScope.cart.id + ' ' + (customerId ? ' User ' + customerId : ' Anonymous'));
             });

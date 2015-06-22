@@ -18,15 +18,15 @@ exports.byLocation = function (country, state, currency, callback) {
     var path = '',
         params = [];
 
-    if(country)
+    if (country)
         params.push('country=' + country);
-    if(state)
+    if (state)
         params.push('state=' + state);
-    if(currency)
+    if (currency)
         params.push('currency=' + currency);
 
-    for(var i = 0; i < params.length; i++) {
-        if(i == 0)
+    for (var i = 0; i < params.length; i++) {
+        if (i == 0)
             path = '?' + params[i]
         else {
             path += '&' + params[i]
@@ -44,24 +44,46 @@ exports.byLocation = function (country, state, currency, callback) {
 };
 
 
-exports.byLocationOneCurrency = function (country, state, currency, callback) {
-    exports.byLocation(country, state, currency, function (err, result) {
-        if (err)
-            callback(err, null)
-        else {
-            for(var i = 0; i < result.length; i++) {
-                for(var j = 0; j < result[i].zoneRates.length; j++) {
+exports.byLocationOneCurrency = function (country, state, currency, zonename, callback) {
 
-                    for(var k = 0; k < result[k].zoneRates[j].shippingRates.length; j++) {
-                        if(result[k].zoneRates[j].shippingRates[k].price.currencyCode != currency) {
-                            result[k].zoneRates[j].shippingRates.splice(k,1);
-                            break;
+    CommonService.byName('zones', zonename, function (err, zone) {
+
+        if (err || zone == null || zone.length == 0) {
+            callback(new Error(err), null);
+        } else {
+
+            exports.byLocation(country, state, currency, function (err, result) {
+                if (err)
+                    callback(err, null)
+                else {
+
+                    for (var i = 0; i < result.length; i++) {
+                        for (var j = 0; j < result[i].zoneRates.length; j++) {
+                            if (result[i].zoneRates[j].zone.id != zone[0].id) {
+                                result[i].zoneRates.splice(j, 1);
+                            }
                         }
                     }
-                }
-            }
 
-            callback(null, result)
+
+                    for (var i = 0; i < result.length; i++) {
+                        for (var j = 0; j < result[i].zoneRates.length; j++) {
+
+                            for (var k = 0; k < result[i].zoneRates[j].shippingRates.length; k++) {
+                                if (result[i].zoneRates[j].shippingRates[k].price.currencyCode != currency) {
+                                    result[i].zoneRates[j].shippingRates.splice(k, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    callback(null, result)
+                }
+            });
         }
+
     });
+
+
 };

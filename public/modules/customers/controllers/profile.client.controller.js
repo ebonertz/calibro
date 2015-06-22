@@ -3,6 +3,7 @@
 angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus',
 	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus) {
 		$scope.customer = angular.copy(Authentication.user);
+		$scope.$utils = ProductUtils;
 
 		// If user is not signed in then redirect back home
 		if (!$scope.customer) $location.path('/');

@@ -23,7 +23,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     }
 
-                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD').then(function(data) {
+                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function(data) {
                         $scope.shippingMethods = data;
 
                         if ($rootScope.cart.shippingInfo != null) {
@@ -88,7 +88,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart = result;
                 $scope.shippingMethodClass = 'active';
 
-                ShippingMethodService.byLocationOneCurrency('US', null, 'USD').then(function(data) {
+                ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function(data) {
                     $scope.shippingMethods = data;
                 });
 

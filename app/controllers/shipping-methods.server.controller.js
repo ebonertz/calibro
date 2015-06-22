@@ -39,9 +39,10 @@ exports.byLocation = function (req, res) {
 exports.byLocationOneCurrency = function (req, res) {
     var country = req.query.country,
         state = req.query.state,
-        currency = req.query.currency;
+        currency = req.query.currency,
+        zonename = req.query.zonename;
 
-    ShippingMethodService.byLocationOneCurrency(country, state, currency, function (err, result) {
+    ShippingMethodService.byLocationOneCurrency(country, state, currency, zonename, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {

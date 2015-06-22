@@ -5,7 +5,7 @@ angular.module('carts').service('ShippingMethodService', ['$http', '$q',
     function ($http, $q) {
         var urlString = '/shipping-methods';
 
-        this.byLocationOneCurrency = function (country, state, currency) {
+        this.byLocationOneCurrency = function (country, state, currency, zonename) {
             var deferred = $q.defer();
 
             var path = '',
@@ -17,6 +17,8 @@ angular.module('carts').service('ShippingMethodService', ['$http', '$q',
                 params.push('state=' + state);
             if (currency)
                 params.push('currency=' + currency);
+            if (zonename)
+                params.push('zonename=' + zonename);
 
             for (var i = 0; i < params.length; i++) {
                 if (i == 0)
