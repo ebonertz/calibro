@@ -25,7 +25,7 @@
 
                                     <form ng-if="authentication.user">
                                         <label ng-repeat="address in authentication.user.addresses track by address.id"
-                                               ng-click="selectShippingAddress(address)" class="block-radio">
+                                               ng-click="selectShippingAddress(address)" class="block-radio {{address.selected ? 'checked' : ''}}">
                                             <b>{{address.firstName}} {{address.lastName}}</b><br/>
                                             {{address.streetName}} {{address.streetNumber}}<br/>
                                             {{address.phone}}
@@ -77,7 +77,7 @@
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">US</option>
                                         </select>
-                                        <input ng-if="authenticate.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
+                                        <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
@@ -104,14 +104,14 @@
                                            style="max-width: 100%;">
                                         <div class="shipping-logo">
                                             <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg"
-                                                 alt=""/>
+                                                 alt="" err-src="/design/images/shipping-logos/Truck.png"/>
                                         </div>
                                         <b>{{shippingMethod.name}}</b><br/>
                                         <input type="radio" name="shipping" value="1">
                                     </label>
 
                                 </form>
-                        </div>
+                            </div>
                         <div class="continue">
                             <a ng-click="setShippingMethod()" href=""
                                class="btn outline green radius block">Continue</a>

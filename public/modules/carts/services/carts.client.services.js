@@ -16,26 +16,17 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                         LoggerServices.success('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
 
                     } else {
-
-                        var cart = new Cart({
-                            "currency": "USD",
-                            "customerId": Authentication.user.id
-                        });
-
-                        cart.$save(function (sphereCart) {
-                            $rootScope.cart = sphereCart;
-                            LoggerServices.success('New Cart created for user in Sphere. ID: ' + $rootScope.cart.id);
-                        });
-
-
+                        this.service.createCart(Authentication.user.id);
                     }
 
-                });
+                }.bind({service: this}), function (error) {
+                    this.service.createCart(Authentication.user.id);
+                }.bind({service: this}));
 
             } else {
 
                 if ($cookies.anonymousCart == null || $cookies.anonymousCart == 'null') {
-                    this.createAnonymous();
+                    this.createCart(null);
                 } else {
 
                     Cart.get({
@@ -44,7 +35,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
                             // This check is to avoid showing a user cart, that started as an anonymous cart.
                             if (data.customerId != null) {
-                                this.service.createAnonymous();
+                                this.service.createCart(null);
                             } else {
                                 $rootScope.cart = data;
                                 LoggerServices.success('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
@@ -52,24 +43,25 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
                         }.bind({service: this}),
                         function (error) {
-                            this.service.createAnonymous();
+                            this.service.createCart(null);
                         }.bind({service: this}));
                 }
             }
 
         }
 
-        this.createAnonymous = function () {
+        this.createCart = function (customerId) {
             var cart = new Cart({
-                "currency": "USD"
+                "currency": "USD",
+                "customerId": customerId
             });
 
             cart.$save(function (sphereCart) {
                 $rootScope.cart = sphereCart;
-                $cookies.anonymousCart = sphereCart.id;
-                LoggerServices.success('Anonymous cart created in Sphere. ID: ' + $rootScope.cart.id);
+                if(customerId != null)
+                    $cookies.anonymousCart = sphereCart.id;
+                LoggerServices.success('New Cart created in Sphere. ID: ' + $rootScope.cart.id + ' ' + (customerId ? ' User ' + customerId : ' Anonymous'));
             });
-
         }
 
         this.addToCart = function (productId, variantId, quantity) {
@@ -135,6 +127,8 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             $http.get(urlString + '/byCustomer/' + customerId).success(function (data) {
                 deferred.resolve(data);
+            }).error(function(error) {
+                deferred.reject(error);
             });
 
             return deferred.promise;

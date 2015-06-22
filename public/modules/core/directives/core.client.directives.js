@@ -109,7 +109,9 @@ angular.module('core').directive('panelTrigger', function () {
         link: function (scope, element, attrs) {
 
             $(element).click(function() {
-                $(this).parents('.ex-panel').toggleClass('active');
+                if($(this).parents('.ex-panel').attr('class').indexOf('disabled') == -1) {
+                    $(this).parents('.ex-panel').toggleClass('active');
+                }
                 return false;
             });
         }

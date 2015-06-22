@@ -1959,7 +1959,7 @@ table#cart{
 				}
 			}
 		}
-		
+
 		.panel-content{
 			max-height: 0px;
 			overflow: hidden;
@@ -1980,6 +1980,30 @@ table#cart{
 				
 			}
 		}
+	  &.disabled{
+		h4{
+		  a{
+			color: grey;
+			cursor: default;
+			&:before{
+			  content: '';
+			  display: inline-block;
+			  vertical-align: text-bottom;
+			  width: 26px;
+			  height: 26px;
+			  background: url(../images/help/expanders_grey.png)no-repeat top center;
+			  background-size: 26px auto;
+			  margin-right: 8px;
+			}
+		  }
+		}
+		.panel-content{
+		  max-height: 0px;
+		  overflow: hidden;
+		  transition: max-height  300ms;
+		}
+	  }
+
 	}
 }
 .checkout-steps{
