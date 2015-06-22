@@ -83,5 +83,9 @@ module.exports = {
             contactus: 'contactus',
             passwordtoken: 'password-token'
         }
+    },
+    authorizenet: {
+        timeCorrection: 10773 // Matias
+        // timeCorrection: 3532 // Luciano
     }
 };
