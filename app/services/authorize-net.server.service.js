@@ -32,7 +32,10 @@ exports.get = function (amount, callback) {
             now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()),
             timeCorrection = config.authorizenet.timeCorrection;
 
-        var timestamp = (now_utc.getTime() / 1000) - timeCorrection;
+        var time = (now_utc.getTime() / 1000);
+        console.log("time: " + time);
+
+        var timestamp = time - timeCorrection;
 
         var message = apiLoginID + '^' + lastPaymentNumber + '^' + timestamp + '^' + amount + '^';
 
