@@ -111,24 +111,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       return slug
     }
 
-    $scope.latestProducts = function(category, gender, pageSize){
-      var products = {men: [], women: []}
-      var genders = ['men', 'women']
-      
-      $scope.sort = {}
-      $scope.pageSize = pageSize || 5;
-      for(var i = 0; i < genders.length; i++){
-        ProductService.getByCategorySlug(category, {gender: genders[i]}, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
-          if(resultsArray.products.length > 0){
-            var gender = resultsArray.products[0].masterVariant.attr.gender.key.toLowerCase()
-            products[gender] = resultsArray.products
-          }
-        })
-      }
-
-      return products;
-    }
-
     $scope.fetchRecommendedProducts = function(category, gender, pageSize){
       var promise = new Promise(function(resolve, reject){
         var products = {}
@@ -223,6 +205,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     $scope.addToCart = function () {
       CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.quantity );
     };
+
     $scope.view = function(id){
       if(!id)
         id = $stateParams.id

@@ -1,4 +1,4 @@
-<div ng-controller="HomeController"  ng-init="loadContent(slug); selectedGender = 'men'" id="wrapper">
+<div ng-controller="HomeController"  ng-init="loadContent(category); selectedGender = 'men'" id="wrapper">
 	<div class="slider-wrapper">
 		<div class="content-wrapper">
 			<section id="subpage-head">
@@ -56,22 +56,22 @@
 			<section class="product-panels">
 				<div ng-class="category" class="panel" id="men">
 					<div class="description">
-						<h2 id="test-panel">{{products[selectedGender][0].name[lang]}}</h2>
-						<span class="no-stock-notice" ng-hide="products[selectedGender][0].masterVariant.availability.isOnStock">Out Of Stock</span>
+						<h2 id="test-panel">{{contentfulData[selectedGender+'Product'][0].name[lang]}}</h2>
+						<span class="no-stock-notice" ng-hide="contentfulData[selectedGender+'Product'][0].masterVariant.availability.isOnStock">Out Of Stock</span>
 					<span class="price">
-						<del ng-show="products[selectedGender][0].masterVariant.basePrices[currency]">
-							<span class="amount">{{products[selectedGender][0].masterVariant.basePrices[currency] | spherePrice}}</span>
+						<del ng-show="contentfulData[selectedGender+'Product'][0].masterVariant.basePrices[currency]">
+							<span class="amount">{{contentfulData[selectedGender+'Product'][0].masterVariant.basePrices[currency] | spherePrice}}</span>
 						</del>
 						<ins>
-							<span class="amount sale-price large">{{products[selectedGender][0].masterVariant.prices[currency] | spherePrice}}</span>
+							<span class="amount sale-price large">{{contentfulData[selectedGender+'Product'][0].masterVariant.prices[currency] | spherePrice}}</span>
 						</ins>
 					</span>
-						<p>{{products[selectedGender][0].description[lang]}}</p>
-						<a ng-href="#!/products/{{products[selectedGender][0].slug}}" class="btn blue radius thick">SHOP NOW</a> 
+						<p>{{contentfulData[selectedGender+'Product'][0].description[lang]}}</p>
+						<a ng-href="#!/products/{{contentfulData[selectedGender+'Product'][0].slug}}" class="btn blue radius thick">SHOP NOW</a>
 						<a ng-href="#!/categories/{{selectedGender}}/{{category}}" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
 					</div>
 					<div class="section-cover">
-						<img ng-src="{{products[selectedGender][0].masterVariant.images[0]['url']}}" ng-show="products[selectedGender][0].masterVariant.images.length > 0" />
+						<img ng-src="{{contentfulData[selectedGender+'Product'][0].masterVariant.images[0]['url']}}" ng-show="contenfulData[selectedGender+'Product'][0].masterVariant.images.length > 0" />
 					</div>
 				</div>
 			</section>
@@ -85,7 +85,8 @@
 				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
 					tempor invidunt ut labore et dolore magna aliquyam.</p>
 			</div>
-			<product-thumbnail product="product" data-ng-repeat="product in products.men.slice(1) track by product.id"></product-thumbnail>
+			<latest-products category="{{category}}" gender="men"></latest-products>
+			<!--<product-thumbnail product="product" data-ng-repeat="product in products.men.slice(1) track by product.id"></product-thumbnail>-->
 		</section>
 		<section class="all-link"><!--has to be a section for clearfix-->
 			<a ng-href="#!/categories/men/{{category}}" class="btn blue radius">Shop All Men's {{category}}</a>

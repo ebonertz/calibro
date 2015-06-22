@@ -7,7 +7,9 @@ module.directive('productThumbnail', function () {
 		templateUrl: 'modules/products/templates/product.client.template.html',
 		restrict: 'E',
 		scope: {
-			product: '='
+			product: '=',
+			//currency: '=',
+			//lang: '='
 		},
 		replace: true,
 		link: function($scope){

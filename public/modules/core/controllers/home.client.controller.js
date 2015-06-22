@@ -5,13 +5,14 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 	function($scope, Authentication, ContentfulService, $stateParams) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
+		$scope.lang = 'en';
 
 		if ($stateParams.hasOwnProperty('gender')) {
 			$scope.gender = $stateParams.gender;
 		}
 
 		if ($stateParams.hasOwnProperty('slug')){
-			$scope.slug = $stateParams.slug
+			$scope.category = $stateParams.slug
 		}
 
 		$scope.loadContent = function(page, args){
