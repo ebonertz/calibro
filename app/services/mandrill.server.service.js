@@ -97,3 +97,21 @@ exports.sendPasswordToken = function(email, link){
 	}
 	return exports.send_one(options)
 }
+
+exports.orderCreated = function(email, orderId, link){
+	var options = {
+		email: email,
+		template: 'order',
+		template_content: [
+			{
+				"name": "orderId",
+				"content": email
+			},
+			{
+				"name": "link",
+				"content": link
+			}
+		]
+	}
+	return exports.send_one(options)
+}

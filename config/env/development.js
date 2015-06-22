@@ -81,7 +81,8 @@ module.exports = {
         templates: {
             welcome: 'welcome',
             contactus: 'contactus',
-            passwordtoken: 'password-token'
+            passwordtoken: 'password-token',
+            order: 'order'
         }
     },
     authorizenet: {

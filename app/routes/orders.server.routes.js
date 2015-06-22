@@ -10,7 +10,7 @@ var commons = require('../controllers/commons.server.controller.js'),
 module.exports = function (app) {
     app.route('/orders')
         .get(commons.list.bind({entity: entity}))
-        .post(commons.create.bind({entity: entity}));
+        .post(orders.create);
 
     app.route('/orders/own')
     	.get(commons.byCustomerOwn.bind({entity: entity}));
