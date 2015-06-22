@@ -81,7 +81,7 @@
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
-                                <div class="continue">
+                                <div ng-if="validateShippingAddress()" class="continue" disabled="true">
                                     <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
                                        class="btn outline green radius block">Continue</a>
                                     <hr/>
@@ -113,7 +113,7 @@
 
                                 </form>
                             </div>
-                        <div class="continue">
+                        <div ng-if="selectedShippingMethod" class="continue">
                             <a ng-click="setShippingMethod()" href=""
                                class="btn outline green radius block">Continue</a>
                             <hr/>

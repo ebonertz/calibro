@@ -86,6 +86,6 @@ module.exports = {
     },
     authorizenet: {
         timeCorrection: 10773 // Matias
-        // timeCorrection: 3532 // Luciano
+        // timeCorrection: 14373 // Luciano
     }
 };

@@ -23,7 +23,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     }
 
-                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function(data) {
+                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                         $scope.shippingMethods = data;
 
                         if ($rootScope.cart.shippingInfo != null) {
@@ -33,6 +33,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                                 for (var i = 0; i < $scope.shippingMethods.length; i++) {
                                     if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
                                         $scope.shippingMethods[i].selected = true;
+                                        $scope.selectedShippingMethod = $scope.shippingMethods[i];
                                     }
                                 }
                                 $scope.shippingMethodClass = 'active';
@@ -88,7 +89,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart = result;
                 $scope.shippingMethodClass = 'active';
 
-                ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function(data) {
+                ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                     $scope.shippingMethods = data;
                 });
 
@@ -161,6 +162,15 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $scope.error = response.data.message;
             });
 
+        };
+
+        $scope.validateShippingAddress = function () {
+            return $rootScope.cart &&
+                $rootScope.cart.shippingAddress &&
+                $rootScope.cart.shippingAddress.streetName &&
+                $rootScope.cart.shippingAddress.streetNumber &&
+                $rootScope.cart.shippingAddress.firstName &&
+                $rootScope.cart.shippingAddress.lastName;
         };
 
     }
