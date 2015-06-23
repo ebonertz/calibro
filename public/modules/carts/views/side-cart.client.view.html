@@ -3,7 +3,7 @@
     <hr/>
     <table id="subtotals">
         <span class="sub-title">Products</span>
-        <tr ng-if="!cart.lineItems">(No products yet)</tr>
+        <span ng-if="(cart.lineItems == null || cart.lineItems.length == 0)">(No products yet)</span>
         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
             <td class="product-name">
                 {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>

@@ -83,31 +83,32 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
-            var finalShippingAddress = shippingAddress;
+            if (!$rootScope.loading) {
+                var finalShippingAddress = shippingAddress;
 
-            if ($scope.selectedShippingAddress) {
-                finalShippingAddress = $scope.selectedShippingAddress;
-            }
+                if ($scope.selectedShippingAddress) {
+                    finalShippingAddress = $scope.selectedShippingAddress;
+                }
 
-            $rootScope.loading = true;
-            CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
+                $rootScope.loading = true;
+                CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
 
-                $rootScope.cart = result;
-                $scope.shippingMethodClass = 'active';
-                LoggerServices.success('Shipping address updated');
+                    $rootScope.cart = result;
+                    $scope.shippingMethodClass = 'active';
+                    LoggerServices.success('Shipping address updated');
 
-                ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
-                    $scope.shippingMethods = data;
-                    $rootScope.loading = false;
+                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
+                        $scope.shippingMethods = data;
+                        $rootScope.loading = false;
+                    });
+
                 });
-
-                //optileList();
-            });
+            }
 
         }
 
         $scope.setShippingMethod = function () {
-            if ($scope.selectedShippingMethod) {
+            if (!$rootScope.loading && $scope.selectedShippingMethod) {
                 $rootScope.loading = true;
                 CartService.setShippingMethod($rootScope.cart.id, {
                     shippingMethod: {
