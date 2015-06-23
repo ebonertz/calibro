@@ -296,7 +296,7 @@ header{
 		padding-top: 6px;
 	}
 	nav {
-		.make-md-column(6);
+		.make-md-column(5);
 		.hidden-xs();
 		.hidden-sm();
 		a {
@@ -379,7 +379,7 @@ header{
 	}
 	.top-cart{
 		.make-xs-column(8);
-		.make-md-column(4);
+		.make-md-column(5);
 		text-align: right;
 		.search{
 			display: inline-block;
@@ -415,7 +415,6 @@ header{
 			&.site-login{
 				font-size: 11px;
 				font-weight: 700;
-				margin: 0 10px;
 			}
 		}
 		.cart-contents{
@@ -2157,4 +2156,15 @@ table#cart{
   bottom: 10px;
   right: 10px;
   position: fixed; width: 100%; height: 100%; top: 0; left: 0;background-color: rgba(255,255,255,0.8);z-index: 100000;
+}
+
+.top-user-name {
+  display: inline-block;
+  text-align: right;
+  margin: 0 8px;
+  .top-name {
+	display: inline-block;
+	padding-top: 10px;
+	font-size: 11px;
+  }
 }

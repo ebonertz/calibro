@@ -33,8 +33,11 @@
                     <input itemprop="query-input" type="text" name="query">
                 </form>
             </div>
-            <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
-            <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+            <div class="top-user-name">
+                <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
+                <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
+                <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+            </div>
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
                         class="cart-icon"></i> Cart <span class="items-in-cart">({{cart.lineItems.length}})</span></a>
