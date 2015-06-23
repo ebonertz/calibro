@@ -184,3 +184,15 @@ $('.block-radio').click(function() {
 	$('.block-radio').removeClass('checked');
 	$(this).addClass('checked');
 });
+
+//Sticky header
+$(function(){
+    $(window).scroll(function(){
+        // make sure you change 52 to your headers height plus your padding
+        if ($(window).scrollTop() > 20) {
+            $("#main-header").addClass("sticky");
+        } else {
+            $("#main-header").removeClass("sticky");
+        }
+    });
+});
