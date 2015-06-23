@@ -15,10 +15,13 @@ exports.send_one = function (options, callback) {
         to: [to],
         from_email: MandrillClient.options.from_email,
         from_name: MandrillClient.options.from_name,
-        subject: options.subject,
-        html: options.html,
-        
+        subject: options.subject || null,
+        html: options.html || null,
+        attachments: options.attachments || null
 	}
+
+    console.log(message)
+
 
 	var template_content = options.template_content || [
         {
@@ -26,6 +29,11 @@ exports.send_one = function (options, callback) {
             "content": "example content"
         }
     ]
+
+    if(!MandrillClient.templates.hasOwnProperty(options.template)){
+        console.log("ERROR Template "+options.template+" not found in config. Email could not be sent.")
+        return
+    }
 
 	var p = new Promise(function(resolve, reject){
 		MandrillClient.mandrill('/messages/send-template', {
@@ -94,6 +102,23 @@ exports.sendPasswordToken = function(email, link){
 				"content": link
 			}
 		]
+	}
+	return exports.send_one(options)
+}
+
+exports.sendAttachment = function(email, file_name, file_contents, file_type){
+	var options = {
+		email: email,
+		template: 'attachment',
+		//template_content: [],
+		attachments: [
+			{
+				"type": file_type,
+				"name": file_name,
+				"content": file_contents
+			}
+		],
+
 	}
 	return exports.send_one(options)
 }

@@ -54,7 +54,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       try {
         $scope.FETCHING = true;
 
-        var slug, query, gender;
+        var query, gender;
 
         // Get category slug
         var slug = $stateParams.slug
