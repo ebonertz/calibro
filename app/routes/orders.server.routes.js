@@ -24,5 +24,6 @@ module.exports = function (app) {
     app.route('/orders/payOrder/:orderId')
         .post(orders.payOrder);
 
+    app.route('/ship').get(orders.ship);
 
 };
