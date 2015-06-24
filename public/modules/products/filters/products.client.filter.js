@@ -49,6 +49,15 @@ angular.module('products').filter('facets', function(){
   }
 })
 
+.filter('capitalizeFirst', function(){
+    return function(input){
+        if(!input)
+            return
+        else
+            return input.charAt(0).toUpperCase() + input.slice(1);
+    }
+})
+
 // Should get the enum locale'd labels, that's what they're for
 var terms = {
   // frameShape

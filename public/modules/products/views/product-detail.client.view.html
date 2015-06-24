@@ -80,11 +80,6 @@
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
             <a class="social-share" href="#" onclick="#" id="twitter"></a>
           </div>
-          <!--<div class="tags">-->
-            <!--<span>Tags</span>-->
-
-            <!--<div class="tag-cloud"><a href="#">Square</a>, <a href="#">Rimless</a>, Narrow, Acetate, Tortoise</div>-->
-          <!--</div>-->
         </section>
       </div>
 
@@ -92,40 +87,22 @@
     <section id="product-extra">
       <div class="tabs">
         <a class="tab active" href="#" data-tab="features">Features</a>
-        <a class="tab" href="#" data-tab="sizing">Sizing</a>
+
       </div>
       <div class="tab-content active" id="features">
         <section class="inner">
           <div class="column" id="complimentary">
-            <p>Complimentary to</p>
-            <h4>Triangular Faces</h4>
+            <div>Frame Shape: <span data-ng-bind="currentVariant.attr.frameShape.label.en | capitalizeFirst"></span></div>
+            <div>Frame Type: <span data-ng-bind="currentVariant.attr.frameType.label.en | capitalizeFirst"></span></div>
+            <div>Frame Material: <span data-ng-bind="currentVariant.attr.frameMaterial.en | capitalizeFirst"></span></div>
           </div>
           <div class="column">
-            <h4>Lenses</h4>
-            <ul>
-              <li>Made from polycarbonate</li>
-              <li>Offer 100% UV protection</li>
-              <li>Anti-scratch and anti-reflective coating</li>
-            </ul>
+            <div>Mirror Reflection: <span>{{!!currentVariant.attr.mirrorReflection ? "Yes" : "No"}}</span></div>
           </div>
           <div class="column">
-            <h4>Materials</h4>
-            <ul>
-              <li>Made from custom cellulose acetate</li>
-              <li>Akulon-coated screws for durability</li>
-              <li>Cut from a single sheet of acetate</li>
-            </ul>
-          </div>
+            <div>Width: <span data-ng-bind="currentVariant.attr.width.label.en | capitalizeFirst"></span></div>
         </section>
       </div>
-      <div class="tab-content" id="sizing">
-
-        <p>Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor
-          ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, vel scelerisque nisl
-          consectetur et. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
-          fermentum massa justo sit amet risus.</p>
-      </div>
-
     </section>
     <section class="related">
       <div class="cross-sells">
