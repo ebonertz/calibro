@@ -366,5 +366,17 @@
       "isRequired": false,
       "isSearchable": false
     }
+    {
+      "type": {
+        "name": "boolean"
+      },
+      "name": "isNew",
+      "label": {
+        "en": "Is New"
+      },
+      "isRequired": false,
+      "attributeConstraint": "SameForAll",
+      "isSearchable": true
+    },
   ]
 }

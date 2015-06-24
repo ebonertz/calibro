@@ -32,9 +32,9 @@
         <meta itemprop="brand" content="Focali">
         <meta itemprop="manufacturer" content="Focali Inc">
       <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-        <meta itemprop="availability" content="In Stock">
-        <meta itemprop="itemCondition" content="New">
-        <span class="new-badge">New</span>
+        <meta itemprop="availability" ng-if="currentVariant.availability.isOnStock" content="In Stock">
+        <meta itemprop="itemCondition" ng-if="currentVariant.attr.isNew" content="New">
+        <span class="new-badge" ng-show="currentVariant.attr.isNew">New</span>
         <span class="on-sale-badge" ng-if="currentVariant.basePrices[currency]">Sale</span>
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
@@ -80,11 +80,11 @@
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
             <a class="social-share" href="#" onclick="#" id="twitter"></a>
           </div>
-          <div class="tags">
-            <span>Tags</span>
+          <!--<div class="tags">-->
+            <!--<span>Tags</span>-->
 
-            <div class="tag-cloud"><a href="#">Square</a>, <a href="#">Rimless</a>, Narrow, Acetate, Tortoise</div>
-          </div>
+            <!--<div class="tag-cloud"><a href="#">Square</a>, <a href="#">Rimless</a>, Narrow, Acetate, Tortoise</div>-->
+          <!--</div>-->
         </section>
       </div>
 

@@ -214,6 +214,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
       var products = new Products({id: id})
       products.$get({id: id}, function(result){
+        console.log(result)
         $scope.product = result;
         $scope.currentVariant = $scope.product.masterVariant;
         $scope.product.variants.unshift($scope.product.masterVariant);

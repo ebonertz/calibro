@@ -35,6 +35,7 @@ exports.bySlug = function(req, res){
     if (err) {
       return res.status(400);
     } else {
+      console.log(result)
       res.json(result);
     }
   })
