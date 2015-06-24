@@ -20,8 +20,6 @@ exports.send_one = function (options, callback) {
         attachments: options.attachments || null
 	}
 
-    console.log(message)
-
 
 	var template_content = options.template_content || [
         {
@@ -106,10 +104,11 @@ exports.sendPasswordToken = function(email, link){
 	return exports.send_one(options)
 }
 
-exports.sendAttachment = function(email, file_name, file_contents, file_type) {
+exports.sendAttachment = function(email, subject, file_name, file_contents, file_type) {
 	var options = {
 		email: email,
 		template: 'attachment',
+        subject: subject,
 		//template_content: [],
 		attachments: [
 			{
