@@ -5,7 +5,7 @@
 
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
-				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
+				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Login</span>
 			</span></span>
     </div>
@@ -26,9 +26,6 @@
               <label>
                 <input type="checkbox" class="rememberme" data-ng-model="credentials.rememberme"/> Remember Me
               </label>
-              <div data-ng-show="login_error" class="text-center text-danger">
-                <div class="notice outline red small" data-ng-bind="login_error"></div>
-              </div>
               <input type="submit" class="btn radius blue" value="Login">
             </form>
           </div>

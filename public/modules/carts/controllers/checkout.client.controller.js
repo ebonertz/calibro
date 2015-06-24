@@ -1,29 +1,77 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService) {
 
-        setTimeout(function () {
-            if ($rootScope.cart != null && $rootScope.cart.shippingInfo != null) {
-                AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                    $scope.authorizeNet = data;
+        $scope.shippingMethodClass = 'disabled';
+        $scope.reviewOrderClass = 'disabled';
 
-                    for (var i = 0; i < $scope.shippingMethods.length; i++) {
-                        if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
-                            $scope.shippingMethods[i].selected = true;
+        var init = function () {
+            if ($rootScope.cart != null) {
+                if ($rootScope.cart.shippingAddress != null) {
+                    $scope.shippingMethodClass = 'active';
+
+                    if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
+                        for (var i = 0; i < Authentication.user.addresses.length; i++) {
+                            if ($rootScope.cart.shippingAddress.streetName == Authentication.user.addresses[i].streetName &&
+                                $rootScope.cart.shippingAddress.streetNumber == Authentication.user.addresses[i].streetNumber &&
+                                $rootScope.cart.shippingAddress.firstName == Authentication.user.addresses[i].firstName &&
+                                $rootScope.cart.shippingAddress.lastName == Authentication.user.addresses[i].lastName) {
+                                Authentication.user.addresses[i].selected = true;
+                            }
                         }
+
                     }
 
-                });
+                    $rootScope.loading = true;
+
+                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
+                        $scope.shippingMethods = data;
+
+                        $rootScope.loading = false;
+
+                        if ($rootScope.cart.shippingInfo != null) {
+                            AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
+                                $scope.authorizeNet = data;
+
+                                for (var i = 0; i < $scope.shippingMethods.length; i++) {
+                                    if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
+                                        $scope.shippingMethods[i].selected = true;
+                                        $scope.selectedShippingMethod = $scope.shippingMethods[i];
+                                    }
+                                }
+                                $scope.shippingMethodClass = 'active';
+                                $scope.reviewOrderClass = 'active';
+
+                                if (!$scope.$$phase)
+                                    $scope.$apply();
+
+                            });
+                        }
+
+                    });
+
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+
+                }
+
+            } else {
+                console.log("Cart is still null. Loading delay?");
             }
-        }, 3000);
+        }
+
+        if ($rootScope.cart == null) {
+            setTimeout(function () {
+                init();
+            }, 4000);
+        } else {
+            init();
+        }
+
 
         $scope.authentication = Authentication;
         $scope.$utils = ProductUtils;
-
-        ShippingMethods.query(function (data) {
-            $scope.shippingMethods = data;
-        });
 
         $scope.selectShippingAddress = function (shippingAddress) {
             $scope.selectedShippingAddress = shippingAddress;
@@ -35,21 +83,33 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
-            var finalShippingAddress = shippingAddress;
+            if (!$rootScope.loading) {
+                var finalShippingAddress = shippingAddress;
 
-            if ($scope.selectedShippingAddress) {
-                finalShippingAddress = $scope.selectedShippingAddress;
+                if ($scope.selectedShippingAddress) {
+                    finalShippingAddress = $scope.selectedShippingAddress;
+                }
+
+                $rootScope.loading = true;
+                CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
+
+                    $rootScope.cart = result;
+                    $scope.shippingMethodClass = 'active';
+                    LoggerServices.success('Shipping address updated');
+
+                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
+                        $scope.shippingMethods = data;
+                        $rootScope.loading = false;
+                    });
+
+                });
             }
 
-            CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
-                $rootScope.cart = result;
-                $scope.shippingMethodClass = 'active';
-                //optileList();
-            });
         }
 
         $scope.setShippingMethod = function () {
-            if ($scope.selectedShippingMethod) {
+            if (!$rootScope.loading && $scope.selectedShippingMethod) {
+                $rootScope.loading = true;
                 CartService.setShippingMethod($rootScope.cart.id, {
                     shippingMethod: {
                         id: $scope.selectedShippingMethod.id,
@@ -58,33 +118,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }).then(function (result) {
                     $rootScope.cart = result;
                     $scope.reviewOrderClass = 'active';
+                    LoggerServices.success('Shipping method updated');
 
                     AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                         $scope.authorizeNet = data;
+                        $rootScope.loading = false;
                     });
                 });
 
             }
         }
-
-        /*        var optileList = function () {
-         OptileService.list($rootScope.cart.shippingAddress.country,
-         {email: Authentication.user.email},
-         {
-         amount: $rootScope.cart.taxedPrice.totalNet.centAmount / 100,
-         currency: $rootScope.cart.taxedPrice.totalNet.currencyCode,
-         reference: $rootScope.cart.id
-         }).then(function (listUrl) {
-         $('#paymentNetworks').checkoutList(
-         {
-         payButton: "submitBtn",
-         listUrl: listUrl,
-         smartSwitch: true
-         }
-         );
-         });
-         }
-         */
 
         $scope.createOrder = function () {
             var order = new Order({
@@ -105,15 +148,30 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             console.log(valid);
 
             var address = new Addresses(address);
+            $rootScope.loading = true;
 
             address.$save(function (response) {
                 Authentication.user = response;
+                LoggerServices.success('Address added');
+                $rootScope.loading = false;
                 console.log("success address");
             }, function (response) {
                 $scope.error = response.data.message;
+                $rootScope.loading = false;
+                LoggerServices.error(response);
             });
 
         };
 
+        $scope.validateShippingAddress = function () {
+            return $rootScope.cart &&
+                $rootScope.cart.shippingAddress &&
+                $rootScope.cart.shippingAddress.streetName &&
+                $rootScope.cart.shippingAddress.streetNumber &&
+                $rootScope.cart.shippingAddress.firstName &&
+                $rootScope.cart.shippingAddress.lastName;
+        };
+
     }
-]);
+])
+;

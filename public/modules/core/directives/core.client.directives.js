@@ -21,8 +21,8 @@ angular.module('core').directive('topCart', function () {
                 $(element[0].children[3].children[1]).fadeIn().removeClass('hidden');
             });
 
-            $(element[0].children[3].children[1]).mouseleave(function () {
-                $(this).fadeOut().addClass('hidden');
+            $(element).mouseleave(function () {
+                $(element[0].children[3].children[1]).fadeOut().addClass('hidden');
             });
 
         }
@@ -109,7 +109,9 @@ angular.module('core').directive('panelTrigger', function () {
         link: function (scope, element, attrs) {
 
             $(element).click(function() {
-                $(this).parents('.ex-panel').toggleClass('active');
+                if($(this).parents('.ex-panel').attr('class').indexOf('disabled') == -1) {
+                    $(this).parents('.ex-panel').toggleClass('active');
+                }
                 return false;
             });
         }

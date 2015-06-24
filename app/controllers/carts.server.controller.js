@@ -7,7 +7,12 @@ exports.byCustomer = function (req, res) {
         if (err) {
             return res.sendStatus(400);
         } else {
-            res.json(result);
+            if (result.errors != null && result.errors.length > 0) {
+                return res.sendStatus(400);
+            } else {
+                res.json(result);
+            }
+
         }
     });
 };
@@ -96,7 +101,7 @@ exports.addDiscountCode = function (req, res) {
 
     CartService.addDiscountCode(cartId, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }

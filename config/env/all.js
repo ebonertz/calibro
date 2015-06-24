@@ -13,7 +13,8 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				'public/lib/optile/ajax-integration-1.1.min.css'
+				'public/lib/optile/ajax-integration-1.1.min.css',
+				'public/lib/angular-toastr/dist/angular-toastr.css'
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -28,7 +29,8 @@ module.exports = {
 				'public/design/js/focali-required.js',
 				'public/design/js/focali-scripts.js',
 				'public/lib/optile/ajax-integration-1.1.min.js',
-				'public/lib/angular-cookie/angular-cookie.min.js'
+				'public/lib/angular-cookie/angular-cookie.min.js',
+				'public/lib/angular-toastr/dist/angular-toastr.js'
 			]
 		},
 		css: [

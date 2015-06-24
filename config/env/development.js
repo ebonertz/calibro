@@ -82,7 +82,12 @@ module.exports = {
             welcome: 'welcome',
             contactus: 'contactus',
             passwordtoken: 'password-token',
-            attachment: 'attachment'
+            attachment: 'attachment',
+            order: 'order'
         }
+    },
+    authorizenet: {
+        timeCorrection: 10773 // Matias
+        // timeCorrection: 14373 // Luciano
     }
 };

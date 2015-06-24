@@ -30,21 +30,24 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 		};
 
 		$scope.signin = function() {
+			$rootScope.loading = true;
 			$scope.credentials.anonymousCartId = $rootScope.cart.id;
 
 			$http.post('/auth/signin', $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response.customer;
 				$rootScope.cart = response.cart;
-				LoggerServices.success('Cart from Sphere after login. ID: ' + $rootScope.cart.id);
+				console.log('Cart from Sphere after login. ID: ' + $rootScope.cart.id);
 				if(response.hasOwnProperty('remember')){
 					CustomerService.setCookie(response.remember.rem, response.remember.rid)
 				}
 
 				// And redirect to the index page
 				$location.path('/');
+				$rootScope.loading = false;
 			}).error(function(response) {
-				$scope.login_error = response.message;
+				LoggerServices.error('Login failed')
+				$rootScope.loading = false;
 			});
 		};
 

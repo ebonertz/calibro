@@ -95,6 +95,16 @@ exports.byCustomer = function (entity, customerId, callback) {
     });
 };
 
+
+exports.byName = function (entity, name, callback) {
+    SphereClient.getClient()[entity].where('name="' + name + '"').fetch().then(function (result) {
+        callback(null, result.body.results);
+    }).error(function (err) {
+        console.log(err);
+        callback(err, null);
+    });
+};
+
 exports.update = function (entity, id, actions, callback) {
     SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
         SphereClient.getClient()[entity].byId(id).update({

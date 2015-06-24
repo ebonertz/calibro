@@ -22,7 +22,6 @@
                     </ul>
 
                 </li>
-                <li><a href="#!/locations">Locations</a></li>
                 <li><a href="#!/about-us">About Us</a></li>
                 <li><a href="#!/help">Help</a></li>
             </ul>
@@ -34,8 +33,11 @@
                     <input itemprop="query-input" type="text" name="query">
                 </form>
             </div>
-            <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
-            <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+            <div class="top-user-name">
+                <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
+                <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
+                <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+            </div>
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
                         class="cart-icon"></i> Cart <span class="items-in-cart">({{cart.lineItems.length}})</span></a>
@@ -50,11 +52,11 @@
                         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-preview">
                             <td><a ng-click="removeFromCart(lineItem)" class="remove-product" href="">X</a> {{lineItem.name.en}}</td>
                             <td class="cp-qty-td">{{lineItem.quantity}}</td>
-                            <td class="cp-price-td">&euro;{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>
+                            <td class="cp-price-td">{{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}}{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>
                         </tr>
                         </tbody>
                     </table>
-                    <a href="#!/cart" class="btn radius small outline thick blue">View Cart</a>
+                    <a href="#!/cart" id="view-cart-btn" class="btn radius small outline thick blue">View Cart</a>
                     <a href="#!/checkout" class="btn radius small blue">Checkout</a>
                 </div>
 			</span>

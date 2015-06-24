@@ -5,7 +5,7 @@
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
-				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /  
+				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Checkout</span>
 			</span></span>
         </div>
@@ -25,7 +25,7 @@
 
                                     <form ng-if="authentication.user">
                                         <label ng-repeat="address in authentication.user.addresses track by address.id"
-                                               ng-click="selectShippingAddress(address)" class="block-radio">
+                                               ng-click="selectShippingAddress(address)" class="block-radio {{address.selected ? 'checked' : ''}}">
                                             <b>{{address.firstName}} {{address.lastName}}</b><br/>
                                             {{address.streetName}} {{address.streetNumber}}<br/>
                                             {{address.phone}}
@@ -77,13 +77,13 @@
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">US</option>
                                         </select>
-                                        <input ng-if="authenticate.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
+                                        <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
-                                <div class="continue">
+                                <div ng-if="validateShippingAddress()" class="continue" disabled="true">
                                     <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
-                                       class="btn outline green radius block">Continue</a>
+                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Continue</a>
                                     <hr/>
                                 </div>
                             </section>
@@ -104,17 +104,18 @@
                                            style="max-width: 100%;">
                                         <div class="shipping-logo">
                                             <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg"
-                                                 alt=""/>
+                                                 alt="" err-src="/design/images/shipping-logos/Truck.png"/>
                                         </div>
-                                        <b>{{shippingMethod.name}}</b><br/>
+                                        <b>{{shippingMethod.name}}</b>
+                                        <b class="pull-right" style="margin-top: 10px;">{{$utils.getCurrencySimbol(shippingMethod.zoneRates[0].shippingRates[0].price.currencyCode)}} {{shippingMethod.zoneRates[0].shippingRates[0].price.centAmount / 100}}</b><br/>
                                         <input type="radio" name="shipping" value="1">
                                     </label>
 
                                 </form>
-                        </div>
-                        <div class="continue">
+                            </div>
+                        <div ng-if="selectedShippingMethod" class="continue">
                             <a ng-click="setShippingMethod()" href=""
-                               class="btn outline green radius block">Continue</a>
+                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Continue</a>
                             <hr/>
                         </div>
             </section>
@@ -199,7 +200,7 @@
                 </table>
             </div>
 
-            <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet" method='post' action='https://test.authorize.net/gateway/transact.dll' >
+            <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet && cart.lineItems != null && cart.lineItems.length > 0" method='post' action='https://test.authorize.net/gateway/transact.dll' >
                 <INPUT type='hidden' name='x_login' value='{{authorizeNet.x_login}}' />
                 <INPUT type='hidden' name='x_amount' value='{{authorizeNet.x_amount}}' />
                 <INPUT type='hidden' name='x_description' value='Descr' />
@@ -209,7 +210,7 @@
                 <INPUT type='hidden' name='x_test_request' value='false' />
                 <INPUT type='hidden' name='x_show_form' value='PAYMENT_FORM' />
                 <INPUT type='hidden' name='x_receipt_link_method' value='POST' />
-                <INPUT type='hidden' name='x_receipt_link_text' value='Back to Focali' />
+                <INPUT type='hidden' name='x_receipt_link_text' value='Proceed' />
                 <INPUT type='hidden' name='x_receipt_link_url' value='http://localhost:3000/orders/payOrder/{{cart.id}}' />
                 <div class="place-order">
                     <br/>

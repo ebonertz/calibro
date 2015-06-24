@@ -1,26 +1,26 @@
 'use strict';
 
-angular.module('core').service('LoggerServices', ['$log',
-    function ($log) {
+angular.module('core').service('LoggerServices', ['$log', 'toastr',
+    function ($log, toastr) {
 
         // This logger wraps the toastr logger and also logs to console
         // toastr.js is library by John Papa that shows messages in pop up toast.
         // https://github.com/CodeSeven/toastr
 
         /*toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "positionClass": "toast-bottom-right",
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };*/
+         "closeButton": false,
+         "debug": false,
+         "positionClass": "toast-bottom-right",
+         "onclick": null,
+         "showDuration": "300",
+         "hideDuration": "1000",
+         "timeOut": "5000",
+         "extendedTimeOut": "1000",
+         "showEasing": "swing",
+         "hideEasing": "linear",
+         "showMethod": "fadeIn",
+         "hideMethod": "fadeOut"
+         };*/
 
         var logger = {
             error: error,
@@ -36,27 +36,27 @@ angular.module('core').service('LoggerServices', ['$log',
 
         //#region implementation
         function error(message, title) {
-          //  toastr.error(message, title);
+            toastr.error(message, title);
             $log.error("Error: " + message);
         }
 
         function info(message, title) {
-            //toastr.info(message, title);
+            toastr.info(message, title);
             $log.info("Info: " + message);
         }
 
         function infoLong(message, title) {
-            //toastr.info(message, title, {timeOut: 20000});
+            toastr.info(message, title, {timeOut: 20000});
             $log.info("Info: " + message);
         }
 
         function success(message, title) {
-            //toastr.success(message, title);
+            toastr.success(message, title);
             $log.info("Success: " + message);
         }
 
         function warning(message, title) {
-            //toastr.warning(message, title);
+            toastr.warning(message, title);
             $log.warn("Warning: " + message);
         }
 
