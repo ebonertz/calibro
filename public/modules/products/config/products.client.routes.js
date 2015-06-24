@@ -23,6 +23,10 @@ angular.module('products').config(['$stateProvider',
         state('categoryGenderProducts',{
           url: '/categories/:gender/:slug',
           templateUrl: 'modules/products/views/category-products.client.view.html'
+        }).
+        state('searchByText',{
+            url: '/text/:text',
+            templateUrl: 'modules/products/views/category-products.client.view.html'
         });
   }
 ]);

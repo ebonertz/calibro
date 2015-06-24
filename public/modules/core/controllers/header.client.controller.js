@@ -13,5 +13,9 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			CustomerService.removeCookie();
 		}
 
+		$scope.search = function(text){
+			$location.path = 'search/' + text ;
+		}
+
 	}
 ]);

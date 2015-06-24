@@ -62,3 +62,21 @@ exports.fetchCategoryProducts = function(req,res){
     }
   })
 }
+
+exports.searchByText = function(req,res){
+  var text = req.params.text;
+
+  if(!text)
+    return res.status(400);
+
+  var params = new RequestParameters(req.query)
+
+  ProductService.searchByText(text, params, function(err, result){
+    if (err) {
+      return res.status(400);
+    } else {
+      result.products = PostFilterService.variantDisplay(result.products, params);
+      res.json(result);
+    }
+  })
+}

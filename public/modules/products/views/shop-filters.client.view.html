@@ -1,14 +1,14 @@
 <div class="filter-block" id="price-filter">
   <p class="filter-title">Filter by Price</p><a class="clearfilter" ng-click="clearFilter('price')">Clear</a>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '0-99'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="categoryPage()" name="price" value="0-99">
+    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="0-99">
     Below $100
   </label><br/>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '100-200'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="categoryPage()" name="price" value="100-200">$100 - $200
+    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="100-200">$100 - $200
   </label><br/>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '200-500'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="categoryPage()" name="price" value="200-500">$200 - $500
+    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="200-500">$200 - $500
   </label><br/>
 
   <div id="range">
@@ -37,7 +37,7 @@
 <div ng-repeat-start="(facetKey, facetOptions) in facetConfig" class="filter-block" id="{{facetKey}}-filter" >
   <p class="filter-title">{{facetOptions.title}}</p><a class="clearfilter" ng-click="clearFilter(facetKey)">Clear</a>
   <label ng-repeat="term in facets[$utils.attrKey(facetKey, facetOptions)].terms track by term.term" class="check-option">
-  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="categoryPage()">
+  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="init()">
   {{term.term | facets}} <!--<span class="cat-amount">({{term.count}})</span>-->
   </label>
 </div>

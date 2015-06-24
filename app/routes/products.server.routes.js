@@ -13,8 +13,11 @@ module.exports = function(app) {
 
   // Products
   app.route('/products/id/:id').get(products.byId);
+  app.route('/products/byText/:text').get(products.searchByText);
   app.route('/products/:slug').get(products.bySlug);
 
   // Categories
   app.route('/categories/:slug').get(products.fetchCategoryProducts);
+
+
 };

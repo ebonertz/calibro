@@ -56,6 +56,43 @@ exports.searchByCategory = function(categoryId, requestParams, callback){
   });
 }
 
+exports.searchByText = function(text, requestParams, callback){
+  var fetcher = SphereClient.getClient().productProjections
+      .text(text, 'en').facet('categories.id')
+
+  fetcher = requestParams.addByQueries(fetcher);
+  fetcher = requestParams.addFilters(fetcher);
+  fetcher = requestParams.addFacets(fetcher);
+  fetcher = requestParams.addSorts(fetcher);
+  fetcher = requestParams.addPaging(fetcher);
+
+  fetcher.search().then(function(resultArray) {
+    // Convert products
+    var products = resultArray.body.results;
+    for(var i = 0; i < products.length; i++){
+      products[i] = new Product(products[i])
+    }
+
+    var pageInfo = requestParams.getPageInfo()
+
+    // Return products and facets
+    var results = {
+      products: products,
+      facets: resultArray.body.facets,
+      pages:{
+        total: Math.ceil(resultArray.body.total / pageInfo.perPage),
+        current: pageInfo.current,
+        perPage: pageInfo.perPage
+      }
+    }
+    callback(null, results);
+  }).error(function(err) {
+    console.log(err);
+    callback(err, null);
+  });
+}
+
+
 
 exports.byId = function(id, callback){
   SphereClient.getClient().productProjections.staged(false).byId(id).fetch().then(function (result) {
