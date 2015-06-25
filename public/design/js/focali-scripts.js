@@ -196,3 +196,11 @@ $(function(){
         }
     });
 });
+
+//Search
+$(function() {
+	$('#search-expander').click(function() {
+		$('.site-search-wrapper').addClass('showing');
+		return false;
+	})
+});
