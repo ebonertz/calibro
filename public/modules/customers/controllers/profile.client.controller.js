@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus',
-	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus) {
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus', 'LoggerServices',
+	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus, LoggerServices) {
 		$scope.customer = angular.copy(Authentication.user);
 		$scope.$utils = ProductUtils;
 
@@ -31,16 +31,15 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			$scope.success = $scope.error = null;
 
 			if($scope.password.newPassword != $scope.password.repeatPassword){
-				$scope.error = "The new passwords don't match"
+				LoggerServices.error("The new passwords don't match")
 				return
 			}
 
-			$http.post('/customers/password', $scope.password).success(function(response) {
-				// If successful show success message and clear form
-				$scope.success = true;
-				$scope.passwordDetails = null;
+			$http.put('/customers/password/update', $scope.password).success(function(response) {
+				LoggerServices.success(response.message);
+				$scope.password = {}
 			}).error(function(response) {
-				$scope.error = response.message;
+				LoggerServices.error(response.message);
 			});
 		};
 

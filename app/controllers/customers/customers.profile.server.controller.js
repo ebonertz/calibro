@@ -115,7 +115,6 @@ exports.requestPasswordReset = function(req, res){
 
 exports.changePassword = function(req, res){
   var customer = req.user;
-  var message = null;
 
   if(customer){
     var newPassword = req.body.newPassword;
@@ -131,7 +130,9 @@ exports.changePassword = function(req, res){
       if(err){
         return res.status(400).send({message: err.message})
       }else{
-        return res.json(result);
+        return res.json({
+          message: "Password updated successfully"
+        });
       }
     })
   } else {
