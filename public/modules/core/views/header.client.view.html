@@ -47,7 +47,7 @@
             <div class="top-user-name">
                 <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
                 <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
-                <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+                <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> / <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
             </div>
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
@@ -80,10 +80,10 @@ $(function() {
 	$('#search-expander').click(function() {
 		$('.site-search-wrapper').addClass('showing');
 		return false;
-	})
+	});
 	$('#search-close').click(function() {
 		$('.site-search-wrapper').removeClass('showing');
 		return false;
-	})
+	});
 });
 </script>

@@ -202,5 +202,10 @@ $(function() {
 	$('#search-expander').click(function() {
 		$('.site-search-wrapper').addClass('showing');
 		return false;
-	})
+	});
+	$('#search-close').click(function() {
+		$('.site-search-wrapper').removeClass('showing');
+		return false;
+	});
+	
 });
