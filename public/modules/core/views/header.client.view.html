@@ -1,56 +1,58 @@
-<div class="site-search-wrapper">
-	<div class="content-wrapper">
-		<section id="site-search">
-			<div class="col-lg-12">
-				<form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="#">
-				    <meta itemprop="target" content="http://www.focali.com/search?q={query}"/>
-				    <input itemprop="query-input" type="text" name="query" placeholder="Search for product">
-				    <button type="sumbit"><img src="design/images/search-icon.png" width="20" height="auto"/></button>
-				    <a class="close" id="search-close" href="#"><img src="design/images/close-button.png" width="30" height="30" alt="close-search" />
-				</form>
-			</div>
-		</section>
-	</div>
-</div>
-<div class="content-wrapper" ng-controller="HeaderController">
-    <header id="main">
-        <div class="brand">
-            <a href="/" rel="logo"><img src="design/images/focalilogo.png" alt="Focali" width="102" height="40"</a>
+<div ng-controller="HeaderController">
+    <div class="site-search-wrapper">
+        <div class="content-wrapper">
+            <section id="site-search">
+                <div class="col-lg-12">
+                    <div class="site-search-form">
+                        <meta itemprop="target" content="http://www.focali.com/search?q={query}"/>
+                        <input ng-model="searchText" itemprop="query-input" type="text" name="query" placeholder="Search for product">
+                        <button ng-click="search(searchText)"><img src="design/images/search-icon.png" width="20" height="auto"/></button>
+                        <a class="close" id="search-close" href="#"><img src="design/images/close-button.png" width="30" height="30" alt="close-search"/>
+                    </div>
+                </div>
+            </section>
         </div>
-        <nav id="primary" itemscope itemtype="http://schema.org/SiteNavigationElement">
-            <ul class="main-navigation">
-                <li class="has-children">
-                    <a href="#">Men</a>
-                    <ul class="sub-menu">
-                        <li><a href="#!/categories/men/eyewear">Men's Eyewear</a></li>
-                        <li><a href="#!/categories/men/sunglasses">Men's Sunglasses</a></li>
-                        <li><a href="#!/landing/summer/men">Men's Summer 2015</a></li>
-                    </ul>
-                </li>
-                <li class="has-children">
-                    <a href="#">Women</a>
-                    <ul class="sub-menu">
-                        <li><a href="#!/categories/women/eyewear">Women's Eyewear</a></li>
-                        <li><a href="#!/categories/women/sunglasses">Women's Sunglasses</a></li>
-                        <li><a href="#!/landing/summer/women">Women's Summer 2015</a></li>
-                    </ul>
+    </div>
+    <div class="content-wrapper">
+        <header id="main">
+            <div class="brand">
+                <a href="/" rel="logo"><img src="design/images/focalilogo.png" alt="Focali" width="102" height="40"</a>
+            </div>
+            <nav id="primary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                <ul class="main-navigation">
+                    <li class="has-children">
+                        <a href="#">Men</a>
+                        <ul class="sub-menu">
+                            <li><a href="#!/categories/men/eyewear">Men's Eyewear</a></li>
+                            <li><a href="#!/categories/men/sunglasses">Men's Sunglasses</a></li>
+                            <li><a href="#!/landing/summer/men">Men's Summer 2015</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#">Women</a>
+                        <ul class="sub-menu">
+                            <li><a href="#!/categories/women/eyewear">Women's Eyewear</a></li>
+                            <li><a href="#!/categories/women/sunglasses">Women's Sunglasses</a></li>
+                            <li><a href="#!/landing/summer/women">Women's Summer 2015</a></li>
+                        </ul>
 
-                </li>
-                <li><a href="#!/about-us">About Us</a></li>
-                <li><a href="#!/help">Help</a></li>
-            </ul>
-        </nav>
-        <div class="top-cart">
-            <div class="search">
-               <a href="#" id="search-expander"><img src="design/images/search-icon.png" width="20" height="auto"/></a>
-            </div>
-            <div class="top-user-name">
-                <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
-                <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
-                <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> / <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
-            </div>
+                    </li>
+                    <li><a href="#!/about-us">About Us</a></li>
+                    <li><a href="#!/help">Help</a></li>
+                </ul>
+            </nav>
+            <div class="top-cart">
+                <div class="search">
+                    <a href="#" id="search-expander"><img src="design/images/search-icon.png" width="20" height="auto"/></a>
+                </div>
+                <div class="top-user-name">
+                    <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
+                    <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
+                    <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> / <a href="/auth/signout" class="site-login" data-ng-click="logout()"
+                                                                                                                       data-ng-show="authentication.user">Logout</a>
+                </div>
 			<span class="cart-contents">
-				<a href="#!/cart" class="btn creme radius xsmall outline cart" id="top-cart-tr"><i
+				<a href="#!/cart" class="btn creme radius xsmall outline cart cart-class" id="top-cart-tr"><i
                         class="cart-icon"></i> Cart <span class="items-in-cart">({{cart.lineItems.length}})</span></a>
 				<div ng-if="cart.lineItems" class="cart-preview hidden">
                     <table id="cart-preview">
@@ -72,18 +74,19 @@
                 </div>
 			</span>
 
-        </div>
-    </header>
+            </div>
+        </header>
+    </div>
 </div>
 <script type="text/javascript">
-$(function() {
-	$('#search-expander').click(function() {
-		$('.site-search-wrapper').addClass('showing');
-		return false;
-	});
-	$('#search-close').click(function() {
-		$('.site-search-wrapper').removeClass('showing');
-		return false;
-	});
-});
+    $(function () {
+        $('#search-expander').click(function () {
+            $('.site-search-wrapper').addClass('showing');
+            return false;
+        });
+        $('#search-close').click(function () {
+            $('.site-search-wrapper').removeClass('showing');
+            return false;
+        });
+    });
 </script>

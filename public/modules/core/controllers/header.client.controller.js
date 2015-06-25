@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', 'ProductUtils',
-	function($scope, Authentication, Menus, CartService, CustomerService, ProductUtils) {
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', 'ProductUtils', '$location',
+	function($scope, Authentication, Menus, CartService, CustomerService, ProductUtils, $location) {
 		$scope.authentication = Authentication;
 		$scope.$utils = ProductUtils;
 
@@ -14,7 +14,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		}
 
 		$scope.search = function(text){
-			$location.path = 'search/' + text ;
+			$location.path('text/' + text);
 		}
 
 	}

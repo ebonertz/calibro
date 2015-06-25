@@ -27,7 +27,7 @@ exports.byId = function (id, callback) {
 };
 
 exports.home = function (callback) {
-    var entityId = '2XBFCfxbqMooI40CqMQ4E6';
+    var entityId = '3jUtHsj4y4QeGkWESIo0Qa';
 
     exports.byId(entityId, function (err, entries) {
         if (err) {

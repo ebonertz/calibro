@@ -11,18 +11,18 @@ angular.module('core').directive('hero', function () {
     }
 });
 
-angular.module('core').directive('topCart', function () {
+angular.module('core').directive('cartClass', function () {
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
 
             $(element).mouseover(function () {
                 //$('.cart-preview').fadeIn().removeClass('hidden');
-                $(element[0].children[2].children[1]).fadeIn().removeClass('hidden');
+                $(element.parent().children()[1]).fadeIn().removeClass('hidden');
             });
 
             $(element).mouseleave(function () {
-                $(element[0].children[2].children[1]).fadeOut().addClass('hidden');
+                $(element.parent().children()[1]).fadeOut().addClass('hidden');
             });
 
         }
