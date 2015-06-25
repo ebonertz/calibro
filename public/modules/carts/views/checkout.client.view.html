@@ -15,9 +15,9 @@
             <h1 class="page-title">Checkout</h1>
             <section class="steps">
                 <div class="panels full">
-                    <div class="ex-panel active">
+                    <div ng-if="phaseA">
                         <h4><a class="panel-trigger" href="#" id="orders">Shipping Adddress</a></h4>
-
+                        <hr>
                         <div class="panel-content">
                             <section class="inner">
                                 <div class="saved-addresses-checkout">
@@ -83,152 +83,153 @@
                                 </div>
                                 <div ng-if="validateShippingAddress()" class="continue" disabled="true">
                                     <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
-                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Continue</a>
-                                    <hr/>
+                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next</a>
                                 </div>
                             </section>
                         </div>
                     </div>
-                    <div class="ex-panel {{shippingMethodClass}}" id="shippingMethod">
+                    <div ng-if="phaseB">
                         <h4><a class="panel-trigger" href="#" id="orders">Shipping Method</a></h4>
-
+                        <hr>
                         <div class="panel-content">
                             <section class="inner">
                                 <div class="shipping-full">
-                                <h6>Shipping Carriers</h6>
+                                    <h6>Shipping Carriers</h6>
 
-                                <form>
+                                    <form>
 
-                                    <label ng-repeat="shippingMethod in shippingMethods"
-                                           ng-click="selectShippingMethod(shippingMethod)" class="block-radio {{shippingMethod.selected ? 'checked' : ''}}"
-                                           style="max-width: 100%;">
-                                        <div class="shipping-logo">
-                                            <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg"
-                                                 alt="" err-src="/design/images/shipping-logos/Truck.png"/>
-                                        </div>
-                                        <b>{{shippingMethod.name}}</b>
-                                        <b class="pull-right" style="margin-top: 10px;">{{$utils.getCurrencySimbol(shippingMethod.zoneRates[0].shippingRates[0].price.currencyCode)}} {{shippingMethod.zoneRates[0].shippingRates[0].price.centAmount / 100}}</b><br/>
-                                        <input type="radio" name="shipping" value="1">
-                                    </label>
+                                        <label ng-repeat="shippingMethod in shippingMethods"
+                                               ng-click="selectShippingMethod(shippingMethod)" class="block-radio {{shippingMethod.selected ? 'checked' : ''}}"
+                                               style="max-width: 100%;">
+                                            <div class="shipping-logo">
+                                                <img ng-src="/design/images/shipping-logos/{{shippingMethod.name}}.jpg"
+                                                     alt="" err-src="/design/images/shipping-logos/Truck.png"/>
+                                            </div>
+                                            <b>{{shippingMethod.name}}</b>
+                                            <b class="pull-right" style="margin-top: 10px;">{{$utils.getCurrencySimbol(shippingMethod.zoneRates[0].shippingRates[0].price.currencyCode)}}
+                                                {{shippingMethod.zoneRates[0].shippingRates[0].price.centAmount / 100}}</b><br/>
+                                            <input type="radio" name="shipping" value="1">
+                                        </label>
 
-                                </form>
-                            </div>
-                        <div ng-if="selectedShippingMethod" class="continue">
-                            <a ng-click="setShippingMethod()" href=""
-                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Continue</a>
-                            <hr/>
+                                    </form>
+                                </div>
+                                <div ng-if="selectedShippingMethod" class="continue">
+                                    <a ng-click="setShippingMethod()" href=""
+                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next</a>
+                                </div>
+                            </section>
                         </div>
-            </section>
-        </div>
-</div>
-<div class="ex-panel {{reviewOrderClass}}" id="reviewOrder">
-    <h4><a class="panel-trigger" href="#" id="review">Review Order</a></h4>
+                    </div>
+                    <div ng-if="phaseC">
+                        <h4><a class="panel-trigger" href="#" id="review">Review Order</a></h4>
+                        <hr>
+                        <div class="panel-content">
+                            <h6>Order Details</h6>
+                            <table id="cart" class="checkout-review">
+                                <thead>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
+                                    <td class="product-image">
+                                        <img ng-src="{{lineItem.variant.images[0].url}}"/>
+                                        <span class="product-name">{{lineItem.name.en}}</span>
+                                    </td>
+                                    <td class="product-price">
+                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount /
+                                        100}}
+                                    </td>
+                                    <td class="quantity">
+                                        {{lineItem.quantity}}
+                                    </td>
+                                    <td class="item-total-checkout">
+                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
+                                        lineItem.quantity / 100}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--Shipping, Payment, and Totals-->
+                            <section id="order-totals-checkout">
+                                <div class="checkout-totals" id="billing">
+                                    <h6>Payment Information</h6>
+                                    <b>To be set in next step</b>
 
-    <div class="panel-content">
-        <h6>Order Details</h6>
-        <table id="cart" class="checkout-review">
-            <thead>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            </thead>
-            <tbody>
-            <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
-                <td class="product-image">
-                    <img ng-src="{{lineItem.variant.images[0].url}}"/>
-                    <span class="product-name">{{lineItem.name.en}}</span>
-                </td>
-                <td class="product-price">
-                    {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount /
-                    100}}
-                </td>
-                <td class="quantity">
-                    {{lineItem.quantity}}
-                </td>
-                <td class="item-total-checkout">
-                    {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
-                    lineItem.quantity / 100}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <!--Shipping, Payment, and Totals-->
-        <section id="order-totals-checkout">
-            <div class="checkout-totals" id="billing">
-                <h6>Payment Information</h6>
-                <b>To be set in next step</b>
+                                </div>
+                                <div class="checkout-totals" id="shipping">
+                                    <h6>Shipping Information</h6>
+                                    <b>{{cart.shippingAddress.firstName}} {{cart.shippingAddress.lastName}}</b><br/>
+                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.streetNumber}}<br/>
+                                    {{cart.shippingAddress.phone}}
 
-            </div>
-            <div class="checkout-totals" id="shipping">
-                <h6>Shipping Information</h6>
-                <b>{{cart.shippingAddress.firstName}} {{cart.shippingAddress.lastName}}</b><br/>
-                {{cart.shippingAddress.streetName}} {{cart.shippingAddress.streetNumber}}<br/>
-                {{cart.shippingAddress.phone}}
+                                </div>
+                                <div class="checkout-totals" id="order-total">
+                                    <h6>Totals</h6>
+                                    <table id="final-totals">
+                                        <tbody>
+                                        <tr>
+                                            <td>Sub Total</td>
+                                            <td>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
+                                                cart.shippingInfo.shippingRate.price.centAmount) / 100}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Taxes</td>
+                                            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
+                                                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping</td>
+                                            <td ng-if="cart.shippingInfo">
+                                                {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
+                                                {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+                                            </td>
+                                            <td ng-if="!cart.shippingInfo">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td><h6>Order Total</h6></td>
+                                            <td><h6>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount
+                                                / 100}}</h6></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-            </div>
-            <div class="checkout-totals" id="order-total">
-                <h6>Totals</h6>
-                <table id="final-totals">
-                    <tbody>
-                    <tr>
-                        <td>Sub Total</td>
-                        <td>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
-                            cart.shippingInfo.shippingRate.price.centAmount) / 100}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Taxes</td>
-                        <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
-                            {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Shipping</td>
-                        <td ng-if="cart.shippingInfo">
-                            {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
-                            {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
-                        </td>
-                        <td ng-if="!cart.shippingInfo">-</td>
-                    </tr>
-                    <tr>
-                        <td><h6>Order Total</h6></td>
-                        <td><h6>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount
-                            / 100}}</h6></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet && cart.lineItems != null && cart.lineItems.length > 0" method='post'
+                                      action='https://test.authorize.net/gateway/transact.dll'>
+                                    <INPUT type='hidden' name='x_login' value='{{authorizeNet.x_login}}'/>
+                                    <INPUT type='hidden' name='x_amount' value='{{authorizeNet.x_amount}}'/>
+                                    <INPUT type='hidden' name='x_description' value='Descr'/>
+                                    <INPUT type='hidden' name='x_fp_sequence' value='{{authorizeNet.x_fp_sequence}}'/>
+                                    <INPUT type='hidden' name='x_fp_timestamp' value='{{authorizeNet.x_fp_timestamp}}'/>
+                                    <INPUT type='hidden' name='x_fp_hash' value='{{authorizeNet.x_fp_hash}}'/>
+                                    <INPUT type='hidden' name='x_test_request' value='false'/>
+                                    <INPUT type='hidden' name='x_show_form' value='PAYMENT_FORM'/>
+                                    <INPUT type='hidden' name='x_receipt_link_method' value='POST'/>
+                                    <INPUT type='hidden' name='x_receipt_link_text' value='Proceed'/>
+                                    <INPUT type='hidden' name='x_receipt_link_url' value='http://localhost:3000/orders/payOrder/{{cart.id}}'/>
 
-            <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet && cart.lineItems != null && cart.lineItems.length > 0" method='post' action='https://test.authorize.net/gateway/transact.dll' >
-                <INPUT type='hidden' name='x_login' value='{{authorizeNet.x_login}}' />
-                <INPUT type='hidden' name='x_amount' value='{{authorizeNet.x_amount}}' />
-                <INPUT type='hidden' name='x_description' value='Descr' />
-                <INPUT type='hidden' name='x_fp_sequence' value='{{authorizeNet.x_fp_sequence}}' />
-                <INPUT type='hidden' name='x_fp_timestamp' value='{{authorizeNet.x_fp_timestamp}}' />
-                <INPUT type='hidden' name='x_fp_hash' value='{{authorizeNet.x_fp_hash}}' />
-                <INPUT type='hidden' name='x_test_request' value='false' />
-                <INPUT type='hidden' name='x_show_form' value='PAYMENT_FORM' />
-                <INPUT type='hidden' name='x_receipt_link_method' value='POST' />
-                <INPUT type='hidden' name='x_receipt_link_text' value='Proceed' />
-                <INPUT type='hidden' name='x_receipt_link_url' value='http://localhost:3000/orders/payOrder/{{cart.id}}' />
-                <div class="place-order">
-                    <br/>
-                    <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Pay"/>
+                                    <div class="place-order">
+                                        <br/>
+                                        <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Pay"/>
+                                    </div>
+                                </FORM>
+
+
+                            </section>
+                        </div>
+                    </div>
                 </div>
-            </FORM>
 
+        </div>
+        <!--close steps column-->
+        <!--checkout side column-->
 
-        </section>
-    </div>
-</div>
-</div>
+        <div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
 
-</div>
-<!--close steps column-->
-<!--checkout side column-->
-
-<div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
-
-</section>
+    </section>
 </div>

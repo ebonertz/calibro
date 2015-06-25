@@ -8,11 +8,18 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	function($locationProvider) {
 		$locationProvider.hashPrefix('!');
 	}
-]).run(function ($rootScope, CartService, CustomerService) {
+]).run(function ($rootScope, CartService, CustomerService, $anchorScroll) {
 	CartService.pageLoad();
 	CustomerService.checkCookieAndLogin();
 	//console.log(Authentication)
 	//$rootScope.cart = CartService.createAnonymous();
+	$rootScope.$on('$viewContentLoaded', function() {
+
+		// Scroll to Top
+		// Set ture for animation which isn't needed in my case
+		$anchorScroll();
+
+	});
 
 });
 

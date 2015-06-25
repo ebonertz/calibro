@@ -3,13 +3,13 @@
 angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService',
     function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService) {
 
-        $scope.shippingMethodClass = 'disabled';
-        $scope.reviewOrderClass = 'disabled';
+        $scope.phaseA = true;
+        $scope.phaseB = false;
+        $scope.phaseC = false;
 
         var init = function () {
             if ($rootScope.cart != null) {
                 if ($rootScope.cart.shippingAddress != null) {
-                    $scope.shippingMethodClass = 'active';
 
                     if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
                         for (var i = 0; i < Authentication.user.addresses.length; i++) {
@@ -33,15 +33,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         if ($rootScope.cart.shippingInfo != null) {
                             AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                                 $scope.authorizeNet = data;
-
-                                for (var i = 0; i < $scope.shippingMethods.length; i++) {
-                                    if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
-                                        $scope.shippingMethods[i].selected = true;
-                                        $scope.selectedShippingMethod = $scope.shippingMethods[i];
-                                    }
-                                }
-                                $scope.shippingMethodClass = 'active';
-                                $scope.reviewOrderClass = 'active';
 
                                 if (!$scope.$$phase)
                                     $scope.$apply();
@@ -94,12 +85,24 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
 
                     $rootScope.cart = result;
-                    $scope.shippingMethodClass = 'active';
                     LoggerServices.success('Shipping address updated');
 
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                         $scope.shippingMethods = data;
+
+                        $scope.phaseA = false;
+                        $scope.phaseB = true;
+                        $scope.phaseC = false;
+
                         $rootScope.loading = false;
+
+                        for (var i = 0; i < $scope.shippingMethods.length; i++) {
+                            if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
+                                $scope.shippingMethods[i].selected = true;
+                                $scope.selectedShippingMethod = $scope.shippingMethods[i];
+                            }
+                        }
+
                     });
 
                 });
@@ -117,11 +120,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }
                 }).then(function (result) {
                     $rootScope.cart = result;
-                    $scope.reviewOrderClass = 'active';
+
                     LoggerServices.success('Shipping method updated');
 
                     AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                         $scope.authorizeNet = data;
+
+                        $scope.phaseA = false;
+                        $scope.phaseB = false;
+                        $scope.phaseC = true;
+
                         $rootScope.loading = false;
                     });
                 });
