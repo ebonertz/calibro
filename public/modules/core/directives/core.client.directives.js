@@ -18,11 +18,11 @@ angular.module('core').directive('topCart', function () {
 
             $(element).mouseover(function () {
                 //$('.cart-preview').fadeIn().removeClass('hidden');
-                $(element[0].children[3].children[1]).fadeIn().removeClass('hidden');
+                $(element[0].children[2].children[1]).fadeIn().removeClass('hidden');
             });
 
             $(element).mouseleave(function () {
-                $(element[0].children[3].children[1]).fadeOut().addClass('hidden');
+                $(element[0].children[2].children[1]).fadeOut().addClass('hidden');
             });
 
         }
