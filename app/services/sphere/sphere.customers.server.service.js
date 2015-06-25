@@ -4,6 +4,11 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
   Customer = require('../../models/sphere/sphere.customer.server.model.js'),
   _ = require('lodash');
 
+var endpoints = {
+    login: "/login",
+    change_password: "/customers/password"
+}
+
 var updateCustomer = function(customer_id, actions){
   return SphereClient.getClient().customers.byId(customer_id).update(actions)
 }
@@ -26,7 +31,7 @@ exports.login = function (email, password, anonymousCartId, callback) {
 
     console.log("anonymousCartId " + anonymousCartId)
 
-    SphereClient.getClient().customers._save('/login',customer).then(function (result) {
+    SphereClient.getClient().customers._save(endpoints['login'],customer).then(function (result) {
       var customer = new Customer(result.body.customer)
       callback(null, customer, result.body.cart);
     }).error(function (err) {
@@ -75,5 +80,17 @@ exports.updateProfile = function(customer, updateValues, callback){
 }
 
 exports.changePassword = function(customer, currentPassword, newPassword, callback){
-  callback(new Error("Not yet implemented"), null)
+    SphereClient.getClient().customers.byId(customer.id).fetch().then(function (result) {
+        SphereClient.getClient().customers._save(endpoints['change_password'], {
+            id: customer.id,
+            version: result.body.version,
+            currentPassword: currentPassword,
+            newPassword: newPassword
+        }).then(function (result) {
+            callback(null, result.body)
+        }).error(function (err) {
+            console.log(err);
+            callback(err, null);
+        });
+    });
 }

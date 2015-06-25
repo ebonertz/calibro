@@ -31,23 +31,22 @@
 					<input required type="text" class="half" id="lastName" name="lastName" data-ng-model="customer.lastName" placeholder="Last Name"/>
 				</div>
 				<div class="form-field-half">
-				<label>Email*</label>
-				<input required type="email" class="half" id="email" name="email" data-ng-model="customer.email"  placeholder="Email"/>
+					<label>Email*</label>
+					<input required type="email" class="half" id="email" name="email" data-ng-model="customer.email"  placeholder="Email"/>
 				</div>
-<!-- 				<div class="form-field-half">
-				<label>Phone*</label>
-				<input required type="tel" class="half" value="614-644598" id="first_name" placeholder="Phone Number"/>
-				</div> -->
-				<br/><br/>
+				<br />
+				<input type="submit" class="btn outline thick blue radius" value="Save Changes"/>
+			</form>
 
-				<span class="sub-title">Change Password</span>
-				<p>If you're changing other data and you don't want to change your password leave these fields blank</p>
-				<hr/>
-<!-- 				<form id="password-change" action="" name="password-change">
-				<div class="form-field-half-single">
+
+			<span class="sub-title">Change Password</span>
+			<p>If you're changing other data and you don't want to change your password leave these fields blank</p>
+			<hr/>
+			<form id="password-change" data-ng-submit="changeCustomerPassword(true)" name="password-change">
+				<div class="form-field-half">
 					<label>Current Password</label>
-					<input type="password" class="user-password" id="oldPassword" name="oldPassword"  data-ng-model="password.oldPassword" value="11324024" placeholder="Enter Your Password"/>
-				</div>
+					<input type="password" class="user-password" id="oldPassword" name="oldPassword" data-ng-model="password.oldPassword" placeholder="Enter Your Password"/>
+				</div><br />
 				<div class="form-field-half">
 					<label>New Password</label>
 					<input type="password" id="newPassword" name="newPassword" data-ng-model="password.newPassword" placeholder="Enter Your New Password" />
@@ -56,24 +55,25 @@
 					<label>Repeat New Password</label>
 					<input type="password" id="repeatPassword" name="repeatPassword" data-ng-model="password.repeatPassword" placeholder="Re-enter Your New Password" />
 				</div>
-				</form> -->
-				<br/>
-				<span class="sub-title">Email Preferences</span>
-				<hr/>
-				<label class="opt-in" >
-				<input type="checkbox" name="newsletter" ng-model="newsletterSubscription" ng-init="fetchSubscription('newsletter')" ng-click="updateSubscription('newsletter')" /> Sign up to our newsletter
-				</label>
-				<label class="opt-in">
-				<input type="checkbox" name="offers" ng-model="offersSubscription" ng-init="fetchSubscription('offers')" ng-click="updateSubscription('offers')" /> Receive special offers to your inbox
-				</label>
-				<div data-ng-show="error" class="notice outline red small">
-					<p data-ng-bind="error"></p>
-				</div>
-				<div data-ng-show="success" class="notice outline tblue small">
-					<p data-ng-bind="success"></p>
-				</div>
-				<input type="submit" class="btn outline thick blue radius" value="Save Changes"/>
+				<input type="submit" class="btn outline thick blue radius" value="Change password"/>
 			</form>
+			<br/>
+
+
+			<span class="sub-title">Email Preferences</span>
+			<hr/>
+			<label class="opt-in" >
+			<input type="checkbox" name="newsletter" ng-model="newsletterSubscription" ng-init="fetchSubscription('newsletter')" ng-click="updateSubscription('newsletter')" /> Sign up to our newsletter
+			</label>
+			<label class="opt-in">
+			<input type="checkbox" name="offers" ng-model="offersSubscription" ng-init="fetchSubscription('offers')" ng-click="updateSubscription('offers')" /> Receive special offers to your inbox
+			</label>
+			<div data-ng-show="error" class="notice outline red small">
+				<p data-ng-bind="error"></p>
+			</div>
+			<div data-ng-show="success" class="notice outline tblue small">
+				<p data-ng-bind="success"></p>
+			</div>
 				
 		</div>
 		<div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
