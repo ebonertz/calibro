@@ -41,6 +41,13 @@
                 -
             </td>
         </tr>
+        <tr ng-if="cart.discountCodes != null && cart.discountCodes.length > 0" class="shipping">
+            <td class="concept">
+                Discount included
+            </td>
+            <td class="amount">
+            </td>
+        </tr>
         <tr id="final-order-price">
             <td class="concept">
                 <b>Order Total</b>
@@ -51,7 +58,7 @@
         </tr>
     </table>
     <div ng-controller="CartController">
-        <a ng-click="proceedToCheckout()" href="" class="btn block radius blue">Proceed To Checkout</a>
+        <a ng-if="!isCheckout" ng-click="proceedToCheckout()" href="" class="btn block radius blue">Proceed To Checkout</a>
 
         <div id="cart-coupon" class="coupons">
             <h6>Have a Coupon?</h6>

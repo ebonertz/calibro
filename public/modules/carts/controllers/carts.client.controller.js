@@ -4,6 +4,7 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
     function ($scope, Authentication, CartService, $rootScope, ProductUtils, $location, LoggerServices) {
         $scope.$utils = ProductUtils;
         $scope.authentication = Authentication;
+        $scope.isCheckout = $location.path().indexOf('checkout') > -1;
 
         $scope.proceedToCheckout = function() {
             if($rootScope.cart != null && $rootScope.cart.lineItems != null && $rootScope.cart.lineItems.length > 0)

@@ -83,7 +83,7 @@
                                 </div>
                                 <div ng-if="validateShippingAddress()" class="continue" disabled="true">
                                     <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
-                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next</a>
+                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
                                 </div>
                             </section>
                         </div>
@@ -113,9 +113,20 @@
 
                                     </form>
                                 </div>
-                                <div ng-if="selectedShippingMethod" class="continue">
-                                    <a ng-click="setShippingMethod()" href=""
-                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next</a>
+                                <div class="row">
+                                    <div class="col col-md-6">
+                                        <div ng-if="selectedShippingMethod" class="continue">
+                                            <a ng-click="showPhaseA()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                        </div>
+                                    </div>
+                                    <div class="col col-md-6">
+                                        <div ng-if="selectedShippingMethod" class="continue">
+                                            <a ng-click="setShippingMethod()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </section>
                         </div>
@@ -215,7 +226,18 @@
 
                                     <div class="place-order">
                                         <br/>
-                                        <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Pay"/>
+
+                                        <div class="row">
+                                            <div class="col col-md-6">
+                                                <div ng-if="selectedShippingMethod" class="continue">
+                                                    <a ng-click="showPhaseB()" href=""
+                                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-6">
+                                                <input ng-click="createOrder()" type='submit' class="btn block blue outline radius" value="Pay"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </FORM>
 

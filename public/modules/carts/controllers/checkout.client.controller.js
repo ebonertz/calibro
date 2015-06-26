@@ -1,11 +1,29 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll) {
 
-        $scope.phaseA = true;
-        $scope.phaseB = false;
-        $scope.phaseC = false;
+
+        $scope.showPhaseA = function () {
+            $scope.phaseA = true;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $anchorScroll();
+        }
+        $scope.showPhaseB = function () {
+            $scope.phaseA = false;
+            $scope.phaseB = true;
+            $scope.phaseC = false;
+            $anchorScroll();
+        }
+        $scope.showPhaseC = function () {
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = true;
+            $anchorScroll();
+        }
+
+        $scope.showPhaseA();
 
         var init = function () {
             if ($rootScope.cart != null) {
@@ -90,18 +108,17 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                         $scope.shippingMethods = data;
 
-                        $scope.phaseA = false;
-                        $scope.phaseB = true;
-                        $scope.phaseC = false;
-
-                        $rootScope.loading = false;
-
-                        for (var i = 0; i < $scope.shippingMethods.length; i++) {
-                            if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
-                                $scope.shippingMethods[i].selected = true;
-                                $scope.selectedShippingMethod = $scope.shippingMethods[i];
+                        if ($rootScope.cart.shippingInfo != null) {
+                            for (var i = 0; i < $scope.shippingMethods.length; i++) {
+                                if ($scope.shippingMethods[i].name == $rootScope.cart.shippingInfo.shippingMethodName) {
+                                    $scope.shippingMethods[i].selected = true;
+                                    $scope.selectedShippingMethod = $scope.shippingMethods[i];
+                                }
                             }
                         }
+
+                        $rootScope.loading = false;
+                        $scope.showPhaseB();
 
                     });
 
@@ -126,9 +143,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
                         $scope.authorizeNet = data;
 
-                        $scope.phaseA = false;
-                        $scope.phaseB = false;
-                        $scope.phaseC = true;
+                        $scope.showPhaseC();
 
                         $rootScope.loading = false;
                     });
@@ -177,7 +192,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.shippingAddress.streetName &&
                 $rootScope.cart.shippingAddress.streetNumber &&
                 $rootScope.cart.shippingAddress.firstName &&
-                $rootScope.cart.shippingAddress.lastName;
+                $rootScope.cart.shippingAddress.lastName &&
+                $rootScope.cart.shippingAddress.country;
         };
 
     }
