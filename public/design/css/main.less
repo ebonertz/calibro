@@ -87,6 +87,8 @@ a {
 		text-decoration: none;
 		.fade();
 	}
+
+  cursor: pointer;
 }
 b, strong{
 	font-weight: 400;
@@ -1064,7 +1066,7 @@ header{
 		&:after{
 			content: '';
 			display: inline-block;
-			background: url(../images/shop/sort-arrow.png) no-repeat center center;
+		 	background: url(../images/shop/sort-arrow-down.png) no-repeat center center;
 			background-size: 100% 100%;
 			width: 15px;
 			height: 15px;
@@ -1077,6 +1079,14 @@ header{
 		}
 		&:hover{
 			color: #333;
+		}
+	  	&.up:after{
+		  background: url(../images/shop/sort-arrow-up.png) no-repeat center center;
+		  background-size: 100% 100%;
+		}
+	  	&.down:after{
+		  background: url(../images/shop/sort-arrow-down.png) no-repeat center center;
+		  background-size: 100% 100%;
 		}
 	}
 	.category-filters{
