@@ -11,7 +11,7 @@ angular.module('core').directive('hero', function () {
     }
 });
 
-angular.module('core').directive('cartClass', function () {
+angular.module('core').directive('cartFadeInClass', function () {
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
@@ -21,8 +21,17 @@ angular.module('core').directive('cartClass', function () {
                 $(element.parent().children()[1]).fadeIn().removeClass('hidden');
             });
 
+        }
+    }
+});
+
+angular.module('core').directive('cartFadeOutClass', function () {
+    return {
+        restrict: 'C',
+        link: function (scope, element, attrs) {
+
             $(element).mouseleave(function () {
-                $(element.parent().children()[1]).fadeOut().addClass('hidden');
+                $(element).fadeOut().addClass('hidden');
             });
 
         }
@@ -191,4 +200,18 @@ angular.module('core').directive('errSrc', function() {
             });
         }
     }
+});
+
+angular.module('core').directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
 });

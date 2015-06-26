@@ -3,7 +3,7 @@
         <div class="content-wrapper">
             <section id="subpage-head">
                 <div class="subpage-hero">
-                    <h1 class="subpage-title" data-ng-bind="contentfulData.name"></h1>
+                    <h1 class="subpage-title" data-ng-bind="contentfulData.mainTitle"></h1>
                     <!--<img src="design/images/slider/slide-1.jpg"/>-->
 
                     <img ng-src="{{contentfulData.mainImage.fields.file.url}}" alt="{{contentfulData.mainImage.fields.title}}"/>
@@ -34,7 +34,7 @@
             <product-thumbnail product="product" data-ng-repeat="product in contentfulData.sunglassesProducts track by product.id"></product-thumbnail>
             <!--explicarle al mati por qué uso un <p> acá para hacer un clearfix-->
             <p class="center">
-                <a class="btn blue radius"  ng-href="/#!/categories/{{gender}}/sunglasses">Shop All Sunglasses Newcomers</a>
+                <a class="btn blue radius"  ng-href="{{contentfulData.sunglassesButtonUrl}}">{{contentfulData.sunglassesButtonText}}</a>
             </p>
         </section>
         <hr/>
@@ -49,7 +49,7 @@
         <section class="products" id="big">
             <product-thumbnail product="product" data-ng-repeat="product in contentfulData.eyewearProducts track by product.id"></product-thumbnail>
             <p class="center">
-                <a class="btn blue radius" ng-href="/#!/categories/{{gender}}/eyewear">Shop All Eyewear Newcomers</a>
+                <a class="btn blue radius" ng-href="{{contentfulData.eyewearButtonUrl}}">{{contentfulData.eyewearButtonText}}</a>
             </p>
         </section>
 
