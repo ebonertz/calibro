@@ -48,8 +48,7 @@
                 <div class="top-user-name">
                     <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
                     <a class="top-name" href="" data-ng-show="authentication.user" style="cursor: default;">Welcome back {{authentication.user.firstName}}</a><br/>
-                    <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> <span data-ng-show="authentication.user">/</span> <a href="/auth/signout" class="site-login" data-ng-click="logout()"
-                                                                                                                       data-ng-show="authentication.user">Logout</a>
+                    <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> <span data-ng-show="authentication.user">/</span> <a href="/auth/signout" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
                 </div>
 			<span class="cart-contents">
 				<a href="#!/cart" class="btn creme radius xsmall outline cart cart-fade-in-class" id="top-cart-tr"><i
@@ -57,20 +56,29 @@
 				<div ng-if="cart.lineItems" class="cart-preview hidden cart-fade-out-class">
                     <table id="cart-preview">
                         <thead>
+                        <th id="cp-remove"></th>
                         <th id="cp-product">Product</th>
                         <th id="cp-qty">Quantity</th>
                         <th id="cp-price">Price</th>
                         </thead>
                         <tbody>
                         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-preview">
-                            <td><a ng-click="removeFromCart(lineItem)" class="remove-product" href="">X</a> {{lineItem.name.en}}</td>
+                        	<td><a ng-click="removeFromCart(lineItem)" class="remove-product remove-from-cart" href=""></a></td>
+                            <td class="product-name">{{lineItem.name.en}}</td>
                             <td class="cp-qty-td">{{lineItem.quantity}}</td>
                             <td class="cp-price-td">{{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}}{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>
                         </tr>
                         </tbody>
                     </table>
-                    <a href="#!/cart" id="view-cart-btn" class="btn radius small outline thick blue">View Cart</a>
-                    <a href="#!/checkout" class="btn radius small blue">Checkout</a>
+                    <div class="top-cart-action-buttons">
+	                    <a href="#!/cart" id="view-cart-btn" class="btn radius small outline thick blue">View Cart</a>
+	                    <a href="#!/checkout" class="btn radius small blue">Checkout</a>
+                    </div>
+                    <div class="top-cart-total">
+                    	<span>
+                    	<!--I'm putting this same function from the cart, but the total doesn't seem to be correct-->
+                    	{{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + cart.totalPrice.centAmount / 100 : '-'}}</span>
+                    </div>
                 </div>
 			</span>
 

@@ -297,7 +297,7 @@ header{
 		.make-md-column(2);
 		padding-top: 6px;
 	}
-	nav {
+	nav {
 		.make-md-column(5);
 		.hidden-xs();
 		.hidden-sm();
@@ -397,8 +397,8 @@ header{
 		}
 		.cart-contents{
 			.cart-preview{
-				max-width: 500px;
-			  	min-width: 500px;
+				max-width: 400px;
+			  	min-width: 400px;
 				position: absolute;
 				padding: 15px;
 				background: white;
@@ -432,8 +432,14 @@ header{
 								}
 						}
 					}
+					td.product-name{
+						padding-left: 0px;
+					}
+					#cp-remove{
+						width: 10%;
+					}
 					#cp-product{
-						width: 55%;
+						width: 45%;
 					}
 					#cp-qty{
 						width: 35%;
@@ -451,15 +457,29 @@ header{
 					.cp-qty-td{
 						text-align: center;
 					}
-					.remove-product{
-						font-weight: 600;
-						font-family: 'Open Sans';
-						color: #bebebe;
-						margin-right: 8px;
-						&:hover{
-							color: @red;
-						}
-					}
+				}
+				.remove-from-cart{
+					width: 18px;
+					height: 18px;
+					vertical-align: middle;
+				}
+			}
+			.top-cart-action-buttons{
+				text-align: left !important;
+				position: relative;
+				width: 65%;
+				margin-top: 15px;
+			}
+			.top-cart-action-buttons, .top-cart-total{
+				display: inline-block;
+			}
+			.top-cart-total{
+				position: relative;
+				width: 30%;
+				span{
+					font-family: 'Noto Serif', serif;
+					font-weight: 700;
+					font-size: 18px !important;
 				}
 			}
 		}
@@ -468,6 +488,24 @@ header{
 			-moz-transition: none !important;
 			-webkit-transition: none !important;
 			transition: none !important;
+			
+			&.cart-w-items{
+				color: white !important;
+				background-color: @tblue !important;
+				border-color: @tblue !important;
+				&:hover {
+				  background-color: #79a5d2 !important;
+				}
+				.cart-icon{
+					background-position: bottom center !important;
+				
+				}
+				&:hover{
+					.cart-icon{
+						background-position: bottom center !important;
+					}
+				}
+			}
 			.cart-icon{
 				content: '';
 				display: inline-block;
@@ -1198,7 +1236,7 @@ header{
 				margin-left: 10px;
 			}
 		}
-		p, a, input {
+		p, a, input {
 			font-family: 'Noto Serif', serif;
 		}
 		label, input[type="radio"]{
@@ -1682,7 +1720,7 @@ table#cart{
 	width: 24px;
 	height: 24px;
 	display: inline-block;
-	background: url(../images/shop/remove_item.jpg) no-repeat top center;
+	background: url(../images/shop/remove_item.png) no-repeat top center;
 	background-size: 100%;
 	transition: none;
 	&:hover{
