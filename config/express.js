@@ -22,11 +22,19 @@ var fs = require('fs'),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
-	path = require('path');
+	path = require('path'),
+	seo = require('mean-seo');
 
 module.exports = function(db) {
 	// Initialize express app
 	var app = express();
+
+	//app.use(seo({
+	//	cacheClient: 'disk', // Can be 'disk' or 'redis'
+	//	//redisURL: 'redis://:password@hostname:port', // If using redis, optionally specify server credentials
+	//	cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds for disk cache
+	//}));
+
 
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {

@@ -26,6 +26,8 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
+				$scope.register = {}
+
 				// And redirect to the index page
 				$location.path('#!/account');
 			}).error(function(response) {
@@ -45,6 +47,8 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				if(response.hasOwnProperty('remember')){
 					CustomerService.setCookie(response.remember.rem, response.remember.rid)
 				}
+
+				$scope.credentials = {}
 
 				// And redirect to the index page
 				$location.path('/');

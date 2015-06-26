@@ -31,23 +31,23 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                     this.createCart(null);
                 } else {
 
-                    Cart.get({
-                            cartId: $cookies.anonymousCart
-                        }, function (data) {
-
-                            // This check is to avoid showing a user cart, that started as an anonymous cart.
-                            if (data.customerId != null) {
-                                this.service.createCart(null);
-                            } else {
-                                $rootScope.cart = data;
-                                console.log('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
-                                $rootScope.loading = false;
-                            }
-
-                        }.bind({service: this}),
-                        function (error) {
-                            this.service.createCart(null);
-                        }.bind({service: this}));
+                    //Cart.get({
+                    //        cartId: $cookies.anonymousCart
+                    //    }, function (data) {
+                    //
+                    //        // This check is to avoid showing a user cart, that started as an anonymous cart.
+                    //        if (data.customerId != null) {
+                    //            this.service.createCart(null);
+                    //        } else {
+                    //            $rootScope.cart = data;
+                    //            console.log('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
+                    //            $rootScope.loading = false;
+                    //        }
+                    //
+                    //    }.bind({service: this}),
+                    //    function (error) {
+                    //        this.service.createCart(null);
+                    //    }.bind({service: this}));
                 }
             }
 

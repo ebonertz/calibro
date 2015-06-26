@@ -170,6 +170,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
           }
 
+          $scope.htmlReady()
 
         })
       }catch(e){

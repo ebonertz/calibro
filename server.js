@@ -28,6 +28,11 @@ var init = require('./config/init')(),
 // Init the express application
 var app = require('./config/express')(null);
 
+
+//require('./config/less')();
+// PhantomJS
+require('./config/phantom')();
+
 // Bootstrap passport config
 require('./config/passport')();
 
