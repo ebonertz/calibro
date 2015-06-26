@@ -47,8 +47,8 @@
                 </div>
                 <div class="top-user-name">
                     <a href="#!/login" class="site-login" data-ng-hide="authentication.user">Login</a>
-                    <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome Test User</a><br/>
-                    <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> / <a href="/auth/signout" class="site-login" data-ng-click="logout()"
+                    <a class="top-name" href="#!/account" data-ng-show="authentication.user">Welcome back {{authentication.user.firstName}}</a><br/>
+                    <a href="#!/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> <span data-ng-show="authentication.user">/</span> <a href="/auth/signout" class="site-login" data-ng-click="logout()"
                                                                                                                        data-ng-show="authentication.user">Logout</a>
                 </div>
 			<span class="cart-contents">
