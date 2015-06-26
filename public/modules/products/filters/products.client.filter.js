@@ -49,12 +49,15 @@ angular.module('products').filter('facets', function(){
   }
 })
 
-.filter('capitalizeFirst', function(){
+.filter('label', function(){
     return function(input){
         if(!input)
-            return
-        else
+            return 'N/A'
+        else {
+            if (input.toString() == "true") return "Yes"
+            if (input.toString() == "false") return "No"
             return input.charAt(0).toUpperCase() + input.slice(1);
+        }
     }
 })
 

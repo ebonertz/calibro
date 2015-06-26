@@ -92,15 +92,15 @@
       <div class="tab-content active" id="features">
         <section class="inner">
           <div class="column" id="complimentary" style="text-align: left">
-            <div>Frame Shape: <span data-ng-bind="currentVariant.attr.frameShape.label.en | capitalizeFirst"></span></div>
-            <div>Frame Type: <span data-ng-bind="currentVariant.attr.frameType.label.en | capitalizeFirst"></span></div>
-            <div>Frame Material: <span data-ng-bind="currentVariant.attr.frameMaterial.en | capitalizeFirst"></span></div>
+            <div>Frame Shape: <span data-ng-bind="currentVariant.attr.frameShape.label.en | label"></span></div>
+            <div>Frame Type: <span data-ng-bind="currentVariant.attr.frameType.label.en | label"></span></div>
+            <div>Frame Material: <span data-ng-bind="currentVariant.attr.frameMaterial.en | label"></span></div>
           </div>
           <div class="column">
-            <div>Mirror Reflection: <span>{{!!currentVariant.attr.mirrorReflection ? "Yes" : "No"}}</span></div>
+            <div>Mirror Reflection: <span>{{currentVariant.attr.mirrorReflection | label}}</span></div>
           </div>
           <div class="column">
-            <div>Width: <span data-ng-bind="currentVariant.attr.width.label.en | capitalizeFirst"></span></div>
+            <div>Width: <span data-ng-bind="currentVariant.attr.width.label.en | label"></span></div>
         </section>
       </div>
     </section>
