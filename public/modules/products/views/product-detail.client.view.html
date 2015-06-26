@@ -53,7 +53,7 @@
             <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>
           </div>
         </div>
-        <div class="add-to-cart">
+        <div class="add-to-cart" ng-if="currentVariant.availability.isOnStock">
           <button ng-click="decrementQuantity()" class="op" id="minus">&#45;</button>
           <input type="text" min="1" id="item-amount" value="{{quantity}}">
           <button ng-click="incrementQuantity()" class="op" id="more">&#43;</button>
