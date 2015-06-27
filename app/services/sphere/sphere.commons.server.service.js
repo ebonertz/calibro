@@ -119,6 +119,18 @@ exports.update = function (entity, id, actions, callback) {
     });
 };
 
+exports.updateWithVersion = function (entity, id, version, actions, callback) {
+    SphereClient.getClient()[entity].byId(id).update({
+        version: version,
+        actions: actions
+    }).then(function (result) {
+        callback(null, result.body)
+    }).error(function (err) {
+        console.log(err);
+        callback(err, null);
+    });
+};
+
 exports.post = function (entity, endpoint, payload, callback) {
     SphereClient.getClient()[entity]._save(endpoint, payload).then(function (result) {
         callback(null, result.body)

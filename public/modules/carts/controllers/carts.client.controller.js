@@ -19,7 +19,7 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
             if (code != null) {
 
                 $rootScope.loading = true;
-                CartService.addDiscountCode($rootScope.cart.id, {
+                CartService.addDiscountCode($rootScope.cart.id,  $rootScope.cart.version, {
                     code: code
                 }).then(function (result) {
                     $rootScope.cart = result;
@@ -36,26 +36,34 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
         $scope.increaseLineItemQuantity = function (item) {
             item.quantity++;
             $rootScope.loading = true;
-            CartService.changeLineItemQuantity($rootScope.cart.id, {
+            CartService.changeLineItemQuantity($rootScope.cart.id, $rootScope.cart.version, {
                 lineItemId: item.id,
                 quantity: item.quantity
             }).then(function (result) {
                 $rootScope.cart = result;
                 $rootScope.loading = false;
                 LoggerServices.success('Quantity updated.');
+            }, function (error) {
+                item.quantity--;
+                $rootScope.loading = false;
+                LoggerServices.warning(error);
             });
         }
 
         $scope.decreaseLineItemQuantity = function (item) {
             item.quantity--;
             $rootScope.loading = true;
-            CartService.changeLineItemQuantity($rootScope.cart.id, {
+            CartService.changeLineItemQuantity($rootScope.cart.id, $rootScope.cart.version, {
                 lineItemId: item.id,
                 quantity: item.quantity
             }).then(function (result) {
                 $rootScope.cart = result;
                 $rootScope.loading = false;
                 LoggerServices.success('Quantity updated.');
+            }, function (error) {
+                item.quantity++;
+                $rootScope.loading = false;
+                LoggerServices.warning(error);
             });
         }
 

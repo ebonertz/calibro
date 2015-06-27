@@ -100,7 +100,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }
 
                 $rootScope.loading = true;
-                CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
+                CartService.setShippingAddress($rootScope.cart.id, $rootScope.cart.version, {address: finalShippingAddress}).then(function (result) {
 
                     $rootScope.cart = result;
                     LoggerServices.success('Shipping address updated');
@@ -130,7 +130,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.setShippingMethod = function () {
             if (!$rootScope.loading && $scope.selectedShippingMethod) {
                 $rootScope.loading = true;
-                CartService.setShippingMethod($rootScope.cart.id, {
+                CartService.setShippingMethod($rootScope.cart.id, $rootScope.cart.version, {
                     shippingMethod: {
                         id: $scope.selectedShippingMethod.id,
                         typeId: "shipping-method"
@@ -147,6 +147,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         $rootScope.loading = false;
                     });
+                }, function (error) {
+                    $rootScope.loading = false;
+                    LoggerServices.warning(error);
                 });
 
             }
@@ -161,8 +164,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             order.$save(function (response) {
                 console.log('Order created.');
                 $('#authorizeNetForm').submit();
-            }, function (errorResponse) {
-                console.log(errorResponse);
+            }, function (error) {
+                $rootScope.loading = false;
+                LoggerServices.warning(error.data);
             });
         }
 
@@ -182,6 +186,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $scope.error = response.data.message;
                 $rootScope.loading = false;
                 LoggerServices.error(response);
+            }, function (error) {
+                $rootScope.loading = false;
+                LoggerServices.warning(error);
             });
 
         };

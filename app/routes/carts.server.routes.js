@@ -20,24 +20,24 @@ module.exports = function (app) {
     app.route('/carts/byCustomer/:customerId')
         .get(carts.byCustomer);
 
-    app.route('/carts/addLineItem/:cartId')
+    app.route('/carts/addLineItem/:cartId/:version')
         .post(carts.addLineItem);
 
-    app.route('/carts/removeLineItem/:cartId')
+    app.route('/carts/removeLineItem/:cartId/:version')
         .post(carts.removeLineItem);
 
-    app.route('/carts/setShippingAddress/:cartId')
+    app.route('/carts/setShippingAddress/:cartId/:version')
         .post(carts.setShippingAddress);
 
-    app.route('/carts/setBillingAddress/:cartId')
+    app.route('/carts/setBillingAddress/:cartId/:version')
         .post(carts.setBillingAddress);
 
-    app.route('/carts/setShippingMethod/:cartId')
+    app.route('/carts/setShippingMethod/:cartId/:version')
         .post(carts.setShippingMethod);
 
-    app.route('/carts/changeLineItemQuantity/:cartId')
+    app.route('/carts/changeLineItemQuantity/:cartId/:version')
         .post(carts.changeLineItemQuantity);
 
-    app.route('/carts/addDiscountCode/:cartId')
+    app.route('/carts/addDiscountCode/:cartId/:version')
         .post(carts.addDiscountCode);
 };

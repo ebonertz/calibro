@@ -26,65 +26,65 @@ exports.byCustomer = function (customerId, callback) {
 };
 
 
-exports.addLineItem = function (cartId, payload, callback) {
+exports.addLineItem = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.addLineItem;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.removeLineItem = function (cartId, payload, callback) {
+exports.removeLineItem = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.removeLineItem;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.setShippingAddress = function (cartId, payload, callback) {
+exports.setShippingAddress = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.setShippingAddress;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.setBillingAddress = function (cartId, payload, callback) {
+exports.setBillingAddress = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.setBillingAddress;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.setShippingMethod = function (cartId, payload, callback) {
+exports.setShippingMethod = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.setShippingMethod;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.changeLineItemQuantity = function (cartId, payload, callback) {
+exports.changeLineItemQuantity = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.changeLineItemQuantity;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }
 
-exports.addDiscountCode = function (cartId, payload, callback) {
+exports.addDiscountCode = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.addDiscountCode;
 
-    CommonService.update(entity, cartId, [payload], function (err, result) {
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
 }

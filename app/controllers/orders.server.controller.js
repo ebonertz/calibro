@@ -5,7 +5,7 @@ exports.create = function (req, res) {
 
     OrderService.create(cart, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -18,7 +18,7 @@ exports.payOrder = function (req, res) {
 
     OrderService.payOrder(orderId, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.redirect('/#!/orders/' + result.id)
         }

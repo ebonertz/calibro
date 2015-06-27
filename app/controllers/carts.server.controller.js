@@ -5,7 +5,7 @@ exports.byCustomer = function (req, res) {
 
     CartService.byCustomer(customerId, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             if (result.errors != null && result.errors.length > 0) {
                 return res.sendStatus(400);
@@ -19,11 +19,12 @@ exports.byCustomer = function (req, res) {
 
 exports.addLineItem = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.addLineItem(cartId, payload, function (err, result) {
+    CartService.addLineItem(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -32,11 +33,12 @@ exports.addLineItem = function (req, res) {
 
 exports.removeLineItem = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.removeLineItem(cartId, payload, function (err, result) {
+    CartService.removeLineItem(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -45,11 +47,12 @@ exports.removeLineItem = function (req, res) {
 
 exports.setShippingAddress = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setShippingAddress(cartId, payload, function (err, result) {
+    CartService.setShippingAddress(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -58,11 +61,12 @@ exports.setShippingAddress = function (req, res) {
 
 exports.setBillingAddress = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setBillingAddress(cartId, payload, function (err, result) {
+    CartService.setBillingAddress(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -71,11 +75,12 @@ exports.setBillingAddress = function (req, res) {
 
 exports.setShippingMethod = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setShippingMethod(cartId, payload, function (err, result) {
+    CartService.setShippingMethod(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -84,11 +89,12 @@ exports.setShippingMethod = function (req, res) {
 
 exports.changeLineItemQuantity = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.changeLineItemQuantity(cartId, payload, function (err, result) {
+    CartService.changeLineItemQuantity(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.json(result);
         }
@@ -97,9 +103,10 @@ exports.changeLineItemQuantity = function (req, res) {
 
 exports.addDiscountCode = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.addDiscountCode(cartId, payload, function (err, result) {
+    CartService.addDiscountCode(cartId, version, payload, function (err, result) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
@@ -110,14 +117,14 @@ exports.addDiscountCode = function (req, res) {
 
 exports.createOrder = function (req, res) {
     var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.createOrder(cartId, payload, function (err, result) {
+    CartService.createOrder(cartId, version, payload, function (err, result) {
         if (err) {
-            return res.sendStatus(400);
+            return res.status(400).send(err.body.message);
         } else {
             res.redirect('/#!/orders/' + result.id)
         }
     });
 };
-
