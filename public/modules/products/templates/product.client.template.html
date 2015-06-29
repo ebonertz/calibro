@@ -1,17 +1,17 @@
-<div  class="product" ng-class="{'on-sale': product.displayVariant.basePrices.hasOwnProperty(currency), 'no-stock': !product.displayVariant.availability.isOnStock}">
+<div class="product" ng-class="{'on-sale': product.displayVariant.basePrices.hasOwnProperty(currency), 'no-stock': !product.displayVariant.availability.isOnStock}" bindonce="ready">
   <div class="product-extras">
-    <span class="new-badge" ng-if="product.displayVariant.attr.isNew">New</span>
-    <span class="on-sale-badge" ng-if="product.displayVariant.basePrices.hasOwnProperty(currency)">Sale</span>
+    <span class="new-badge" bo-if="product.displayVariant.attr.isNew">New</span>
+    <span class="on-sale-badge" bo-if="product.displayVariant.basePrices.hasOwnProperty(currency)">Sale</span>
     <!-- <span class="no-stock-notice" ng-if="!product.displayVariant.availability.isOnStock">Out of Stock</span> -->
   </div>
-  <a href="/#!/products/{{product.slug[lang]}}" class="product-cover"><img ng-src="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
-  <a ng-href="#!/products/{{product.slug[lang]}}" class="product-title"><b>{{product.name[lang]}}</b></a>
+  <a bo-href="'/#!/products/'+(product.slug | locale)" class="product-cover"><img bo-src-i="{{product.displayVariant.images[0] ? product.displayVariant.images[0]['url'] : '/design/images/noimage.jpg'}}" err-src="/design/images/noimage.jpg"/></a>
+  <a bo-href="'/#!/products/'+(product.slug | locale)" class="product-title"><b bo-text="product.name | locale"></b></a>
   <span class="price">
-    <del ng-if="product.displayVariant.basePrices.hasOwnProperty(currency)">
-      <span class="amount">{{product.displayVariant.basePrices[currency] | spherePrice}}</span>
+    <del bo-if="product.displayVariant.basePrices.hasOwnProperty(currency)">
+      <span class="amount" bo-text="product.displayVariant.basePrices[currency] | spherePrice"></span>
     </del>
     <ins>
-      <span class="amount sale-price">{{product.displayVariant.prices[currency] | spherePrice}}</span>
+      <span class="amount sale-price" bo-text="product.displayVariant.prices[currency] | spherePrice"></span>
     </ins>
   </span>
 </div>

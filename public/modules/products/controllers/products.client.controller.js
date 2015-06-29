@@ -289,7 +289,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
       var products = new Products({id: id})
       products.$get({id: id}, function(result){
-        console.log(result)
         $scope.product = result;
         $scope.currentVariant = $scope.product.masterVariant;
         $scope.product.variants.unshift($scope.product.masterVariant);
@@ -306,6 +305,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             url: ("/#!/"+$scope.product.masterVariant.attr.gender.key+"/"+$scope.breadcrumbs.category).toLowerCase()
           }
         }
+
+        //$scope.variantImages = flattenImages($scope.product.variants)
 
         $scope.fetchRecommendedProducts($scope.product.categories[0].slug, $scope.product.masterVariant.attr.gender.key)
         .then(function(result){

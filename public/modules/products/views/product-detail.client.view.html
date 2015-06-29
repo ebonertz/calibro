@@ -1,5 +1,5 @@
 <hr class="nav-divider"/>
-<div ng-controller="ProductsController" data-ng-init="view()" scroll-top>
+<div ng-controller="ProductsController" data-ng-init="view()" scroll-top bindonce="product">
   <div class="content-wrapper">
     <section id="breadcrumbs">
       <div class="breadcrumb">
@@ -17,17 +17,13 @@
     <section id="product-details" itemscope itemtype="http://schema.org/Product">
       <div class="product-images">
         <div class="img-big">
-          <img itemprop="image" ng-src="{{currentVariant.images[0]['url']}}"/>
+          <img itemprop="image" ng-src="{{currentVariant.images[0]['url']}}" ng-hide="currentVariant.images.length == 0"/>
         </div>
-        <div class="thumbnails">
-          <a ng-repeat="image in currentVariant.images track by image.url" class="thumbnail-wrapper active" href="#" data-url="{{image.url}}">
-            <img class="thumbnail" ng-src="{{image.url}}"
-               alt="{{image.label}}"/>
-          </a>
+        <div class="thumbnails" product-images>
         </div>
       </div>
       <div class="product-details">
-        <h1 itemprop="name" class="product-title">{{product.name[lang]}}</h1>
+        <h1 itemprop="name" class="product-title" bo-text="product.name | locale"></h1>
         <meta itemprop="url" content="http://www.focali.com/eyewear/mens-eyewear/focali-better-view/">
         <meta itemprop="brand" content="Focali">
         <meta itemprop="manufacturer" content="Focali Inc">
@@ -39,7 +35,7 @@
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
           <del>
-            <span class="amount" ng-if="currentVariant.basePrices[currency]">{{currentVariant.basePrices[currency] | spherePrice}}</span>
+            <span class="amount" bo-if="currentVariant.basePrices[currency]">{{currentVariant.basePrices[currency] | spherePrice}}</span>
           </del>
           <ins>
             <span data-ng-bind="currentVariant.prices[currency] | spherePrice"></span>
@@ -60,22 +56,22 @@
           <button ng-click="addToCart(product)" class="cart-add btn blue radius">Add to Cart</button>
         </div>
         <div class="product-description" itemprop="description">
-          <p data-ng-bind="product.description[lang]"></p>
+          <p bo-text="product.description | locale"></p>
         </div>
         <section class="meta">
           <div class="social-block">
             <span>Tell Friends</span>
-            <div id="fb-root"></div>
-            <script type="text/javascript">
-              (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-                fjs.parentNode.insertBefore(js, fjs);
-              }(document, 'script', 'facebook-jssdk'));
-            </script>
-            <div class="fb-share-button social-share" data-href="http://localhost:3000/?_escaped_fragment_=/products/ray-ban-justin-rb" data-layout="icon" id="facebook"></div>
+            <!--<div id="fb-root"></div>-->
+            <!--<script type="text/javascript">-->
+              <!--(function(d, s, id) {-->
+                <!--var js, fjs = d.getElementsByTagName(s)[0];-->
+                <!--if (d.getElementById(id)) return;-->
+                <!--js = d.createElement(s); js.id = id;-->
+                <!--js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";-->
+                <!--fjs.parentNode.insertBefore(js, fjs);-->
+              <!--}(document, 'script', 'facebook-jssdk'));-->
+            <!--</script>-->
+            <!--<div class="fb-share-button social-share" data-href="http://localhost:3000/?_escaped_fragment_=/products/ray-ban-justin-rb" data-layout="icon" id="facebook"></div>-->
             <a class="social-share" href="#" onclick="#" id="facebook"></a>
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
             <a class="social-share" href="#" onclick="#" id="twitter"></a>

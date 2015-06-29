@@ -16,8 +16,9 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		}
 
 		$scope.loadContent = function(page, args){
-			console.log('Loading contentful data: '+page+'('+args+')')
+			console.log('Loading contentful data: '+page+'('+(args?args:'')+')')
 			ContentfulService[page](args).then(function(data) {
+				console.log('Contentful page loaded.')
 				$scope.contentfulData = data;
 			});
 		}

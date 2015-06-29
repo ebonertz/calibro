@@ -30,7 +30,8 @@ module.exports = {
 				'public/design/js/focali-scripts.js',
 				'public/lib/optile/ajax-integration-1.1.min.js',
 				'public/lib/angular-cookie/angular-cookie.min.js',
-				'public/lib/angular-toastr/dist/angular-toastr.js'
+				'public/lib/angular-toastr/dist/angular-toastr.js',
+				'public/lib/angular-bindonce/bindonce.js'
 			]
 		},
 		css: [
