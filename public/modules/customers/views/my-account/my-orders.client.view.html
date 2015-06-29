@@ -29,9 +29,6 @@
 				<th id="order-date" data-field="date" data-sortable="true">
 					Order Date
 				</th>
-				<th id="order-payment-method" data-field="method" data-sortable="true">
-					Payment Method
-				</th>
 				<th id="order-status" data-field="status" data-sortable="true">
 					Order Status
 				</th>
@@ -49,9 +46,6 @@
 					</td>
 					<td class="order-date">
 						{{order.createdAt | sphereDate | localeDate}}
-					</td>
-					<td class="order-payment-method">
-						<span class="badge small radius" ng-class="order.paymentState | statusColor">{{order.paymentState}}<span>
 					</td>
 					<td class="order-status">
 						<span class="badge small radius" ng-class="order.orderState | statusColor">{{order.orderState}}<span>
