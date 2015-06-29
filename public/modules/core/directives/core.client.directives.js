@@ -205,8 +205,8 @@ angular.module('core').directive('errSrc', function() {
 angular.module('core').directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
+            if (event.which === 13) {
+                scope.$apply(function () {
                     scope.$eval(attrs.ngEnter);
                 });
 
@@ -214,4 +214,13 @@ angular.module('core').directive('ngEnter', function () {
             }
         });
     };
+})
+
+angular.module('core').directive('scrollTop', function() {
+    return {
+        restrict: 'A',
+        link: function() {
+            window.scrollTo(0,0);
+        }
+    }
 });

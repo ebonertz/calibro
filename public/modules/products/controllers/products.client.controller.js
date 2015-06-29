@@ -44,7 +44,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     };
 
     $scope.init = function (){
-
       if($stateParams.slug) {
         $scope.categoryPage();
       } else {
