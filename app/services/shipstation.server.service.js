@@ -48,7 +48,7 @@ exports.ship = function(order, callback){
                 phone: order.shippingAddress.phone,
             },
             items: buildItems(order.lineItems),
-            amountPaid: order.totalPrice.centAmount/100,
+            amountPaid: order.taxedPrice.totalGross.centAmount/100,
             taxAmount: order.taxedPrice ? (order.taxedPrice.totalGross.centAmount - order.taxedPrice.totalNet.centAmount)/100 : null,
             shippingAmount: order.shippingInfo ? order.shippingInfo.price.centAmount/100 : null,
             requestedShippingService: order.shippingInfo ? order.shippingInfo.shippingMethodName : null,
