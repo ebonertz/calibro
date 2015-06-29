@@ -8,7 +8,14 @@ exports.create = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            ShipstationService.ship(result, function(err, ss_result){
+                if(err){
+                    return res.sendStatus(400);
+                } else {
+                    res.json(result);
+                }
+            });
+            //res.json(result);
         }
     });
 };
@@ -22,20 +29,15 @@ exports.payOrder = function (req, res) {
             return res.status(400).send(err.body.message);
         } else {
 
-            // Call Shipping service
+            ShipstationService.ship(result, function(err){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("Shipstation order updated successfully.")
+                }
+            });
 
             res.redirect('/#!/orders/' + result.id)
         }
     });
 };
-
-exports.ship = function(req, res){
-    ShipstationService.ship(function(err, result){
-        if(err){
-            return res.sendStatus(400);
-        } else {
-            res.json(result);
-        }
-    });
-}
-
