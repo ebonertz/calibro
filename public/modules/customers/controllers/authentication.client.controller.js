@@ -9,13 +9,17 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 
 		$scope.register = function() {
 			if($scope.register.password != $scope.register.repeatPassword){
-				$scope.register.error = "Passwords do not match"
+				LoggerServices.error("Passwords do not match")
+                $scope.register.password = null;
+                $scope.register.repeatPassword = null;
 				return false
 			}
 
-		  var createValues = {
-				email: $scope.register.email,
-				password: $scope.register.password
+            var createValues = {
+                firstName: $scope.register.firstName,
+                lastName: $scope.register.lastName,
+                email: $scope.register.email,
+                password: $scope.register.password
 			}
 
 			$http.post('/auth/signup', createValues).success(function(response) {

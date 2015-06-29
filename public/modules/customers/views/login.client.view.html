@@ -54,6 +54,12 @@
         <div class="register">
           <span class="sub-title">Free Registration</span>
           <form name="userForm" data-ng-submit="register()" class="user-registration" method="POST" autocomplete="off">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="register.firstName" placeholder="Please Enter Your First Name" required>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="register.lastName" placeholder="Please Enter Your Last Name" required>
+
             <label for="email">Email</label>
             <input type="email" id="email" name="email" class="form-control" data-ng-model="register.email" placeholder="Please Enter Your Email" required>
 
