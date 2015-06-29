@@ -1,4 +1,4 @@
-'use strict';
+    'use strict';
 
 module.exports = {
     db: 'mongodb://localhost/focali-mean-dev',
@@ -65,22 +65,22 @@ module.exports = {
     },
 
     mailchimp: {
-        key: '9ec9ac7d7489e242cac5c26d0333aaeb-us11',
+        key: 'bf21e8530000f313ca295c6be0bd98fe-us11',
         lists: {
-            'newsletter': '363d286358',
-            'offers': 'f79541374a'
+            'newsletter': '8c5a60f754',
+            'offers': '76ed47a5ac'
         }
     },
     mandrill: {
-        key: 'G2aMt_7XNEFriFTfs1Otnw',
+        key: 'cP6gybqxJGlJWMkAcvz5hw',
         options: {
-            from_email: 'focali.dev@gmail.com',
-            from_name: 'Focali',
-            contactus_email: 'focali.dev@gmail.com',
+            from_email: 'support@focalioptics.com',
+            from_name: 'Focali Optics',
+            contactus_email: 'support@focalioptics.com',
         },
         templates: {
             welcome: 'welcome',
-            contactus: 'contactus',
+            contactus: 'contact-us',
             passwordtoken: 'password-token',
             attachment: 'attachment',
             order: 'order'
@@ -91,7 +91,7 @@ module.exports = {
         // timeCorrection: 14373 // Luciano
     },
     shipstation: {
-        key: 'cbd2a0614cbc48f7aed5f017a4551fd5',
-        secret: 'e784026082e24169b2581c9bc503d6ec'
+        key: 'd9d40094ab3347db928e16f1199939ac',
+        secret: 'f1a3cf70216e4743a3f844fe076774fb'
     }
 };
