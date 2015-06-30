@@ -7,11 +7,12 @@ var init = require('../config/init')(),
     MandrillService = require('../app/services/mandrill.server.service.js'),
     csv = require('fast-csv'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    _ = require('lodash');
 
-var integration_names = ['quickbook','shipstation'],
+var integration_names = ['order-export'], //['quickbook','shipstation'],
     intgs = {},
-    days_to_fetch = 2;
+    days_to_fetch = 1;
 
 // Functions
 var buildFiles = function(intgs){
@@ -43,55 +44,90 @@ var buildFiles = function(intgs){
 
             var createdAt = new Date(value.createdAt);
             var createdAtDateStr = createdAt.getMonth() + '/' + createdAt.getDate() + '/' + createdAt.getFullYear();
+            var fullCreatedAt = createdAt.getFullYear() + '/' + createdAt.getMonth() + '/' + createdAt.getDate() + ' ' +
+                (createdAt.getHours().length == 1 ? '0'+createdAt.getHours() : createdAt.getHours()) + ":" +
+                (createdAt.getMinutes().length == 1 ? '0'+createdAt.getMinutes() : createdAt.getMinutes()) + ":" +
+                (createdAt.getSeconds().length == 1 ? '0'+createdAt.getSeconds() : createdAt.getSeconds())
 
-            intgs['quickbook'].csvStream.write({
-                "DATE": createdAtDateStr,
-                "DESCRIPTION": 'SPHERE.IO - ID: '+value.id,
-                "Amount": order.totalPrice
-            })
+            //intgs['quickbook'].csvStream.write({
+            //    "DATE": createdAtDateStr,
+            //    "DESCRIPTION": 'SPHERE.IO - ID: '+value.id,
+            //    "Amount": order.totalPrice
+            //})
 
             value.lineItems.forEach(function(item){
-                intgs['shipstation'].csvStream.write({
-                    "Order Number": value.id,
-                    "Order Create Date": createdAtDateStr,
-                    "Order Date Paid": "",
-                    "Order Total": order.grossPrice,
-                    "Order Amount Paid": order.grossPrice,
-                    "Order Tax Paid": order.taxPrice,
-                    "Order Shipping Paid":order.shippingPrice,
-                    "Order Shipping Service": value.shippingInfo ? value.shippingInfo.shippingMethodName : null,
-                    "Order Total Weight (oz)": null,
-                    "Order Custom Field 1": null,
-                    "Order Custom Field 2": null,
-                    "Order Custom Field 3": null,
-                    "Order Source": "Sphere.io",
-                    "Order Notes to Buyer": null,
-                    "Order Notes from Buyer": null,
-                    "Order Internal Notes": null,
+                intgs['order-export'].csvStream.write({
+                    "Order Id": value.id,
+                    "Order Number": value.orderNumber,
+                    "Create Date": fullCreatedAt,
+                    "Customer Id": value.customerId,
+                    "Customer Email": value.customerEmail,
+                    "Total Price": value.totalPrice.centAmount/100,
+                    "Total Net": value.taxedPrice.totalNet.centAmount/100,
+                    "Total Gross": value.taxedPrice.totalGross.centAmount/100,
+                    "Country": value.country,
+                    "Order State": value.orderState,
+                    "Payment State": value.paymentState,
+                    "Discount Codes": value.discountCodes.length > 0 ? _.pluck(value.discountCodes , 'code').join(';') : '',
+
                     "Ship to First Name": value.shippingAddress.firstName,
                     "Ship to Last Name": value.shippingAddress.lastName,
                     "Ship to Phone": value.shippingAddress.phone,
-                    "Ship to E-mail": null,
-                    "Ship to Username": null,
-                    "Ship to Company Name": null,
-                    "Ship to Address":  value.shippingAddress.streetName,
-                    "Ship to Address 2": value.shippingAddress.streetNumber,
-                    "Ship to Address 3": null,
+                    "Ship to Company Name": value.shippingAddress.company,
+                    "Ship to Street Name":  value.shippingAddress.streetName,
+                    "Ship to Street Number": value.shippingAddress.streetNumber,
                     "Ship to City": value.shippingAddress.city,
                     "Ship to Postal Code": value.shippingAddress.postalCode,
                     "Ship to Country Code": value.shippingAddress.country,
-                    "Product Height (in)": null,
-                    "Product Width (in)": null,
-                    "Product Length (in)": null,
-                    "Product Sku": item.variant.sku,
+
                     "Product Name": item.name.en,
+                    "Product Slug": item.slug,
+                    "Product Sku": item.variant.sku,
                     "Product Quantity": item.quantity,
                     "Product Unit Price": item.price.value.centAmount/100,
-                    "Product Weight (oz)": null,
-                    "Product Options": null,
-                    "Product Warehouse Location": null,
-                    "Product Marketplace Item #": null
+
                 })
+                //intgs['shipstation'].csvStream.write({
+                //    "Order Number": value.id,
+                //    "Order Create Date": createdAtDateStr,
+                //    "Order Date Paid": "",
+                //    "Order Total": order.grossPrice,
+                //    "Order Amount Paid": order.grossPrice,
+                //    "Order Tax Paid": order.taxPrice,
+                //    "Order Shipping Paid":order.shippingPrice,
+                //    "Order Shipping Service": value.shippingInfo ? value.shippingInfo.shippingMethodName : null,
+                //    "Order Total Weight (oz)": null,
+                //    "Order Custom Field 1": null,
+                //    "Order Custom Field 2": null,
+                //    "Order Custom Field 3": null,
+                //    "Order Source": "Sphere.io",
+                //    "Order Notes to Buyer": null,
+                //    "Order Notes from Buyer": null,
+                //    "Order Internal Notes": null,
+                //    "Ship to First Name": value.shippingAddress.firstName,
+                //    "Ship to Last Name": value.shippingAddress.lastName,
+                //    "Ship to Phone": value.shippingAddress.phone,
+                //    "Ship to E-mail": null,
+                //    "Ship to Username": null,
+                //    "Ship to Company Name": null,
+                //    "Ship to Address":  value.shippingAddress.streetName,
+                //    "Ship to Address 2": value.shippingAddress.streetNumber,
+                //    "Ship to Address 3": null,
+                //    "Ship to City": value.shippingAddress.city,
+                //    "Ship to Postal Code": value.shippingAddress.postalCode,
+                //    "Ship to Country Code": value.shippingAddress.country,
+                //    "Product Height (in)": null,
+                //    "Product Width (in)": null,
+                //    "Product Length (in)": null,
+                //    "Product Sku": item.variant.sku,
+                //    "Product Name": item.name.en,
+                //    "Product Quantity": item.quantity,
+                //    "Product Unit Price": item.price.value.centAmount/100,
+                //    "Product Weight (oz)": null,
+                //    "Product Options": null,
+                //    "Product Warehouse Location": null,
+                //    "Product Marketplace Item #": null
+                //})
             })
 
         })
@@ -112,7 +148,7 @@ var sendEmail = function(intg){
         data = new Buffer(data, 'utf8').toString('base64');
 
         // Add subject with integration name
-        MandrillService.sendAttachment('focali.dev@gmail.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
+        MandrillService.sendAttachment('orders@focalioptics.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
             console.log('Email sent for '+intg.name)
         }, function(error){
             console.log('Error sending email for '+intg.name)

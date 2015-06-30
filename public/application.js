@@ -8,7 +8,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	function($locationProvider) {
 		$locationProvider.hashPrefix('!');
 	}
-]).run(function ($rootScope, CartService, CustomerService, $anchorScroll) {
+]).run(function ($rootScope, CartService, CustomerService, $anchorScroll, $FB) {
 	CartService.pageLoad();
 	CustomerService.checkCookieAndLogin();
 	//console.log(Authentication)
@@ -21,6 +21,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 
 	});
 
+	$FB.init('841888042555433');
 });
 
 //Then define the init function for starting up the application

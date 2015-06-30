@@ -87,8 +87,9 @@ module.exports = {
         }
     },
     authorizenet: {
-        timeCorrection: 10773 // Matias
+        //timeCorrection: 10773 // Matias
         // timeCorrection: 14373 // Luciano
+        timeCorrection: -7288  // Sebas
     },
     shipstation: {
         key: 'd9d40094ab3347db928e16f1199939ac',

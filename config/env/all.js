@@ -14,7 +14,8 @@ module.exports = {
 		lib: {
 			css: [
 				'public/lib/optile/ajax-integration-1.1.min.css',
-				'public/lib/angular-toastr/dist/angular-toastr.css'
+				'public/lib/angular-toastr/dist/angular-toastr.css',
+				'public/lib/angular-socialshare/angular-socialshare.min.css'
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -31,7 +32,8 @@ module.exports = {
 				'public/lib/optile/ajax-integration-1.1.min.js',
 				'public/lib/angular-cookie/angular-cookie.min.js',
 				'public/lib/angular-toastr/dist/angular-toastr.js',
-				'public/lib/angular-bindonce/bindonce.js'
+				'public/lib/angular-bindonce/bindonce.js',
+				'public/lib/angular-socialshare/angular-socialshare.min.js'
 			]
 		},
 		css: [
