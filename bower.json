@@ -16,6 +16,7 @@
     "angular-ui-router": "~0.2.11",
     "angular-cookie": "~4.0.8",
     "angular-toastr": "angular-1.2",
-    "angular-bindonce": "~0.3.1"
+    "angular-bindonce": "~0.3.1",
+    "angular-socialshare": "~1.4.1"
   }
 }
