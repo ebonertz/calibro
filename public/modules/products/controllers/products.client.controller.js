@@ -169,8 +169,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
           for(var i = 0; i < resultsArray.products.length; i++){
             $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
           }
-
-
         })
       }catch(e){
         console.log(e)

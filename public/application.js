@@ -6,9 +6,10 @@ angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfig
 // Setting HTML5 Location Mode
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
 	function($locationProvider) {
+		//$locationProvider.html5Mode(true);
 		$locationProvider.hashPrefix('!');
 	}
-]).run(function ($rootScope, CartService, CustomerService, $anchorScroll) {
+]).run(function ($rootScope, CartService, CustomerService, $anchorScroll, $FB) {
 	CartService.pageLoad();
 	CustomerService.checkCookieAndLogin();
 	//console.log(Authentication)
@@ -21,6 +22,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 
 	});
 
+	$FB.init('842679845809586');
 });
 
 //Then define the init function for starting up the application

@@ -4,7 +4,10 @@
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 		// Redirect to home view when route not found
-		$urlRouterProvider.otherwise('/');
+		if(window.location.search && window.location.search.match(/\?_escaped_fragment_/i)){
+			// Bot crawling website
+		}else
+			$urlRouterProvider.otherwise('/');
 
 		// Home state routing
 		$stateProvider.
