@@ -2,14 +2,15 @@
 var childProcess = require('child_process')
 var phantomjs = require('phantomjs')
 var binPath = phantomjs.path;
-var path = require('path');
+var path = require('path'),
+    config = require('./config');
 
 var childArgs = [
     '--disk-cache=no',
     //path.join(__dirname, 'angular-phantom.js'),
     'angular-phantom.js',
     '8888',
-    'http://localhost:3000'
+    config.serverPath,
     //'some other argument (passed to phantomjs script)'
 ]
 
