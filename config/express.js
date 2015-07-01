@@ -15,6 +15,7 @@ var fs = require('fs'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	passport = require('passport'),
+	request = require('request'),
 /*	mongoStore = require('connect-mongo')({
 		session: session
 	}),*/
@@ -29,13 +30,6 @@ module.exports = function(db) {
 	// Initialize express app
 	var app = express();
 
-	//app.use(seo({
-	//	cacheClient: 'disk', // Can be 'disk' or 'redis'
-	//	//redisURL: 'redis://:password@hostname:port', // If using redis, optionally specify server credentials
-	//	cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds for disk cache
-	//}));
-
-
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
 		require(path.resolve(modelPath));
@@ -48,6 +42,23 @@ module.exports = function(db) {
 	app.locals.facebookAppId = config.facebook.clientID;
 	app.locals.jsFiles = config.getJavaScriptAssets();
 	app.locals.cssFiles = config.getCSSAssets();
+
+	//app.use(/^\/\?_escaped_fragment_=(.*)/i, function(req, res, next){
+	app.use(function(req, res, next){
+		var query = req.query["_escaped_fragment_"];
+		if(query && query.length > 0){
+			console.log("Query: "+query);
+
+			request('http://localhost:8888'+query, function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					res.send(body) // Print the google web page.
+				}
+			});
+		}else{
+			next()
+		}
+
+	})
 
 	// Passing the request url to environment locals
 	app.use(function(req, res, next) {
@@ -90,6 +101,7 @@ module.exports = function(db) {
 	}));
 	app.use(bodyParser.json());
 	app.use(methodOverride());
+
 
 	// Setting the app router and static folder
 	// Should be at the top to avoid session checking

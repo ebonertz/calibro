@@ -42,13 +42,9 @@ var renderHtml = function(url, cb) {
 };
 
 server.listen(port, function (request, response) {
-    var route = parse_qs(request.url)._escaped_fragment_;
+    console.log('Phantom request.url: '+request.url);
 
-    var url = urlPrefix
-        + request.url.slice(1, request.url.indexOf('?'))
-        + '#!' + decodeURIComponent(route);
-    console.log("Sending "+url)
-    //var url = urlPrefix + request.url;
+    var url = urlPrefix + '/#!' + request.url;
     renderHtml(url, function(html) {
         response.statusCode = 200;
         response.write(html);
