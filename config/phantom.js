@@ -5,11 +5,12 @@ var binPath = phantomjs.path;
 var path = require('path'),
     config = require('./config');
 
+var phantomPort = '8888';
 var childArgs = [
     '--disk-cache=no',
     //path.join(__dirname, 'angular-phantom.js'),
     'angular-phantom.js',
-    '8888',
+    phantomPort,
     config.serverPath,
     //'some other argument (passed to phantomjs script)'
 ]
@@ -19,7 +20,7 @@ var spawn = require('child_process').spawn;
 module.exports = function(){
     var child = spawn(binPath, childArgs);
 
-    console.log("Starting up Phantom.js")
+    console.log("Starting up Phantom.js on port "+phantomPort+" pointing to "+config.serverPath)
 
     child.stdout.on('data', function(data) {
         console.log(data.toString());

@@ -1,8 +1,8 @@
 'use strict';
 
 // Setting up route
-angular.module('core').config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
-	function($stateProvider, $urlRouterProvider, $locationProvider) {
+angular.module('core').config(['$stateProvider', '$urlRouterProvider',
+	function($stateProvider, $urlRouterProvider) {
 		// Redirect to home view when route not found
 		if(window.location.search && window.location.search.match(/\?_escaped_fragment_/i)){
 			// Bot crawling website

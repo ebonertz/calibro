@@ -61,18 +61,7 @@
         <section class="meta">
           <div class="social-block">
             <span>Tell Friends</span>
-            <a facebook class="facebookShare" data-url='http://uskk7d36f0e2.sikian.koding.io/#!/products/ray-ban-justin-rb' data-shares='shares'>{{ shares }}</a>
-            <!--<div id="fb-root"></div>-->
-            <!--<script type="text/javascript">-->
-              <!--(function(d, s, id) {-->
-                <!--var js, fjs = d.getElementsByTagName(s)[0];-->
-                <!--if (d.getElementById(id)) return;-->
-                <!--js = d.createElement(s); js.id = id;-->
-                <!--js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";-->
-                <!--fjs.parentNode.insertBefore(js, fjs);-->
-              <!--}(document, 'script', 'facebook-jssdk'));-->
-            <!--</script>-->
-            <!--<div class="fb-share-button social-share" data-href="http://localhost:3000/?_escaped_fragment_=/products/ray-ban-justin-rb" data-layout="icon" id="facebook"></div>-->
+            <a facebook-feed-share class="facebookShare" data-url='http://local.focali.com/#!/products/ray-ban-justin-rb' data-name="Focali Optics - {{product.name | locale}}" data-picture="{{currentVariant.images[0]['url']}}" data-shares='shares' data-description="{{currentVariant.description}}">{{ shares }}</a>
             <a class="social-share" href="#" onclick="#" id="facebook"></a>
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
             <a class="social-share" href="#" onclick="#" id="twitter"></a>
