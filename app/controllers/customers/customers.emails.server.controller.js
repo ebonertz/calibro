@@ -34,12 +34,19 @@ exports.subscribe = function (req, res) {
 	var user = req.user;
 	var list = req.params.listName;
 
-	if(!user || !list)
-		return res.status(400)
+	if(!list)
+		return res.status(400);
 
-	var email = user.email
-	var firstName = user.firstName
-	var lastName = user.lastName
+	var email;
+	if(req.body.email)
+		email = req.body.email
+	else if(user['email'])
+		email = user.email
+	else
+		return res.status(400);
+
+	//var firstName = user['firstName']
+	//var lastName = user['lastName']
 	MailchimpService.subscribe(email, list, function(err, result){
 		if(err){
 	  	return res.status(400).send(err);

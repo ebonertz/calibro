@@ -1,4 +1,4 @@
-<div id="newsletter-wrapper">
+<div id="newsletter-wrapper" ng-controller="FooterController">
     <div class="content-wrapper">
         <section id="footer-newsletter">
             <div class="newsletter">
@@ -7,14 +7,21 @@
                 <p>Stay stylishly up-to-date with the latest news, hottest trends and new arrivals direct to your
                     inbox.</p>
 
-                <form action="//localhost.us11.list-manage.com/subscribe/post?u=32c60b976811b3cb878cd5a76&amp;id=363d286358" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                <!-- <form action="#" id="newsletter-form"> -->
+                <form data-ng-submit="subscribeToNewsletter()" class="validate" id="newsletter-form" novalidate>
                     <div class="nl-wrapper mc-field-group">
-                        <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Enter your email address"/>
+                        <input type="email" name="email" ng-model="newsletter.email" class="required email"  placeholder="Enter your email address"/>
                         <button type="submit"><img src="/design/images/footer/newsletter-button.png"/></button>
-                        <div style="position: absolute; left: -5000px;"><input type="text" name="b_32c60b976811b3cb878cd5a76_363d286358" tabindex="-1" value=""></div>
                     </div>
                 </form>
+
+                <!--<form action="//localhost.us11.list-manage.com/subscribe/post?u=32c60b976811b3cb878cd5a76&amp;id=363d286358" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>-->
+                <!--&lt;!&ndash; <form action="#" id="newsletter-form"> &ndash;&gt;-->
+                    <!--<div class="nl-wrapper mc-field-group">-->
+                        <!--<input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Enter your email address"/>-->
+                        <!--<button type="submit"><img src="/design/images/footer/newsletter-button.png"/></button>-->
+                        <!--<div style="position: absolute; left: -5000px;"><input type="text" name="b_32c60b976811b3cb878cd5a76_363d286358" tabindex="-1" value=""></div>-->
+                    <!--</div>-->
+                <!--</form>-->
             </div>
         </section>
     </div>

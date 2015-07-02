@@ -146,7 +146,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			$http.get('/issubscribed/'+list).success(function(result){
 				$scope[list+"Subscription"] = (result.toLowerCase() === 'true')
 			})
-		}
+		};
 
 		$scope.updateSubscription = function(list){
 			// TODO prevent abuse
@@ -166,7 +166,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				$scope.error = e.error
 				$scope[list+"Subscription"] = false;
 			})
-		}
+		};
 
 		/*
 		 * Order History
