@@ -54,12 +54,12 @@ angular.module('products').filter('facets', function(){
         if(!input)
             return 'N/A'
         else {
-            if (input.toString() == "true") return "Yes"
-            if (input.toString() == "false") return "No"
+            if (input.toString() == "true") return "Yes";
+            if (input.toString() == "false") return "No";
             return input.charAt(0).toUpperCase() + input.slice(1);
         }
     }
-})
+});
 
 // Should get the enum locale'd labels, that's what they're for
 var terms = {

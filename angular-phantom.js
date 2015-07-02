@@ -35,7 +35,7 @@ var renderHtml = function(url, cb) {
         page.evaluate(function() {
             setTimeout(function() {
                 window.callPhantom();
-            }, 5000);
+            }, 10000);
         });
     };
     page.open(url);

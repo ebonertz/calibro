@@ -1,5 +1,5 @@
 <hr class="nav-divider"/>
-<div ng-controller="ProductsController" data-ng-init="view()" bindonce="product">
+<div ng-controller="ProductsController" data-ng-init="view()" bindonce="product" itemscope itemtype="http://schema.org/Product">
   <div class="content-wrapper">
     <section id="breadcrumbs">
       <div class="breadcrumb">
@@ -60,12 +60,12 @@
         </div>
         <section class="meta">
           <div class="social-block">
+            <script src="http://platform.twitter.com/widgets.js"></script>
             <span>Tell Friends</span>
-            <a facebook-feed-share class="facebookShare" data-url='http://local.focali.com/#!/products/ray-ban-justin-rb' data-name="Focali Optics - {{product.name | locale}}" data-picture="{{currentVariant.images[0]['url']}}" data-shares='shares' data-description="{{currentVariant.description}}">{{ shares }}</a>
-            <a class="social-share" href="#" onclick="#" id="facebook"></a>
+            <a facebook-feed-share class="social-share" id="facebook" data-url='{{shareUrl}}' data-name="{{product.name | locale}}" data-picture="{{currentVariant.images[0]['url']}}" data-caption="Focali Optics - {{(breadcrumbs.sub_category ? breadcrumbs.sub_category.name : breadcrumbs.category.name) | label}}" data-description="{{product.description | locale}}"></a>
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
-            <a class="social-share" href="#" onclick="#" id="twitter"></a>
-              <div gplus class="g-plus" data-size="tall" data-annotation="bubble" data-href='http://uskk7d36f0e2.sikian.koding.io:3000/#!/products/ray-ban-justin-rb' data-action='share'></div>
+            <div gplus class="g-plus" data-size="tall" data-annotation="bubble" data-href={{shareUrl}' data-action='share'></div>
+            <a class="social-share" id="twitter" bo-href="tweetUrl"></a>
           </div>
         </section>
       </div>

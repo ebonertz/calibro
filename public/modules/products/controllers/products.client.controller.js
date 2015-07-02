@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService',
-  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'SocialShareService',
+  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, SocialShareService) {
     $scope.authentication = Authentication;
     $scope.$location = $location;
 
@@ -303,6 +303,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             url: ("/#!/"+$scope.product.masterVariant.attr.gender.key+"/"+$scope.breadcrumbs.category).toLowerCase()
           }
         }
+
+        $scope.shareUrl = SocialShareService.shareLink();
+        $scope.tweetUrl = SocialShareService.twitterLink($scope.product.name.en + ":");
 
         //$scope.variantImages = flattenImages($scope.product.variants)
 
