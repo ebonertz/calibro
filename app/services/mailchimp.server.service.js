@@ -25,14 +25,14 @@ exports.isSubscribed = function(email, list, callback){
 }
 
 exports.subscribe = function(email, list, callback){
-	MailchimpClient.getClient().lists.subscribe(
-		{
-			"id": MailchimpClient.lists[list],
-			"email": {
-				"email": email
-			},
-			"update_existing": true,
+	var payload =	{
+		"id": MailchimpClient.lists[list],
+		"email": {
+			"email": email
 		},
+		"update_existing": true,
+	}
+	MailchimpClient.getClient().lists.subscribe(payload,
 		function(result){
 			callback(null, result)
 		},
