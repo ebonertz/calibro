@@ -19,3 +19,11 @@ exports.get = function (req, res) {
     });
 
 };
+
+exports.relay = function (req, res) {
+    console.log('Query');
+    console.log(req.query);
+    console.log('Body');
+    console.log(req.body);
+    return res.sendStatus(200);
+};

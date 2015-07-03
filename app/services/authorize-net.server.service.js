@@ -3,8 +3,8 @@ var CryptoJS = require("crypto-js"),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
     CommonService = require('./sphere/sphere.commons.server.service.js');
 
-var apiLoginID = '78qH88Btv',
-    transactionKey = '85k34Y4947T4pMkf';
+var apiLoginID = config.authorizenet.apiLoginID,
+    transactionKey = config.authorizenet.transactionKey;
 
 exports.get = function (amount, callback) {
 
@@ -56,7 +56,57 @@ exports.get = function (amount, callback) {
             x_fp_hash: hash
         }
 
+        console.log("--------------------");
+
+        console.log(returnObj);
+
         callback(null, returnObj)
+
+    });
+}
+
+
+exports.relay = function (receipt, callback) {
+
+    var object = {};
+
+    var order = {
+        id: receipt.cartId, // TODO
+        version: receipt.version // TODO
+    };
+
+    exports.create(order, function (orderCreated) {
+
+        // Save info of Cart Payment in custom objects. Just in case we need them later.
+        var newCustomObject = {
+            container: 'checkoutInfo',
+            key: orderCreated.id,
+            value: receipt
+        };
+
+        CommonService.create('customObjects', newCustomObject);
+
+        /*
+         1 This transaction has been approved.
+         2 This transaction has been declined.
+         3 There has been an error processing this transaction.
+         4 This transaction is being held for review.
+         */
+
+        if (receipt.x_response_code == 1) {
+            exports.changePaymentState(orderCreated.id, {paymentState: 'Paid'}, function (err, resultOrder) {
+
+                if (err) {
+                    callback(err, null);
+                    return;
+                } else {
+                    callback(null, resultOrder);
+                }
+
+            });
+        } else {
+            callback(new Error('Error in Authorize.net payment process.'), null);
+        }
 
     });
 }

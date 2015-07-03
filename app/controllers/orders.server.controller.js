@@ -20,6 +20,8 @@ exports.create = function (req, res) {
     });
 };
 
+/*
+
 exports.payOrder = function (req, res) {
     var orderId = req.param('orderId'),
         payload = req.body;
@@ -41,3 +43,5 @@ exports.payOrder = function (req, res) {
         }
     });
 };
+
+*/

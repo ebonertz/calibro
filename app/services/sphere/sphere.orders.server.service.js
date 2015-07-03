@@ -10,12 +10,12 @@ var actions = {
 
 exports.create = function (object, callback) {
     CommonService.create(entity, object, function (err, orderCreated) {
-        if(err) {
+        if (err) {
             callback(err, null);
         } else {
 
             CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
-                if(!err && customer != null && customer.email != null)
+                if (!err && customer != null && customer.email != null)
                     MandrillService.orderCreated(customer.email, orderCreated.id, config.serverPath + '/#!/orders/' + orderCreated.id);
             });
 
@@ -32,40 +32,4 @@ exports.changePaymentState = function (orderId, payload, callback) {
     CommonService.update(entity, orderId, [payload], function (err, result) {
         callback(err, result);
     });
-}
-
-exports.payOrder = function (orderId, receipt, callback) {
-
-    // Save info of Cart Payment in custom objects. Just in case we need them later.
-    var newCustomObject = {
-        container: 'checkoutInfo',
-        key: orderId,
-        value: receipt
-    };
-
-    CommonService.create('customObjects', newCustomObject);
-
-    /*
-     1 This transaction has been approved.
-     2 This transaction has been declined.
-     3 There has been an error processing this transaction.
-     4 This transaction is being held for review.
-     */
-
-    if (receipt.x_response_code == 1) {
-        exports.changePaymentState(orderId, {paymentState: 'Paid'}, function (err, resultOrder) {
-
-            if (err) {
-                callback(err, null);
-                return;
-            } else {
-                callback(null, resultOrder);
-            }
-
-        });
-    } else {
-        callback(new Error('Error in Authorize.net payment process.'), null);
-    }
-
-
 }

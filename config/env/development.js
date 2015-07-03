@@ -87,9 +87,11 @@ module.exports = {
         }
     },
     authorizenet: {
-        //timeCorrection: 10773 // Matias
+        apiLoginID: '78qH88Btv',
+        transactionKey: '85k34Y4947T4pMkf',
+        timeCorrection: 10773 // Matias
         // timeCorrection: 14373 // Luciano
-        timeCorrection: -7288  // Sebas
+        //timeCorrection: -7288  // Sebas
     },
     shipstation: {
         key: 'd9d40094ab3347db928e16f1199939ac',
