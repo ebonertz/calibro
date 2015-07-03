@@ -25,5 +25,6 @@ exports.relay = function (req, res) {
     console.log(req.query);
     console.log('Body');
     console.log(req.body);
-    return res.sendStatus(200);
+    return res.render('authorize-net-scripts/success');
+    //return res.sendStatus(200);
 };
