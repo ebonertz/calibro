@@ -26,8 +26,10 @@ angular.module('misc').service('SocialShareService', ['$location',
         }
 
         this.shareLink = function(){
-            return "http://uskk7d36f0e2.sikian.koding.io:3000/#!/"+$location.path()
-            return $location.absUrl();
+            var url = '//'+$location.host()
+            if($location)
+            return "http://uskk7d36f0e2.sikian.koding.io:3000/#!"+$location.path();
+            //return $location.absUrl();
         }
     }
 ]);

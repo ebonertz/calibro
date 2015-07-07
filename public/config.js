@@ -18,6 +18,11 @@ var ApplicationConfiguration = (function() {
 	return {
 		applicationModuleName: applicationModuleName,
 		applicationModuleVendorDependencies: applicationModuleVendorDependencies,
-		registerModule: registerModule
+		registerModule: registerModule,
+
+		defaults: {
+			currency: 'USD',
+			locale: 'en'
+		}
 	};
 })();

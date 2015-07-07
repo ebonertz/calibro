@@ -1,0 +1,10 @@
+{
+  "key": "nonprescription",
+  "roles": ["ProductDistribution"],
+  "name": {
+  	"en": "Non-Prescription"
+  },
+  "description": {
+  	"en": "Non-prescription price"
+  }
+}

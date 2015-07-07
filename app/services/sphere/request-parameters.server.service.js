@@ -32,7 +32,7 @@ var RequestParameters = function(query){
         } else if (ascending == "DESC"){
           ascending = false
         } else {
-          console.warn('No direction for sort, received '+ascending)
+          //console.warn('No direction for sort, received '+ascending)
           continue;
         }
 
@@ -67,39 +67,39 @@ var RequestParameters = function(query){
   // Maybe extend Sphere queries insted of using this object
   this.addFilters = function(sphereQuery){
     _.forEach(requestparams._filters, function(valueArray, key){
-      console.log('.filter('+requestparams._toSphereString(key, valueArray)+')')
+      //console.log('.filter('+requestparams._toSphereString(key, valueArray)+')')
       sphereQuery = sphereQuery.filter(requestparams._toSphereString(key, valueArray))
     })
     return sphereQuery
   }
   this.addByQueries = function(sphereQuery){
     _.forEach(requestparams._byQueries, function(valueArray, key){
-      console.log('.filterByQuery('+requestparams._toSphereString(key, valueArray)+')')
+      //console.log('.filterByQuery('+requestparams._toSphereString(key, valueArray)+')')
       sphereQuery = sphereQuery.filterByQuery(requestparams._toSphereString(key, valueArray))
     })
     return sphereQuery
   }
   this.addFacets = function(sphereQuery){
     _.forEach(requestparams._facets, function(value){
-      console.log('.facet('+requestparams._toSphereString(value)+')')
+      //console.log('.facet('+requestparams._toSphereString(value)+')')
       sphereQuery = sphereQuery.facet(requestparams._toSphereString(value))
     })
     return sphereQuery
   }
   this.addSorts = function(sphereQuery){
     _.forEach(requestparams._sorts, function(value, key){
-      console.log('.sort('+sphereKeys["sort"+key]+','+value.toString()+')')
+      //console.log('.sort('+sphereKeys["sort"+key]+','+value.toString()+')')
       sphereQuery = sphereQuery.sort(sphereKeys["sort"+key], value)
     })
     return sphereQuery
   }
   this.addPaging = function(sphereQuery){
     if(requestparams._page.num){
-      console.log('.page('+requestparams._page.num+')')
+      //console.log('.page('+requestparams._page.num+')')
       sphereQuery = sphereQuery.page(requestparams._page.num)
     }
     if(requestparams._page.size){
-      console.log('.perPage('+requestparams._page.size+')')
+      //console.log('.perPage('+requestparams._page.size+')')
       sphereQuery = sphereQuery.perPage(requestparams._page.size)
     }
 

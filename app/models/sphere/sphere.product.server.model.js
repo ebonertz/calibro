@@ -1,6 +1,7 @@
 "use strict";
 
-var CategoriesService = require('../../services/sphere/sphere.categories.server.service');
+var CategoriesService = require('../../services/sphere/sphere.categories.server.service'),
+    ChannelsService = require('../../services/sphere/sphere.channels.server.service');
 
 var lang = 'en';
 
@@ -35,7 +36,7 @@ var Product = function(options){
   }
 
   this.masterVariant = new Variant(options.masterVariant)
-}
+};
 
 var Variant = function(options){
   this.id = options.id;
@@ -53,12 +54,21 @@ var Variant = function(options){
     }
   }
 
-  this.prices = {}
+  //this.prices = {};
+  //for(var i = 0; i < options.prices.length; i++){
+  //  var price = options.prices[i];
+  //  var name = (price.country ? price.value.currencyCode+'-'+price.country : price.value.currencyCode);
+  //  this.prices[name] = price.value;
+  //}
+
+  this.prices = []
   for(var i = 0; i < options.prices.length; i++){
-    var price = options.prices[i]
-    var name = (price.country ? price.value.currencyCode+'-'+price.country : price.value.currencyCode);
-    this.prices[name] = price.value;
+    var price = options.prices[i];
+    var channel =  ChannelsService.getById(price.channel.id);
+    price.channel = channel;
+    this.prices.push(price);
   }
+
 
   // BasePrices has been moved to root above
   if(options.basePrices){
@@ -71,7 +81,7 @@ var Variant = function(options){
   }
 
   return this;
-}
+};
 
-module.exports.Variant = Variant
-module.exports.Product = Product
+module.exports.Variant = Variant;
+module.exports.Product = Product;

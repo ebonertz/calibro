@@ -1,4 +1,5 @@
-var CartService = require('../services/sphere/sphere.carts.server.service.js');
+var CartService = require('../services/sphere/sphere.carts.server.service.js'),
+    ChannelsService = require('../services/sphere/sphere.channels.server.service.js');
 
 exports.byCustomer = function (req, res) {
     var customerId = req.param('customerId');
@@ -21,6 +22,13 @@ exports.addLineItem = function (req, res) {
     var cartId = req.param('cartId'),
         version = parseInt(req.param('version')),
         payload = req.body;
+
+    if(payload.distributionChannel){
+        payload.distributionChannel = {
+            typeId: "channel",
+            id: ChannelsService.getByKey(payload.distributionChannel).id
+        }
+    }
 
     CartService.addLineItem(cartId, version, payload, function (err, result) {
         if (err) {

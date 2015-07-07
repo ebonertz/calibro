@@ -11,7 +11,7 @@
       <span class="amount" bo-text="product.displayVariant.basePrices[currency] | spherePrice"></span>
     </del>
     <ins>
-      <span class="amount sale-price" bo-text="product.displayVariant.prices[currency] | spherePrice"></span>
+      <span class="amount sale-price" bo-text="product.displayVariant.prices | currency | channel:'nonprescription' | spherePrice"></span>
     </ins>
   </span>
 </div>

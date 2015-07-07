@@ -69,12 +69,13 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             });
         }
 
-        this.addToCart = function (productId, variantId, quantity) {
+        this.addToCart = function (productId, variantId, channel, quantity) {
 
             var payload = {
                 productId: productId,
                 variantId: variantId,
-                quantity: quantity
+                quantity: quantity,
+                distributionChannel: channel
             }
 
             $rootScope.loading = true;

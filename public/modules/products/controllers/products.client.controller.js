@@ -9,6 +9,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
     $scope.currency = 'USD';
+    $scope.error = {}
     
     $scope.$utils = ProductUtils
     $scope.facetConfig = {
@@ -276,7 +277,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     }
 
     $scope.addToCart = function () {
-      CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.quantity );
+      if(!$scope.distributionChannel){
+        $scope.error.distributionChannel = "Please select an option";
+      }else {
+        $scope.error.distributionChannel = null;
+        CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.distributionChannel, $scope.quantity);
+      }
     };
 
     $scope.view = function(id){
@@ -293,7 +299,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.selectedColor = $scope.currentVariant.attr.color[$scope.lang];
 
         // Breadcrumbs
-        $scope.breadcrumbs = {}
+        $scope.breadcrumbs = {};
         $scope.breadcrumbs.category = $scope.product.categories[0].slug;
 
         if($scope.product.masterVariant.attr.gender){

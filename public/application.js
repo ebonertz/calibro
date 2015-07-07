@@ -23,7 +23,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	});
 
 	$FB.init('841888042555433');
-});
+}).constant('appDefaults', ApplicationConfiguration.defaults);
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {

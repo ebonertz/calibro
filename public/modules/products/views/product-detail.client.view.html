@@ -34,11 +34,18 @@
         <span class="on-sale-badge" ng-if="currentVariant.basePrices[currency]">Sale</span>
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
-          <del>
-            <span class="amount" bo-if="currentVariant.basePrices[currency]">{{currentVariant.basePrices[currency] | spherePrice}}</span>
+          <del bo-if="currentVariant.basePrices[currency]">
+            <span class="amount" >{{currentVariant.basePrices[currency] | spherePrice}}</span>
           </del>
           <ins>
-            <span data-ng-bind="currentVariant.prices[currency] | spherePrice"></span>
+              <div class="notice outline red small" ng-show="error.distributionChannel" ng-bind="error.distributionChannel"></div>
+              <div ng-repeat="price in currentVariant.prices | currency track by price.id" >
+                <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="price.channel.key" name="channel" id="channel-{{price.channel.key}}"></input>
+                <label for="channel-{{price.channel.key}}" class="channel-price">
+                  <span bo-text="price.channel.name.en"></span>
+                  <span bo-text="price | spherePrice" style="float:right"></span>
+                </label>
+              </div>
           </ins>
         </div>
       </span>
@@ -64,7 +71,7 @@
             <span>Tell Friends</span>
             <a facebook-feed-share class="social-share" id="facebook" data-url='{{shareUrl}}' data-name="{{product.name | locale}}" data-picture="{{currentVariant.images[0]['url']}}" data-caption="Focali Optics - {{(breadcrumbs.sub_category ? breadcrumbs.sub_category.name : breadcrumbs.category.name) | label}}" data-description="{{product.description | locale}}"></a>
             <a class="social-share" href="#" onclick="#" id="google-plus"></a>
-            <div gplus class="g-plus" data-size="tall" data-annotation="bubble" data-href={{shareUrl}' data-action='share'></div>
+            <div gplus class="g-plus" data-size="tall" data-annotation="bubble" data-href='{{shareUrl}}' data-action='share'></div>
             <a class="social-share" id="twitter" bo-href="tweetUrl"></a>
           </div>
         </section>

@@ -62,4 +62,5 @@ var fetchCategories = function(){
 }
 
 // Run once on startup
+console.log("Initializing Sphere Categories");
 fetchCategories();

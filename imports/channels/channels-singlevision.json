@@ -1,0 +1,10 @@
+{
+	"key": "singlevision",
+	"roles": ["ProductDistribution"],
+	"name": {
+		"en": "Single Vision"
+	},
+	"description": {
+		"en": "Single vision price"
+	}
+}

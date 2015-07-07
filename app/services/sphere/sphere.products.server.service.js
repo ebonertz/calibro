@@ -18,10 +18,10 @@ exports.list = function(callback) {
 
 exports.searchByCategory = function(categoryId, requestParams, callback){
   var fetcher = SphereClient.getClient().productProjections
-    .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id') // Default byCategory
+    .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id'); // Default byCategory
 
-  console.log(".filterByQuery('categories.id:\""+categoryId+"\"')")
-  console.log(".facet('categories.id')")
+  //console.log(".filterByQuery('categories.id:\""+categoryId+"\"')")
+  //console.log(".facet('categories.id')")
 
   // Query parameters
   fetcher = requestParams.addByQueries(fetcher);
