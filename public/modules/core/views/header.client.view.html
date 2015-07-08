@@ -64,9 +64,14 @@
                         <tbody>
                         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-preview">
                         	<td><a ng-click="removeFromCart(lineItem)" class="remove-product remove-from-cart" href=""></a></td>
-                            <td class="product-name">{{lineItem.name.en}}</td>
+                            <td class="product-name">{{lineItem.name.en}}
+                                <label class="no-margin">{{lineItem.distributionChannel.name.en}}<label>
+                            </td>
                             <td class="cp-qty-td">{{lineItem.quantity}}</td>
-                            <td class="cp-price-td">{{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}}{{lineItem.price.value.centAmount * lineItem.quantity / 100}}</td>
+                            <td class="cp-price-td">
+                                <span ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></span>
+                                <span ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -77,7 +82,7 @@
                     <div class="top-cart-total">
                     	<span>
                     	<!--I'm putting this same function from the cart, but the total doesn't seem to be correct-->
-                    	{{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + cart.totalPrice.centAmount / 100 : '-'}}</span>
+                    	{{cart.totalPrice ? (cart.totalPrice | spherePrice) : '-'}}</span>
                     </div>
                 </div>
 			</span>

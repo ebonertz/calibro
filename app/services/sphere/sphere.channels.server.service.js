@@ -44,6 +44,9 @@ var fetchChannels = function(){
 
             for(var i = 0; i < channels.length; i++){
                 var chan = channels[i];
+                delete chan.createdAt;
+                delete chan.lastModifiedAt;
+
                 chanById[chan.id] = chan;
                 chanByKey[chan.key] = chan;
             }

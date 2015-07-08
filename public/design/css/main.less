@@ -1690,17 +1690,19 @@ table#cart{
 		padding: 40px 0;
 	}
 	.product-image{
-		width: 50%;
+		width: 110px;
 		img{
-			max-width: 30%;
+			max-width: 110px;
 		}
-		.product-name{
-			display: inline-block;
-			max-width: 68%;
-			padding-left: 30px;
-			text-transform: uppercase;
-			vertical-align: middle;
-		}
+	}
+	.product-name{
+	  padding-left: 30px;
+	  text-transform: uppercase;
+	  text-align: left;
+
+	  .name {
+		font-weight: bold;
+	  }
 	}
 	.product-price{
 		width: 15%;
@@ -1756,6 +1758,9 @@ table#cart{
 		b{
 			font-weight: 600;
 		}
+	}
+  	.product-quantity{
+	  text-align: center;
 	}
 	.concept{
 		width: 70%;
@@ -2164,6 +2169,9 @@ table#cart{
 }
 .no-margin{
 	margin: 0px !important;
+}
+.no-padding{
+  	padding: 0px !important;
 }
 #add-card-checkout {
 	.form-field-half{

@@ -10,13 +10,13 @@
 			</span></span>
         </div>
     </section>
-    <section id="cart">
+    <section id="cart" bindonce="cart">
         <div class="cart-alerts not-showing"></div>
         <div id="cart-contents">
             <h1 class="page-title">Your Shopping Cart</h1>
             <table id="cart">
                 <thead>
-                <th>Product</th>
+                <th colspan="2">Product</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
@@ -26,10 +26,14 @@
                 <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
                     <td class="product-image">
                         <img ng-src="{{lineItem.variant.images[0].url}}"/>
-                        <span class="product-name">{{lineItem.name.en}}</span>
+                    </td>
+                    <td class="product-name">
+                        <div class="name">{{lineItem.name.en}}</div>
+                        <div class="lens-type">{{lineItem.distributionChannel.name | locale}}</div>
                     </td>
                     <td class="product-price">
-                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount / 100}}
+                        {{lineItem.price | spherePrice}}
+                        <div ng-if="lineItem.discountedPrice" style="font-size: 90%">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | spherePrice}}</div>
                     </td>
                     <td class="edit-quantity">
                         <button ng-click="decreaseLineItemQuantity(lineItem)" class="op" id="minus">&#45;</button>
@@ -38,7 +42,9 @@
                     </td>
                     <td class="item-total">
                         <div class="item-cart-price">
-                            {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount * lineItem.quantity / 100}} <span ng-if="lineItem.discountedPrice" class="discount-text">(-{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>
+                            <span ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></span>
+                            <span ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></span>
+                            <!--<span ng-if="lineItem.discountedPrice" class="discount-text">(-{{lineItem.discountedPrice | priceDiscount:lineItem.discountedPrice | spherePrice }}{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>-->
                         </div>
                     </td>
                     <td class="remove-item">

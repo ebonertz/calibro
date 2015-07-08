@@ -6,44 +6,46 @@
         <span ng-if="(cart.lineItems == null || cart.lineItems.length == 0)">(No products yet)</span>
         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
             <td class="product-name">
-                {{lineItem.name.en}} <span class="qty">x{{lineItem.quantity}}</span>
+                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name.en}}</label>
+            <td class="product-quantity">
+                x{{lineItem.quantity}}
             </td>
             <td class="amount">
-                {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
-                lineItem.quantity / 100}}
+                <span ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></span>
+                <span ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></span>
             </td>
         </tr>
         <tr class="subtotal">
             <td class="concept">
                 Taxes <span style="font-size: 10px;">(included)</span>
             </td>
+            <td></td>
             <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions" id="sub-amount" class="amount">
-                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
+                {{taxPortion.amount | spherePrice}}
             </td>
         </tr>
         <tr class="subtotal">
             <td class="concept">
                 Subtotal
             </td>
-            <td id="sub-amount" class="amount">
-                {{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + (cart.totalPrice.centAmount - cart.shippingInfo.shippingRate.price.centAmount) / 100 : '-'}}
+            <td id="sub-amount" class="amount" colspan="2">
+                {{cart.totalPrice | spherePrice}}
             </td>
         </tr>
         <tr class="shipping">
             <td class="concept">
                 Shipping
             </td>
-            <td ng-if="cart.shippingInfo" id="shipping-cost" class="amount">
-                {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
-                {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+            <td ng-if="cart.shippingInfo" id="shipping-cost" class="amount" colspan="2">
+                {{cart.shippingInfo.shippingRate.price | spherePrice}}
             </td>
-            <td ng-if="!cart.shippingInfo" id="shipping-cost" class="amount">
+            <td ng-if="!cart.shippingInfo" id="shipping-cost" class="amount" colspan="2">
                 -
             </td>
         </tr>
         <tr ng-if="cart.discountCodes != null && cart.discountCodes.length > 0" class="shipping">
             <td class="concept">
-                Discount included
+                Discount <span style="font-size: 10px;">(included)</span>
             </td>
             <td class="amount">
             </td>
@@ -52,8 +54,8 @@
             <td class="concept">
                 <b>Order Total</b>
             </td>
-            <td id="price-total" class="amount">
-                {{cart.totalPrice ? $utils.getCurrencySimbol(cart.totalPrice.currencyCode) + ' ' + cart.totalPrice.centAmount / 100 : '-'}}
+            <td id="price-total" class="amount" colspan="2">
+                {{cart.totalPrice ? (cart.totalPrice | spherePrice) : '-'}}
             </td>
         </tr>
     </table>

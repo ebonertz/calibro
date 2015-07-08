@@ -1,5 +1,9 @@
 var CartService = require('../services/sphere/sphere.carts.server.service.js'),
-    ChannelsService = require('../services/sphere/sphere.channels.server.service.js');
+    ChannelService = require('../services/sphere/sphere.channels.server.service.js'),
+    CommonService = require('../services/sphere/sphere.commons.server.service.js'),
+    Cart = require('../models/sphere/sphere.cart.server.model.js');
+
+var entity = 'carts';
 
 exports.byCustomer = function (req, res) {
     var customerId = req.param('customerId');
@@ -18,6 +22,19 @@ exports.byCustomer = function (req, res) {
     });
 };
 
+exports.byId = function(req, res){
+    var id = req.param('id');
+
+    CommonService.byId(entity, id, function(err, result){
+        if (err) {
+            return res.status(400).send(err.body.message);
+        } else {
+            var cart = new Cart(result);
+            res.json(cart);
+        }
+    })
+};
+
 exports.addLineItem = function (req, res) {
     var cartId = req.param('cartId'),
         version = parseInt(req.param('version')),
@@ -26,7 +43,7 @@ exports.addLineItem = function (req, res) {
     if(payload.distributionChannel){
         payload.distributionChannel = {
             typeId: "channel",
-            id: ChannelsService.getByKey(payload.distributionChannel).id
+            id: ChannelService.getByKey(payload.distributionChannel).id
         }
     }
 
@@ -34,7 +51,8 @@ exports.addLineItem = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };

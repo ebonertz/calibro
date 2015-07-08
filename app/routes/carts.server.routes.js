@@ -14,7 +14,7 @@ module.exports = function (app) {
         .delete(commons.deleteAll.bind({entity: entity}))
 
     app.route('/carts/:id')
-        .get(commons.byId.bind({entity: entity}))
+        .get(carts.byId)
         .delete(commons.delete.bind({entity: entity}))
 
     app.route('/carts/byCustomer/:customerId')
