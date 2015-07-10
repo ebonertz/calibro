@@ -94,6 +94,13 @@
                             <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
                         </div>
                     </div>
+                    <div ng-if="!phasePrescription && showPrescriptionSummary">
+                        <h4>Prescription Summary</h4>
+                        <span class="summary"><b>Prescription type:</b></span> <span class="summary" ng-bind="prescription.type"></span>
+                        <div ng-if="prescription.type == 'reader'"><span class="summary"><b>Lens Strength:</b></span> +{{prescription.strength}}</span></div>
+                        <div ng-if="prescription.type == 'prescription'"><span class="summary"><b>Prescription Details:</b> {{prescription.method | prescriptionName}}</span></div>
+                        <br />
+                    </div>
 
                     <!-- PHASE A -->
                     <div ng-if="phaseA">

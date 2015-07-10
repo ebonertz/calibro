@@ -49,13 +49,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         };
 
         $scope.showPhaseA();
-        //$scope.showPrescriptionSelection = false;
+        $scope.showPrescriptionSummary = false;
 
         var init = function () {
             if ($rootScope.cart != null) {
                 if($scope.cartPrescriptionCount() > 0) {
                     $scope.showPhasePrescription();
-                    //$scope.showPrescriptionSelection = true;
+                    $scope.showPrescriptionSummary = true;
                 }
 
                 if ($rootScope.cart.shippingAddress != null) {
@@ -281,6 +281,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.savePrescription = function(type_method, valid){
             $scope.savedPrescription = {}
             var data = {}
+
+            // Fast fix
+            $scope.prescription = $scope.prescription || {}
 
             var save = function(type, method, data, callback){
                 $rootScope.loading = true;
