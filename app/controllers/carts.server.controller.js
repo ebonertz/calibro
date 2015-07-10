@@ -15,7 +15,8 @@ exports.byCustomer = function (req, res) {
             if (result.errors != null && result.errors.length > 0) {
                 return res.sendStatus(400);
             } else {
-                res.json(result);
+                var cart = new Cart(result);
+                res.json(cart);
             }
 
         }

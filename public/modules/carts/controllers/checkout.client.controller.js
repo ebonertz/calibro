@@ -252,10 +252,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $rootScope.loading = true;
             CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function(result) {
                 $rootScope.cart = result;
-                //LoggerServices.success(status ? 'Added high-index lenses' : 'Removed high-index lenses');
-                if(status) LoggerServices.success('Added high-index lenses') // I have the feeling no feedback should be given when no index lenses are selected
+                if(status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
                 $rootScope.loading = false;
-                $scope.showPhaseA();
             }, function(err){
                 $rootScope.loading = false;
                 LoggerServices.error('Could not save, please try again');
@@ -272,8 +270,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }else if($scope.prescription.method == 'calldoctor'){
                         $scope.prescription.calldoctor = $scope.prescription.data;
                         $scope.highindex = true;
+                        $scope.anchorScroll('calldoctor');
                     }else if($scope.prescription.method == 'sendlater'){
                         $scope.highindex = true;
+                        $scope.anchorScroll('lensType');
                     }
                 }
             });
@@ -304,6 +304,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             }
             switch(type_method){
                 case 'reader':
+                    if(!valid) return false
+
                     if($scope.highIndexLine() != null) $scope.selectHighIndex(false);
                     data = {strength: $scope.prescription.strength}
                     save('reader', null, data, function(){

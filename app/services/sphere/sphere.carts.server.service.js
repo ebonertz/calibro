@@ -112,7 +112,7 @@ exports.addDiscountCode = function (cartId, version, payload, callback) {
 exports.addHighIndex = function(cartId, version, payload, callback) {
     var quantity = payload.quantity;
     if(quantity < 1)
-        return res.status(400).send("No lines to apply high-index to.");
+        return callback("No lines to apply high-index to");
 
     var taxCategory = TaxCategoryService.getFirst();
     var payload = {

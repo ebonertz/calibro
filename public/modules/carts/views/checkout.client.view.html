@@ -22,8 +22,8 @@
                         <div id="lensType">
                             <hr />
                             <h6>What kind of glasses do you need?</h6>
-                            <prescription-box header="prescription" size="2" ng-click="highindex = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
-                            <prescription-box header="reader" size="2" ng-click="highindex = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
+                            <prescription-box header="prescription" size="2" ng-click="highindex = false; $parent.proceedCheckout = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
+                            <prescription-box header="reader" size="2" ng-click="highindex = false; $parent.proceedCheckout = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
                         </div>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
                             <br />
@@ -57,10 +57,10 @@
                                     </div>
                                     <div class="form-field-half">
                                         <label>patient date of birth*</label>
-                                        <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}/"/>
+                                        <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/^[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}$/"/>
                                     </div>
                                     <div class="form-field-half">
-                                        <button type="submit" class="btn radius blue">Save</button>
+                                        <button type="submit" class="btn radius blue">Next</button>
                                     </div>
                                 </form>
                             </div>
@@ -76,7 +76,7 @@
                                         <option value="">Select a strength</option>
                                     </select>
                                 </div>
-                                <button type="button" class="btn radius blue inline" ng-click="savePrescription('reader');">Save</button>
+                                <button type="submit" class="btn radius outline green block">Next ></button>
                             </form>
                         </div>
 
@@ -86,6 +86,12 @@
                             <h6>Do you want high-index lenses if necessary?</h6>
                             <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index lenses for an additional $30 if I have a strong prescription.</prescription-box>
                             <prescription-box header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: highIndexLine() == null}">Please do not use high-index lenses with my prescription.</prescription-box>
+                        </div>
+
+                        <div ng-show="highindex">
+                            <br />
+                            <hr />
+                            <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
                         </div>
                     </div>
 
