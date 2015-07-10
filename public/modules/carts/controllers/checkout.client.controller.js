@@ -1,32 +1,63 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription, AuthorizeNetService, ShippingMethodService, $anchorScroll) {
 
+        $scope.anchorScroll = function(where){
+            $location.hash(where);
+            $anchorScroll(where);
+        }
 
+        $scope.showPhasePrescription = function(){
+            $scope.phasePrescription = true;
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.anchorScroll(null);
+        };
         $scope.showPhaseA = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = true;
             $scope.phaseB = false;
             $scope.phaseC = false;
-            $anchorScroll();
-        }
+            $scope.anchorScroll(null);
+        };
         $scope.showPhaseB = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = true;
             $scope.phaseC = false;
-            $anchorScroll();
-        }
+            $scope.anchorScroll(null);
+        };
         $scope.showPhaseC = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = true;
-            $anchorScroll();
-        }
+            $scope.anchorScroll(null);
+        };
+
+        $scope.cartPrescriptionCount = function(){
+            var has = 0;
+            for(var i in $rootScope.cart.lineItems){
+                var line = $rootScope.cart.lineItems[i];
+                if(line.distributionChannel.key != 'nonprescription'){
+                    has+=line.quantity;
+                }
+            }
+            return has;
+        };
 
         $scope.showPhaseA();
+        //$scope.showPrescriptionSelection = false;
 
         var init = function () {
             if ($rootScope.cart != null) {
+                if($scope.cartPrescriptionCount() > 0) {
+                    $scope.showPhasePrescription();
+                    //$scope.showPrescriptionSelection = true;
+                }
+
                 if ($rootScope.cart.shippingAddress != null) {
 
                     if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
@@ -68,12 +99,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             } else {
                 console.log("Cart is still null. Loading delay?");
             }
-        }
+        };
 
         if ($rootScope.cart == null) {
-            setTimeout(function () {
-                init();
-            }, 4000);
+            $rootScope.$watch('cart', function(){init()})
+            //setTimeout(function () {
+            //    init();
+            //}, 2000);
         } else {
             init();
         }
@@ -203,6 +235,111 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.shippingAddress.country;
         };
 
+        $scope.selectHighIndex = function(status){
+            var method = status ? 'addHighIndex' : 'removeHighIndex';
+
+            var highIndexLine = $scope.highIndexLine();
+            var payload = {
+                quantity: $scope.cartPrescriptionCount(),
+                lineId: highIndexLine ? highIndexLine.id : null
+            };
+
+            // Don't remove if there's high-index line
+            if(!highIndexLine && !status){
+                return
+            }
+
+            $rootScope.loading = true;
+            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function(result) {
+                $rootScope.cart = result;
+                //LoggerServices.success(status ? 'Added high-index lenses' : 'Removed high-index lenses');
+                if(status) LoggerServices.success('Added high-index lenses') // I have the feeling no feedback should be given when no index lenses are selected
+                $rootScope.loading = false;
+                $scope.showPhaseA();
+            }, function(err){
+                $rootScope.loading = false;
+                LoggerServices.error('Could not save, please try again');
+                console.log(err)
+            })
+        };
+        $scope.getPrescription = function(prescription){
+            new Prescription({_id: $rootScope.cart.id}).$get().then(function(result){
+                if(result.value) {
+                    console.log(result.value)
+                    $scope.prescription = result.value;
+                    if($scope.prescription.type == 'reader'){
+                        $scope.prescription.strength = $scope.prescription.data.strength;
+                    }else if($scope.prescription.method == 'calldoctor'){
+                        $scope.prescription.calldoctor = $scope.prescription.data;
+                        $scope.highindex = true;
+                    }else if($scope.prescription.method == 'sendlater'){
+                        $scope.highindex = true;
+                    }
+                }
+            });
+        }
+        $scope.savePrescription = function(type_method, valid){
+            $scope.savedPrescription = {}
+            var data = {}
+
+            var save = function(type, method, data, callback){
+                $rootScope.loading = true;
+                var prescription = new Prescription({
+                    _id: $rootScope.cart.id,
+                    type: type,
+                    method: method,
+                    data: data
+                }).$save(function(response){
+                    $rootScope.loading = false;
+                    LoggerServices.success('Prescription saved');
+                    callback(response);
+                }, function (response) {
+                    $scope.error = response.data.message;
+                    $rootScope.loading = false;
+                    LoggerServices.error(response);
+                }, function (error) {
+                    $rootScope.loading = false;
+                    LoggerServices.warning(error);
+                });
+            }
+            switch(type_method){
+                case 'reader':
+                    if($scope.highIndexLine() != null) $scope.selectHighIndex(false);
+                    data = {strength: $scope.prescription.strength}
+                    save('reader', null, data, function(){
+                        $scope.showPhaseA();
+                    });
+
+                    break;
+
+                case 'calldoctor':
+                    if(valid) {
+                        data = $scope.prescription.calldoctor
+                        save('prescription', 'calldoctor', data, function(){
+                            $scope.highindex = true;
+                            $scope.anchorScroll('calldoctor');
+                        });
+                    }
+                    break;
+
+                case 'sendlater':
+                    save('prescription', 'sendlater', null, function(){
+                        $scope.anchorScroll('lensType');
+                        $scope.highindex = true;
+                    })
+                    break;
+            }
+        }
+
+        $scope.highIndexLine = function(){
+            for(var i in $rootScope.cart.customLineItems){
+                var line = $rootScope.cart.customLineItems[i];
+                if(line.slug == 'high-index-lens') {
+                    return line;
+                }
+            }
+            return null
+        };
     }
 ])
 ;

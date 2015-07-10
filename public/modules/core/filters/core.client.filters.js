@@ -14,8 +14,11 @@ angular.module('core').filter('locale', function(appDefaults){
 
 angular.module('core').filter('priceTimes', function(){
     return function(price, times){
+        if(price.value){
+            price = price.value
+        }
         var totalLinePrice = angular.copy(price);
-        totalLinePrice.value.centAmount = totalLinePrice.value.centAmount * times;
+        totalLinePrice.centAmount = totalLinePrice.centAmount * times;
         return totalLinePrice
     }
 })
@@ -31,4 +34,14 @@ angular.module('core').filter('sumDiscounts', function(){
         }
         return {value: totalLineDiscount}
     }
-})
+});
+
+angular.module('core').filter('range', function() {
+    return function(input, min, max) {
+        min = parseInt(min); //Make string input int
+        max = parseInt(max);
+        for (var i=min; i<max; i++)
+            input.push(i);
+        return input;
+    };
+});

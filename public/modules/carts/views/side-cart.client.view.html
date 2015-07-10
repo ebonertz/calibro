@@ -6,7 +6,7 @@
         <span ng-if="(cart.lineItems == null || cart.lineItems.length == 0)">(No products yet)</span>
         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
             <td class="product-name">
-                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name.en}}</label>
+                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name | locale}}</label>
             <td class="product-quantity">
                 x{{lineItem.quantity}}
             </td>
@@ -15,12 +15,22 @@
                 <span ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></span>
             </td>
         </tr>
+        <tr ng-repeat="lineItem in cart.customLineItems track by lineItem.slug" class="product">
+            <td class="product-name">
+                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name | locale}}</label>
+            <td class="product-quantity">
+                x{{lineItem.quantity}}
+            </td>
+            <td class="amount">
+                <span ng-bind="lineItem.money | priceTimes:lineItem.quantity | spherePrice"></span>
+            </td>
+        </tr>
         <tr class="subtotal">
             <td class="concept">
                 Taxes <span style="font-size: 10px;">(included)</span>
             </td>
             <td></td>
-            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions" id="sub-amount" class="amount">
+            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions track by $index" id="sub-amount" class="amount">
                 {{taxPortion.amount | spherePrice}}
             </td>
         </tr>
@@ -47,7 +57,7 @@
             <td class="concept">
                 Discount <span style="font-size: 10px;">(included)</span>
             </td>
-            <td class="amount">
+            <td class="amount" colspan="2">
             </td>
         </tr>
         <tr id="final-order-price">

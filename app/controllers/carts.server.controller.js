@@ -146,6 +146,7 @@ exports.createOrder = function (req, res) {
         version = parseInt(req.param('version')),
         payload = req.body;
 
+    // Create order and any associated notes
     CartService.createOrder(cartId, version, payload, function (err, result) {
         if (err) {
             return res.status(400).send(err.body.message);
@@ -153,4 +154,48 @@ exports.createOrder = function (req, res) {
             res.redirect('/#!/orders/' + result.id)
         }
     });
+};
+
+exports.addHighIndex = function (req, res) {
+    var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
+        payload = req.body;
+
+    var addLine = function(version) {
+        CartService.addHighIndex(cartId, version, req.body, function (err, result) {
+            if (err) {
+                return res.status(400).send(err.body.message);
+            } else {
+                var cart = new Cart(result);
+                res.json(cart);
+            }
+        })
+    };
+
+    // Remove + add if already have the line (can't update quantity)
+    if(payload.lineId){
+        CartService.removeHighIndex(cartId, version, payload.lineId, function(err, result){
+            if(result)
+                addLine(result.version)
+            else
+                return res.status(400)
+        });
+    }else{
+        addLine(version)
+    }
+};
+
+exports.removeHighIndex = function (req, res){
+    var cartId = req.param('cartId'),
+        version = parseInt(req.param('version')),
+        payload = req.body;
+
+    CartService.removeHighIndex(cartId, version, payload.lineId, function (err, result) {
+        if (err) {
+            return res.status(400).send(err.body.message);
+        } else {
+            var cart = new Cart(result);
+            res.json(cart);
+        }
+    })
 };

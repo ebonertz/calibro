@@ -19,5 +19,13 @@ exports.find = function (container, key, callback) {
 
         }
     });
-
 };
+
+exports.create = function(container, key, value, callback){
+    var payload = {
+        container: container,
+        key: key,
+        value: value,
+    };
+    CommonService.create('customObjects', payload, callback);
+}

@@ -206,5 +206,29 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             return deferred.promise;
         }
 
+        this.addHighIndex = function (cartId, version, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/highIndex/' + cartId + '/' + version, payload).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
+        this.removeHighIndex = function (cartId, version, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/removeHighIndex/' + cartId + '/' + version, payload).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
     }
 ]);

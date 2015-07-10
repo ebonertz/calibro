@@ -7,9 +7,10 @@ var CommonService = require('./sphere.commons.server.service.js'),
 var categories = [];
 var chanById = {};
 var chanByKey = {};
+var lastFetchTime;
 
 exports.getByKey = function(key){
-    if(chanByKey.hasOwnProperty(key)){
+    if(chanByKey.hasOwnProperty(key) && stillValidData()){
         return chanByKey[key]
     }else{
         fetchChannels().then(function(){
@@ -23,7 +24,7 @@ exports.getByKey = function(key){
 };
 
 exports.getById = function(id){
-    if(chanById.hasOwnProperty(id)){
+    if(chanById.hasOwnProperty(id) && stillValidData()){
         return chanById[id];
     }else{
         fetchChannels().then(function(){
@@ -36,6 +37,10 @@ exports.getById = function(id){
     }
 };
 
+var stillValidData = function(){
+    var maxHoursDifference = 24;
+    return ((new Date - lastFetchTime)/(1000*60*60) < maxHoursDifference);
+};
 
 var fetchChannels = function(){
     var p = new Promise(function(resolve, reject){
@@ -50,6 +55,8 @@ var fetchChannels = function(){
                 chanById[chan.id] = chan;
                 chanByKey[chan.key] = chan;
             }
+
+            lastFetchTime = new Date()
 
             resolve()
         }).error(function (err) {

@@ -65,7 +65,7 @@
                         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-preview">
                         	<td><a ng-click="removeFromCart(lineItem)" class="remove-product remove-from-cart" href=""></a></td>
                             <td class="product-name">{{lineItem.name.en}}
-                                <label class="no-margin">{{lineItem.distributionChannel.name.en}}<label>
+                                <label class="no-margin">{{lineItem.distributionChannel.name | locale}}<label>
                             </td>
                             <td class="cp-qty-td">{{lineItem.quantity}}</td>
                             <td class="cp-price-td">

@@ -40,4 +40,10 @@ module.exports = function (app) {
 
     app.route('/carts/addDiscountCode/:cartId/:version')
         .post(carts.addDiscountCode);
+
+    app.route('/carts/highIndex/:cartId/:version')
+        .post(carts.addHighIndex);
+
+    app.route('/carts/removeHighIndex/:cartId/:version')
+        .post(carts.removeHighIndex);
 };

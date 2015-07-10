@@ -29,7 +29,7 @@
                     </td>
                     <td class="product-name">
                         <div class="name">{{lineItem.name.en}}</div>
-                        <div class="lens-type">{{lineItem.distributionChannel.name | locale}}</div>
+                        <div class="lens-type" style="font-size: 90%">{{lineItem.distributionChannel.name | locale}}</div>
                     </td>
                     <td class="product-price">
                         {{lineItem.price | spherePrice}}
@@ -42,8 +42,9 @@
                     </td>
                     <td class="item-total">
                         <div class="item-cart-price">
-                            <span ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></span>
-                            <span ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></span>
+                            <div ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></div>
+                            <div ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></div>
+                            <!--<div ng-if="lineItem.discountedPrice">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | priceTimes:lineItem.quantity | spherePrice}}</div>-->
                             <!--<span ng-if="lineItem.discountedPrice" class="discount-text">(-{{lineItem.discountedPrice | priceDiscount:lineItem.discountedPrice | spherePrice }}{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>-->
                         </div>
                     </td>

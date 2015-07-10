@@ -1,0 +1,72 @@
+<div>
+    <h4>Apply Prescription</h4>
+    <div id="lensType" ng-init="prescription = $parent.$parent.prescription; getPrescription()">
+        <hr />
+        <h6>What kind of glasses do you need?</h6>
+        <prescription-box header="prescription" size="2" ng-click="$parent.highindex = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
+        <prescription-box header="reader" size="2" ng-click="$parent.highindex = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
+    </div>
+    <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
+        <br />
+        <hr />
+        <h6>How would you like to send us your prescription?</h6>
+        <prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>
+        <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; $parent.highindex=false; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
+        <prescription-box header="Send Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater'); $parent.highindex=true" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
+
+        <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
+            <br />
+            <hr />
+            <h6>Please enter the following information</h6>
+            <form name="callDoctorForm" data-ng-submit="savePrescription('calldoctor', callDoctorForm.$valid);" novalidate>
+                <div class="form-field-half">
+                    <label>Doctor or Clinic name*</label>
+                    <input required type="text" class="half" id="doctorName" name="doctorName" data-ng-model="prescription.calldoctor.doctorName" placeholder="Doctor or Clinic name" ng-minlength="4" />
+                </div>
+                <div class="form-field-half">
+                    <label>Clinic phone number*</label>
+                    <input required type="text" class="half" id="phoneNumber" name="phoneNumber" data-ng-model="prescription.calldoctor.phoneNumber" placeholder="Clinic phone number" ng-minlength="4"/>
+                </div>
+                <div class="form-field-half">
+                    <label>Clinic or Clinic State*</label>
+                    <input required type="text" class="half" id="state" name="state" data-ng-model="prescription.calldoctor.state" placeholder="Clinic or Clinic State"/>
+                </div>
+                <br />
+                <div class="form-field-half">
+                    <label>Patient Full Name*</label>
+                    <input required type="text" class="half" id="patientName" name="patientName" data-ng-model="prescription.calldoctor.patientName" placeholder="Patient Full Name" ng-minlength="4"/>
+                </div>
+                <div class="form-field-half">
+                    <label>patient date of birth*</label>
+                    <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}/"/>
+                </div>
+                <div class="form-field-half">
+                    <button type="submit" class="btn radius blue">Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div ng-show="prescription.type == 'reader'">
+        <br />
+        <hr />
+        <h6>Select reading glasses strength</h6>
+        <form name="readerForm" data-ng-submit="savePrescription('reader', readerForm.$valid);" novalidate>
+            <div class="form-field-half">
+                <select class="half"  name="strength" data-ng-model="prescription.strength" ng-options="n*0.25 as '+'+n*0.25 for n in [] | range:1:11"  required>
+                    <option value="">Select a strength</option>
+                </select>
+            </div>
+            <button type="button" class="btn radius blue inline" ng-click="savePrescription('reader');">Save</button>
+        </form>
+    </div>
+
+    <div ng-show="$parent.highindex" id="highindex">
+        <br />
+        <hr />
+        <h6>Do you want high-index lenses if necessary?</h6>
+        <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index lenses for an additional $30 if I have a strong prescription.</prescription-box>
+        <prescription-box header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: highIndexLine() == null}">Please do not use high-index lenses with my prescription.</prescription-box>
+    </div>
+</div>

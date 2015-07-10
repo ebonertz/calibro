@@ -238,6 +238,10 @@ label:not(.channel-price){
 .channel-price{
   	display: inline;
 }
+form.ng-dirty .ng-invalid{
+  border: 1px solid red !important;
+}
+
 //Tables
 table{
 	width: 100%;
@@ -2118,6 +2122,29 @@ table#cart{
   	.shipping-full, .add-card-checkout {
 		.make-md-column(12);
   	}
+
+	.prescription-box{
+	  	//width: 50%;
+	  	display: inline-block;
+	  	padding: 20px 15px;
+	  	cursor: pointer;
+	 	opacity: 0.9;
+
+	  	border: 1px solid #d4d9dd;
+		border-radius: 5px;
+
+	  	&:hover, &.selected{
+			border-color: rgba(0, 124, 175, 0.45);
+		  opacity: 1;
+			.header{
+			  color: #007caf;
+			}
+		  	hr {
+			  //color: #00A2E1;
+			  border-color: #00A2E1;
+			}
+		}
+	}
 }
 
 //Global BLock Radio: displays as a block instead of an input

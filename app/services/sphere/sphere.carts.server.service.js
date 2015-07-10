@@ -1,5 +1,7 @@
 var SphereClient = require('../../clients/sphere.server.client.js'),
     CommonService = require('./sphere.commons.server.service.js'),
+    TaxCategoryService = require('./sphere.taxCategories.server.service.js'),
+    config = require('../../../config/config'),
     entity = 'carts';
 
 var actions = {
@@ -7,6 +9,7 @@ var actions = {
     removeLineItem: 'removeLineItem',
     changeLineItemQuantity: 'changeLineItemQuantity',
     addCustomLineItem: 'addCustomLineItem',
+    removeCustomLineItem: 'removeCustomLineItem',
     setShippingAddress: 'setShippingAddress',
     setBillingAddress: 'setBillingAddress',
     setShippingMethod: 'setShippingMethod',
@@ -25,7 +28,6 @@ exports.byCustomer = function (customerId, callback) {
     });
 };
 
-
 exports.addLineItem = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.addLineItem;
@@ -33,11 +35,29 @@ exports.addLineItem = function (cartId, version, payload, callback) {
     CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
-}
+};
+
+exports.addCustomLineItem = function (cartId, version, payload, callback) {
+    if (payload)
+        payload.action = actions.addCustomLineItem;
+
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
+        callback(err, result);
+    });
+};
 
 exports.removeLineItem = function (cartId, version, payload, callback) {
     if (payload)
         payload.action = actions.removeLineItem;
+
+    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
+        callback(err, result);
+    });
+}
+
+exports.removeCustomLineItem = function (cartId, version, payload, callback) {
+    if (payload)
+        payload.action = actions.removeCustomLineItem;
 
     CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
@@ -87,4 +107,40 @@ exports.addDiscountCode = function (cartId, version, payload, callback) {
     CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
         callback(err, result);
     });
+}
+
+exports.addHighIndex = function(cartId, version, payload, callback) {
+    var quantity = payload.quantity;
+    if(quantity < 1)
+        return res.status(400).send("No lines to apply high-index to.");
+
+    var taxCategory = TaxCategoryService.getFirst();
+    var payload = {
+        'name': {
+            'en': "High-index Lens",
+        },
+        'quantity': quantity,
+        'money': {
+            // Move to config
+            "currencyCode": "USD",
+            "centAmount": config.highIndexPrice*100 || 3000
+        },
+        'slug': 'high-index-lens',
+        'taxCategory': {
+            typeId: 'tax-category',
+            id: taxCategory.id
+        }
+    };
+
+    exports.addCustomLineItem(cartId, version, payload, function (err, result) {
+        callback(err, result);
+    });
+};
+
+// Proxy
+exports.removeHighIndex = function(cartId, version, lineId, callback) {
+    var payload = {
+        customLineItemId: lineId
+    };
+    exports.removeCustomLineItem(cartId, version, payload, callback);
 }
