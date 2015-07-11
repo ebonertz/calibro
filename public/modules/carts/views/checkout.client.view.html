@@ -22,16 +22,16 @@
                         <div id="lensType">
                             <hr />
                             <h6>What kind of glasses do you need?</h6>
-                            <prescription-box header="prescription" size="2" ng-click="highindex = false; $parent.proceedCheckout = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
-                            <prescription-box header="reader" size="2" ng-click="highindex = false; $parent.proceedCheckout = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
+                            <prescription-box header="prescription" size="2" ng-click="$parent.highindex = false; $parent.proceedCheckout = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
+                            <prescription-box header="reader" size="2" ng-click="$parent.highindex = false; $parent.proceedCheckout = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
                         </div>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
                             <br />
                             <hr />
                             <h6>How would you like to send us your prescription?</h6>
-                            <prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>
-                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; highindex=false; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
-                            <prescription-box header="Send Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater'); highindex=true" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
+                            <prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>
+                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; $parent.highindex=false; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
+                            <prescription-box header="Send Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater'); $parent.highindex=true" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
 
                             <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
                                 <br />
@@ -60,7 +60,7 @@
                                         <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/^[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}$/"/>
                                     </div>
                                     <div class="form-field-half">
-                                        <button type="submit" class="btn radius blue">Next</button>
+                                        <button type="submit" class="btn radius blue">{{$parent.highindex ? 'Update' : 'Next'}}</button>
                                     </div>
                                 </form>
                             </div>
@@ -80,7 +80,8 @@
                             </form>
                         </div>
 
-                        <div ng-show="highindex" id="highindex">
+
+                        <div ng-show="$parent.highindex" id="highindex">
                             <br />
                             <hr />
                             <h6>Do you want high-index lenses if necessary?</h6>
@@ -88,7 +89,7 @@
                             <prescription-box header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: highIndexLine() == null}">Please do not use high-index lenses with my prescription.</prescription-box>
                         </div>
 
-                        <div ng-show="highindex">
+                        <div ng-show="$parent.highindex" id="next">
                             <br />
                             <hr />
                             <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
@@ -96,10 +97,12 @@
                     </div>
                     <div ng-if="!phasePrescription && showPrescriptionSummary">
                         <h4>Prescription Summary</h4>
+                        <hr />
                         <span class="summary"><b>Prescription type:</b></span> <span class="summary" ng-bind="prescription.type"></span>
                         <div ng-if="prescription.type == 'reader'"><span class="summary"><b>Lens Strength:</b></span> +{{prescription.strength}}</span></div>
                         <div ng-if="prescription.type == 'prescription'"><span class="summary"><b>Prescription Details:</b> {{prescription.method | prescriptionName}}</span></div>
-                        <br />
+                        <!--<hr />-->
+                        <br /><br />
                     </div>
 
                     <!-- PHASE A -->

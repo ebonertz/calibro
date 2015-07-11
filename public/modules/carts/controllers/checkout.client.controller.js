@@ -102,7 +102,12 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         };
 
         if ($rootScope.cart == null) {
-            $rootScope.$watch('cart', function(){init()})
+            var cartWatch = $rootScope.$watch('cart', function(cart){
+                if(cart != null) {
+                    cartWatch()
+                    init();
+                }
+            })
             //setTimeout(function () {
             //    init();
             //}, 2000);
@@ -259,6 +264,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 LoggerServices.error('Could not save, please try again');
                 console.log(err)
             })
+
+            return false;
         };
         $scope.getPrescription = function(prescription){
             new Prescription({_id: $rootScope.cart.id}).$get().then(function(result){
