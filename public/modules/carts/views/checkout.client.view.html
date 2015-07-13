@@ -86,7 +86,7 @@
                             <hr />
                             <h6>Do you want high-index lenses if necessary?</h6>
                             <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index lenses for an additional $30 if I have a strong prescription.</prescription-box>
-                            <prescription-box header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: highIndexLine() == null}">Please do not use high-index lenses with my prescription.</prescription-box>
+                            <prescription-box header="No" size="2" ng-click="selectHighIndex(false)">Please do not use high-index lenses with my prescription.</prescription-box>
                         </div>
 
                         <div ng-show="$parent.highindex" id="next">
