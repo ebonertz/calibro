@@ -20,4 +20,8 @@ module.exports = function (app) {
 
     app.route('/orders/byCustomer/:customerId')
         .get(commons.byCustomer.bind({entity: entity}));
+
+    // TODO: Should be deleted when merge.
+    app.route('/orders/payOrder/:orderId')
+        .post(orders.payOrder);
 };

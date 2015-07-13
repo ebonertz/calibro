@@ -33,3 +33,40 @@ exports.changePaymentState = function (orderId, payload, callback) {
         callback(err, result);
     });
 }
+
+// TODO: Should be deleted when merge.
+exports.payOrder = function (orderId, receipt, callback) {
+
+    // Save info of Cart Payment in custom objects. Just in case we need them later.
+    var newCustomObject = {
+        container: 'checkoutInfo',
+        key: orderId,
+        value: receipt
+    };
+
+    CommonService.create('customObjects', newCustomObject);
+
+    /*
+     1 This transaction has been approved.
+     2 This transaction has been declined.
+     3 There has been an error processing this transaction.
+     4 This transaction is being held for review.
+     */
+
+    if (receipt.x_response_code == 1) {
+        exports.changePaymentState(orderId, {paymentState: 'Paid'}, function (err, resultOrder) {
+
+            if (err) {
+                callback(err, null);
+                return;
+            } else {
+                callback(null, resultOrder);
+            }
+
+        });
+    } else {
+        callback(new Error('Error in Authorize.net payment process.'), null);
+    }
+
+
+}

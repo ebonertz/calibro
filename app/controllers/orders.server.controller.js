@@ -20,8 +20,8 @@ exports.create = function (req, res) {
     });
 };
 
-/*
 
+// TODO: Should be deleted when merge.
 exports.payOrder = function (req, res) {
     var orderId = req.param('orderId'),
         payload = req.body;
@@ -44,4 +44,4 @@ exports.payOrder = function (req, res) {
     });
 };
 
-*/
+
