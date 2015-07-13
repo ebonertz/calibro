@@ -34,7 +34,7 @@
                     <hr/>
                     <p>
                         <b>Shipping Carrier:</b> {{order.shippingInfo.shippingMethodName}} <br/>
-                        <b>Shipping Cost:</b> {{$utils.getCurrencySimbol(order.shippingInfo.price.currencyCode)}} {{order.shippingInfo.price.centAmount / 100}} <br/>
+                        <b>Shipping Cost:</b> {{order.shippingInfo.price | spherePrice}} <br/>
                         <b>Arrives:</b> 6-10 Days
                     </p>
                 </div>
@@ -44,15 +44,15 @@
                         <tbody>
                         <tr>
                             <td>Sub Total</td>
-                            <td>{{order.taxedPrice.totalNet.currencyCode}} {{order.taxedPrice.totalNet.centAmount / 100}}</td>
+                            <td>{{order.taxedPrice.totalNet | spherePrice}</td>
                         </tr>
                         <tr>
                             <td>Taxes</td>
-                            <td>{{order.taxedPrice.totalNet.currencyCode}} {{(order.taxedPrice.totalGross.centAmount - order.taxedPrice.totalNet.centAmount) / 100}}</td>
+                            <td>{(order.taxedPrice.totalGross | spherePrice}}</td>
                         </tr>
                         <tr>
                             <td><h6>Order Total</h6></td>
-                            <td><h6>{{order.totalPrice.currencyCode}} {{order.totalPrice.centAmount / 100}}</h6></td>
+                            <td><h6>{{order.totalPrice | spherePrice}}</h6></td>
                         </tr>
                         </tbody>
                     </table>
