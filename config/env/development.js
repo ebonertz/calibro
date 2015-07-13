@@ -97,5 +97,8 @@ module.exports = {
         key: 'd9d40094ab3347db928e16f1199939ac',
         secret: 'f1a3cf70216e4743a3f844fe076774fb'
     },
-    highIndexPrice: 30,
+    highIndex: {
+        price: 30,
+        slug: 'high-index-lens'
+    },
 };

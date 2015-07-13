@@ -28,4 +28,13 @@ exports.create = function(container, key, value, callback){
         value: value,
     };
     CommonService.create('customObjects', payload, callback);
+};
+
+exports.delete = function(container, key, callback){
+    SphereClient.getClient().customObjects.fetch(container+'/'+key).delete().then(function(result){
+        callback(null, result)
+    }).error(function(err){
+        console.log(err)
+        callback(err, null)
+    })
 }

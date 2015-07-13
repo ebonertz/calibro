@@ -159,6 +159,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     });
 
+                }, function(err){
+                    LoggerServices.warning("Couldn't set shipping address, please try again");
+                    $rootScope.loading = false;
                 });
             }
 
@@ -300,6 +303,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     method: method,
                     data: data
                 }).$save(function(response){
+                    $scope.prescription = response.value;
+                    if($scope.prescription.type == 'reader'){
+                        $scope.prescription.strength = $scope.prescription.data.strength;
+                    }else if($scope.prescription.method == 'calldoctor'){
+                        $scope.prescription.calldoctor = $scope.prescription.data;
+                    }
+
                     $rootScope.loading = false;
                     LoggerServices.success('Prescription saved');
                     callback(response);

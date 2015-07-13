@@ -36,6 +36,22 @@ angular.module('core').filter('sumDiscounts', function(){
     }
 });
 
+angular.module('core').filter('priceMath', function(){
+    return function(firstPrice, secondPrice, op){
+        var price = angular.copy(firstPrice);
+        switch(op){
+            case '+':
+                price.centAmount += secondPrice.centAmount;
+                break;
+            case '-':
+                price.centAmount -= secondPrice.centAmount;
+                break;
+        }
+
+        return price
+    }
+})
+
 angular.module('core').filter('range', function() {
     return function(input, min, max) {
         min = parseInt(min); //Make string input int

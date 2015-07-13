@@ -25,7 +25,7 @@
                 <span ng-bind="lineItem.money | priceTimes:lineItem.quantity | spherePrice"></span>
             </td>
         </tr>
-        <tr class="subtotal">
+        <tr class="taxes" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">
                 Taxes <span style="font-size: 10px;">(included)</span>
             </td>
@@ -34,15 +34,16 @@
                 {{taxPortion.amount | spherePrice}}
             </td>
         </tr>
-        <tr class="subtotal">
+        <tr class="subtotal" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">
                 Subtotal
             </td>
             <td id="sub-amount" class="amount" colspan="2">
-                {{cart.totalPrice | spherePrice}}
+                <span ng-if="cart.shippingInfo">{{cart.totalPrice | priceMath:cart.shippingInfo.shippingRate.price:'-' | spherePrice}}</span>
+                <span ng-if="!cart.shippingInfo">{{cart.totalPrice | spherePrice}}</span>
             </td>
         </tr>
-        <tr class="shipping">
+        <tr class="shipping" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">
                 Shipping
             </td>
@@ -60,7 +61,7 @@
             <td class="amount" colspan="2">
             </td>
         </tr>
-        <tr id="final-order-price">
+        <tr id="final-order-price" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">
                 <b>Order Total</b>
             </td>

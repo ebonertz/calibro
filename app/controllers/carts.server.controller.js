@@ -67,7 +67,8 @@ exports.removeLineItem = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };
@@ -81,7 +82,8 @@ exports.setShippingAddress = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };
@@ -95,7 +97,8 @@ exports.setBillingAddress = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };
@@ -109,7 +112,8 @@ exports.setShippingMethod = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };
@@ -123,7 +127,8 @@ exports.changeLineItemQuantity = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };
@@ -137,7 +142,8 @@ exports.addDiscountCode = function (req, res) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
-            res.json(result);
+            var cart = new Cart(result);
+            res.json(cart);
         }
     });
 };

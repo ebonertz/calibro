@@ -72,7 +72,7 @@
                             <h6>Select reading glasses strength</h6>
                             <form name="readerForm" data-ng-submit="savePrescription('reader', readerForm.$valid);" novalidate>
                                 <div class="form-field-half">
-                                    <select class="half"  name="strength" data-ng-model="prescription.strength" ng-options="n*0.25 as '+'+n*0.25 for n in [] | range:1:11"  required>
+                                    <select class="half"  name="strength" data-ng-model="prescription.strength" ng-options="n*0.25 as '+'+n*0.25 for n in [] | range:1:11"  ng-init="$parent.prescription.strength=''" required>
                                         <option value="">Select a strength</option>
                                     </select>
                                 </div>
@@ -197,8 +197,7 @@
                                                      alt="" err-src="/design/images/shipping-logos/Truck.png"/>
                                             </div>
                                             <b>{{shippingMethod.name}}</b>
-                                            <b class="pull-right" style="margin-top: 10px;">{{$utils.getCurrencySimbol(shippingMethod.zoneRates[0].shippingRates[0].price.currencyCode)}}
-                                                {{shippingMethod.zoneRates[0].shippingRates[0].price.centAmount / 100}}</b><br/>
+                                            <b class="pull-right" style="margin-top: 10px;">{{shippingMethod.zoneRates[0].shippingRates[0].price | spherePrice}}</b><br/>
                                             <input type="radio" name="shipping" value="1">
                                         </label>
 
@@ -229,27 +228,35 @@
                             <h6>Order Details</h6>
                             <table id="cart" class="checkout-review">
                                 <thead>
-                                <th>Product</th>
+                                <th colspan="2">Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
+                                <th class="remove"></th>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product-row">
                                     <td class="product-image">
                                         <img ng-src="{{lineItem.variant.images[0].url}}"/>
-                                        <span class="product-name">{{lineItem.name.en}}</span>
+                                    </td>
+                                    <td class="product-name">
+                                        <div class="name">{{lineItem.name.en}}</div>
+                                        <div class="lens-type" style="font-size: 90%">{{lineItem.distributionChannel.name | locale}}</div>
                                     </td>
                                     <td class="product-price">
-                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount /
-                                        100}}
+                                        {{lineItem.price | spherePrice}}
+                                        <div ng-if="lineItem.discountedPrice" style="font-size: 90%">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | spherePrice}}</div>
                                     </td>
                                     <td class="quantity">
                                         {{lineItem.quantity}}
                                     </td>
-                                    <td class="item-total-checkout">
-                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
-                                        lineItem.quantity / 100}}
+                                    <td class="item-total">
+                                        <div class="item-cart-price">
+                                            <div ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></div>
+                                            <div ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></div>
+                                            <!--<div ng-if="lineItem.discountedPrice">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | priceTimes:lineItem.quantity | spherePrice}}</div>-->
+                                            <!--<span ng-if="lineItem.discountedPrice" class="discount-text">(-{{lineItem.discountedPrice | priceDiscount:lineItem.discountedPrice | spherePrice }}{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>-->
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -274,28 +281,25 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
-                                                cart.shippingInfo.shippingRate.price.centAmount) / 100}}
+                                            <td>{{cart.totalPrice | priceMath:cart.shippingInfo.shippingRate.price:'-' | spherePrice}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Taxes</td>
                                             <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
-                                                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
+                                                {{taxPortion.amount | spherePrice}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
                                             <td ng-if="cart.shippingInfo">
-                                                {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
-                                                {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+                                                {{cart.shippingInfo.shippingRate.price | spherePrice}}
                                             </td>
                                             <td ng-if="!cart.shippingInfo">-</td>
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount
-                                                / 100}}</h6></td>
+                                            <td><h6>{{cart.totalPrice | spherePrice}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>

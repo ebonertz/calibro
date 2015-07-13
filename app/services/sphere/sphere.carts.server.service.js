@@ -123,9 +123,9 @@ exports.addHighIndex = function(cartId, version, payload, callback) {
         'money': {
             // Move to config
             "currencyCode": "USD",
-            "centAmount": config.highIndexPrice*100 || 3000
+            "centAmount": config.highIndex.price*100 || 3000
         },
-        'slug': 'high-index-lens',
+        'slug': config.highIndex.slug,
         'taxCategory': {
             typeId: 'tax-category',
             id: taxCategory.id
@@ -143,4 +143,4 @@ exports.removeHighIndex = function(cartId, version, lineId, callback) {
         customLineItemId: lineId
     };
     exports.removeCustomLineItem(cartId, version, payload, callback);
-}
+};

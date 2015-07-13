@@ -1,16 +1,14 @@
 'use strict';
 var CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
-    container = 'cartPrescriptions';
+    PrescriptionService = require('../services/sphere/sphere.prescriptions.server.service.js');
 
 exports.create = function (req, res) {
     var cartId = req.param('cartId'),
         contents = req.body;
 
-    delete contents._id;
-    var value = contents;
-    console.log(req.body)
+    delete contents._id
 
-    CustomObjectService.create(container, cartId, value, function (err, result) {
+    PrescriptionService.create(cartId, contents, 'cart', function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -22,7 +20,7 @@ exports.create = function (req, res) {
 exports.byCart = function (req, res) {
     var cartId = req.param('cartId');
 
-    CustomObjectService.find(container, cartId, function(err, result){
+    PrescriptionService.byId(cartId, function(err, result){
         if (err) {
             return res.sendStatus(400);
         } else {

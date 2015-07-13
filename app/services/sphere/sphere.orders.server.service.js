@@ -15,8 +15,12 @@ exports.create = function (object, callback) {
         } else {
 
             CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
-                if (!err && customer != null && customer.email != null)
+                if(!err && customer != null && customer.email != null) {
                     MandrillService.orderCreated(customer.email, orderCreated.id, config.serverPath + '/#!/orders/' + orderCreated.id);
+                    // If at any point the order's id is different to the cart's id, use the following
+                    //PrescriptionService.toOrder(object.id, orderCreated.id)
+                }
+
             });
 
             callback(null, orderCreated);
@@ -67,6 +71,4 @@ exports.payOrder = function (orderId, receipt, callback) {
     } else {
         callback(new Error('Error in Authorize.net payment process.'), null);
     }
-
-
 }
