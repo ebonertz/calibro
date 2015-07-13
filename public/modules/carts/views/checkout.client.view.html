@@ -172,10 +172,20 @@
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
-                                <div ng-if="validateShippingAddress()" class="continue" disabled="true">
-                                    <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
-                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
-                                </div>
+                                <div class="row" ng-if="validateShippingAddress()"><div class="col-md-12">
+                                    <div class="col col-md-6" ng-if="showPrescriptionSummary">
+                                        <div class="continue">
+                                            <a ng-click="showPhasePrescription()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                        </div>
+                                    </div>
+                                    <div ng-class="{'col-md-6': showPrescriptionSummary}" class="col">
+                                        <div class="continue" disabled="true">
+                                            <a ng-click="setShippingAddress(cart.shippingAddress)" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
+                                        </div>
+                                    </div>
+                                </div></div>
                             </section>
                         </div>
                     </div>
