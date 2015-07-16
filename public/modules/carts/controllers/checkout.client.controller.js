@@ -1,7 +1,11 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription, AuthorizeNetService, ShippingMethodService, $anchorScroll) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService',
+    'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions',
+    'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'Upload',
+    function ($scope, Authentication, $rootScope, CartService,
+              ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription,
+              AuthorizeNetService, ShippingMethodService, $anchorScroll, Upload) {
 
         $scope.anchorScroll = function(where){
             $location.hash(where);
@@ -350,7 +354,39 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.highindex = true;
                     })
                     break;
+
+                case 'upload':
+                    save('prescription', 'upload', data, function(){
+                        $scope.highindex = true;
+                    })
             }
+        };
+
+        $scope.uploadPrescription = function(files){
+
+            if (files && files.length) {
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    Upload.upload({
+                        url: '/prescriptions/upload',
+                        file: file
+                    }).progress(function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        $scope.log = 'progress: ' + progressPercentage + '% ' +
+                            evt.config.file.name + '\n' + $scope.log;
+                    }).success(function (data, status, headers, config) {
+                        console.log(status);
+                        LoggerServices.success("Prescription uploaded")
+                        $scope.prescription.method = 'upload';
+                        $scope.highindex=true;
+                        $scope.savePrescription('upload', {file: config.file.name})
+                        //$timeout(function () {
+                        //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+                        //});
+                    });
+                }
+            }
+
         }
 
         $scope.highIndexLine = function(){

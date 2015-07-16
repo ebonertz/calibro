@@ -35,6 +35,7 @@ module.exports = {
 				'public/lib/angular-bindonce/bindonce.js',
 				'public/lib/angular-socialshare/angular-socialshare.min.js',
 				'public/lib/es5-shim/es5-shim.js',
+				'public/lib/ng-file-upload/ng-file-upload-all.min.js'
 			]
 		},
 		css: [

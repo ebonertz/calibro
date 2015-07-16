@@ -12,7 +12,7 @@ var init = require('../config/init')(),
 
 var integration_names = ['order-export'], //['quickbook','shipstation'],
     intgs = {},
-    days_to_fetch = 3;
+    days_to_fetch = 5;
 
 // Functions
 var buildFiles = function(intgs){
@@ -156,11 +156,13 @@ var sendEmail = function(intg){
             return
         }
 
+        console.log(data)
+
         data = new Buffer(data, 'utf8').toString('base64');
 
         // Add subject with integration name
         //MandrillService.sendAttachment('orders@focalioptics.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
-            MandrillService.sendAttachment('focali.dev@gmail.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
+        MandrillService.sendAttachment('focali.dev@gmail.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
 
                 console.log('Email sent for '+intg.name)
         }, function(error){

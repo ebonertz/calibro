@@ -4,7 +4,9 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'focali-mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.utils', 'ipCookie', 'toastr', 'pasvaz.bindonce', 'djds4rce.angular-socialshare'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',
+		'ui.router', 'ui.utils', 'ipCookie', 'toastr', 'pasvaz.bindonce', 'djds4rce.angular-socialshare',
+		'ngFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

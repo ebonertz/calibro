@@ -29,7 +29,9 @@
                             <br />
                             <hr />
                             <h6>How would you like to send us your prescription?</h6>
-                            <prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>
+                            <!--<prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>-->
+                            <prescription-box header="Upload a picture" size="3" ngf-select ngf-change="uploadPrescription($files)" ngf-multiple="multiple" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>
+
                             <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; $parent.highindex=false; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
                             <prescription-box header="Send Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater'); $parent.highindex=true" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
 
