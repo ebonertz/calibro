@@ -39,7 +39,7 @@
           </del>
           <ins>
               <div class="notice outline red small" ng-show="error.distributionChannel">Please select an option</div>
-              <div ng-repeat="price in currentVariant.prices | currency track by price.id" >
+              <div ng-repeat="price in currentVariant.prices | currency track by price.id" class="channel-option" >
                 <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="price.channel.key" name="channel" id="channel-{{price.channel.key}}"></input>
                 <label for="channel-{{price.channel.key}}" class="channel-price">
                   <span bo-text="price.channel.name.en"></span>

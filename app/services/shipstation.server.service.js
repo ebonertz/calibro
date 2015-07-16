@@ -1,6 +1,7 @@
 'use strict';
 
-var domain = 'ssapi.shipstation.com',
+var PrescriptionService = require('./sphere/sphere.prescriptions.server.service.js'),
+    domain = 'ssapi.shipstation.com',
     config = require("../../config/config.js"),
     https = require('https'),
     _ = require('lodash'),
@@ -12,7 +13,9 @@ exports.ship = function(order, callback){
         header = "Basic "+new Buffer(config.shipstation.key+":"+config.shipstation.secret, 'utf8').toString('base64');
 
         // Set billing address same to shipping address while we don't have this value (e.g. before going to Authorize.net)
-        if(!order.billingAddress) order.billingAddress = order.shippingAddress
+        if(!order.billingAddress) order.billingAddress = order.shippingAddress;
+
+        //var prescription =
 
         // TODO: Use orderNumer instead of id
         // TODO: Add payment method?
@@ -47,12 +50,18 @@ exports.ship = function(order, callback){
                 country: order.shippingAddress.country,
                 phone: order.shippingAddress.phone,
             },
-            items: buildItems(order.lineItems),
+            items: buildItems(order),
             amountPaid: order.taxedPrice.totalGross.centAmount/100,
             taxAmount: order.taxedPrice ? (order.taxedPrice.totalGross.centAmount - order.taxedPrice.totalNet.centAmount)/100 : null,
             shippingAmount: order.shippingInfo ? order.shippingInfo.price.centAmount/100 : null,
             requestedShippingService: order.shippingInfo ? order.shippingInfo.shippingMethodName : null,
-        }
+            customerNotes: 'High-index lens: ' + (hasHighIndex(order) ? 'Yes' : 'No'),
+            internalNotes: prescriptionToString(order.id, order.customerEmail),
+        };
+
+        // Get prescription method
+
+        // Has high index
 
         var call_options = {
             url: 'https://'+domain+'/orders/createorder',
@@ -93,9 +102,10 @@ var buildName = function(address){
     return fullname
 }
 
-var buildItems = function(items){
-    var shipItems = []
-    items.forEach(function(item){
+var buildItems = function(order){
+    var shipItems = [],
+        customLinesInReceipt = [config.highIndex.slug]
+    order.lineItems.forEach(function(item){
         shipItems.push({
             lineItemKey: item.id,
             sku: item.variant.sku,
@@ -105,7 +115,69 @@ var buildItems = function(items){
             unitPrice: item.price.value.centAmount/100,
             //productId: item.productId,
         })
+    });
+
+    // Adds high-index lines
+    order.customLineItems.forEach(function(item){
+        if(customLinesInReceipt.indexOf(item.slug) >= 0){
+            shipItems.push({
+                lineItemKey: item.id,
+                sku: item.slug,
+                name: item.name.en,
+                quantity: item.quantity,
+                unitPrice: item.money.centAmount/100,
+            })
+        }
     })
 
     return shipItems;
+};
+
+var hasHighIndex = function(order){
+    if(order.customLineItems && typeof order.customLineItems === 'object'){
+        for(var i in order.customLineItems){
+            var line = order.customLineItems[i]
+            if(line.slug == config.highIndex.slug && line.quantity > 0){
+                return true
+            }
+        }
+    }
+    return false
+};
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 }
+var prescriptionToString = function(orderId, email){
+    var str = ''
+    PrescriptionService.byId(orderId, function(err, result){
+        if(!err && result){
+            var val = result.value
+
+            str += "Type: "+ val.type.capitalize() + "\n"
+            if(val.type == 'reader'){
+                str += "Strength: +"+ val.data.strength
+            }else{
+                if(val.method == 'calldoctor'){
+                    str += "Method: " + "Call Doctor" + "\n";
+                    str += "Doctor Name: "+ val.data.doctorName+"\n";
+                    str += "Clinic State: "+ val.data.state+"\n";
+                    str += "Phone Number: "+ val.data.phoneNumber+"\n";
+                    str += "Patient Name: "+ val.data.patientName+"\n";
+                    str += "Patient Birth: "+ val.data.partienBirth+"\n";
+                }else if(val.method == 'sendlater'){
+                    str += "Method: " + "Send Later" + "\n";
+                    str += "Customer Email: " + email + "\n";
+                }else if(val.method == 'upload'){
+                    str += "Method: " + "Upload File" + "\n";
+                    str += "File name: " + "\n";
+                }
+            }
+
+            return str;
+        }else{
+            return null
+        }
+    });
+    return null
+};

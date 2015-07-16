@@ -54,21 +54,17 @@ var Variant = function(options){
     }
   }
 
-  //this.prices = {};
-  //for(var i = 0; i < options.prices.length; i++){
-  //  var price = options.prices[i];
-  //  var name = (price.country ? price.value.currencyCode+'-'+price.country : price.value.currencyCode);
-  //  this.prices[name] = price.value;
-  //}
-
   this.prices = []
   for(var i = 0; i < options.prices.length; i++){
     var price = options.prices[i];
-    var channel =  ChannelsService.getById(price.channel.id);
-    price.channel = channel;
-    this.prices.push(price);
-  }
 
+    // Ignore price if it has no channel
+    if(price.channel) {
+      var channel = ChannelsService.getById(price.channel.id);
+      price.channel = channel;
+      this.prices.push(price);
+    }
+  }
 
   // BasePrices has been moved to root above
   if(options.basePrices){

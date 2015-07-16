@@ -12,7 +12,7 @@ var init = require('../config/init')(),
 
 var integration_names = ['order-export'], //['quickbook','shipstation'],
     intgs = {},
-    days_to_fetch = 1;
+    days_to_fetch = 3;
 
 // Functions
 var buildFiles = function(intgs){
@@ -39,8 +39,16 @@ var buildFiles = function(intgs){
                 taxPrice: value.taxedPrice.taxPortions[0].amount.centAmount/100,
                 streetName: value.shippingAddress ? value.shippingAddress.streetName : "",
                 streetNumber: value.shippingAddress ?  value.shippingAddress.streetNumber : "",
-                address: value.shippingAddress ? value.shippingAddress.streetName + " " + value.shippingAddress.streetNumber : null
+                address: value.shippingAddress ? value.shippingAddress.streetName + " " + value.shippingAddress.streetNumber : null,
+                highIndex: false
             }
+
+            // High-Index
+            value.customLineItems && value.customLineItems.forEach(function(line){
+                if(~line.slug.indexOf('high-index')) {
+                    order.highIndex = true
+                }
+            })
 
             var createdAt = new Date(value.createdAt);
             var createdAtDateStr = createdAt.getMonth() + '/' + createdAt.getDate() + '/' + createdAt.getFullYear();
@@ -86,7 +94,10 @@ var buildFiles = function(intgs){
                     "Product Quantity": item.quantity,
                     "Product Unit Price": item.price.value.centAmount/100,
 
-                })
+                    "Order High Index": order.highIndex ? 'Yes' : 'No'
+                });
+
+                // Shipstation export
                 //intgs['shipstation'].csvStream.write({
                 //    "Order Number": value.id,
                 //    "Order Create Date": createdAtDateStr,
@@ -148,8 +159,10 @@ var sendEmail = function(intg){
         data = new Buffer(data, 'utf8').toString('base64');
 
         // Add subject with integration name
-        MandrillService.sendAttachment('orders@focalioptics.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
-            console.log('Email sent for '+intg.name)
+        //MandrillService.sendAttachment('orders@focalioptics.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
+            MandrillService.sendAttachment('focali.dev@gmail.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
+
+                console.log('Email sent for '+intg.name)
         }, function(error){
             console.log('Error sending email for '+intg.name)
             console.log(error)

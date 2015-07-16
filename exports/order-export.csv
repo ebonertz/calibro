@@ -1,5 +1,22 @@
-Order Id,Order Number,Create Date,Customer Id,Customer Email,Total Price,Total Net,Total Gross,Country,Order State,Payment State,Discount Codes,Ship to First Name,Ship to Last Name,Ship to Phone,Ship to Company Name,Ship to Street Name,Ship to Street Number,Ship to City,Ship to Postal Code,Ship to Country Code,Product Name,Product Slug,Product Sku,Product Quantity,Product Unit Price
-d3e276cd-133a-48e2-a12f-24223a5da7b7,,2015/5/29 16:41:57,8c97803e-902d-4501-892c-78cd63675041,,199.9,199.9,209.9,,Open,Paid,,Test,Name,1234567887654,,adfsdf,123,New York,10001,US,Ray-Ban Justin RB,,11113-BR,2,95
-8800121f-27c9-4610-b39a-9bb943972898,,2015/5/29 19:16:0,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,104.9,104.9,110.15,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Ray-Ban Justin RB,,11113-BR,1,95
-5ca2e77f-74b2-44b2-b788-ca9608186254,,2015/5/29 19:18:18,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,104.9,104.9,110.15,,Open,Paid,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Ray-Ban Justin RB,,11113-BR,1,95
-ef6ed899-318b-4932-8d0a-5d9b648a8891,,2015/5/29 19:45:23,,,109.9,109.9,115.4,,Open,Paid,,asd,asd,,,asd,23,asd,2123a,US,Ray-Ban Justin RB,,11113-BU,1,100
+Order Id,Order Number,Create Date,Customer Id,Customer Email,Total Price,Total Net,Total Gross,Country,Order State,Payment State,Discount Codes,Ship to First Name,Ship to Last Name,Ship to Phone,Ship to Company Name,Ship to Street Name,Ship to Street Number,Ship to City,Ship to Postal Code,Ship to Country Code,Product Name,Product Slug,Product Sku,Product Quantity,Product Unit Price,High Index
+c859ee54-3067-403d-bb98-ded7742a2c38,,2015/6/13 13:12:55,,,359.9,359.9,377.9,,Open,,,first,last,12345676,,addw,123,city,12345,US,Vogue VO,,11114-B,1,175,No
+c859ee54-3067-403d-bb98-ded7742a2c38,,2015/6/13 13:12:55,,,359.9,359.9,377.9,,Open,,,first,last,12345676,,addw,123,city,12345,US,Vogue VO,,11114-BB,1,175,No
+b26df38e-924b-4ebc-af70-18f8c29e0f09,,2015/6/13 13:34:45,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,374.9,374.9,393.65,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Ray-Ban Justin RB,,11113-BR,2,95,No
+b26df38e-924b-4ebc-af70-18f8c29e0f09,,2015/6/13 13:34:45,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,374.9,374.9,393.65,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,1,175,No
+93e2d0c8-4a43-43df-b837-cef718c27e45,,2015/6/13 13:51:43,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,184.9,184.9,194.15,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,1,175,No
+4b5f005f-b66c-4152-a28b-36105c15cea8,,2015/6/13 14:12:51,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,359.9,359.9,377.9,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,2,175,No
+9a10d0a6-10dd-48e5-b8e5-d2c06ba8e871,,2015/6/13 14:15:13,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,184.9,184.9,194.15,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,1,175,No
+4d144fb4-551d-48df-82ee-d5e37260c1de,,2015/6/13 14:36:6,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,184.9,184.9,194.15,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,1,175,No
+660911d8-f80a-456f-a20c-ed8a8e158de7,,2015/6/13 14:46:14,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,279.9,279.9,293.9,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Ray-Ban Justin RB,,11113-BR,1,95,No
+660911d8-f80a-456f-a20c-ed8a8e158de7,,2015/6/13 14:46:14,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,279.9,279.9,293.9,,Open,,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Vogue VO,,11114-B,1,175,No
+6a01ce9c-327d-443b-9f6c-ff74fa51e6b1,,2015/6/13 14:47:49,,,499.9,499.9,524.9,,Open,,,Luciano,Giavedoni,3476305650,,"175 Varick St,",12,New York,10013,US,Vogue VO,,11114-B,2,175,No
+6a01ce9c-327d-443b-9f6c-ff74fa51e6b1,,2015/6/13 14:47:49,,,499.9,499.9,524.9,,Open,,,Luciano,Giavedoni,3476305650,,"175 Varick St,",12,New York,10013,US,Vogue VO,,11114-B,1,140,No
+77b20ea1-8db0-4132-b083-a25de32598d8,,2015/6/13 14:59:33,,,149.9,149.9,157.4,,Open,,,asd,asd,,,asd,123,asd,2123a,US,Vogue VO,,11114-B,1,140,No
+4a832373-cc87-4c9f-8cc4-0a602685acd2,,2015/6/13 15:9:48,,,149.9,149.9,157.4,,Open,,,asd,asd,,,asd,123,asd,2123a,US,Vogue VO,,11114-B,1,140,No
+d94f563b-1429-4f74-bcda-e9db4b6fdcb0,,2015/6/13 15:10:58,,,155,155,162.75,,Open,Paid,,Luciano,Giavedoni,3476305650,,"175 Varick St,",12,New York,10013,US,Awesome Beach Glasses,,11111-TS,1,110,Yes
+6afa23e4-4057-4652-8be8-a864482b0fe8,,2015/6/13 15:12:26,,,149.9,149.9,157.4,,Open,,,asd,asd,,,asd,213,asd,2123a,US,Vogue VO,,11114-B,1,140,No
+ff3a4788-72dd-4a64-951f-0fa8f19e4ea1,,2015/6/13 15:14:54,,,149.9,149.9,157.4,,Open,,,asd,asd,,,asd,123,asd,2123a,US,Vogue VO,,11114-B,1,140,No
+737d1842-0f04-4cba-b87a-715027f721c4,,2015/6/13 15:20:36,,,155,155,162.75,,Open,Paid,,Luciano,Giavedoni,3476305650,,"175 Varick St,",3,New York,10013,US,Awesome Beach Glasses,,11111-TS,1,110,Yes
+f0331ef1-078a-4570-88c7-0e5e8cee072f,,2015/6/13 15:22:30,,,149.9,149.9,157.4,,Open,Paid,,asd,asd,,,asd,123,asd,2123a,US,Vogue VO,,11114-B,1,140,No
+c2c2f579-0986-4459-9136-f649295bf086,,2015/6/13 15:22:43,,,99.9,99.9,104.9,,Open,Paid,,Luciano,Giavedoni,3476305650,,"175 Varick St,",12,New York,10013,US,Awesome Beach Glasses,,11111-TS,1,90,No
+5f3d8e86-6334-4876-976e-d9782b57dc2a,,2015/6/13 15:26:43,4f0eb1e0-5372-44b1-b518-0bd024d0f906,,119.9,119.9,125.9,,Open,Paid,,Sebastián,Neira,123903222,,Maplestree,23,New York,10001,US,Awesome Beach Glasses,,11111-TS,1,110,No
