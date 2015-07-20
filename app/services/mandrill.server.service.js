@@ -66,7 +66,7 @@ exports.welcome = function (email) {
 
 exports.contactUs = function(email, name, message){
 	var options = {
-		email: MandrillClient.options.contactus_email,
+		email: MandrillClient.addresses.contactus_email,
 		template: 'contactus',
 		template_content: [
 			{

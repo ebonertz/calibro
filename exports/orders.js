@@ -162,7 +162,7 @@ var sendEmail = function(intg){
 
         // Add subject with integration name
         //MandrillService.sendAttachment('orders@focalioptics.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
-        MandrillService.sendAttachment('focali.dev@gmail.com', 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
+        MandrillService.sendAttachment(config.emails.orders_export, 'Orders export for '+intg.name ,'sphere-orders-'+intg.name+'.csv', data , 'text/csv').then(function(res){
 
                 console.log('Email sent for '+intg.name)
         }, function(error){

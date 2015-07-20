@@ -1,7 +1,8 @@
 'use strict';
 var CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
     PrescriptionService = require('../services/sphere/sphere.prescriptions.server.service.js'),
-    UploadFileService = require('../services/upload-file.server.services.js');
+    UploadFileService = require('../services/upload-file.server.services.js'),
+    config = require('../../config/config');
 
 exports.create = function (req, res) {
     var cartId = req.param('cartId'),
@@ -47,7 +48,7 @@ exports.upload = function(req, res) {
                     subject: 'Prescription #'+counter,
                     filename: 'prescription-' + counter
                 }
-            UploadFileService.uploadAndEmail(req, 'focali.dev@gmail.com', options, function(err, file_data){
+            UploadFileService.uploadAndEmail(req, config.mandrill.addresses.prescriptions, options, function(err, file_data){
                 if(err){
                     return res.sendStatus(400)
                 }else {

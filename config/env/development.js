@@ -76,7 +76,11 @@ module.exports = {
         options: {
             from_email: 'support@focalioptics.com',
             from_name: 'Focali Optics',
+        },
+        addresses: {
             contactus_email: 'support@focalioptics.com',
+            prescriptions_ema: 'focali.dev@gmail.com',
+            orders_export: 'focali.dev@gmail.com',
         },
         templates: {
             welcome: 'welcome',
@@ -85,10 +89,6 @@ module.exports = {
             attachment: 'attachment',
             order: 'order'
         }
-    },
-    emails: {
-        orders_export: 'focali.dev@gmail.com',
-        prescriptions: 'focali.dev@gmail.com'
     },
     authorizenet: {
         apiLoginID: '78qH88Btv',
