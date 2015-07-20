@@ -19,7 +19,7 @@ exports.ship = function(order, callback){
     if(!order.billingAddress) order.billingAddress = order.shippingAddress;
 
     // TODO: Add payment method
-    prescriptionToString(order.id, order.customerEmail).then(function(prescriptionString){
+    prescriptionToString(order.id, order.customerEmail).then(function(prescriptionString, shouldHold){
         var post_data = {
             orderNumber: order.orderNumber,
             orderKey: order.id,
@@ -81,7 +81,7 @@ exports.ship = function(order, callback){
                 console.log(body);
             }else{
                 // && order.paymentState == "Paid"
-                if(prescriptionString && order.paymentState == "Paid") holdOrder(body.orderId)
+                if(shouldHold && order.paymentState == "Paid") holdOrder(body.orderId)
                 callback(null, body);
             }
         })
@@ -182,11 +182,13 @@ var prescriptionToString = function(orderId, email){
     return new Promise(function(resolve, reject){
         PrescriptionService.byId(orderId, function(err, result){
             if(!err && result){
-                var val = result.value;
+                var val = result.value,
+                    shouldHold = true; // Don't hold the order if it's reader
 
                 str += "Type: "+ val.type.capitalize() + ",\n"
                 if(val.type == 'reader'){
                     str += "Strength: +"+ val.data.strength
+                    shouldHold = false;
                 }else{
                     if(val.method == 'calldoctor'){
                         str += "Method: " + "Call Doctor" + ",\n";
@@ -203,9 +205,9 @@ var prescriptionToString = function(orderId, email){
                         str += "File name: " + val.data.new_filename;
                     }
                 }
-                resolve(str)
+                resolve(str, shouldHold)
             }else{
-                resolve(null)
+                resolve(null, false)
             }
         });
     });

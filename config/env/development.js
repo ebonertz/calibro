@@ -79,7 +79,7 @@ module.exports = {
         },
         addresses: {
             contactus_email: 'support@focalioptics.com',
-            prescriptions_ema: 'focali.dev@gmail.com',
+            prescriptions_email: 'focali.dev@gmail.com',
             orders_export: 'focali.dev@gmail.com',
         },
         templates: {
@@ -93,9 +93,9 @@ module.exports = {
     authorizenet: {
         apiLoginID: '78qH88Btv',
         transactionKey: '85k34Y4947T4pMkf',
-        timeCorrection: 10773 // Matias
+        //timeCorrection: 10773 // Matias
         // timeCorrection: 14373 // Luciano
-        //timeCorrection: -7288  // Sebas
+        timeCorrection: -7288  // Sebas
     },
     shipstation: {
         key: 'd9d40094ab3347db928e16f1199939ac',

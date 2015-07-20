@@ -19,12 +19,13 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
-				$scope.register = {}
-
 				// And redirect to the index page
 				$location.path('#!/account');
+				$scope.register = {}
+				LoggerServices.success("Registered successfully")
 			}).error(function(response) {
-				$scope.register_error = response.message;
+				LoggerServices.error(response.message);
+				$scope.register.password = null;
 			});
 		};
 
@@ -41,13 +42,14 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 					CustomerService.setCookie(response.remember.rem, response.remember.rid)
 				}
 
-				$scope.credentials = {}
+				$scope.credentials = {};
 
 				// And redirect to the index page
 				$location.path('/');
 				$rootScope.loading = false;
+				LoggerServices.success("Logged in successfully")
 			}).error(function(response) {
-				LoggerServices.error('Login failed')
+				LoggerServices.error(response.message)
 				$rootScope.loading = false;
 			});
 		};

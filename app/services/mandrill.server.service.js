@@ -3,8 +3,10 @@
 var MandrillClient = require('../clients/mandrill.server.client.js');
 
 exports.send_one = function (options, callback) {
-	if(!options.email)
-		return false
+	if(!options.email) {
+		console.log("No email to send to")
+		return new Promise(function(reject){reject("No email")})
+	}
 
 	var to = {
 		email: options.email,

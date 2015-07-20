@@ -48,7 +48,7 @@ exports.upload = function(req, res) {
                     subject: 'Prescription #'+counter,
                     filename: 'prescription-' + counter
                 }
-            UploadFileService.uploadAndEmail(req, config.mandrill.addresses.prescriptions, options, function(err, file_data){
+            UploadFileService.uploadAndEmail(req, config.mandrill.addresses.prescriptions_email, options, function(err, file_data){
                 if(err){
                     return res.sendStatus(400)
                 }else {

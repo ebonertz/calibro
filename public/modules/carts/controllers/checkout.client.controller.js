@@ -10,7 +10,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.anchorScroll = function(where){
             $location.hash(where);
             $anchorScroll(where);
-        }
+        };
 
         $scope.showPhasePrescription = function(){
             $scope.phasePrescription = true;
@@ -366,7 +366,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         };
 
         $scope.uploadPrescription = function(files) {
-            $scope.progressbar = ngProgressFactory.createInstance();
+            $scope.progressbar = $scope.progressbar || ngProgressFactory.createInstance();
             $scope.progressbar.set(0);
             //$scope.progressbar.color('#00A2E1');
 
@@ -385,7 +385,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         file: files[0]
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        if (!finished) $scope.progressbar.set(progressPercentage);
+                        if (!finished) $scope.progressbar.set(progressPercentage*0.9);
 
                         $scope.log = 'progress: ' + progressPercentage + '% ' +
                             evt.config.file.name + '\n' + $scope.log;
@@ -403,7 +403,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
                         //});
                     }).error(function (data, status, headers, config) {
-                        console.log(status)
+                        console.log(status);
+                        $scope.progressbar.reset();
                         // handle error
                     })
                 }

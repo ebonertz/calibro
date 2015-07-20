@@ -96,49 +96,6 @@ var buildFiles = function(intgs){
 
                     "Order High Index": order.highIndex ? 'Yes' : 'No'
                 });
-
-                // Shipstation export
-                //intgs['shipstation'].csvStream.write({
-                //    "Order Number": value.id,
-                //    "Order Create Date": createdAtDateStr,
-                //    "Order Date Paid": "",
-                //    "Order Total": order.grossPrice,
-                //    "Order Amount Paid": order.grossPrice,
-                //    "Order Tax Paid": order.taxPrice,
-                //    "Order Shipping Paid":order.shippingPrice,
-                //    "Order Shipping Service": value.shippingInfo ? value.shippingInfo.shippingMethodName : null,
-                //    "Order Total Weight (oz)": null,
-                //    "Order Custom Field 1": null,
-                //    "Order Custom Field 2": null,
-                //    "Order Custom Field 3": null,
-                //    "Order Source": "Sphere.io",
-                //    "Order Notes to Buyer": null,
-                //    "Order Notes from Buyer": null,
-                //    "Order Internal Notes": null,
-                //    "Ship to First Name": value.shippingAddress.firstName,
-                //    "Ship to Last Name": value.shippingAddress.lastName,
-                //    "Ship to Phone": value.shippingAddress.phone,
-                //    "Ship to E-mail": null,
-                //    "Ship to Username": null,
-                //    "Ship to Company Name": null,
-                //    "Ship to Address":  value.shippingAddress.streetName,
-                //    "Ship to Address 2": value.shippingAddress.streetNumber,
-                //    "Ship to Address 3": null,
-                //    "Ship to City": value.shippingAddress.city,
-                //    "Ship to Postal Code": value.shippingAddress.postalCode,
-                //    "Ship to Country Code": value.shippingAddress.country,
-                //    "Product Height (in)": null,
-                //    "Product Width (in)": null,
-                //    "Product Length (in)": null,
-                //    "Product Sku": item.variant.sku,
-                //    "Product Name": item.name.en,
-                //    "Product Quantity": item.quantity,
-                //    "Product Unit Price": item.price.value.centAmount/100,
-                //    "Product Weight (oz)": null,
-                //    "Product Options": null,
-                //    "Product Warehouse Location": null,
-                //    "Product Marketplace Item #": null
-                //})
             })
 
         })

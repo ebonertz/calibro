@@ -10,6 +10,7 @@ var chanByKey = {};
 var lastFetchTime;
 
 exports.getByKey = function(key){
+    // TODO: Block thread if channel not there (this is wrong)
     if(chanByKey.hasOwnProperty(key) && stillValidData()){
         return chanByKey[key]
     }else{
