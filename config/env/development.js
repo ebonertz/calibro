@@ -86,6 +86,10 @@ module.exports = {
             order: 'order'
         }
     },
+    emails: {
+        orders_export: 'focali.dev@gmail.com',
+        prescriptions: 'focali.dev@gmail.com'
+    },
     authorizenet: {
         apiLoginID: '78qH88Btv',
         transactionKey: '85k34Y4947T4pMkf',
@@ -101,4 +105,5 @@ module.exports = {
         price: 30,
         slug: 'high-index-lens'
     },
+    orderPrefix: 'TEST',
 };

@@ -1490,19 +1490,19 @@ button.op{
 	height: 48px;
 	width:24px;
 	text-align: center;
-	background: @blue;
+	//background: @blue;
 	border-radius: 3px;
-	color: white;
+	//color: white;
 	font-size: 20px;
 	font-weight: 700;
 	padding: 0px;
-	border: 1px solid @blue;
+	//border: 1px solid @blue;
 	&:hover{
-		background: #47596b;
-		border-color: #47596b;
+		//background: #47596b;
+		//border-color: #47596b;
 	}
 	&:active{
-		background-color: black;
+		//background-color: black;
 	}
 }
 .cart-add, #whishlist{
@@ -2145,18 +2145,26 @@ table#cart{
 
 	  	&:hover, &.selected{
 			border-color: rgba(0, 124, 175, 0.45);
-		  opacity: 1;
+		  	opacity: 1;
 			.header{
-			  color: #007caf;
+			  	color: #007caf;
 			}
 		  	hr {
-			  //color: #00A2E1;
-			  border-color: #00A2E1;
+			  	//color: #00A2E1;
+			  	border-color: #00A2E1;
+			}
+		}
+	  	.content {
+		  	height: 60px;
+		  	overflow: hidden;
+
+		  	label {
+			  	margin-top: 4px;
 			}
 		}
 	}
   	.summary {
-	  text-transform: uppercase;
+	  	text-transform: uppercase;
 	}
 }
 
@@ -2287,4 +2295,9 @@ table#cart{
 	.close{
 		margin-left: 20px;
 	}
+}
+
+#ngProgress {
+  background-color: #00A2E1 !important;
+  color: #00A2E1 !important;
 }

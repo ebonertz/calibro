@@ -56,11 +56,12 @@
             <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>
           </div>
         </div>
-        <div class="add-to-cart" ng-if="currentVariant.availability.isOnStock">
-          <button ng-click="decrementQuantity()" class="op" id="minus">&#45;</button>
+        <div class="add-to-cart">
+          <button ng-click="decrementQuantity()" class="op" id="minus" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">&#45;</button>
           <input type="text" min="1" id="item-amount" value="{{quantity}}">
-          <button ng-click="incrementQuantity()" class="op" id="more">&#43;</button>
-          <button ng-click="addToCart(product)" class="cart-add btn blue radius">Add to Cart</button>
+          <button ng-click="incrementQuantity()" class="op" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'" id="more">&#43;</button>
+          <button ng-click="addToCart(currentVariant.availability.isOnStock)" class="cart-add btn radius" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">Add to Cart</button>
+          <!--<button class="cart-add btn grey radius" ng-if="!currentVariant.availability.isOnStock">Add to Cart</button>-->
         </div>
         <div class="product-description" itemprop="description">
           <p bo-text="product.description | locale"></p>

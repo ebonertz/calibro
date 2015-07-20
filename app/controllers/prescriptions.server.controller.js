@@ -1,17 +1,15 @@
 'use strict';
 var CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
     PrescriptionService = require('../services/sphere/sphere.prescriptions.server.service.js'),
-    multiparty = require('multiparty'),
-    Busboy = require('busboy'),
-    MandrillService = require('../services/mandrill.server.service.js');
+    UploadFileService = require('../services/upload-file.server.services.js');
 
 exports.create = function (req, res) {
     var cartId = req.param('cartId'),
         contents = req.body;
 
-    delete contents._id
+    delete contents._id;
 
-    PrescriptionService.create(cartId, contents, 'cart', function (err, result) {
+    PrescriptionService.create(cartId, contents, function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -33,39 +31,37 @@ exports.byCart = function (req, res) {
 }
 
 exports.upload = function(req, res) {
-    var busboy = new Busboy({ headers: req.headers });
+    // TODO: Check cart
+    // TODO: Check file size
+    // TODO: Check file extension
 
-    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        console.log('File [' + fieldname + ']: filename: ' + filename);
-        var bufs = [];
-        var totalLength = 0;
-        file.on('data', function(data) {
-            console.log('File [' + fieldname + '] got ' + data.length/1024 + ' KB');
-            //buffs.push(new Buffer(data, 'utf8'))
-            if(data.length > 0) {
-                bufs.push(data)
-                totalLength += data.length
-            }
-            file.resume()
-        });
-        file.on('end', function() {
-            var data = Buffer.concat(bufs, totalLength);
-            MandrillService.sendAttachment('focali.dev@gmail.com', 'Prescription' ,'prescription-'+filename, data.toString('base64') , file.mimeType).then(function(res){
-                console.log('Email sent')
-            }, function(error){
-                console.log('Error sending email')
-                console.log(error)
+    // TODO: Move to upload service
+    // Should upload to temp and send an email when order is created. This is just the simple way around.
+
+    PrescriptionService.getLastUploadId(function(err, result){
+        if(err){
+            return res.sendStatus(400)
+        }else{
+            var counter = result.value + 1,
+                options = {
+                    subject: 'Prescription #'+counter,
+                    filename: 'prescription-' + counter
+                }
+            UploadFileService.uploadAndEmail(req, 'focali.dev@gmail.com', options, function(err, file_data){
+                if(err){
+                    return res.sendStatus(400)
+                }else {
+                    PrescriptionService.updateLastUploadId(counter);
+                    res.json({
+                        new_filename: file_data.new_name,
+                        original_filename: file_data.original_name,
+                        file_size: (file_data.size / (1024 * 1024)).toFixed(2) + "MB"
+                    })
+                }
             })
-            console.log('File [' + fieldname + '] Finished. '+data.length/1024+' MB');
-        });
-    });
-    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
-        console.log('Field [' + fieldname + ']: value: ' + inspect(val));
-    });
-    busboy.on('finish', function() {
-        console.log('Done parsing form!');
-        res.writeHead(303, { Connection: 'close', Location: '/' });
-        res.end();
-    });
-    req.pipe(busboy);
-}
+        }
+    })
+
+
+
+};

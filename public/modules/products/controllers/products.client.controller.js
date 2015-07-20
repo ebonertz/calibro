@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'SocialShareService',
-  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, SocialShareService) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'SocialShareService', 'LoggerServices',
+  function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, SocialShareService, LoggerServices) {
     $scope.authentication = Authentication;
     $scope.$location = $location;
 
@@ -276,12 +276,16 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.quantity --;
     }
 
-    $scope.addToCart = function () {
-      if(!$scope.distributionChannel){
-        $scope.error.distributionChannel = "Please select an option";
-      }else {
-        $scope.error.distributionChannel = null;
-        CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.distributionChannel, $scope.quantity);
+    $scope.addToCart = function (inStock) {
+      if(inStock) {
+        if (!$scope.distributionChannel) {
+          $scope.error.distributionChannel = "Please select an option";
+        } else {
+          $scope.error.distributionChannel = null;
+          CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.distributionChannel, $scope.quantity);
+        }
+      }else{
+        LoggerServices.error("Product out of stock")
       }
     };
 

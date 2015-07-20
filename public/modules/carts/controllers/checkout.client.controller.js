@@ -2,10 +2,10 @@
 
 angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService',
     'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions',
-    'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'Upload',
+    'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'Upload', 'ngProgressFactory',
     function ($scope, Authentication, $rootScope, CartService,
               ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription,
-              AuthorizeNetService, ShippingMethodService, $anchorScroll, Upload) {
+              AuthorizeNetService, ShippingMethodService, $anchorScroll, Upload, ngProgressFactory) {
 
         $scope.anchorScroll = function(where){
             $location.hash(where);
@@ -288,6 +288,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }else if($scope.prescription.method == 'sendlater'){
                         $scope.highindex = true;
                         $scope.anchorScroll('lensType');
+                    }else if($scope.prescription.method == 'upload'){
+                        $scope.highindex = true;
+                        $scope.file = result.value.data;
                     }
                 }
             });
@@ -301,7 +304,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             var save = function(type, method, data, callback){
                 $rootScope.loading = true;
-                var prescription = new Prescription({
+                new Prescription({
                     _id: $rootScope.cart.id,
                     type: type,
                     method: method,
@@ -349,44 +352,62 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     break;
 
                 case 'sendlater':
-                    save('prescription', 'sendlater', null, function(){
+                    save('prescription', 'sendlater', '', function(){
                         $scope.anchorScroll('lensType');
                         $scope.highindex = true;
                     })
                     break;
 
                 case 'upload':
-                    save('prescription', 'upload', data, function(){
+                    save('prescription', 'upload', $scope.file, function(){
                         $scope.highindex = true;
                     })
             }
         };
 
-        $scope.uploadPrescription = function(files){
+        $scope.uploadPrescription = function(files) {
+            $scope.progressbar = ngProgressFactory.createInstance();
+            $scope.progressbar.set(0);
+            //$scope.progressbar.color('#00A2E1');
 
-            if (files && files.length) {
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
+            var finished = false,
+                extensions = ['jpg', 'jpeg', 'png', 'pdf'],
+                maxSizeMB = 20; // 20MB
+
+            if (files && files.length > 0){
+                if(extensions.indexOf(files[0].name.split('.').pop()) < 0){
+                    LoggerServices.error('Incorrect file format')
+                }else if(files[0].size/(1024*1024) > maxSizeMB){
+                    LoggerServices.error('File size exceeded (max. '+maxSizeMB+'MB)')
+                }else {
                     Upload.upload({
                         url: '/prescriptions/upload',
-                        file: file
+                        file: files[0]
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        if (!finished) $scope.progressbar.set(progressPercentage);
+
                         $scope.log = 'progress: ' + progressPercentage + '% ' +
                             evt.config.file.name + '\n' + $scope.log;
                     }).success(function (data, status, headers, config) {
-                        console.log(status);
+                        finished = true;
+                        $scope.progressbar.complete();
+
                         LoggerServices.success("Prescription uploaded")
                         $scope.prescription.method = 'upload';
-                        $scope.highindex=true;
-                        $scope.savePrescription('upload', {file: config.file.name})
+                        $scope.highindex = true;
+
+                        $scope.file = data; // {new_filename, original_filename, file_size}
+                        $scope.savePrescription('upload')
                         //$timeout(function () {
                         //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
                         //});
-                    });
+                    }).error(function (data, status, headers, config) {
+                        console.log(status)
+                        // handle error
+                    })
                 }
             }
-
         }
 
         $scope.highIndexLine = function(){

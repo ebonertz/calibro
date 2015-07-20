@@ -21,6 +21,15 @@ exports.find = function (container, key, callback) {
     });
 };
 
+exports.byId = function (container, key, callback) {
+    SphereClient.getClient().customObjects.byId(container+'/'+key).fetch().then(function(result){
+        callback(null, result.body)
+    }).error(function(err){
+        console.log(err)
+        callback(err, null)
+    })
+}
+
 exports.create = function(container, key, value, callback){
     var payload = {
         container: container,

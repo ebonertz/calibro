@@ -7,20 +7,21 @@ var PrescriptionService = require('./sphere/sphere.prescriptions.server.service.
     _ = require('lodash'),
     request = require('request');
 
-var header;
+
+var getHeader = function(){
+    return "Basic "+new Buffer(config.shipstation.key+":"+config.shipstation.secret, 'utf8').toString('base64');
+}
+
 exports.ship = function(order, callback){
-    try {
-        header = "Basic "+new Buffer(config.shipstation.key+":"+config.shipstation.secret, 'utf8').toString('base64');
+    var header = getHeader();
 
-        // Set billing address same to shipping address while we don't have this value (e.g. before going to Authorize.net)
-        if(!order.billingAddress) order.billingAddress = order.shippingAddress;
+    // Set billing address same to shipping address while we don't have this value (e.g. before going to Authorize.net)
+    if(!order.billingAddress) order.billingAddress = order.shippingAddress;
 
-        //var prescription =
-
-        // TODO: Use orderNumer instead of id
-        // TODO: Add payment method?
+    // TODO: Add payment method
+    prescriptionToString(order.id, order.customerEmail).then(function(prescriptionString){
         var post_data = {
-            orderNumber: order.id,
+            orderNumber: order.orderNumber,
             orderKey: order.id,
             orderDate: order.createdAt,
             orderStatus: order.paymentState == "Paid" ? 'awaiting_shipment' : 'awaiting_payment', // awaiting_payment, awaiting_shipment, shipped, on_hold, cancelled
@@ -55,13 +56,10 @@ exports.ship = function(order, callback){
             taxAmount: order.taxedPrice ? (order.taxedPrice.totalGross.centAmount - order.taxedPrice.totalNet.centAmount)/100 : null,
             shippingAmount: order.shippingInfo ? order.shippingInfo.price.centAmount/100 : null,
             requestedShippingService: order.shippingInfo ? order.shippingInfo.shippingMethodName : null,
-            customerNotes: 'High-index lens: ' + (hasHighIndex(order) ? 'Yes' : 'No'),
-            internalNotes: prescriptionToString(order.id, order.customerEmail),
+            customerNotes: 'High-index Lens: ' + (hasHighIndex(order) ? 'Yes' : 'No'),
         };
 
-        // Get prescription method
-
-        // Has high index
+        if(prescriptionString) post_data.internalNotes = prescriptionString;
 
         var call_options = {
             url: 'https://'+domain+'/orders/createorder',
@@ -82,14 +80,45 @@ exports.ship = function(order, callback){
                 callback(response.statusCode)
                 console.log(body);
             }else{
+                // && order.paymentState == "Paid"
+                if(prescriptionString && order.paymentState == "Paid") holdOrder(body.orderId)
                 callback(null, body);
             }
         })
-    }catch(e){
-        console.log(e)
-        callback(e)
+    })
+};
+
+var holdOrder = function(orderId, callback){
+    var header = getHeader(),
+        date = new Date();
+
+    date.setYear(date.getFullYear()+5);
+
+    var call_options = {
+        url: 'https://'+domain+'/orders/holduntil',
+        method: "POST",
+        json: true,
+        body: {
+            orderId: orderId,
+            holdUntilDate: date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate()
+        },
+        headers: {
+            "content-type": "application/json",
+            'Authorization': header,
+        },
     }
-}
+
+    request(call_options, function (error, response, body) {
+        if(error){
+            console.log(error)
+            if(typeof callback === 'function')
+                callback(error);
+        }else{
+            if(typeof callback === 'function')
+                callback(null, body)
+        }
+    })
+};
 
 var buildName = function(address){
     var fullname = ""
@@ -149,35 +178,35 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 var prescriptionToString = function(orderId, email){
-    var str = ''
-    PrescriptionService.byId(orderId, function(err, result){
-        if(!err && result){
-            var val = result.value
+    var str = '';
+    return new Promise(function(resolve, reject){
+        PrescriptionService.byId(orderId, function(err, result){
+            if(!err && result){
+                var val = result.value;
 
-            str += "Type: "+ val.type.capitalize() + "\n"
-            if(val.type == 'reader'){
-                str += "Strength: +"+ val.data.strength
-            }else{
-                if(val.method == 'calldoctor'){
-                    str += "Method: " + "Call Doctor" + "\n";
-                    str += "Doctor Name: "+ val.data.doctorName+"\n";
-                    str += "Clinic State: "+ val.data.state+"\n";
-                    str += "Phone Number: "+ val.data.phoneNumber+"\n";
-                    str += "Patient Name: "+ val.data.patientName+"\n";
-                    str += "Patient Birth: "+ val.data.partienBirth+"\n";
-                }else if(val.method == 'sendlater'){
-                    str += "Method: " + "Send Later" + "\n";
-                    str += "Customer Email: " + email + "\n";
-                }else if(val.method == 'upload'){
-                    str += "Method: " + "Upload File" + "\n";
-                    str += "File name: " + "\n";
+                str += "Type: "+ val.type.capitalize() + ",\n"
+                if(val.type == 'reader'){
+                    str += "Strength: +"+ val.data.strength
+                }else{
+                    if(val.method == 'calldoctor'){
+                        str += "Method: " + "Call Doctor" + ",\n";
+                        str += "Doctor Name: "+ val.data.doctorName+",\n";
+                        str += "Clinic State: "+ val.data.state+",\n";
+                        str += "Phone Number: "+ val.data.phoneNumber+",\n";
+                        str += "Patient Name: "+ val.data.patientName+",\n";
+                        str += "Patient Birth: "+ val.data.partientBirth;
+                    }else if(val.method == 'sendlater'){
+                        str += "Method: " + "Send Later" + ",\n";
+                        str += "Customer Email: " + (email ? email : "Not provided");
+                    }else if(val.method == 'upload'){
+                        str += "Method: " + "Upload File" + ",\n";
+                        str += "File name: " + val.data.new_filename;
+                    }
                 }
+                resolve(str)
+            }else{
+                resolve(null)
             }
-
-            return str;
-        }else{
-            return null
-        }
+        });
     });
-    return null
 };

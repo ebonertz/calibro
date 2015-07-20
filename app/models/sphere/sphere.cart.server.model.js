@@ -47,10 +47,7 @@ var Cart = function(opt) {
                     resolve(res[0])
                 }
             })
-        })
-            //    .error(function(err) {
-            //    return null;
-            //})
+        });
     }
 };
 

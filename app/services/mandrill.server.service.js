@@ -128,7 +128,7 @@ exports.orderCreated = function(email, orderId, link){
 		template_content: [
 			{
 				"name": "orderId",
-				"content": email
+				"content": orderId
 			},
 			{
 				"name": "link",

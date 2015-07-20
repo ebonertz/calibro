@@ -36,9 +36,9 @@
                         <div ng-if="lineItem.discountedPrice" style="font-size: 90%">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | spherePrice}}</div>
                     </td>
                     <td class="edit-quantity">
-                        <button ng-click="decreaseLineItemQuantity(lineItem)" class="op" id="minus">&#45;</button>
+                        <button ng-click="decreaseLineItemQuantity(lineItem)" class="op blue" id="minus">&#45;</button>
                         <input type="text" id="item-amount" ng-model="lineItem.quantity">
-                        <button ng-click="increaseLineItemQuantity(lineItem)" class="op" id="more">&#43;</button>
+                        <button ng-click="increaseLineItemQuantity(lineItem)" class="op blue" id="more">&#43;</button>
                     </td>
                     <td class="item-total">
                         <div class="item-cart-price">

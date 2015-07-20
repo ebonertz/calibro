@@ -7,6 +7,8 @@ angular.module('carts').filter('prescriptionName', function () {
                 return 'Send Later';
             case 'calldoctor':
                 return 'Call Doctor';
+            case 'upload':
+                return 'Upload File';
         }
     }
 })

@@ -19,6 +19,7 @@
     "angular-bindonce": "~0.3.1",
     "angular-socialshare": "~1.4.1",
     "es5-shim": "~4.1.7",
-    "ng-file-upload": "~5.0.9"
+    "ng-file-upload": "~5.0.9",
+    "ngprogress": "~1.1.1"
   }
 }

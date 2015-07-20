@@ -13,7 +13,7 @@
     <section class="page">
         <div class="content">
             <h1 class="page-title">Thank you for your order</h1>
-            <b>Order ID</b> <span class="badge radius outline tblue xsmall">#{{order.id}}</span> <span
+            <b>Order Number</b><span class="badge radius outline tblue xsmall">{{order.orderNumber}}</span> <span
                 class="badge radius outline yellow xsmall">{{order.orderState}}</span>
             <span ng-if="order.paymentState == 'Paid'" class="badge radius outline green xsmall">Paid</span>
             <hr/>
@@ -48,7 +48,7 @@
                         </tr>
                         <tr>
                             <td>Taxes</td>
-                            <td>{{order.taxedPrice.totalGross |  | spherePrice}}</td>
+                            <td>{{order.taxedPrice.totalGross | spherePrice}}</td>
                         </tr>
                         <tr>
                             <td><h6>Order Total</h6></td>
