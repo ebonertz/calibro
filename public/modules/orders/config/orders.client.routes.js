@@ -12,7 +12,12 @@ angular.module('orders').config(['$stateProvider',
             state('view-order', {
                 url: '/orders/:orderId',
                 templateUrl: 'modules/orders/views/view-order.client.view.html'
-            });
+            }).
+            state('order-view', {
+                url: '/order-view',
+                templateUrl: 'modules/orders/views/view-order.client.view.html'
+            })
+
         ;
     }
 ]);
