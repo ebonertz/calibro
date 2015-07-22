@@ -1,7 +1,8 @@
 var CryptoJS = require("crypto-js"),
     config = require('../../config/config'),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
-    CommonService = require('./sphere/sphere.commons.server.service.js');
+    CommonService = require('./sphere/sphere.commons.server.service.js'),
+    OrderService = require('./sphere/sphere.orders.server.service.js');
 
 var apiLoginID = config.authorizenet.apiLoginID,
     transactionKey = config.authorizenet.transactionKey;
@@ -66,35 +67,39 @@ exports.get = function (amount, callback) {
 }
 
 
-exports.relay = function (receipt, callback) {
-
-    var object = {};
+exports.authorizeCallback = function (receipt, callback) {
 
     var order = {
-        id: receipt.cartId, // TODO
-        version: receipt.version // TODO
+        id: receipt.cart_id, // TODO
+        version: parseInt(receipt.cart_version) // TODO
     };
 
-    exports.create(order, function (orderCreated) {
+    /*
+     1 This transaction has been approved.
+     2 This transaction has been declined.
+     3 There has been an error processing this transaction.
+     4 This transaction is being held for review.
+     */
+    if (receipt.x_response_code == 1) {
 
-        // Save info of Cart Payment in custom objects. Just in case we need them later.
-        var newCustomObject = {
-            container: 'checkoutInfo',
-            key: orderCreated.id,
-            value: receipt
-        };
+        OrderService.create(order, function (err, orderCreated) {
 
-        CommonService.create('customObjects', newCustomObject);
+            if(err) {
+                callback(err, null);
+                return;
+            }
 
-        /*
-         1 This transaction has been approved.
-         2 This transaction has been declined.
-         3 There has been an error processing this transaction.
-         4 This transaction is being held for review.
-         */
+            // Save info of Cart Payment in custom objects. Just in case we need them later.
+            var newCustomObject = {
+                container: 'checkoutInfo',
+                key: orderCreated.id,
+                value: receipt
+            };
 
-        if (receipt.x_response_code == 1) {
-            exports.changePaymentState(orderCreated.id, {paymentState: 'Paid'}, function (err, resultOrder) {
+            CommonService.create('customObjects', newCustomObject);
+
+
+            OrderService.changePaymentState(orderCreated.id, {paymentState: 'Paid'}, function (err, resultOrder) {
 
                 if (err) {
                     callback(err, null);
@@ -104,9 +109,11 @@ exports.relay = function (receipt, callback) {
                 }
 
             });
-        } else {
-            callback(new Error('Error in Authorize.net payment process.'), null);
-        }
 
-    });
+        });
+
+    } else {
+        callback(new Error('Error in Authorize.net payment process.'), null);
+    }
+
 }

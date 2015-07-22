@@ -21,10 +21,19 @@ exports.get = function (req, res) {
 };
 
 exports.relay = function (req, res) {
-    console.log('Query');
-    console.log(req.query);
-    console.log('Body');
-    console.log(req.body);
-    return res.render('authorize-net-scripts/success');
-    //return res.sendStatus(200);
+    var receipt = req.body;
+
+    if (receipt == null) {
+        res.sendStatus(400);
+        return;
+    }
+
+    AuthorizeNetService.authorizeCallback(receipt, function (err, orderCreated) {
+        if (err) {
+            return res.render('authorize-net-scripts/failure');
+        } else {
+            return res.render('authorize-net-scripts/success',  { orderId: orderCreated.id });
+        }
+    });
+
 };

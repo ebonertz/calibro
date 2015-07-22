@@ -15,7 +15,7 @@ exports.find = function (container, key, callback) {
                 }
             }
 
-            callback(null, null);
+            callback(new Error('Custom Object not found.'), null);
 
         }
     });

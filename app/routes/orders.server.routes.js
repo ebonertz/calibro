@@ -21,7 +21,12 @@ module.exports = function (app) {
     app.route('/orders/byCustomer/:customerId')
         .get(commons.byCustomer.bind({entity: entity}));
 
+    app.route('/orders/fromPaypal/:cartId')
+        .get(orders.fromPaypal);
+
     // TODO: Should be deleted when merge.
     app.route('/orders/payOrder/:orderId')
         .post(orders.payOrder);
+
+
 };

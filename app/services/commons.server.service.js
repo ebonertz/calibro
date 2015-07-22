@@ -33,8 +33,9 @@ exports.doRequest = function (endpoint, callback) {
             try {
                 parsed = JSON.parse(body);
             }
-            catch(err) {
+            catch (err) {
                 callback(err, null);
+                return;
             }
 
             callback(null, parsed);
@@ -46,5 +47,41 @@ exports.doRequest = function (endpoint, callback) {
     post_req.on('error', function (e) {
         console.error(e);
         callback(e, null);
+        return;
     });
+}
+
+exports.doRequestNoParse = function (endpoint, callback) {
+
+    var post_req = https.request(endpoint, function (res) {
+        var body = '';
+
+        res.on('data', function (d) {
+            body += d;
+        });
+
+        res.on('end', function () {
+            callback(null, body);
+        });
+    });
+
+    post_req.end();
+
+    post_req.on('error', function (e) {
+        console.error(e);
+        callback(e, null);
+        return;
+    });
+}
+
+
+exports.parseKeyValuePairs = function (str, divider) {
+    var lines = str.split(divider);
+    var map = {};
+    for (var i = 0; i < lines.length; i++) {
+        var pieces = lines[i].split("=");
+        if (pieces.length == 2)
+            map[pieces[0]] = pieces[1];
+    }
+    return map;
 }
