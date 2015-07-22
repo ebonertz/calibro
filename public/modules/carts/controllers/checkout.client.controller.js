@@ -1,45 +1,59 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService',
-    'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions',
-    'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'Upload', 'ngProgressFactory',
-    function ($scope, Authentication, $rootScope, CartService,
-              ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription,
-              AuthorizeNetService, ShippingMethodService, $anchorScroll, Upload, ngProgressFactory) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory) {
 
-        $scope.anchorScroll = function(where){
-            $location.hash(where);
-            $anchorScroll(where);
-        };
+        $scope.card = {};
 
-        $scope.showPhasePrescription = function(){
-            $scope.phasePrescription = true;
-            $scope.phaseA = false;
-            $scope.phaseB = false;
-            $scope.phaseC = false;
-            $scope.anchorScroll(null);
-        };
+        $scope.billingMethods = [
+            {name: 'Credit Card'},
+            {name: 'PayPal'}
+        ];
+
+
         $scope.showPhaseA = function () {
-            $scope.phasePrescription = false;
             $scope.phaseA = true;
             $scope.phaseB = false;
             $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
         $scope.showPhaseB = function () {
-            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = true;
             $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
         $scope.showPhaseC = function () {
-            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = true;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
+
+        $scope.showPhaseD = function () {
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.phaseD = true;
+            $scope.phaseE = false;
+            $scope.anchorScroll(null);
+        }
+
+        $scope.showPhaseE = function () {
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = true;
+            $scope.anchorScroll(null);
+        }
+
 
         $scope.cartPrescriptionCount = function(){
             var has = 0;
@@ -54,6 +68,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         $scope.showPhaseA();
         $scope.showPrescriptionSummary = false;
+
 
         var init = function () {
             if ($rootScope.cart != null) {
@@ -83,16 +98,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         $rootScope.loading = false;
 
-                        if ($rootScope.cart.shippingInfo != null) {
-                            AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                                $scope.authorizeNet = data;
-
-                                if (!$scope.$$phase)
-                                    $scope.$apply();
-
-                            });
-                        }
-
                     });
 
                     if (!$scope.$$phase)
@@ -103,7 +108,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             } else {
                 console.log("Cart is still null. Loading delay?");
             }
-        };
+        }
 
         if ($rootScope.cart == null) {
             var cartWatch = $rootScope.$watch('cart', function(cart){
@@ -130,6 +135,15 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         $scope.selectShippingMethod = function (shippingMethod) {
             $scope.selectedShippingMethod = shippingMethod;
+        }
+
+        $scope.selectBillingAddress = function (billingAddress) {
+            $scope.selectedBillingAddress = billingAddress;
+            $rootScope.cart.billingAddress = billingAddress;
+        }
+
+        $scope.selectBillingMethod = function (billingMethod) {
+            $scope.selectedBillingMethod = billingMethod;
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
@@ -171,6 +185,45 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         }
 
+
+        $scope.setBillingMethod = function () {
+            if (!$rootScope.loading) {
+                if ($scope.selectedBillingMethod) {
+                    if ($scope.selectedBillingMethod.name == 'PayPal') {
+                        PaypalService.setExpressCheckout($rootScope.cart.totalPrice.currencyCode, $rootScope.cart.totalPrice.centAmount / 100, $rootScope.cart.id).then(function(data) {
+                            $window.location.href = data;
+                        });
+                    } else {
+                        $scope.showPhaseD();
+                    }
+                }
+            }
+        }
+
+        $scope.setBillingAddress = function (billingAddress) {
+            if (!$rootScope.loading) {
+                var finalBillingAddress = billingAddress;
+
+                if ($scope.selectedBillingAddress) {
+                    finalBillingAddress = $scope.selectedBillingAddress;
+                }
+
+                $rootScope.loading = true;
+                CartService.setBillingAddress($rootScope.cart.id, $rootScope.cart.version, {address: finalBillingAddress}).then(function (result) {
+
+                    $rootScope.cart = result;
+                    LoggerServices.success('Billing address updated');
+
+                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
+                        $scope.authorizeNet = data;
+                        $scope.showPhaseE();
+                        $rootScope.loading = false;
+                    });
+
+                });
+            }
+        }
+
         $scope.setShippingMethod = function () {
             if (!$rootScope.loading && $scope.selectedShippingMethod) {
                 $rootScope.loading = true;
@@ -183,20 +236,19 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     $rootScope.cart = result;
 
                     LoggerServices.success('Shipping method updated');
+                    $scope.showPhaseC();
+                    $rootScope.loading = false;
 
-                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                        $scope.authorizeNet = data;
-
-                        $scope.showPhaseC();
-
-                        $rootScope.loading = false;
-                    });
                 }, function (error) {
                     $rootScope.loading = false;
                     LoggerServices.warning(error);
                 });
 
             }
+        }
+
+        $scope.placeOrder = function () {
+
         }
 
         $scope.createOrder = function () {
@@ -213,7 +265,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 LoggerServices.warning(error.data);
             });
         }
-
 
         $scope.addCustomerAddress = function (address, valid) {
             console.log(valid);
@@ -246,6 +297,21 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.shippingAddress.lastName &&
                 $rootScope.cart.shippingAddress.country;
         };
+
+        $scope.validateBillingAddress = function () {
+            return $rootScope.cart &&
+                $rootScope.cart.billingAddress &&
+                $rootScope.cart.billingAddress.streetName &&
+                $rootScope.cart.billingAddress.streetNumber &&
+                $rootScope.cart.billingAddress.firstName &&
+                $rootScope.cart.billingAddress.lastName &&
+                $rootScope.cart.billingAddress.country;
+        };
+
+        $scope.validateCreditCard = function () {
+            return $scope.card.card_number != null && $scope.card.card_exp != null && $scope.card.card_security_code != null;
+        };
+
 
         $scope.selectHighIndex = function(status){
             var method = status ? 'addHighIndex' : 'removeHighIndex';
@@ -310,24 +376,24 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     method: method,
                     data: data
                 }).$save(function(response){
-                    $scope.prescription = response.value;
-                    if($scope.prescription.type == 'reader'){
-                        $scope.prescription.strength = $scope.prescription.data.strength;
-                    }else if($scope.prescription.method == 'calldoctor'){
-                        $scope.prescription.calldoctor = $scope.prescription.data;
-                    }
+                        $scope.prescription = response.value;
+                        if($scope.prescription.type == 'reader'){
+                            $scope.prescription.strength = $scope.prescription.data.strength;
+                        }else if($scope.prescription.method == 'calldoctor'){
+                            $scope.prescription.calldoctor = $scope.prescription.data;
+                        }
 
-                    $rootScope.loading = false;
-                    LoggerServices.success('Prescription saved');
-                    callback(response);
-                }, function (response) {
-                    $scope.error = response.data.message;
-                    $rootScope.loading = false;
-                    LoggerServices.error(response);
-                }, function (error) {
-                    $rootScope.loading = false;
-                    LoggerServices.warning(error);
-                });
+                        $rootScope.loading = false;
+                        LoggerServices.success('Prescription saved');
+                        callback(response);
+                    }, function (response) {
+                        $scope.error = response.data.message;
+                        $rootScope.loading = false;
+                        LoggerServices.error(response);
+                    }, function (error) {
+                        $rootScope.loading = false;
+                        LoggerServices.warning(error);
+                    });
             }
             switch(type_method){
                 case 'reader':
@@ -420,6 +486,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             }
             return null
         };
+
+
     }
 ])
 ;

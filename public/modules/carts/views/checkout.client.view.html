@@ -2,7 +2,7 @@
 <div class="content-wrapper" ng-controller="CheckoutController">
     <section id="breadcrumbs">
         <div class="breadcrumb">
-		
+
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
@@ -202,6 +202,8 @@
                             </section>
                         </div>
                     </div>
+
+
                     <div ng-if="phaseB">
                         <h4>Shipping Method</h4>
                         <hr>
@@ -244,7 +246,155 @@
                             </section>
                         </div>
                     </div>
+
+
                     <div ng-if="phaseC">
+                        <h4>Billing Method</h4>
+                        <hr>
+                        <div class="panel-content">
+                            <section class="inner">
+                                <div class="saved-addresses-checkout">
+                                    <h6>Choose an existing address</h6>
+
+                                    <form>
+                                        <label ng-repeat="billingMethod in billingMethods"
+                                               ng-click="selectBillingMethod(billingMethod)" class="block-radio">
+                                            <b>{{billingMethod.name}}</b><br/>
+                                            <input type="radio" name="address" value="1">
+                                        </label>
+                                    </form>
+
+                                </div>
+                                <div ng-if="selectedBillingMethod.name == 'PayPal'" class="add-address-checkout" style="height: 174px;">
+                                </div>
+                                <div ng-if="selectedBillingMethod.name != 'PayPal'" class="add-address-checkout">
+                                    <h6>Card information</h6>
+
+                                    <form id="add-address" name="addAddress" action="#">
+                                        <label>Number</label>
+                                        <input type="text" name="cardNumber" placeholder="Card Number"
+                                               ng-model="card.card_number" required/>
+                                        <label>Expiration Date</label>
+                                        <input type="text" name="cardExp" placeholder="Expiration Date"
+                                               ng-model="card.card_exp" required/>
+                                        <label>Security Code</label>
+                                        <input type="tel" name="securityCode" placeholder="Security Code"
+                                               ng-model="card.card_security_code"/>
+                                    </form>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col col-md-6">
+                                        <div class="continue">
+                                            <a ng-click="showPhaseB()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                        </div>
+                                    </div>
+                                    <div class="col col-md-6">
+                                        <div ng-if="selectedBillingMethod && ((selectedBillingMethod.name != 'PayPal' && validateCreditCard()) || selectedBillingMethod.name == 'PayPal')" class="continue">
+                                            <a ng-click="setBillingMethod()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+
+
+                    <div ng-if="phaseD">
+                        <h4>Billing Address</h4>
+                        <hr>
+                        <div class="panel-content">
+                            <section class="inner">
+                                <div class="saved-addresses-checkout">
+                                    <h6>Choose an existing address</h6>
+
+                                    <form ng-if="authentication.user">
+                                        <label ng-repeat="address in authentication.user.addresses track by address.id"
+                                               ng-click="selectBillingAddress(address)" class="block-radio {{address.selected ? 'checked' : ''}}">
+                                            <b>{{address.firstName}} {{address.lastName}}</b><br/>
+                                            {{address.streetName}} {{address.streetNumber}}<br/>
+                                            {{address.phone}}
+                                            <input type="radio" name="address" value="1">
+                                        </label>
+                                    </form>
+
+                                    <div ng-if="!authentication.user" class="text-center text-danger" style="position: relative;top: 32px;">
+                                        <div class="notice outline red small">No addresses. Please log in.</div>
+                                    </div>
+
+                                </div>
+                                <div class="add-address-checkout">
+                                    <h6>Selected Address</h6>
+
+                                    <form id="add-address" name="addAddress" action="#">
+                                        <label>First Name</label>
+                                        <input type="text" name="firstName" placeholder="First Name"
+                                               ng-model="cart.billingAddress.firstName" required/>
+                                        <label>Last Name</label>
+                                        <input type="text" name="lastName" placeholder="Last Name"
+                                               ng-model="cart.billingAddress.lastName" required/>
+                                        <label>Phone</label>
+                                        <input type="tel" name="last-name" placeholder="Phone #"
+                                               ng-model="cart.billingAddress.phone"/>
+
+                                        <div class="form-field-big-quarter">
+                                            <label>Address</label>
+                                            <input type="text" name="streetName" placeholder="Street Name"
+                                                   ng-model="cart.billingAddress.streetName" required/>
+                                        </div>
+                                        <div class="form-field-small-quarter">
+                                            <label>#</label>
+                                            <input type="text" name="streetNumber" placeholder="#"
+                                                   ng-model="cart.billingAddress.streetNumber" required/>
+                                        </div>
+                                        <label>City</label>
+                                        <input type="text" name="city" placeholder="City"
+                                               ng-model="cart.billingAddress.city" required/>
+                                        <label>State/Province</label>
+                                        <input type="text" name="stater" placeholder="State/Province"
+                                               ng-model="cart.billingAddress.stater" required/>
+                                        <label>Zip/Postal</label>
+                                        <input type="text" name="postalCode" placeholder="ZIP/Postal"
+                                               ng-model="cart.billingAddress.postalCode" required/>
+                                        <label for="country">Country</label>
+                                        <select name="country" id="country" ng-model="cart.billingAddress.country"
+                                                required>
+                                            <option disabled selected>Please choose a country</option>
+                                            <option value="US">US</option>
+                                        </select>
+                                        <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
+                                               type="button" class="btn blue radius small" value="Save Address"/>
+                                    </form>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col col-md-6">
+                                        <div class="continue">
+                                            <a ng-click="showPhaseC()" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                        </div>
+                                    </div>
+                                    <div class="col col-md-6">
+                                        <div ng-if="validateBillingAddress()" class="continue">
+                                            <a ng-click="setBillingAddress(cart.billingAddress)" href=""
+                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+
+
+                    <div ng-if="phaseE">
                         <h4>Review Order</h4>
                         <hr>
                         <div class="panel-content">
@@ -288,7 +438,9 @@
                             <section id="order-totals-checkout">
                                 <div class="checkout-totals" id="billing">
                                     <h6>Payment Information</h6>
-                                    <b>To be set in next step</b>
+                                    <b>{{cart.billingAddress.firstName}} {{cart.billingAddress.lastName}}</b><br/>
+                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}<br/>
+                                    {{cart.billingAddress.phone}}
 
                                 </div>
                                 <div class="checkout-totals" id="shipping">
@@ -328,37 +480,48 @@
                                     </table>
                                 </div>
 
+
                                 <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet && cart.lineItems != null && cart.lineItems.length > 0" method='post'
                                       action='https://test.authorize.net/gateway/transact.dll'>
+
                                     <INPUT type='hidden' name='x_login' value='{{authorizeNet.x_login}}'/>
                                     <INPUT type='hidden' name='x_amount' value='{{authorizeNet.x_amount}}'/>
-                                    <INPUT type='hidden' name='x_description' value='Descr'/>
                                     <INPUT type='hidden' name='x_fp_sequence' value='{{authorizeNet.x_fp_sequence}}'/>
                                     <INPUT type='hidden' name='x_fp_timestamp' value='{{authorizeNet.x_fp_timestamp}}'/>
                                     <INPUT type='hidden' name='x_fp_hash' value='{{authorizeNet.x_fp_hash}}'/>
-                                    <INPUT type='hidden' name='x_test_request' value='false'/>
-                                    <INPUT type='hidden' name='x_show_form' value='PAYMENT_FORM'/>
-                                    <INPUT type='hidden' name='x_receipt_link_method' value='POST'/>
-                                    <INPUT type='hidden' name='x_receipt_link_text' value='Proceed'/>
-                                        <INPUT type='hidden' name='x_receipt_link_url' value='http://localhost:3000/orders/payOrder/{{cart.id}}'/>
+
+                                    <INPUT type='hidden' name='x_card_num' value='{{card.card_number}}'/>
+                                    <INPUT type='hidden' name='x_exp_date' value='{{card.card_exp}}'/>
+
+                                    <INPUT type='hidden' name='x_first_name' value='{{cart.billingAddress.firstName}}'/>
+                                    <INPUT type='hidden' name='x_last_name' value='{{cart.billingAddress.lastName}}'/>
+
+                                    <INPUT type='hidden' name='x_address' value='{{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}'/>
+                                    <INPUT type='hidden' name='x_city' value='{{cart.billingAddress.city}}'/>
+                                    <INPUT type='hidden' name='x_state' value='{{cart.billingAddress.state}}'/>
+                                    <INPUT type='hidden' name='x_country' value='{{cart.billingAddress.country}}'/>
+
+                                    <INPUT type='hidden' name='cart_id' value='{{cart.id}}'/>
+                                    <INPUT type='hidden' name='cart_version' value='{{cart.version}}'/>
+
+                                    <INPUT TYPE="HIDDEN" NAME="x_relay_always" VALUE="TRUE"/>
 
                                     <div class="place-order">
                                         <br/>
 
                                         <div class="row">
                                             <div class="col col-md-6">
-                                                <div ng-if="selectedShippingMethod" class="continue">
-                                                    <a ng-click="showPhaseB()" href=""
+                                                <div class="continue">
+                                                    <a ng-click="showPhaseD()" href=""
                                                        class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
                                                 </div>
                                             </div>
                                             <div class="col col-md-6">
-                                                <input ng-click="createOrder()" type='button' class="btn block blue outline radius" value="Pay"/>
+                                                <input type='submit' class="btn block blue outline radius" value="Pay"/>
                                             </div>
                                         </div>
                                     </div>
                                 </FORM>
-
 
                             </section>
                         </div>
