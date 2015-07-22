@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window',
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
     function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory) {
 
         $scope.card = {};
@@ -10,8 +10,23 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             {name: 'PayPal'}
         ];
 
+        $scope.anchorScroll = function(where){
+            $location.hash(where);
+            $anchorScroll(where);
+        };
+
+        $scope.showPhasePrescription = function(){
+            $scope.phasePrescription = true;
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
+            $scope.anchorScroll(null);
+        };
 
         $scope.showPhaseA = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = true;
             $scope.phaseB = false;
             $scope.phaseC = false;
@@ -20,6 +35,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.anchorScroll(null);
         }
         $scope.showPhaseB = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = true;
             $scope.phaseC = false;
@@ -28,6 +44,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.anchorScroll(null);
         }
         $scope.showPhaseC = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = true;
@@ -37,6 +54,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.showPhaseD = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = false;
@@ -46,6 +64,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.showPhaseE = function () {
+            $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = false;
