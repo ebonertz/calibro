@@ -3,6 +3,7 @@ var MandrillService = require('../mandrill.server.service.js'),
     CustomObjectService = require('./sphere.custom-objects.server.service.js'),
     CountryLookup = require('country-data').lookup,
     config = require('../../../config/config'),
+    PaypalService = require('../paypal.server.service.js'),
     entity = 'orders',
     container = 'Orders';
 
@@ -62,7 +63,7 @@ exports.changePaymentState = function (orderId, payload, callback) {
     });
 }
 
-
+// When you click on "Place Order" in Checkout.
 exports.fromPaypal = function (cartId, version, callback) {
 
     CustomObjectService.find('paypalInfo', cartId, function (err, customObject) {
