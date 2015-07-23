@@ -12,4 +12,5 @@ module.exports = function (app) {
 
     app.route('/authorize-net/relay')
         .post(authorizeNet.relay);
+
 };

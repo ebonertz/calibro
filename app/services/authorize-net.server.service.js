@@ -2,6 +2,7 @@ var CryptoJS = require("crypto-js"),
     config = require('../../config/config'),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
     CommonService = require('./sphere/sphere.commons.server.service.js'),
+    fs = require('fs'),
     OrderService = require('./sphere/sphere.orders.server.service.js');
 
 var apiLoginID = config.authorizenet.apiLoginID,
@@ -67,7 +68,7 @@ exports.get = function (amount, callback) {
 }
 
 
-exports.authorizeCallback = function (receipt, callback) {
+exports.relay = function (receipt, callback) {
 
     var order = {
         id: receipt.cart_id, // TODO
@@ -84,7 +85,7 @@ exports.authorizeCallback = function (receipt, callback) {
 
         OrderService.create(order, function (err, orderCreated) {
 
-            if(err) {
+            if (err) {
                 callback(err, null);
                 return;
             }
@@ -105,7 +106,17 @@ exports.authorizeCallback = function (receipt, callback) {
                     callback(err, null);
                     return;
                 } else {
-                    callback(null, resultOrder);
+
+                    fs.readFile('app/views/authorize-net-scripts/success.server.view.html', 'utf8', function (err, data) {
+                        if (err) {
+                            callback(err, null);
+                        }
+                        var html = data.replace("%", (config.serverPath + '/#!/orders/' + resultOrder.id));
+                        callback(null, html);
+
+                    });
+
+
                 }
 
             });
@@ -117,3 +128,4 @@ exports.authorizeCallback = function (receipt, callback) {
     }
 
 }
+

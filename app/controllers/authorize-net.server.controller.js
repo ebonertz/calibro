@@ -28,11 +28,11 @@ exports.relay = function (req, res) {
         return;
     }
 
-    AuthorizeNetService.authorizeCallback(receipt, function (err, orderCreated) {
+    AuthorizeNetService.relay(receipt, function (err, html) {
         if (err) {
             return res.render('authorize-net-scripts/failure');
         } else {
-            return res.render('authorize-net-scripts/success',  { orderId: orderCreated.id });
+            return res.send(html);
         }
     });
 
