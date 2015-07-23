@@ -109,9 +109,9 @@ exports.addDiscountCode = function (cartId, version, payload, callback) {
     });
 }
 
-exports.addHighIndex = function(cartId, version, payload, callback) {
+exports.addHighIndex = function (cartId, version, payload, callback) {
     var quantity = payload.quantity;
-    if(quantity < 1)
+    if (quantity < 1)
         return callback("No lines to apply high-index to");
 
     var taxCategory = TaxCategoryService.getFirst();
@@ -123,7 +123,7 @@ exports.addHighIndex = function(cartId, version, payload, callback) {
         'money': {
             // Move to config
             "currencyCode": "USD",
-            "centAmount": config.highIndex.price*100 || 3000
+            "centAmount": config.highIndex.price * 100 || 3000
         },
         'slug': config.highIndex.slug,
         'taxCategory': {
@@ -138,9 +138,82 @@ exports.addHighIndex = function(cartId, version, payload, callback) {
 };
 
 // Proxy
-exports.removeHighIndex = function(cartId, version, lineId, callback) {
+exports.removeHighIndex = function (cartId, version, lineId, callback) {
     var payload = {
         customLineItemId: lineId
     };
     exports.removeCustomLineItem(cartId, version, payload, callback);
 };
+
+
+exports.init = function (userId, cookieId, callback) {
+
+    var newCart = {
+        "currency": "USD",
+        "customerId": userId
+    };
+
+    if (userId) {
+
+        exports.byCustomer(userId, function (err, cart) {
+
+            if (err) {
+                callback(err, null);
+            } else {
+
+                if (cart == null || cart.errors != null && cart.errors.length > 0) {
+
+                    CommonService.create('carts', newCart, function (err, cart) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            console.log("Init Cart A - Cart created - Cart ID: " + cart.id);
+                            callback(null, cart);
+                        }
+                    });
+
+                } else {
+                    console.log("Init Cart B - Customer has a cart - Cart ID: " + cart.id);
+                    callback(null, cart);
+                }
+            }
+        });
+
+    } else {
+
+        if (cookieId == null) {
+            if (err) {
+                callback(err, null);
+            } else {
+                console.log("Init Cart C - Cart created - Cart ID: " + cart.id);
+                callback(null, cart);
+            }
+        } else {
+
+            CommonService.byId('carts', cookieId, function (err, cart) {
+
+                if (err) {
+                    callback(err, null);
+                } else {
+                    // This check is to avoid showing a user cart, that started as an anonymous cart.
+                    if (cart.customerId == null && cart.cartState == 'Active') {
+                        console.log("Init Cart D - Customer has a cart from cookie - Cart ID: " + cart.id);
+                        callback(null, cart);
+                    } else {
+                        CommonService.create('carts', newCart, function (err, cart) {
+                            if (err) {
+                                callback(err, null);
+                            } else {
+                                console.log("Init Cart E - Cart created - Cart ID: " + cart.id);
+                                callback(null, cart);
+                            }
+                        });
+                    }
+
+                }
+            });
+
+        }
+    }
+
+}
