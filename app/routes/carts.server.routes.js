@@ -13,6 +13,9 @@ module.exports = function (app) {
         .post(commons.create.bind({entity: entity}))
         .delete(commons.deleteAll.bind({entity: entity}))
 
+    app.route('/carts/init')
+        .get(carts.init);
+
     app.route('/carts/:id')
         .get(carts.byId)
         .delete(commons.delete.bind({entity: entity}))

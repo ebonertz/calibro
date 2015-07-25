@@ -1,63 +1,109 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService',
-    'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'Prescriptions',
-    'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'Upload', 'ngProgressFactory',
-    function ($scope, Authentication, $rootScope, CartService,
-              ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, Prescription,
-              AuthorizeNetService, ShippingMethodService, $anchorScroll, Upload, ngProgressFactory) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory) {
 
-        $scope.anchorScroll = function(where){
+        $scope.card = {};
+
+        $scope.billingMethods = [
+            {name: 'Credit Card'},
+            {name: 'PayPal'}
+        ];
+
+
+        $scope.anchorScroll = function (where) {
             $location.hash(where);
             $anchorScroll(where);
         };
 
-        $scope.showPhasePrescription = function(){
+        $scope.showPhasePrescription = function () {
             $scope.phasePrescription = true;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
         };
+
         $scope.showPhaseA = function () {
             $scope.phasePrescription = false;
             $scope.phaseA = true;
             $scope.phaseB = false;
             $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
         $scope.showPhaseB = function () {
             $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = true;
             $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
         $scope.showPhaseC = function () {
             $scope.phasePrescription = false;
             $scope.phaseA = false;
             $scope.phaseB = false;
             $scope.phaseC = true;
+            $scope.phaseD = false;
+            $scope.phaseE = false;
             $scope.anchorScroll(null);
-        };
+        }
 
-        $scope.cartPrescriptionCount = function(){
+        $scope.showPhaseD = function () {
+            $scope.phasePrescription = false;
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.phaseD = true;
+            $scope.phaseE = false;
+            $scope.anchorScroll(null);
+        }
+
+        $scope.showPhaseE = function () {
+            $scope.phasePrescription = false;
+            $scope.phaseA = false;
+            $scope.phaseB = false;
+            $scope.phaseC = false;
+            $scope.phaseD = false;
+            $scope.phaseE = true;
+            $scope.anchorScroll(null);
+        }
+
+
+        $scope.cartPrescriptionCount = function () {
             var has = 0;
-            for(var i in $rootScope.cart.lineItems){
+            for (var i in $rootScope.cart.lineItems) {
                 var line = $rootScope.cart.lineItems[i];
-                if(line.distributionChannel.key != 'nonprescription'){
-                    has+=line.quantity;
+                if (line.distributionChannel.key && line.distributionChannel.key != 'nonprescription') {
+                    has += line.quantity;
                 }
             }
             return has;
         };
 
-        $scope.showPhaseA();
+
+        if ($location.search().jumpto == null) {
+            $scope.showPhaseA();
+        } else {
+            if ($location.search().jumpto == 'billingMethod') {
+                $scope.showPhaseC();
+                LoggerServices.warning('There was a problem on the Payment site.');
+            } else {
+                $scope.showPhaseA();
+            }
+        }
+
         $scope.showPrescriptionSummary = false;
+
 
         var init = function () {
             if ($rootScope.cart != null) {
-                if($scope.cartPrescriptionCount() > 0) {
+                if ($scope.cartPrescriptionCount() > 0) {
                     $scope.showPhasePrescription();
                     $scope.showPrescriptionSummary = true;
                 }
@@ -83,16 +129,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         $rootScope.loading = false;
 
-                        if ($rootScope.cart.shippingInfo != null) {
-                            AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                                $scope.authorizeNet = data;
-
-                                if (!$scope.$$phase)
-                                    $scope.$apply();
-
-                            });
-                        }
-
                     });
 
                     if (!$scope.$$phase)
@@ -103,11 +139,11 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             } else {
                 console.log("Cart is still null. Loading delay?");
             }
-        };
+        }
 
         if ($rootScope.cart == null) {
-            var cartWatch = $rootScope.$watch('cart', function(cart){
-                if(cart != null) {
+            var cartWatch = $rootScope.$watch('cart', function (cart) {
+                if (cart != null) {
                     cartWatch()
                     init();
                 }
@@ -130,6 +166,15 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         $scope.selectShippingMethod = function (shippingMethod) {
             $scope.selectedShippingMethod = shippingMethod;
+        }
+
+        $scope.selectBillingAddress = function (billingAddress) {
+            $scope.selectedBillingAddress = billingAddress;
+            $rootScope.cart.billingAddress = billingAddress;
+        }
+
+        $scope.selectBillingMethod = function (billingMethod) {
+            $scope.selectedBillingMethod = billingMethod;
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
@@ -163,12 +208,51 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     });
 
-                }, function(err){
+                }, function (err) {
                     LoggerServices.warning("Couldn't set shipping address, please try again");
                     $rootScope.loading = false;
                 });
             }
 
+        }
+
+
+        $scope.setBillingMethod = function () {
+            if (!$rootScope.loading) {
+                if ($scope.selectedBillingMethod) {
+                    if ($scope.selectedBillingMethod.name == 'PayPal') {
+                        PaypalService.setExpressCheckout($rootScope.cart.totalPrice.currencyCode, $rootScope.cart.totalPrice.centAmount / 100, $rootScope.cart.id).then(function (data) {
+                            $window.location.href = data;
+                        });
+                    } else {
+                        $scope.showPhaseD();
+                    }
+                }
+            }
+        }
+
+        $scope.setBillingAddress = function (billingAddress) {
+            if (!$rootScope.loading) {
+                var finalBillingAddress = billingAddress;
+
+                if ($scope.selectedBillingAddress) {
+                    finalBillingAddress = $scope.selectedBillingAddress;
+                }
+
+                $rootScope.loading = true;
+                CartService.setBillingAddress($rootScope.cart.id, $rootScope.cart.version, {address: finalBillingAddress}).then(function (result) {
+
+                    $rootScope.cart = result;
+                    LoggerServices.success('Billing address updated');
+
+                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
+                        $scope.authorizeNet = data;
+                        $scope.showPhaseE();
+                        $rootScope.loading = false;
+                    });
+
+                });
+            }
         }
 
         $scope.setShippingMethod = function () {
@@ -183,20 +267,19 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     $rootScope.cart = result;
 
                     LoggerServices.success('Shipping method updated');
+                    $scope.showPhaseC();
+                    $rootScope.loading = false;
 
-                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                        $scope.authorizeNet = data;
-
-                        $scope.showPhaseC();
-
-                        $rootScope.loading = false;
-                    });
                 }, function (error) {
                     $rootScope.loading = false;
                     LoggerServices.warning(error);
                 });
 
             }
+        }
+
+        $scope.placeOrder = function () {
+
         }
 
         $scope.createOrder = function () {
@@ -213,7 +296,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 LoggerServices.warning(error.data);
             });
         }
-
 
         $scope.addCustomerAddress = function (address, valid) {
             console.log(valid);
@@ -247,7 +329,22 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.shippingAddress.country;
         };
 
-        $scope.selectHighIndex = function(status){
+        $scope.validateBillingAddress = function () {
+            return $rootScope.cart &&
+                $rootScope.cart.billingAddress &&
+                $rootScope.cart.billingAddress.streetName &&
+                $rootScope.cart.billingAddress.streetNumber &&
+                $rootScope.cart.billingAddress.firstName &&
+                $rootScope.cart.billingAddress.lastName &&
+                $rootScope.cart.billingAddress.country;
+        };
+
+        $scope.validateCreditCard = function () {
+            return $scope.card.card_number != null && $scope.card.card_exp != null && $scope.card.card_security_code != null;
+        };
+
+
+        $scope.selectHighIndex = function (status) {
             var method = status ? 'addHighIndex' : 'removeHighIndex';
 
             var highIndexLine = $scope.highIndexLine();
@@ -257,16 +354,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             };
 
             // Don't remove if there's high-index line
-            if(!highIndexLine && !status){
+            if (!highIndexLine && !status) {
                 return
             }
 
             $rootScope.loading = true;
-            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function(result) {
+            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 $rootScope.cart = result;
-                if(status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
+                if (status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
                 $rootScope.loading = false;
-            }, function(err){
+            }, function (err) {
                 $rootScope.loading = false;
                 LoggerServices.error('Could not save, please try again');
                 console.log(err)
@@ -274,77 +371,77 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             return false;
         };
-        $scope.getPrescription = function(prescription){
-            new Prescription({_id: $rootScope.cart.id}).$get().then(function(result){
-                if(result.value) {
+        $scope.getPrescription = function (prescription) {
+            new Prescription({_id: $rootScope.cart.id}).$get().then(function (result) {
+                if (result.value) {
                     console.log(result.value)
                     $scope.prescription = result.value;
-                    if($scope.prescription.type == 'reader'){
+                    if ($scope.prescription.type == 'reader') {
                         $scope.prescription.strength = $scope.prescription.data.strength;
-                    }else if($scope.prescription.method == 'calldoctor'){
+                    } else if ($scope.prescription.method == 'calldoctor') {
                         $scope.prescription.calldoctor = $scope.prescription.data;
                         $scope.highindex = true;
                         $scope.anchorScroll('calldoctor');
-                    }else if($scope.prescription.method == 'sendlater'){
+                    } else if ($scope.prescription.method == 'sendlater') {
                         $scope.highindex = true;
                         $scope.anchorScroll('lensType');
-                    }else if($scope.prescription.method == 'upload'){
+                    } else if ($scope.prescription.method == 'upload') {
                         $scope.highindex = true;
                         $scope.file = result.value.data;
                     }
                 }
             });
         }
-        $scope.savePrescription = function(type_method, valid){
+        $scope.savePrescription = function (type_method, valid) {
             $scope.savedPrescription = {}
             var data = {}
 
             // Fast fix
             $scope.prescription = $scope.prescription || {}
 
-            var save = function(type, method, data, callback){
+            var save = function (type, method, data, callback) {
                 $rootScope.loading = true;
                 new Prescription({
                     _id: $rootScope.cart.id,
                     type: type,
                     method: method,
                     data: data
-                }).$save(function(response){
-                    $scope.prescription = response.value;
-                    if($scope.prescription.type == 'reader'){
-                        $scope.prescription.strength = $scope.prescription.data.strength;
-                    }else if($scope.prescription.method == 'calldoctor'){
-                        $scope.prescription.calldoctor = $scope.prescription.data;
-                    }
+                }).$save(function (response) {
+                        $scope.prescription = response.value;
+                        if ($scope.prescription.type == 'reader') {
+                            $scope.prescription.strength = $scope.prescription.data.strength;
+                        } else if ($scope.prescription.method == 'calldoctor') {
+                            $scope.prescription.calldoctor = $scope.prescription.data;
+                        }
 
-                    $rootScope.loading = false;
-                    LoggerServices.success('Prescription saved');
-                    callback(response);
-                }, function (response) {
-                    $scope.error = response.data.message;
-                    $rootScope.loading = false;
-                    LoggerServices.error(response);
-                }, function (error) {
-                    $rootScope.loading = false;
-                    LoggerServices.warning(error);
-                });
+                        $rootScope.loading = false;
+                        LoggerServices.success('Prescription saved');
+                        callback(response);
+                    }, function (response) {
+                        $scope.error = response.data.message;
+                        $rootScope.loading = false;
+                        LoggerServices.error(response);
+                    }, function (error) {
+                        $rootScope.loading = false;
+                        LoggerServices.warning(error);
+                    });
             }
-            switch(type_method){
+            switch (type_method) {
                 case 'reader':
-                    if(!valid) return false
+                    if (!valid) return false
 
-                    if($scope.highIndexLine() != null) $scope.selectHighIndex(false);
+                    if ($scope.highIndexLine() != null) $scope.selectHighIndex(false);
                     data = {strength: $scope.prescription.strength}
-                    save('reader', null, data, function(){
+                    save('reader', null, data, function () {
                         $scope.showPhaseA();
                     });
 
                     break;
 
                 case 'calldoctor':
-                    if(valid) {
+                    if (valid) {
                         data = $scope.prescription.calldoctor
-                        save('prescription', 'calldoctor', data, function(){
+                        save('prescription', 'calldoctor', data, function () {
                             $scope.highindex = true;
                             $scope.anchorScroll('calldoctor');
                         });
@@ -352,20 +449,20 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     break;
 
                 case 'sendlater':
-                    save('prescription', 'sendlater', '', function(){
+                    save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
                         $scope.highindex = true;
                     })
                     break;
 
                 case 'upload':
-                    save('prescription', 'upload', $scope.file, function(){
+                    save('prescription', 'upload', $scope.file, function () {
                         $scope.highindex = true;
                     })
             }
         };
 
-        $scope.uploadPrescription = function(files) {
+        $scope.uploadPrescription = function (files) {
             $scope.progressbar = $scope.progressbar || ngProgressFactory.createInstance();
             $scope.progressbar.set(0);
             //$scope.progressbar.color('#00A2E1');
@@ -374,18 +471,18 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 extensions = ['jpg', 'jpeg', 'png', 'pdf'],
                 maxSizeMB = 20; // 20MB
 
-            if (files && files.length > 0){
-                if(extensions.indexOf(files[0].name.split('.').pop()) < 0){
+            if (files && files.length > 0) {
+                if (extensions.indexOf(files[0].name.split('.').pop()) < 0) {
                     LoggerServices.error('Incorrect file format')
-                }else if(files[0].size/(1024*1024) > maxSizeMB){
-                    LoggerServices.error('File size exceeded (max. '+maxSizeMB+'MB)')
-                }else {
+                } else if (files[0].size / (1024 * 1024) > maxSizeMB) {
+                    LoggerServices.error('File size exceeded (max. ' + maxSizeMB + 'MB)')
+                } else {
                     Upload.upload({
                         url: '/prescriptions/upload',
                         file: files[0]
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        if (!finished) $scope.progressbar.set(progressPercentage*0.9);
+                        if (!finished) $scope.progressbar.set(progressPercentage * 0.9);
 
                         $scope.log = 'progress: ' + progressPercentage + '% ' +
                             evt.config.file.name + '\n' + $scope.log;
@@ -411,15 +508,17 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             }
         }
 
-        $scope.highIndexLine = function(){
-            for(var i in $rootScope.cart.customLineItems){
+        $scope.highIndexLine = function () {
+            for (var i in $rootScope.cart.customLineItems) {
                 var line = $rootScope.cart.customLineItems[i];
-                if(line.slug == 'high-index-lens') {
+                if (line.slug == 'high-index-lens') {
                     return line;
                 }
             }
             return null
         };
+
+
     }
 ])
 ;

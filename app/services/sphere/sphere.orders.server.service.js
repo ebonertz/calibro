@@ -3,6 +3,7 @@ var MandrillService = require('../mandrill.server.service.js'),
     CustomObjectService = require('./sphere.custom-objects.server.service.js'),
     CountryLookup = require('country-data').lookup,
     config = require('../../../config/config'),
+    PaypalService = require('../paypal.server.service.js'),
     entity = 'orders',
     container = 'Orders';
 
@@ -60,6 +61,64 @@ exports.changePaymentState = function (orderId, payload, callback) {
     CommonService.update(entity, orderId, [payload], function (err, result) {
         callback(err, result);
     });
+}
+
+// When you click on "Place Order" in Checkout.
+exports.fromPaypal = function (cartId, version, callback) {
+
+    CustomObjectService.find('paypalInfo', cartId, function (err, customObject) {
+        if (err) {
+            callback(err, null);
+        } else {
+
+            var paypalInfo = customObject.value;
+
+            var order = {
+                id: cartId,
+                version: parseInt(version)
+            };
+
+            exports.create(order, function (err, orderCreated) {
+
+                if (err) {
+                    callback(err, null);
+                } else {
+
+                    PaypalService.doExpressCheckoutPayment(paypalInfo.CURRENCYCODE, paypalInfo.PAYMENTREQUEST_0_AMT, paypalInfo.TOKEN, paypalInfo.PAYERID, function (err, paypalResponse) {
+
+                        if (err) {
+                            callback(err, null);
+                        } else {
+
+                            console.log(paypalResponse);
+
+                            if (paypalResponse.ACK == 'Success' && paypalResponse.PAYMENTINFO_0_PAYMENTSTATUS == 'Completed') {
+
+                                exports.changePaymentState(orderCreated.id, {paymentState: 'Paid'}, function (err, resultOrder) {
+
+                                    if (err) {
+                                        callback(err, null);
+                                    } else {
+                                        callback(null, resultOrder);
+                                    }
+
+                                });
+
+                            } else {
+                                callback(new Error('PayPal response not valid to pay Order.'), null);
+                            }
+                        }
+                    });
+                }
+
+
+            });
+
+
+        }
+    });
+
+
 }
 
 // TODO: Should be deleted when merge.

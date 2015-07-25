@@ -9,64 +9,29 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             $rootScope.loading = true;
 
-            if (Authentication.user) {
+            var customerId = null,
+                cookieId = null;
 
-                this.byCustomer(Authentication.user.id).then(function (cart) {
-
-                    if (cart != null) {
-                        $rootScope.cart = cart;
-                        console.log('User already has a cart in Sphere. ID: ' + $rootScope.cart.id);
-                        $rootScope.loading = false;
-                    } else {
-                        this.service.createCart(Authentication.user.id);
-                    }
-
-                }.bind({service: this}), function (error) {
-                    this.service.createCart(Authentication.user.id);
-                }.bind({service: this}));
-
-            } else {
-
-                if ($cookies.anonymousCart == null || $cookies.anonymousCart == 'null') {
-                    this.createCart(null);
-                } else {
-
-                    Cart.get({
-                            cartId: $cookies.anonymousCart
-                        }, function (data) {
-
-                            // This check is to avoid showing a user cart, that started as an anonymous cart.
-                            if (data.customerId != null) {
-                                this.service.createCart(null);
-                            } else {
-                                $rootScope.cart = data;
-                                console.log('Anonymous cart found in cookie. ID: ' + $rootScope.cart.id);
-                                $rootScope.loading = false;
-                            }
-
-                        }.bind({service: this}),
-                        function (error) {
-                            this.service.createCart(null);
-                        }.bind({service: this}));
-                }
+            if (Authentication.user != null) {
+                customerId = Authentication.user.id;
             }
 
-        }
+            if ($cookies.anonymousCart != null) {
+                cookieId = $cookies.anonymousCart;
+            }
 
-        this.createCart = function (customerId) {
-            $rootScope.loading = true;
-            var cart = new Cart({
-                "currency": "USD",
-                "customerId": customerId
-            });
+            this.init(customerId, cookieId).then(function (cart) {
+                console.log('Cart ID: ' + cart.id);
+                $rootScope.cart = cart;
 
-            cart.$save(function (sphereCart) {
-                $rootScope.cart = sphereCart;
-                if (customerId == null)
-                    $cookies.anonymousCart = sphereCart.id;
-                console.log('New Cart created in Sphere. ID: ' + $rootScope.cart.id + ' ' + (customerId ? ' User ' + customerId : ' Anonymous'));
+                if(customerId == null) {
+                    $cookies.anonymousCart = cart.id;
+                    console.log('Cart saved in cookie.');
+                }
+
                 $rootScope.loading = false;
             });
+
         }
 
         this.addToCart = function (productId, variantId, channel, quantity) {
@@ -80,7 +45,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
 
             $rootScope.loading = true;
 
-            this.addLineItem($rootScope.cart.id,  $rootScope.cart.version, payload).then(function (result) {
+            this.addLineItem($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 LoggerServices.success('Product added');
                 $rootScope.cart = result;
                 $rootScope.loading = false;
@@ -222,6 +187,28 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             var deferred = $q.defer();
 
             $http.post(urlString + '/removeHighIndex/' + cartId + '/' + version, payload).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
+        this.init = function (customerId, cookieId) {
+            var deferred = $q.defer();
+
+            var path = urlString + '/init?';
+
+            if(customerId) {
+                path += 'customer=' + customerId;
+            }
+
+            if(cookieId) {
+                path += '&cookie=' + cookieId;
+            }
+
+            $http.get(path).success(function (data) {
                 deferred.resolve(data);
             }).error(function (error) {
                 deferred.reject(error);

@@ -1,4 +1,5 @@
-var AuthorizeNetService = require('../services/authorize-net.server.service.js');
+var AuthorizeNetService = require('../services/authorize-net.server.service.js'),
+    config = require('../../config/config');
 
 exports.get = function (req, res) {
     var amount = req.query.amount;
@@ -21,10 +22,26 @@ exports.get = function (req, res) {
 };
 
 exports.relay = function (req, res) {
-    console.log('Query');
-    console.log(req.query);
-    console.log('Body');
-    console.log(req.body);
-    return res.render('authorize-net-scripts/success');
-    //return res.sendStatus(200);
+    var receipt = req.body;
+
+    if (receipt == null) {
+        res.sendStatus(400);
+        return;
+    }
+
+    AuthorizeNetService.relay(receipt, function (err, html) {
+        if (err) {
+            fs.readFile('app/views/authorize-net-scripts/redirect.server.view.html', 'utf8', function (err, data) {
+                if (err) {
+                    res.send(400);
+                }
+                var html = data.replace("%", (config.serverPath + config.payments.errorUrl));
+                res.send(html);
+
+            });
+        } else {
+            return res.send(html);
+        }
+    });
+
 };

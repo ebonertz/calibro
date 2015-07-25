@@ -32,6 +32,8 @@ exports.all = function (entity, callback) {
 
 exports.create = function (entity, object, callback) {
     SphereClient.getClient()[entity].save(object).then(function (result) {
+        console.log(entity + " Object saved.");
+        console.log(result.body);
         if (callback)
             callback(null, result.body);
     }).error(function (err) {
