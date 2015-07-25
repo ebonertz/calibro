@@ -4,6 +4,7 @@ var MandrillService = require('../mandrill.server.service.js'),
     CountryLookup = require('country-data').lookup,
     config = require('../../../config/config'),
     PaypalService = require('../paypal.server.service.js'),
+    ShipstationService = require('../shipstation.server.service.js'),
     entity = 'orders',
     container = 'Orders';
 
@@ -43,6 +44,14 @@ exports.create = function (object, callback) {
                             console.log(err)
                         }
 
+                    });
+
+                    ShipstationService.ship(result, function (err, orderCreated) {
+                        if (err) {
+                            return res.sendStatus(400);
+                        } else {
+                            res.json(result);
+                        }
                     });
 
                     callback(null, orderCreated);
@@ -99,6 +108,15 @@ exports.fromPaypal = function (cartId, version, callback) {
                                     if (err) {
                                         callback(err, null);
                                     } else {
+
+                                        ShipstationService.ship(resultOrder, function (err) {
+                                            if (err) {
+                                                console.log(err);
+                                            } else {
+                                                console.log("Shipstation order updated successfully.")
+                                            }
+                                        });
+
                                         callback(null, resultOrder);
                                     }
 
