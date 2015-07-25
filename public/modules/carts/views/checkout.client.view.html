@@ -170,8 +170,8 @@
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
                                         <label>State/Province</label>
-                                        <input type="text" name="stater" placeholder="State/Province"
-                                               ng-model="cart.shippingAddress.stater" required/>
+                                        <input type="text" name="state" placeholder="State/Province"
+                                               ng-model="cart.shippingAddress.state" required/>
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.shippingAddress.postalCode" required/>
@@ -254,20 +254,25 @@
                         <div class="panel-content">
                             <section class="inner">
                                 <div class="saved-addresses-checkout">
-                                    <h6>Choose an existing address</h6>
+                                    <h6>Choose billing method</h6>
 
                                     <form>
-                                        <label ng-repeat="billingMethod in billingMethods"
-                                               ng-click="selectBillingMethod(billingMethod)" class="block-radio">
-                                            <b>{{billingMethod.name}}</b><br/>
+                                        <label ng-click="selectBillingMethod({name: 'Credit Card'})" class="block-radio">
+                                            <img src="/design/images/credit-card.jpg">
+                                            <b style="margin-left: 13px;">Credit Card</b><br/>
+                                            <input type="radio" name="address" value="1">
+                                        </label>
+                                        <label ng-click="selectBillingMethod({name: 'PayPal'})" class="block-radio">
+                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg">
+                                            <b style="margin-left: 13px">PayPal</b><br/>
                                             <input type="radio" name="address" value="1">
                                         </label>
                                     </form>
 
                                 </div>
-                                <div ng-if="selectedBillingMethod.name == 'PayPal'" class="add-address-checkout" style="height: 174px;">
+                                <div ng-if="selectedBillingMethod == null || selectedBillingMethod.name == 'PayPal'" class="add-address-checkout" style="height: 220px;">
                                 </div>
-                                <div ng-if="selectedBillingMethod.name != 'PayPal'" class="add-address-checkout">
+                                <div ng-if="selectedBillingMethod && selectedBillingMethod.name != 'PayPal'" class="add-address-checkout">
                                     <h6>Card information</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
@@ -356,8 +361,8 @@
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.billingAddress.city" required/>
                                         <label>State/Province</label>
-                                        <input type="text" name="stater" placeholder="State/Province"
-                                               ng-model="cart.billingAddress.stater" required/>
+                                        <input type="text" name="state" placeholder="State/Province"
+                                               ng-model="cart.billingAddress.state" required/>
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.billingAddress.postalCode" required/>
