@@ -106,5 +106,8 @@ module.exports = {
         signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AwykjF3zYTfi7eN45MkbfB-y7x3A',
         returnUrl: 'http://localhost:3000/paypal/success',
         cancelUrl: 'http://localhost:3000/paypal/cancel'
+    },
+    payments: {
+        errorUrl: '/#!/checkout?jumpto=billingMethod'
     }
 };

@@ -1,5 +1,6 @@
 var config = require('../../config/config'),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
+    CartService = require('../services/sphere/sphere.carts.server.service.js'),
     CommonService = require('../services/sphere/sphere.commons.server.service.js'),
     Commons = require('./commons.server.service.js'),
     OrderService = require('./sphere/sphere.orders.server.service.js');
@@ -27,6 +28,8 @@ exports.setExpressCheckout = function (currencyCode, amount, cartId, callback) {
         "method": "GET",
         "headers": {}
     };
+
+    CartService.deleteBillingAddress(cartId);
 
     Commons.doRequestNoParse(endpoint, function (err, data) {
         if (err)

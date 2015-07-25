@@ -12,4 +12,7 @@ module.exports = function (app) {
 
     app.route('/paypal/success')
         .get(paypal.success);
+
+    app.route('/paypal/cancel')
+        .get(paypal.cancel);
 };

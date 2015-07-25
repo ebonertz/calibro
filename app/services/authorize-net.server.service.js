@@ -107,7 +107,7 @@ exports.relay = function (receipt, callback) {
                     return;
                 } else {
 
-                    fs.readFile('app/views/authorize-net-scripts/success.server.view.html', 'utf8', function (err, data) {
+                    fs.readFile('app/views/authorize-net-scripts/redirect.server.view.html', 'utf8', function (err, data) {
                         if (err) {
                             callback(err, null);
                         }
@@ -124,7 +124,16 @@ exports.relay = function (receipt, callback) {
         });
 
     } else {
-        callback(new Error('Error in Authorize.net payment process.'), null);
+
+        fs.readFile('app/views/authorize-net-scripts/redirect.server.view.html', 'utf8', function (err, data) {
+            if (err) {
+                callback(err, null);
+            }
+            var html = data.replace("%", (config.serverPath + config.payments.errorUrl));
+            callback(null, html);
+
+        });
+
     }
 
 }

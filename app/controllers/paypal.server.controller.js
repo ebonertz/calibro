@@ -1,4 +1,5 @@
-var PaypalService = require('../services/paypal.server.service.js');
+var PaypalService = require('../services/paypal.server.service.js'),
+    config = require('../../config/config');
 
 exports.setExpressCheckout = function (req, res) {
     var amount = req.query.amount,
@@ -25,7 +26,7 @@ exports.success = function (req, res) {
 
     PaypalService.getExpressCheckoutDetails(token, cartId, function (err, data) {
         if (err) {
-
+            res.redirect(config.payments.errorUrl);
         } else {
             console.log(data);
             res.redirect('/#!/carts/' + cartId);
@@ -33,7 +34,7 @@ exports.success = function (req, res) {
     });
 };
 
-// TODO
 exports.cancel = function (req, res) {
-    console.log('TODO Cancel route');
+    var cartId = req.query.cart;
+    res.redirect(config.payments.errorUrl);
 };

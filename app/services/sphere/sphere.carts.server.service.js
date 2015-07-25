@@ -182,12 +182,14 @@ exports.init = function (userId, cookieId, callback) {
     } else {
 
         if (cookieId == null) {
-            if (err) {
-                callback(err, null);
-            } else {
-                console.log("Init Cart C - Cart created - Cart ID: " + cart.id);
-                callback(null, cart);
-            }
+            CommonService.create('carts', newCart, function (err, cart) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    console.log("Init Cart C - Cart created - Cart ID: " + cart.id);
+                    callback(null, cart);
+                }
+            });
         } else {
 
             CommonService.byId('carts', cookieId, function (err, cart) {
@@ -217,3 +219,23 @@ exports.init = function (userId, cookieId, callback) {
     }
 
 }
+
+exports.deleteBillingAddress = function (cartId, callback) {
+    CommonService.byId('carts', cartId, function (err, cart) {
+        if (err) {
+            if (callback)
+                callback(err, null);
+        } else {
+
+            if (cart.billingAddress == null) {
+                if (callback)
+                    callback(null, cart);
+            } else {
+                exports.setBillingAddress(cart.id, cart.version, {address: {}}, function (err, cart) {
+                    if (callback)
+                        callback(null, cart);
+                });
+            }
+        }
+    });
+};
