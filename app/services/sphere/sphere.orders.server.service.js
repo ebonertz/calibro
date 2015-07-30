@@ -75,7 +75,7 @@ exports.changePaymentState = function (orderId, payload, callback) {
 // When you click on "Place Order" in Checkout.
 exports.fromPaypal = function (cartId, version, callback) {
 
-    CustomObjectService.find('paypalInfo', cartId, function (err, customObject) {
+    CustomObjectService.byId('paypalInfo', cartId, function (err, customObject) {
         if (err) {
             callback(err, null);
         } else {

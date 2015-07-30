@@ -11,7 +11,7 @@ var apiLoginID = config.authorizenet.apiLoginID,
 
 exports.get = function (amount, callback) {
 
-    CustomObjectService.find('globalInfo', 'lastPaymentNumber', function (err, customObject) {
+    CustomObjectService.byId('globalInfo', 'lastPaymentNumber', function (err, customObject) {
         var lastPaymentNumber = 1;
 
         var newCustomObject = {
