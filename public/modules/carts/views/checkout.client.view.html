@@ -279,11 +279,11 @@
                                         <label>Number</label>
                                         <input type="text" name="cardNumber" placeholder="Card Number"
                                                ng-model="card.card_number" required maxlength="16"/>
-                                        <label>Expiration Date</label>
+                                        <label>Expiration Date (<b>MMYY</b> format)</label>
                                         <input type="text" name="cardExp" placeholder="Expiration Date"
-                                               ng-model="card.card_exp" required/>
-                                        <label>Security Code (MMYY format)</label>
-                                        <input type="tel" name="securityCode" placeholder="Security Code"
+                                               ng-model="card.card_exp" required  maxlength="4"/>
+                                        <label>Security Code</label>
+                                        <input type="text" name="securityCode" placeholder="Security Code"
                                                ng-model="card.card_security_code"  maxlength="4"/>
                                     </form>
                                 </div>
