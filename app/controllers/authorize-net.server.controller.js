@@ -1,5 +1,6 @@
 var AuthorizeNetService = require('../services/authorize-net.server.service.js'),
-    config = require('../../config/config');
+    config = require('../../config/config'),
+    fs = require('fs');
 
 exports.get = function (req, res) {
     var amount = req.query.amount;
