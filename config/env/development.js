@@ -90,8 +90,8 @@ module.exports = {
         //timeCorrection: -7288  // Sebas
     },
     shipstation: {
-        key: 'd9d40094ab3347db928e16f1199939ac',
-        secret: 'f1a3cf70216e4743a3f844fe076774fb'
+        key: '02cd0f0315154ff8bebd999c3ba0d9f3',
+        secret: '4cf1970cb1f049648e3808da0d20c4a2'
     },
     highIndex: {
         price: 30,
