@@ -36,7 +36,7 @@ module.exports = {
 				'public/lib/angular-socialshare/angular-socialshare.min.js',
 				'public/lib/es5-shim/es5-shim.js',
 				'public/lib/ng-file-upload/ng-file-upload-all.min.js',
-				'public/lib/ngprogress/build/ngProgress.js',
+				'public/lib/ngprogress/build/ngprogress.js',
 			]
 		},
 		css: [
