@@ -195,7 +195,14 @@ exports.init = function (userId, cookieId, callback) {
             CommonService.byId('carts', cookieId, function (err, cart) {
 
                 if (err) {
-                    callback(err, null);
+                    CommonService.create('carts', newCart, function (err, cart) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            console.log("Init Cart F - Cart created - Cart ID: " + cart.id);
+                            callback(null, cart);
+                        }
+                    });
                 } else {
                     // This check is to avoid showing a user cart, that started as an anonymous cart.
                     if (cart.customerId == null && cart.cartState == 'Active') {
