@@ -147,7 +147,7 @@ exports.removeHighIndex = function (cartId, version, lineId, callback) {
 
 
 exports.init = function (userId, cookieId, callback) {
-
+    SphereClient.setClient();
     var newCart = {
         "currency": "USD",
         "customerId": userId
