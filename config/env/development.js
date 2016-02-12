@@ -66,13 +66,13 @@ module.exports = {
     mandrill: {
         key: 'cP6gybqxJGlJWMkAcvz5hw',
         options: {
-            from_email: 'support@focalioptics.com',
+            from_email: 'welcome@focalioptics.com',
             from_name: 'Focali Optics',
         },
         addresses: {
             contactus_email: 'support@focalioptics.com',
-            prescriptions_email: 'focali.dev@gmail.com',
-            orders_export: 'focali.dev@gmail.com',
+            prescriptions_email: 'support@focalioptics.com',
+            orders_export: 'support@focalioptics.com',
         },
         templates: {
             welcome: 'welcome',
