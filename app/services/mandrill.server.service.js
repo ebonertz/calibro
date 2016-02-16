@@ -1,6 +1,7 @@
 'use strict';
 
 var MandrillClient = require('../clients/mandrill.server.client.js');
+var _ = require('lodash');
 
 exports.send_one = function (options, callback) {
 	if(!options.email) {
@@ -12,6 +13,7 @@ exports.send_one = function (options, callback) {
 		email: options.email,
 		name: options.name,
 	}
+	var global_merge_vars = options.global_merge_vars;
 
 	var message = {
         to: [to],
@@ -20,8 +22,12 @@ exports.send_one = function (options, callback) {
         subject: options.subject || null,
         html: options.html || null,
         attachments: options.attachments || null
+	};
+	if(global_merge_vars){
+		message.global_merge_vars = global_merge_vars;
+		message.merge = true;
+		message.merge_language = "handlebars";
 	}
-
 
 	var template_content = options.template_content || [
         {
@@ -132,6 +138,72 @@ exports.orderCreated = function(email, orderId, link){
 				"name": "orderId",
 				"content": orderId
 			},
+			{
+				"name": "link",
+				"content": link
+			}
+		]
+	}
+	return exports.send_one(options)
+}
+exports.orderConfirmation = function(email, order, link){
+
+	var lineItems = [];
+	_.each(order.lineItems,function(lineItem){
+		var item = {};
+		item.quantity = lineItem.quantity;
+		item.name = lineItem.name.en;
+		item.price = lineItem.price.value.centAmount /100;
+		item.currency = lineItem.price.value.currencyCode;
+		lineItems.push(item);
+	});
+
+	var shippingPrice = {
+		price : order.shippingInfo.price.centAmount / 100,
+		currency : order.shippingInfo.price.currencyCode
+	};
+	var totalPrice = {
+		price : order.totalPrice.centAmount / 100,
+		currency : order.totalPrice.currencyCode
+	};
+	var subTotal = {
+		price : totalPrice.price -shippingPrice.price,
+		currency : order.totalPrice.currencyCode
+	};
+
+	var orderDate = order.createdAt.substr(8,2) + "/"+order.createdAt.substr(5,2)+ "/" + order.createdAt.substr(0,4);
+	var options = {
+		email: email,
+		template: 'orderConfirmation',
+		global_merge_vars: [
+			{
+				"name": "orderDate",
+				"content": orderDate
+			},
+      {
+        "name": "shippingAddress",
+        "content": order.shippingAddress
+      },
+      {
+        "name": "billingAddress",
+        "content": order.billingAddress
+      },
+			{
+				"name": "lineItems",
+				"content": lineItems
+			},
+      {
+        "name": "totalPrice",
+        "content": totalPrice
+      },
+      {
+        "name": "subTotal",
+        "content": subTotal
+      },
+      {
+        "name": "shippingPrice",
+        "content": shippingPrice
+      },
 			{
 				"name": "link",
 				"content": link

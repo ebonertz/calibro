@@ -61,8 +61,6 @@
 					<select name="country" id="country" data-ng-model="newAddress.country" required>
 						<option disabled selected value="">Please choose a country</option>
 						<option value="US">United States</option>
-						<option value="CA">Canada</option>
-						<option value="GB">United Kingdom</option>
 					</select>
 				</div>
 				<br />
@@ -94,7 +92,9 @@
 				<br />
 				<div class="form-field-half">
 					<label for="state">State/Province*</label>
-					<input type="text" name="state" id="state" placeholder="State/Province" data-ng-model="newAddress.state" required />
+					<select id="state" name="state" data-ng-model="newAddress.state"   required placeholder="State/Province">
+						<option  ng-repeat="ds in dataStates['US']" value="{{ds.code}}">{{ds.name}}</option>
+					</select>
 				</div>
 				<div class="form-field-half">
 					<label for="postalCode">Zip/Postal*</label>

@@ -64,7 +64,7 @@ module.exports = {
         }
     },
     mandrill: {
-        key: 'cP6gybqxJGlJWMkAcvz5hw',
+        key: 'cP6gybqxJGlJWMkAcvz5hw',//'G2aMt_7XNEFriFTfs1Otnw',
         options: {
             from_email: 'welcome@focalioptics.com',
             from_name: 'Focali Optics',
@@ -79,7 +79,8 @@ module.exports = {
             contactus: 'contact-us',
             passwordtoken: 'password-token',
             attachment: 'attachment',
-            order: 'order'
+            order: 'order',
+            orderConfirmation: 'orderconfirmation'
         }
     },
     authorizenet: {

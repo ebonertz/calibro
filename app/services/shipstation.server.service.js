@@ -16,7 +16,7 @@ exports.ship = function(order, callback){
     var header = getHeader();
 
     // Set billing address same to shipping address while we don't have this value (e.g. before going to Authorize.net)
-    if(!order.billingAddress) order.billingAddress = order.shippingAddress;
+    //if(!order.billingAddress) order.billingAddress = order.shippingAddress;
 
     // TODO: Add payment method
     prescriptionToString(order.id, order.customerEmail).then(function(prescriptionString, shouldHold){
@@ -28,7 +28,7 @@ exports.ship = function(order, callback){
             customerUsername: order.customerEmail,
             customerEmail: order.customerEmail,
             billTo: {
-                name: buildName(order.billingAddress),
+                name: buildName(order.billingAddress!=null?order.billingAddress:order.shippingAddress),
                 company: order.billingAddress.company,
                 street1: order.billingAddress.streetName,
                 street2: order.billingAddress.streetNumber,

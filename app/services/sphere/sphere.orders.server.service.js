@@ -37,9 +37,7 @@ exports.create = function (object, callback) {
 
                     CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
                         if(!err && customer != null && customer.email != null) {
-                            MandrillService.orderCreated(customer.email, orderCreated.orderNumber, config.serverPath + '/#!/orders/' + orderCreated.id);
-                            // If at any point the order's id is different to the cart's id, use the following
-                            //PrescriptionService.toOrder(object.id, orderCreated.id)
+                            MandrillService.orderConfirmation(customer.email,orderCreated, config.serverPath + '/#!/orders/' + orderCreated.id);
                         }else{
                             console.log(err)
                         }

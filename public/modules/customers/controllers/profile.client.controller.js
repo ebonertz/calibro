@@ -1,9 +1,11 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus', 'LoggerServices',
-	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus, LoggerServices) {
-		$scope.customer = angular.copy(Authentication.user);
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus', 'LoggerServices','AddressSelector',
+	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus, LoggerServices,AddressSelector) {
+    $scope.dataStates = AddressSelector.dataStates;
+    $scope.customer = angular.copy(Authentication.user);
 		$scope.$utils = ProductUtils;
+
 
 		// If user is not signed in then redirect back home
 		if (!$scope.customer) $location.path('/');
@@ -120,12 +122,12 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			for(var i = 0; i < addresses.length; i++){
 				if(addresses[i].id == id){
 					// Convert streetNumber or it won't get set
-					addresses[i].streetNumber = parseInt(addresses[i].streetNumber)
+					addresses[i].streetNumber = parseInt(addresses[i].streetNumber);
 					return addresses[i]
 				}
 			}
 
-			// If no address is found
+			// If no address is found´
 			$scope.error = "Address not found"
 		}
 

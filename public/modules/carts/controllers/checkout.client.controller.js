@@ -1,10 +1,9 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory) {
-
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory,AddressSelector) {
+        $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
-
         $scope.billingMethods = [
             {name: 'Credit Card'},
             {name: 'PayPal'}

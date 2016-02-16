@@ -170,8 +170,11 @@
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
                                         <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province"
-                                               ng-model="cart.shippingAddress.state" required/>
+                                        <select id="states"  ng-model="cart.shippingAddress.state"   required>
+                                            <option value="" selected disabled>Choose Province/State</option>
+                                            <option ng-selected="{{cart.shippingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.shippingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
+
+                                        </select>
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.shippingAddress.postalCode" required/>
