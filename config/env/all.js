@@ -37,11 +37,13 @@ module.exports = {
 				'public/lib/es5-shim/es5-shim.js',
 				'public/lib/ng-file-upload/ng-file-upload-all.min.js',
 				'public/lib/ngprogress/build/ngprogress.js',
+				'public/lib/angular-loading-bar/build/loading-bar.min.js'
 			]
 		},
 		css: [
 			'public/modules/**/css/*.css',
-			'public/lib/ngprogress/ngProgress.css'
+			'public/lib/ngprogress/ngProgress.css',
+			'public/lib/angular-loading-bar/build/loading-bar.min.css'
 		],
 		js: [
 			'public/config.js',
