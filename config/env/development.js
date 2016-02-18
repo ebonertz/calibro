@@ -90,10 +90,6 @@ module.exports = {
         // timeCorrection: 14373 // Luciano
         //timeCorrection: -7288  // Sebas
     },
-    shipstation: {
-        key: '02cd0f0315154ff8bebd999c3ba0d9f3',
-        secret: '4cf1970cb1f049648e3808da0d20c4a2'
-    },
     highIndex: {
         price: 30,
         slug: 'high-index-lens'

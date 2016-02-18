@@ -3,7 +3,6 @@ var CryptoJS = require("crypto-js"),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js'),
     CommonService = require('./sphere/sphere.commons.server.service.js'),
     fs = require('fs'),
-    ShipstationService = require('./shipstation.server.service.js'),
     OrderService = require('./sphere/sphere.orders.server.service.js');
 
 var apiLoginID = config.authorizenet.apiLoginID,
@@ -107,15 +106,6 @@ exports.relay = function (receipt, callback) {
                     callback(err, null);
                     return;
                 } else {
-
-                    ShipstationService.ship(resultOrder, function (err) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log("Shipstation order updated successfully.")
-                        }
-                    });
-
                     fs.readFile('app/views/authorize-net-scripts/redirect.server.view.html', 'utf8', function (err, data) {
                         if (err) {
                             callback(err, null);
