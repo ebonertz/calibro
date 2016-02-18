@@ -22,6 +22,7 @@ angular.module('core').service('LoggerServices', ['$log', 'toastr',
          "hideMethod": "fadeOut"
          };*/
 
+
         var logger = {
             error: error,
             info: info,
@@ -36,27 +37,35 @@ angular.module('core').service('LoggerServices', ['$log', 'toastr',
 
         //#region implementation
         function error(message, title) {
-            toastr.error(message, title);
+            toastr.error(message, title,{
+                positionClass: 'toast-bottom-right'
+            });
             $log.error("Error: " + message);
         }
 
         function info(message, title) {
-            toastr.info(message, title);
+            toastr.info(message, title,{
+                positionClass: 'toast-bottom-right'
+            });
             $log.info("Info: " + message);
         }
 
         function infoLong(message, title) {
-            toastr.info(message, title, {timeOut: 20000});
+            toastr.info(message, title, {timeOut: 20000,positionClass: 'toast-bottom-right'});
             $log.info("Info: " + message);
         }
 
         function success(message, title) {
-            toastr.success(message, title);
+            toastr.success(message, title,{
+                positionClass: 'toast-bottom-right'
+            });
             $log.info("Success: " + message);
         }
 
         function warning(message, title) {
-            toastr.warning(message, title);
+            toastr.warning(message, title,{
+                positionClass: 'toast-bottom-right'
+            });
             $log.warn("Warning: " + message);
         }
 
