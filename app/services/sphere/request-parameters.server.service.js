@@ -134,6 +134,8 @@ var RequestParameters = function(query){
 
     if(key == 'price'){
       query = query +':range ('+valueArray.min+' to '+valueArray.max+')'
+    }else if(key == 'options'){
+      query = 'variants.attributes.options.key' +' : '+valueArray;
     }else if(typeof valueArray === 'object'){
       var is_enum = (sphereKeys[key].slice(-3) == "key")
       var values = (is_enum ? valueArray.join('","').toUpperCase() : valueArray.join('","'))

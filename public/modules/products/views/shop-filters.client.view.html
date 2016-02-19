@@ -1,21 +1,21 @@
 <div class="filter-block" id="price-filter">
   <p class="filter-title">Filter by Price</p><a class="clearfilter" ng-click="clearFilter('price')">Clear</a>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '0-99'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="0-99">
+    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="0-99">
     Below $100
   </label><br/>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '100-200'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="100-200">$100 - $200
+    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="100-200">$100 - $200
   </label><br/>
   <label class="radio-price" ng-class="{'checked': productFilters['price'] == '200-500'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="init()" name="price" value="200-500">$200 - $500
+    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="200-500">$200 - $500
   </label><br/>
 
   <div id="range">
     <div id="price-range" price-range></div>
-    $ <input type="number" ng-model="productFilters['price']['min']" min="0" max="499" id="range-number-min"/> - $
-    <input type="number" ng-model="productFilters['price']['max']" min="1" max="500" id="range-number-max"/>
-    <button type="submit" id="apply-price">Filter</button>
+    $ <input type="number" ng-model="productFiltersMin" min="0" max="499" id="range-number-min" ng-change="minChange(productFiltersMin)" /> - $
+    <input type="number" ng-model="productFiltersMax" min="1" max="500" id="range-number-max"  ng-change="maxChange(productFiltersMax)"/>
+    <button type="submit" id="apply-price" ng-click="init()">Filter</button>
   </div>
 </div>
 

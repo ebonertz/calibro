@@ -5,6 +5,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
   function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, SocialShareService, LoggerServices) {
     $scope.authentication = Authentication;
     $scope.$location = $location;
+    $scope.productFiltersMin =0;
+    $scope.productFiltersMax = 500;
 
     $scope.FETCHING = false; // Will keep track of fetches
     $scope.lang = 'en';
@@ -52,7 +54,18 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
       }
 
     }
+    $scope.optionFilter = function(value){
+      if(value){
+        if(value=="prescription") {
+          $scope.productFilters['options'] = '"PROGRESSIVE","SINGLEVISION"';
+        }
+        if(value=="frames") $scope.productFilters['options'] = '"NONPRESCRIPTION"';
 
+      }else{
+        delete $scope.productFilters['options'];
+      }
+      $scope.init();
+    }
     $scope.categoryPage = function (options){
       options = options || {}
 
@@ -70,6 +83,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         var slug = $stateParams.slug
         $scope.category = slug;
         $scope.productFilters = $scope.productFilters || {} // Init by default
+
 
         // Add gender to filters if found in stateParams (url)
         if($stateParams.gender){
@@ -242,10 +256,33 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
     }
 
     $scope.clearFilter = function(filterName){
-      delete $scope.productFilters[filterName]
+      delete $scope.productFilters[filterName];
       $scope.init();
       return false;
     }
+    $scope.priceRange = function(){
+     // var range = $scope.productFilters['price'].split("-");
+     // $scope.productFiltersMin = parseInt(range[0]);
+     // $scope.productFiltersMax = parseInt(range[1]);
+      $scope.init();
+      return;
+    };
+
+    $scope.minChange = function(value){
+      if(value) {
+        $scope.productFiltersMin = value;
+        $scope.productFilters['price'] = value + "-" + $scope.productFiltersMax;
+      }
+      return;
+    };
+    $scope.maxChange = function(value){
+      if(value) {
+        $scope.productFiltersMax = value;
+        $scope.productFilters['price'] = $scope.productFiltersMin + "-" + value;
+      }
+      return;
+    };
+
 
     $scope.sortBy = function(sortName){
       if($scope.FETCHING) // Avoid queing sort requests
