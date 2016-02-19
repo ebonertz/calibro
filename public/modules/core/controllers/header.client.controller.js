@@ -10,7 +10,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		};
 
 		$scope.logout = function(){
-			CustomerService.removeCookie();
+			window.location = '/api/auth/signout'
 		}
 
 		$scope.search = function(text){

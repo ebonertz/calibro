@@ -6,3 +6,4 @@ var config = require('../../config/config'),
 exports.mandrill = mandrill;
 exports.options = config.mandrill.options;
 exports.templates = config.mandrill.templates;
+exports.addresses = config.mandrill.addresses;

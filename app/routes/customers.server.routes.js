@@ -9,29 +9,29 @@ var customers = require('../controllers/customers.server.controller.js'),
 
 module.exports = function(app) {
   // TODO: Disable list. Change findOne to me
-	app.route('/customers')
+	app.route('/api/customers')
     .put(customers.update)
     .get(commons.list.bind({entity: entity}));
 
-  app.route('/customers/password-token').post(customers.resetPasswordEmail);
-  app.route('/customers/password/reset').post(customers.requestPasswordReset);
+  app.route('/api/customers/password-token').post(customers.resetPasswordEmail);
+  app.route('/api/customers/password/reset').post(customers.requestPasswordReset);
 
-  app.route('/customers/password/update').put(customers.changePassword);
-  app.route('/customers/:id').get(commons.byId.bind({entity: entity}));
+  app.route('/api/customers/password/update').put(customers.changePassword);
+  app.route('/api/customers/:id').get(commons.byId.bind({entity: entity}));
 
-  app.route('/auth/signup').post(customers.signup);
-  app.route('/auth/signin').post(customers.signin);
-  app.route('/auth/signout').get(customers.signout);
-  app.route('/auth/token').post(customers.signWithToken);
+  app.route('/api/auth/signup').post(customers.signup);
+  app.route('/api/auth/signin').post(customers.signin);
+  app.route('/api/auth/signout').get(customers.signout);
+  app.route('/api/auth/token').post(customers.signWithToken);
 
-  app.route('/addresses').post(customers.addAddress)
-  app.route('/addresses/:id')
+  app.route('/api/addresses').post(customers.addAddress)
+  app.route('/api/addresses/:id')
     .put(customers.updateAddress)
     .delete(customers.deleteAddress);
 
-  app.route('/subscribe/:listName').post(customers.subscribe);
-  app.route('/unsubscribe/:listName').post(customers.unsubscribe);
-  app.route('/issubscribed/:listName').get(customers.isSubscribed);
+  app.route('/api/subscribe/:listName').post(customers.subscribe);
+  app.route('/api/unsubscribe/:listName').post(customers.unsubscribe);
+  app.route('/api/issubscribed/:listName').get(customers.isSubscribed);
 
-  app.route('/contactUs/').post(customers.contactUs);
+  app.route('/api/contactUs/').post(customers.contactUs);
 };

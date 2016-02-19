@@ -3,7 +3,7 @@
 //Events service used to communicate Events REST endpoints
 angular.module('products').service('ProductService', ['$http', '$q', '$location',
   function ($http, $q, $location) {
-    var urlString = '/products';
+    var urlString = '/api/products';
 
     this.list = function () {
       var deferred = $q.defer();
@@ -61,9 +61,8 @@ angular.module('products').service('ProductService', ['$http', '$q', '$location'
       
       queryString = queryString.slice(0,-1);
 
-      var get_url = (queryString.length > 0 ? '/categories/'+slug+'?'+queryString : '/categories/'+slug);
+      var get_url = (queryString.length > 0 ? '/api/categories/'+slug+'?'+queryString : '/api/categories/'+slug);
       // var local_url = '/'+location.hash.split('?')[0]+'?'+queryString; 
-
       $http.get(get_url).success(function (data) {
         deferred.resolve(data);
       });
@@ -116,7 +115,7 @@ angular.module('products').service('ProductService', ['$http', '$q', '$location'
 
       queryString = queryString.slice(0,-1);
 
-      var get_url = (queryString.length > 0 ? '/products/byText/' + text + '?' +queryString : '/products/byText/'+text);
+      var get_url = (queryString.length > 0 ? '/api/products/byText/' + text + '?' +queryString : '/api/products/byText/'+text);
       // var local_url = '/'+location.hash.split('?')[0]+'?'+queryString;
 
       $http.get(get_url).success(function (data) {

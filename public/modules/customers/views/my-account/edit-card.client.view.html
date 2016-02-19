@@ -19,7 +19,7 @@
 			<hr/>
 			<h3>Edit Card</h3>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-			<form id="edit-card" action="#">
+			<form id="edit-card" data-ng-submit="updateCreditCard(edit-card)">
 				<div class="form-field-half">
 				<label>Card Number</label>
 				<input type="text" name="card-number" value="XXXX-XXXX-XXXX-9875" placeholder="Card Number" />
@@ -81,7 +81,7 @@
 							VISA
 						</td>
 						<td>
-						<a href="/my-account/edit-card.html" class="edit-item"></a><a href="#" class="remove-from-list"></a>
+						<a href="/edit-card" class="edit-item"></a><a href="#" class="remove-from-list"></a>
 						</td>
 					</tr>
 					<tr class="saved-payments expired">

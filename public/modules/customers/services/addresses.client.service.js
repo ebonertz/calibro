@@ -5,7 +5,7 @@ var module = angular.module('customers')
 
 module.factory('Addresses', ['$resource',
   function($resource) {
-    return $resource('addresses/:id', {id: "@id"}, {
+    return $resource('api/addresses/:id', {id: "@id"}, {
       save: {
         method: 'POST',
         params: {id: ''}

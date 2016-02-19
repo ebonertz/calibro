@@ -21,7 +21,7 @@ angular.module('misc').controller('ContactusController', ['$scope', 'Authenticat
                 message: $scope.contactUs.message
             }
 
-            $http.post('/contactUs', post_body).success(function(result){
+            $http.post('/api/contactUs', post_body).success(function(result){
                 $scope.contactSuccess = $scope.contactError = null;
 
                 if(result.status == "sent"){

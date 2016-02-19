@@ -3,7 +3,7 @@
 //Events service used to communicate Events REST endpoints
 angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$rootScope', 'Authentication', 'LoggerServices', 'Cart',
     function ($http, $q, $cookies, $rootScope, Authentication, LoggerServices, Cart) {
-        var urlString = '/carts';
+        var urlString = '/api/carts';
 
         this.pageLoad = function () {
 

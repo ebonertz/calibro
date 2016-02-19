@@ -15,7 +15,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
                 password: $scope.register.password
 			}
 
-			$http.post('/auth/signup', createValues).success(function(response) {
+			$http.post('/api/auth/signup', createValues).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
@@ -33,7 +33,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 			$rootScope.loading = true;
 			$scope.credentials.anonymousCartId = $rootScope.cart.id;
 
-			$http.post('/auth/signin', $scope.credentials).success(function(response) {
+			$http.post('/api/auth/signin', $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response.customer;
 				$rootScope.cart = response.cart;
@@ -57,7 +57,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 		$scope.requestPasswordReset = function(){
 			$scope.reset_result = null;
 
-			$http.post('/customers/password-token', $scope.reset).success(function(response){
+			$http.post('/api/customers/password-token', $scope.reset).success(function(response){
 				$scope.reset_result = {
 					status: "success",
 					message: "An email has been sent to reset the password"

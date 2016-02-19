@@ -46,7 +46,7 @@ describe('Product CRUD tests', function() {
 	});
 
 	it('should be able to save Product instance if logged in', function(done) {
-		agent.post('/auth/signin')
+		agent.post('/api/auth/signin')
 			.send(credentials)
 			.expect(200)
 			.end(function(signinErr, signinRes) {
@@ -57,7 +57,7 @@ describe('Product CRUD tests', function() {
 				var userId = user.id;
 
 				// Save a new Product
-				agent.post('/products')
+				agent.post('/api/products')
 					.send(product)
 					.expect(200)
 					.end(function(productSaveErr, productSaveRes) {
@@ -85,7 +85,7 @@ describe('Product CRUD tests', function() {
 	});
 
 	it('should not be able to save Product instance if not logged in', function(done) {
-		agent.post('/products')
+		agent.post('/api/products')
 			.send(product)
 			.expect(401)
 			.end(function(productSaveErr, productSaveRes) {
@@ -98,7 +98,7 @@ describe('Product CRUD tests', function() {
 		// Invalidate name field
 		product.name = '';
 
-		agent.post('/auth/signin')
+		agent.post('/api/auth/signin')
 			.send(credentials)
 			.expect(200)
 			.end(function(signinErr, signinRes) {
@@ -109,7 +109,7 @@ describe('Product CRUD tests', function() {
 				var userId = user.id;
 
 				// Save a new Product
-				agent.post('/products')
+				agent.post('/api/products')
 					.send(product)
 					.expect(400)
 					.end(function(productSaveErr, productSaveRes) {
@@ -123,7 +123,7 @@ describe('Product CRUD tests', function() {
 	});
 
 	it('should be able to update Product instance if signed in', function(done) {
-		agent.post('/auth/signin')
+		agent.post('/api/auth/signin')
 			.send(credentials)
 			.expect(200)
 			.end(function(signinErr, signinRes) {
@@ -134,7 +134,7 @@ describe('Product CRUD tests', function() {
 				var userId = user.id;
 
 				// Save a new Product
-				agent.post('/products')
+				agent.post('/api/products')
 					.send(product)
 					.expect(200)
 					.end(function(productSaveErr, productSaveRes) {
@@ -145,7 +145,7 @@ describe('Product CRUD tests', function() {
 						product.name = 'WHY YOU GOTTA BE SO MEAN?';
 
 						// Update existing Product
-						agent.put('/products/' + productSaveRes.body._id)
+						agent.put('/api/products/' + productSaveRes.body._id)
 							.send(product)
 							.expect(200)
 							.end(function(productUpdateErr, productUpdateRes) {
@@ -170,7 +170,7 @@ describe('Product CRUD tests', function() {
 		// Save the Product
 		productObj.save(function() {
 			// Request Products
-			request(app).get('/products')
+			request(app).get('/api/products')
 				.end(function(req, res) {
 					// Set assertion
 					res.body.should.be.an.Array.with.lengthOf(1);
@@ -189,7 +189,7 @@ describe('Product CRUD tests', function() {
 
 		// Save the Product
 		productObj.save(function() {
-			request(app).get('/products/' + productObj._id)
+			request(app).get('/api/products/' + productObj._id)
 				.end(function(req, res) {
 					// Set assertion
 					res.body.should.be.an.Object.with.property('name', product.name);
@@ -201,7 +201,7 @@ describe('Product CRUD tests', function() {
 	});
 
 	it('should be able to delete Product instance if signed in', function(done) {
-		agent.post('/auth/signin')
+		agent.post('/api/auth/signin')
 			.send(credentials)
 			.expect(200)
 			.end(function(signinErr, signinRes) {
@@ -212,7 +212,7 @@ describe('Product CRUD tests', function() {
 				var userId = user.id;
 
 				// Save a new Product
-				agent.post('/products')
+				agent.post('/api/products')
 					.send(product)
 					.expect(200)
 					.end(function(productSaveErr, productSaveRes) {
@@ -220,7 +220,7 @@ describe('Product CRUD tests', function() {
 						if (productSaveErr) done(productSaveErr);
 
 						// Delete existing Product
-						agent.delete('/products/' + productSaveRes.body._id)
+						agent.delete('/api/products/' + productSaveRes.body._id)
 							.send(product)
 							.expect(200)
 							.end(function(productDeleteErr, productDeleteRes) {
@@ -247,7 +247,7 @@ describe('Product CRUD tests', function() {
 		// Save the Product
 		productObj.save(function() {
 			// Try deleting Product
-			request(app).delete('/products/' + productObj._id)
+			request(app).delete('/api/products/' + productObj._id)
 			.expect(401)
 			.end(function(productDeleteErr, productDeleteRes) {
 				// Set message assertion

@@ -3,7 +3,7 @@
 // Users service used for communicating with the users REST endpoint
 angular.module('customers').factory('Customers', ['$resource',
 	function($resource) {
-		return $resource('customers', {}, {
+		return $resource('api/customers', {}, {
 			update: {
 				method: 'PUT'
 			}
@@ -30,7 +30,7 @@ angular.module('customers').factory('Customers', ['$resource',
 					}
 
                     // Add login loader?
-					$http.post('/auth/token', payload).success(function(response) {
+					$http.post('/api/auth/token', payload).success(function(response) {
 						// If successful we assign the response to the global user model
 						Authentication.user = response.customer;
 						$rootScope.cart = response.cart;
@@ -40,10 +40,11 @@ angular.module('customers').factory('Customers', ['$resource',
 					});
 				}
 			},
-			removeCookie: function(){
+			/*removeCookie: function(){
+				console.log("Remove cookie");
 				ipCookie.remove('rem');
                 ipCookie.remove('rid');
-			}
+			}*/
 		}
         return funs;
 	}

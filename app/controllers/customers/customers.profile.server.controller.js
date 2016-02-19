@@ -73,9 +73,9 @@ var loginAndSend = function(req, res, user){
 
 exports.resetPasswordEmail = function(req, res){
   var email = req.body.email,
-    path = config.serverPath+'/#!/password/reset/'
+    path = config.serverPath+'/password/reset/'
 
-  CommonService.post('customers', '/customers/password-token', {email: email}, function(err, result){
+  CommonService.post('customers', '/api/customers/password-token', {email: email}, function(err, result){
     if(err){
       return res.status(400).send({message: err.message})
     }else{
@@ -103,7 +103,7 @@ exports.requestPasswordReset = function(req, res){
       newPassword: password
     }
 
-    CommonService.post('customers', '/customers/password/reset', payload, function(err, result){
+    CommonService.post('customers', '/api/customers/password/reset', payload, function(err, result){
       if(err){
         return res.status(400).send({message: err.message})
       }else{

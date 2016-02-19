@@ -37,7 +37,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				return
 			}
 
-			$http.put('/customers/password/update', $scope.password).success(function(response) {
+			$http.put('/api/customers/password/update', $scope.password).success(function(response) {
 				LoggerServices.success(response.message);
 				$scope.password = {}
 			}).error(function(response) {
@@ -145,14 +145,14 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 		 */
 
 		$scope.fetchSubscription = function(list){
-			$http.get('/issubscribed/'+list).success(function(result){
+			$http.get('/api/issubscribed/'+list).success(function(result){
 				$scope[list+"Subscription"] = (result.toLowerCase() === 'true')
 			})
 		};
 
 		$scope.updateSubscription = function(list){
 			// TODO prevent abuse
-			var urlString = ($scope[list+"Subscription"] ? '/unsubscribe/'+list : '/subscribe/'+list);
+			var urlString = ($scope[list+"Subscription"] ? '/api/unsubscribe/'+list : '/api/subscribe/'+list);
 			var params;
 			$http.post(urlString, params).success(function(result){
 				var status = (result.toLowerCase() === 'true');
@@ -178,7 +178,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			$scope.orders = []
 			$scope.$utils = ProductUtils;
 			
-			$http.get('/orders/own').success(function(result){
+			$http.get('/api/orders/own').success(function(result){
 				console.log(result)
 				$scope.orders = result;
 			})

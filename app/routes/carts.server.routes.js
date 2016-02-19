@@ -8,45 +8,45 @@ var carts = require('../controllers/carts.server.controller.js'),
     entity = 'carts';
 
 module.exports = function (app) {
-    app.route('/carts')
+    app.route('/api/carts')
         .get(commons.list.bind({entity: entity}))
         .post(commons.create.bind({entity: entity}))
         .delete(commons.deleteAll.bind({entity: entity}))
 
-    app.route('/carts/init')
+    app.route('/api/carts/init')
         .get(carts.init);
 
-    app.route('/carts/:id')
+    app.route('/api/carts/:id')
         .get(carts.byId)
         .delete(commons.delete.bind({entity: entity}))
 
-    app.route('/carts/byCustomer/:customerId')
+    app.route('/api/carts/byCustomer/:customerId')
         .get(carts.byCustomer);
 
-    app.route('/carts/addLineItem/:cartId/:version')
+    app.route('/api/carts/addLineItem/:cartId/:version')
         .post(carts.addLineItem);
 
-    app.route('/carts/removeLineItem/:cartId/:version')
+    app.route('/api/carts/removeLineItem/:cartId/:version')
         .post(carts.removeLineItem);
 
-    app.route('/carts/setShippingAddress/:cartId/:version')
+    app.route('/api/carts/setShippingAddress/:cartId/:version')
         .post(carts.setShippingAddress);
 
-    app.route('/carts/setBillingAddress/:cartId/:version')
+    app.route('/api/carts/setBillingAddress/:cartId/:version')
         .post(carts.setBillingAddress);
 
-    app.route('/carts/setShippingMethod/:cartId/:version')
+    app.route('/api/carts/setShippingMethod/:cartId/:version')
         .post(carts.setShippingMethod);
 
-    app.route('/carts/changeLineItemQuantity/:cartId/:version')
+    app.route('/api/carts/changeLineItemQuantity/:cartId/:version')
         .post(carts.changeLineItemQuantity);
 
-    app.route('/carts/addDiscountCode/:cartId/:version')
+    app.route('/api/carts/addDiscountCode/:cartId/:version')
         .post(carts.addDiscountCode);
 
-    app.route('/carts/highIndex/:cartId/:version')
+    app.route('/api/carts/highIndex/:cartId/:version')
         .post(carts.addHighIndex);
 
-    app.route('/carts/removeHighIndex/:cartId/:version')
+    app.route('/api/carts/removeHighIndex/:cartId/:version')
         .post(carts.removeHighIndex);
 };

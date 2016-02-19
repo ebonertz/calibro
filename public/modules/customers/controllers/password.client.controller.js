@@ -27,7 +27,7 @@ angular.module('customers').controller('PasswordController', ['$scope', '$stateP
 			}
 
 			// Request password to be updated
-			$http.post('/customers/password/reset', payload).success(function(response){
+			$http.post('/api/customers/password/reset', payload).success(function(response){
 				$scope.reset = {};
 				// Authentication.user = response;
 

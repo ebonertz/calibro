@@ -7,7 +7,7 @@ angular.module('core').controller('FooterController', ['$scope', 'Authentication
         $scope.subscribeToNewsletter = function(){
             // TODO prevent abuse
             var list = 'newsletter';
-            var urlString = '/subscribe/'+list;
+            var urlString = '/api/subscribe/'+list;
             var params = {email: $scope.newsletter.email}
             $http.post(urlString, params).success(function(result){
                 var status = (result.toLowerCase() === 'true');

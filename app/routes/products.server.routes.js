@@ -8,16 +8,16 @@ var products = require('../controllers/products.server.controller.js'),
   entity = 'products';
 
 module.exports = function(app) {
-  app.route('/products')
+  app.route('/api/products')
     .get(commons.list.bind({entity: entity}));
 
   // Products
-  app.route('/products/id/:id').get(products.byId);
-  app.route('/products/byText/:text').get(products.searchByText);
-  app.route('/products/:slug').get(products.bySlug);
+  app.route('/api/products/id/:id').get(products.byId);
+  app.route('/api/products/byText/:text').get(products.searchByText);
+  app.route('/api/products/:slug').get(products.bySlug);
 
   // Categories
-  app.route('/categories/:slug').get(products.fetchCategoryProducts);
+  app.route('/api/categories/:slug').get(products.fetchCategoryProducts);
 
 
 };
