@@ -2,6 +2,9 @@
 
 var SphereClient = require('../../clients/sphere.server.client.js'),
   Product = require('../../models/sphere/sphere.product.server.model.js').Product,
+    ChannelsService = require('./sphere.channels.server.service.js'),
+    config = require('../../../config/config'),
+    Promise = require('bluebird'),
   _ = require('lodash');
 
 /**
@@ -113,6 +116,69 @@ exports.bySlug = function(slug, callback){
     callback(err, null);
   })
 }
+
+
+var facetsShortener = function (facets, variantsLength) {
+  var result = {};
+
+  var keys = Object.keys(facets);
+
+  for (var i = 0; i < keys.length; i++) {
+    var shortName = config.sphere.product_types_inv[keys[i]],
+        terms = facets[keys[i]].terms;
+
+    if (variantsLength != null && terms.length == 1 && terms[0].term == "" && terms[0].count == variantsLength)
+      continue;
+    else
+      result[shortName] = terms;
+
+  }
+
+  return result;
+
+
+}
+
+exports.bySlugWithFacets = function (slug) {
+  var productClient = SphereClient.getClient().productProjections;
+  productClient = productClient.filterByQuery('slug.en:"' + slug + '"');
+
+  return productClient.staged(false).expand('productType').search().then(function (result) {
+    if (result.body.results[0])
+      return result.body.results[0];
+    else
+      return Promise.reject(new Error('Product not found.'));
+  }).then(function (product) {
+
+    var productClient = SphereClient.getClient().productProjections,
+        productClient = productClient.filterByQuery('slug.en:"' + slug + '"'),
+        typeAttributes = product.productType.obj.attributes;
+
+    _.each(typeAttributes, function (attribute) {
+      if (attribute.attributeConstraint == 'CombinationUnique')
+        productClient = productClient.facet(config.sphere.product_types[attribute.name]);
+    });
+
+
+    return productClient.staged(false).expand('productType').expand('categories[*]').search().then(function (result) {
+      //populate channel
+      var masterVariant = result.body.results[0].masterVariant;
+      _.each (masterVariant.prices, function (price) {
+        if(price.channel) {
+          var channel = ChannelsService.getById(price.channel.id);
+          price.channel = channel;
+        }
+      });
+
+      var results = {
+        product: result.body.results[0],
+        facets: facetsShortener(result.body.facets, result.body.results[0].variants.length + 1)
+      }
+      return results;
+    });
+  });
+}
+
 
 exports.bySku = function(skuArray, callback){
   var query = 'variants.sku:';

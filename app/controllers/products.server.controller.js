@@ -31,13 +31,12 @@ exports.bySlug = function(req, res){
   if(!slug)
     return res.status(400)
 
-  ProductService.bySlug(slug, function(err, result){
-    if (err) {
-      return res.status(400);
-    } else {
-      res.json(result);
-    }
-  })
+  ProductService.bySlugWithFacets(slug).then(function (result) {
+    res.json(result);
+  }).error(function (err) {
+    res.sendStatus(400);
+  });
+
 }
 
 exports.fetchCategoryProducts = function(req,res){

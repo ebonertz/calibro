@@ -7,7 +7,7 @@
       <span xmlns:v="http://rdf.data-vocabulary.org/#">
       <!-- TODO, missing information on how to structure this -->
       <span typeof="v:Breadcrumb">
-        <a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
+        <a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a>
         <a class="bc-link" rel="v:url" property="v:title" ng-href="/#!/categories/{{breadcrumbs.category}}">{{breadcrumbs.category}}</a> / 
         <a class="bc-link" rel="v:url" property="v:title" ng-show="breadcrumbs.sub_category.show" ng-href="{{breadcrumbs.sub_category.url}}">{{breadcrumbs.sub_category.name}}</a> <span ng-show="breadcrumbs.sub_category.show"> / </span>
         <span class="breadcrumb-last" rel="v:url" property="v:title">{{product.name[lang]}}</span>
@@ -17,7 +17,7 @@
     <section id="product-details" itemscope itemtype="http://schema.org/Product">
       <div class="product-images">
         <div class="img-big">
-          <img itemprop="image" ng-src="{{currentVariant.images[0]['url']}}" ng-hide="currentVariant.images.length == 0"/>
+          <img itemprop="image" ng-src="{{imgBig}}" ng-hide="currentVariant.images.length == 0"/>
         </div>
         <div class="thumbnails" product-images>
         </div>
@@ -40,7 +40,7 @@
           <ins>
               <div class="notice outline red small" ng-show="error.distributionChannel">Please select an option</div>
               <div ng-repeat="price in currentVariant.prices | currency track by price.id" class="channel-option" >
-                <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="price.channel.key" name="channel" id="channel-{{price.channel.key}}"></input>
+                <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="price.channel.key" name="channel" id="channel-{{price.channel.key}}"/>
                 <label for="channel-{{price.channel.key}}" class="channel-price">
                   <span bo-text="price.channel.name.en"></span>
                   <span bo-text="price | spherePrice" style="float:right"></span>
@@ -50,12 +50,23 @@
         </div>
       </span>
 
-        <div class="selection">
-          <div class="selection-box">
-            <label for="color">Color</label>
-            <select ng-model="currentVariant" ng-options="variant as variant.attr.color[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>
-          </div>
+
+        <div  ng-repeat="facet in facetsArray" class="selection">
+          <b class="section-box">Choose {{formatFacetName(facet.name)}}</b>
+          <select ng-change="selectVariant(facet.name, currentFilters[facet.name])"
+                  ng-model="currentFilters[facet.name]">
+            <option value="" disabled selected>{{formatFacetName(facet.name)}}</option>
+            <option ng-repeat="value in facet.value">{{value.term}}</option>
+          </select>
         </div>
+
+        <!--<div class="selection">-->
+          <!--<div class="selection-box">-->
+            <!--<label for="frameColor">Frame Color</label>-->
+            <!--<select ng-model="currentVariant" ng-options="variant as variant.attr.frameColor.label[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>-->
+          <!--</div>-->
+        <!--</div>-->
+
         <div class="add-to-cart">
           <button ng-click="decrementQuantity()" class="op" id="minus" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">&#45;</button>
           <input type="text" min="1" id="item-amount" value="{{quantity}}">
@@ -87,15 +98,15 @@
       <div class="tab-content active" id="features">
         <section class="inner">
           <div class="column" id="complimentary" style="text-align: left">
-            <div>Frame Shape: <span data-ng-bind="currentVariant.attr.frameShape.label.en | label"></span></div>
-            <div>Frame Type: <span data-ng-bind="currentVariant.attr.frameType.label.en | label"></span></div>
-            <div>Frame Material: <span data-ng-bind="currentVariant.attr.frameMaterial.en | label"></span></div>
+            <div>Frame Shape: <span data-ng-bind="currentVariant.attr.frameShape | label"></span></div>
+            <div>Frame Type: <span data-ng-bind="currentVariant.attr.frameType | label"></span></div>
+            <div>Frame Material: <span data-ng-bind="currentVariant.attr.frameMaterial | label"></span></div>
           </div>
           <div class="column">
-            <div>Mirror Reflection: <span>{{currentVariant.attr.mirrorReflection | label}}</span></div>
+            <div>Mirror Reflection: <span>{{currentVariant.attr.mirrorReflection}}</span></div>
           </div>
           <div class="column">
-            <div>Width: <span data-ng-bind="currentVariant.attr.width.label.en | label"></span></div>
+            <div>Width: <span data-ng-bind="currentVariant.attr.width | label"></span></div>
         </section>
       </div>
     </section>

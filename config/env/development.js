@@ -47,7 +47,19 @@ module.exports = {
         "auth_url": "auth.sphere.io",
         "project_key": "reactionsphere-test",
         "client_id": "r_IHigKd7TDtvC7nX_XDIQYB",
-        "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw"
+        "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw",
+        "product_types": {
+            categories: "categories.id",
+            lensColor: "variants.attributes.lensColor.label.en",
+            frameColor: "variants.attributes.frameColor.label.en",
+            price: "variants.price.centAmount"
+        },
+        "product_types_inv": {
+            "categories.id": "categories",
+            "variants.attributes.lensColor.label.en": "lensColor",
+            "variants.attributes.frameColor.label.en": "frameColor",
+            "variants.price.centAmount": "price"
+        }
     },
     contenful: {
         space: '6b721x8g60bf',

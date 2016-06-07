@@ -48,7 +48,8 @@ module.directive('productThumbnail', function () {
 				if(product && product.hasOwnProperty('variants') && product.variants.length > 0) {
 					flattenImages(product.variants).forEach(function (img) {
 						$elem.append('<a class="thumbnail-wrapper" variant-id="'+img.variantId+'">' +
-							'<img class="thumbnail" src="' + img.url + '"  class="thumbnail" data-url="'+img.url+'" />' +
+							'<img class="thumbnail" src="' + img.url + '"  ng-mouseover="switchImageBig(\''+img.url+'\')" ' +
+							'ng-mouseleave="switchImageBig('+img.url+')" class="thumbnail" data-url="\''+img.url+'\'" />' +
 							'</a>')
 					})
 
