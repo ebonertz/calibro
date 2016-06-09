@@ -35,15 +35,14 @@
                                         <span class="product-name">{{lineItem.name.en}}</span>
                                     </td>
                                     <td class="product-price">
-                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount /
-                                        100}}
+                                        {{lineItem.price.value | spherePrice}}
                                     </td>
                                     <td class="quantity">
                                         {{lineItem.quantity}}
                                     </td>
                                     <td class="item-total-checkout">
-                                        {{$utils.getCurrencySimbol(lineItem.price.value.currencyCode)}} {{lineItem.price.value.centAmount *
-                                        lineItem.quantity / 100}}
+                                       {{lineItem.price.value.centAmount *
+                                        lineItem.quantity / 100}} {{lineItem.price.value.centAmount}}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -70,28 +69,26 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{(cart.totalPrice.centAmount -
-                                                cart.shippingInfo.shippingRate.price.centAmount) / 100}}
+                                            <td>{{(cart.totalPrice.centAmount -
+                                                cart.shippingInfo.shippingRate.price.centAmount) / 100}} {{cart.totalPrice.currencyCode}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Taxes</td>
                                             <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
-                                                {{$utils.getCurrencySimbol(taxPortion.amount.currencyCode)}} {{(taxPortion.amount.centAmount) / 100}}
+                                               {(taxPortion.amount | spherePrice}}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Shipping</td>
                                             <td ng-if="cart.shippingInfo">
-                                                {{$utils.getCurrencySimbol(cart.shippingInfo.shippingRate.price.currencyCode)}}
-                                                {{cart.shippingInfo.shippingRate.price.centAmount / 100}}
+                                                {{cart.shippingInfo.shippingRate.price | spherePrice}}
                                             </td>
                                             <td ng-if="!cart.shippingInfo">-</td>
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>{{$utils.getCurrencySimbol(cart.totalPrice.currencyCode)}} {{cart.totalPrice.centAmount
-                                                / 100}}</h6></td>
+                                            <td><h6>{{cart.totalPrice | spherePrice}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -79,12 +79,14 @@
         </div>
         <section class="meta">
           <div class="social-block">
-            <script src="http://platform.twitter.com/widgets.js"></script>
             <span>Tell Friends</span>
-            <a facebook-feed-share class="social-share" id="facebook" data-url='{{shareUrl}}' data-name="{{product.name | locale}}" data-picture="{{currentVariant.images[0]['url']}}" data-caption="Focali Optics - {{(breadcrumbs.sub_category ? breadcrumbs.sub_category.name : breadcrumbs.category.name) | label}}" data-description="{{product.description | locale}}"></a>
-            <a class="social-share" href="#" onclick="#" id="google-plus"></a>
-            <!--<div gplus class="g-plus" data-size="tall" data-annotation="bubble" data-href='{{shareUrl}}' data-action='share'></div>-->
-            <a class="social-share" id="twitter" bo-href="tweetUrl"></a>
+
+            <sn-addthis-toolbox  data-title="{{product.name | locale}}" data-description="{{product.description | locale}}">
+              <a href class="addthis_button_facebook"><i class="social-share" id="facebook"></i></a>
+              <a href class="addthis_button_google_plusone_share"><i class="social-share" id="google-plus"></i></a>
+              <a href class="addthis_button_twitter"><i class="social-share" id="twitter"></i></a>
+          </sn-addthis-toolbox>
+
           </div>
         </section>
       </div>

@@ -1,12 +1,19 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'SocialShareService', 'LoggerServices', 'lodash',
-    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, SocialShareService, LoggerServices, _) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'LoggerServices', 'lodash',
+    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, LoggerServices, _) {
         $scope.authentication = Authentication;
         $scope.$location = $location;
         $scope.productFiltersMin = 0;
         $scope.productFiltersMax = 500;
+        $scope.perPage = 20;
+        $scope.page = 1;
+        $scope.filterAttributes = {};
+        $scope.sortAttributes = [
+            { name: 'Name', sortAttr: 'name.en', sortAsc: true },
+            { name: 'Lower Price', sortAttr: 'price', sortAsc: true },
+            { name: 'Higher Price', sortAttr: 'price', sortAsc: false }];
 
         $scope.FETCHING = false; // Will keep track of fetches
         $scope.lang = 'en';
@@ -383,9 +390,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                         });
                 }
 
-                $scope.shareUrl = SocialShareService.shareLink();
-                $scope.tweetUrl = SocialShareService.twitterLink($scope.product.name.en + ":");
-
                 //$scope.variantImages = flattenImages($scope.product.variants)
 
 
@@ -463,6 +467,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             return name.replace(/([A-Z])/g, ' $1')
                 // uppercase the first character
                 .replace(/^./, function(str){ return str.toUpperCase(); })
+        }
+
+        $scope.isNew = function (product) {
+            return _.find(product.attributes, {name: "isNew"});
         }
     }
 ]);

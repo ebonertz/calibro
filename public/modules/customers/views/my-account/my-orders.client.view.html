@@ -17,8 +17,8 @@
 		
 			<table class="past-orders" data-toggle="table">
 			<thead>
-				<th id="order-id" data-field="name" data-sortable="true">
-					Order ID
+				<th id="order-id" data-field="orderNumber" data-sortable="true">
+					Order Number
 				</th>
 				<th id="order-items">
 					# of Items
@@ -36,7 +36,7 @@
 			<tbody>
 				<tr class="order" ng-repeat="order in orders track by order.id">
 					<td class="order-id">
-						<a ng-href="#!/orders/{{order.id}}">{{order.id}}</a>
+						<a ng-href="#!/orders/{{order.id}}">{{order.orderNumber}}</a>
 					</td>
 					<td class="order-items">
 						{{order.lineItems | totalItems}}

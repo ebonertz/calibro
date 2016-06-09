@@ -14,8 +14,7 @@ module.exports = {
 		lib: {
 			css: [
 				'public/lib/optile/ajax-integration-1.1.min.css',
-				'public/lib/angular-toastr/dist/angular-toastr.css',
-				//'public/lib/angular-socialshare/angular-socialshare.min.css'
+				'public/lib/angular-toastr/dist/angular-toastr.css'
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -34,6 +33,7 @@ module.exports = {
 				'public/lib/angular-toastr/dist/angular-toastr.js',
 				'public/lib/angular-bindonce/bindonce.js',
 				'public/lib/angular-socialshare/angular-socialshare.min.js',
+				'public/lib/angular-addthis/dist/angular-addthis.min.js',
 				'public/lib/es5-shim/es5-shim.js',
 				'public/lib/ng-file-upload/ng-file-upload-all.min.js',
 				'public/lib/ngprogress/build/ngprogress.js',

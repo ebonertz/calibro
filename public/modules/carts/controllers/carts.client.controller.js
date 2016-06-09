@@ -2,7 +2,6 @@
 
 angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', 'ProductUtils', '$location', 'LoggerServices', 'Cart', '$stateParams', 'OrderService',
     function ($scope, Authentication, CartService, $rootScope, ProductUtils, $location, LoggerServices, Cart, $stateParams, OrderService) {
-        $scope.$utils = ProductUtils;
         $scope.authentication = Authentication;
         $scope.isCheckout = $location.path().indexOf('checkout') > -1;
 
@@ -70,7 +69,7 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
         // Find existing Product
         $scope.findOne = function () {
             Cart.get({
-                productId: $stateParams.productId
+                id: $stateParams.id
             }, function (data) {
                 $scope.cart = data;
             });
