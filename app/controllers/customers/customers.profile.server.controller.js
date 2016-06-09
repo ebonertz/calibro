@@ -10,6 +10,7 @@ var _ = require('lodash'),
   MailchimpService = require('../../services/mailchimp.server.service.js'),
   MandrillService = require('../../services/mandrill.server.service.js'),
   CommonService = require('../../services/sphere/sphere.commons.server.service.js'),
+ SphereClient = require('../../clients/sphere.server.client.js'),
   config = require('../../../config/config');
 
 /**
@@ -75,17 +76,16 @@ exports.resetPasswordEmail = function(req, res){
   var email = req.body.email,
     path = config.serverPath+'/password/reset/'
 
-  CommonService.post('customers', '/api/customers/password-token', {email: email}, function(err, result){
-    if(err){
-      return res.status(400).send({message: err.message})
-    }else{
-      MandrillService.sendPasswordToken(email, path+result.value).then(function(result){
-        return res.json(result);
-      }, function(err){
-        res.status(400).send({message: "We could not send the email, please try again"})
-      })
-    }
-  })
+  SphereClient.getClient().customers._save('/customers/password-token', {email: email}).then (function (result) {
+    MandrillService.sendPasswordToken(email, path+result.value).then(function(result){
+      return res.json(result);
+    }, function(err){
+      res.status(400).send({message: "We could not send the email, please try again"})
+    })
+  },function (err) {
+    return res.status(400).send({message: err.message})
+  });
+
 }
 
 exports.requestPasswordReset = function(req, res){

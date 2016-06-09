@@ -13,6 +13,7 @@ angular.module('misc').controller('ContactusController', ['$scope', 'Authenticat
         $scope.contactUsSubmit = function(valid){
             if(!valid){
                 $scope.contactError = "Please fill in all the required fields"
+                return;
             }
 
             var post_body = {

@@ -66,7 +66,7 @@ angular.module('customers').controller('AuthenticationController', ['$scope', '$
 			}).error(function(error){
 				$scope.reset_result = {
 					status: "error",
-					message: "We couldn't find that email in our database"
+					message: error.message
 				}				
 			})
 		}
