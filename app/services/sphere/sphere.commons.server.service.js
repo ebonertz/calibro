@@ -160,7 +160,7 @@ var getApiToken = function (callback) {
     };
 
     var endpoint = {
-        "host": config.sphere.auth_url,
+        "host": config.sphere.oauth_url,
         "path": "/oauth/token?grant_type=client_credentials&scope=manage_project:" + config.sphere.project_key,
         "method": "POST",
         "port": 443,
@@ -190,7 +190,7 @@ exports.GET_ApiCall = function (entity, path, callback) {
             };
 
             var endpoint = {
-                "host": config.sphere.api_url,
+                "host": config.sphere.api_host,
                 "path": fullPath,
                 "method": "GET",
                 "headers": headers

@@ -198,14 +198,18 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
         this.init = function (customerId, cookieId) {
             var deferred = $q.defer();
 
-            var path = urlString + '/init?';
+            var path = urlString + '/init';
 
             if(customerId) {
-                path += 'customer=' + customerId;
+                path += '?customer=' + customerId;
             }
 
-            if(cookieId) {
-                path += '&cookie=' + cookieId;
+            if (cookieId) {
+                if (customerId) {
+                    path += '&cookie=' + cookieId;
+                } else {
+                    path += '?cookie=' + cookieId;
+                }
             }
 
             $http.get(path).success(function (data) {

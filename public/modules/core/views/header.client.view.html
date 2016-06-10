@@ -48,7 +48,7 @@
                 <div class="top-user-name">
                     <a href="/login" class="site-login" data-ng-hide="authentication.user">Login</a>
                     <a class="top-name" href="" data-ng-show="authentication.user" style="cursor: default;">Welcome back {{authentication.user.firstName}}</a><br/>
-                    <a href="/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> <span data-ng-show="authentication.user">/</span> <a href="" class="site-login" data-ng-click="logout()" data-ng-show="authentication.user">Logout</a>
+                    <a href="/account" class="my-account-top" data-ng-show="authentication.user">My Account</a> <span data-ng-show="authentication.user">/</span> <a href="" class="site-login" data-ng-click="signout()" data-ng-show="authentication.user">Logout</a>
                 </div>
 			<span class="cart-contents">
 				<a href="/cart" class="btn creme radius xsmall outline cart cart-fade-in-class" id="top-cart-tr"><i

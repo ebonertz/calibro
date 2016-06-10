@@ -10,6 +10,8 @@ client = new SphereClient({
         client_id: config.sphere.client_id,
         client_secret: config.sphere.client_secret
     },
+    host: config.sphere.api_host,
+    oauth_host: config.sphere.oauth_url,
     user_agent: 'sphere-node-sdk'
 });
 
@@ -24,6 +26,9 @@ exports.setClient = function() {
             client_id: config.sphere.client_id,
             client_secret: config.sphere.client_secret
         },
+        host: config.sphere.api_host,
+        oauth_host: config.sphere.oauth_url,
         user_agent: 'sphere-node-sdk'
+
     });
 }

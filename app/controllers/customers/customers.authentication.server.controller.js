@@ -8,6 +8,7 @@ var _ = require('lodash'),
   MandrillService = require('../../services/mandrill.server.service.js'),
   CommonsService = require('../../services/sphere/sphere.commons.server.service.js'),
   CustomObjectsService = require('../../services/sphere/sphere.custom-objects.server.service.js'),
+    CartService = require('../../services/sphere/sphere.carts.server.service.js'),
     RememberService = require('../../services/remember.server.service.js');
 
 
@@ -107,7 +108,15 @@ exports.signin = function(req, res, next) {
  */
 exports.signout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  var cookieId = req.query.cookie;
+
+  CartService.init(null, cookieId, function (err, result) {
+    if (err) {
+      return res.status(400).send(err.body.message);
+    } else {
+      res.json(result);
+    }
+  });
 };
 
 exports.signWithToken = function(req, res){
