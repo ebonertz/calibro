@@ -16,11 +16,15 @@
     </section>
     <section id="product-details" itemscope itemtype="http://schema.org/Product">
       <div class="product-images">
-        <div class="img-big">
+        <div class="img-big" style="margin-bottom: 15px;">
           <img itemprop="image" ng-src="{{imgBig}}" ng-hide="currentVariant.images.length == 0"/>
         </div>
-        <div class="thumbnails" product-images>
-        </div>
+
+        <span class="thumbnails"  ng-repeat="image in currentVariant.images">
+          <a class="thumbnail-wrapper">
+          <img class="thumbnail" ng-mouseover="switchImageBig(image.url)" ng-mouseleave="switchImageBig(currentVariant.images[0].url)" class="thumbnail" ng-src="{{image.url | size: 'small'}}" data-image="{{image.url}}"/>
+          </a>
+        </span>
       </div>
       <div class="product-details">
         <h1 itemprop="name" class="product-title" bo-text="product.name | locale"></h1>

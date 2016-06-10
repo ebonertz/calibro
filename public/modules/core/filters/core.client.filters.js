@@ -61,3 +61,19 @@ angular.module('core').filter('range', function() {
         return input;
     };
 });
+
+angular.module('core').filter('size', function () {
+    return function (input, size) {
+
+        if (input) {
+
+            var dotIndex = input.lastIndexOf('.'),
+                fileName = input.substring(0, dotIndex),
+                fileExtention = input.substring(dotIndex, input.length);
+
+            input = fileName + '-' + size + fileExtention;
+
+        }
+        return input;
+    };
+});
