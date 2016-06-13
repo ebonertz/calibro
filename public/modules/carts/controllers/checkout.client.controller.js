@@ -294,7 +294,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 CartService.setBillingAddress($rootScope.cart.id, {address: finalBillingAddress}).then(function (result) {
                     $rootScope.cart = result;
                     LoggerServices.success('Billing address updated');
-
+                    $scope.showPhaseE();
 
                 });
             }
@@ -359,7 +359,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             else if ($scope.paypal) {
                 var checkoutParameters = {
                     payment_method_nonce: $scope.paypal.nonce,
-                    submitForSettlement: false,
+                    submitForSettlement: true,
                     customerId: customerId,
                     orderId: order.id
                 }

@@ -28,7 +28,7 @@ module.exports = function (app) {
         var customerId = req.body.customerId;
         var submitForSettlement = req.body.submitForSettlement;
         if (!submitForSettlement) {
-            submitForSettlement = false;
+            submitForSettlement = true;
         }
         var parameters = {
             customerId: customerId,

@@ -114,15 +114,6 @@ module.exports = {
         slug: 'high-index-lens'
     },
     orderPrefix: 'TEST',
-    paypal: {
-        host: 'api-3t.sandbox.paypal.com',
-        exCheckCommUrl: 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=',
-        username: 'support-facilitator_api1.devgurus.io',
-        password: 'FGLD6522Y7K3ZBV8',
-        signature: 'AFcWxV21C7fd0v3bYYYRCpSSRl31AwykjF3zYTfi7eN45MkbfB-y7x3A',
-        returnUrl: 'http://localhost:3000/paypal/success',
-        cancelUrl: 'http://localhost:3000/paypal/cancel'
-    },
     payments: {
         errorUrl: '/#!/checkout?jumpto=billingMethod'
     }
