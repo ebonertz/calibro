@@ -12,6 +12,10 @@ module.exports = function(app) {
     .get(commons.list.bind({entity: entity}));
 
   // Products
+  app.route('/api/products/categories/:categoryA')
+      .post(products.listBy);
+  app.route('/api/products/categories/:categoryA/:categoryB')
+      .post(products.listBy);
   app.route('/api/products/id/:id').get(products.byId);
   app.route('/api/products/byText/:text').get(products.searchByText);
   app.route('/api/products/:slug').get(products.bySlug);

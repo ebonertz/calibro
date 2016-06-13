@@ -361,6 +361,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
                 $scope.product.variants.unshift($scope.product.masterVariant);
                 $scope.facets = result.facets;
+                $scope.channels = result.channels;
                 $scope.facetsArray = [];
                 $scope.imgBig = $scope.currentVariant.images[0]['url'];
 
@@ -482,5 +483,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.trustAsHtml = function (string) {
             return $sce.trustAsHtml(string);
         };
+
+        $scope.channelInfo = function (price) {
+            var channel =_.find ($scope.channels,function (item) {
+                return item.id == price.channel.id;
+            });
+            return channel;
+        }
+
     }
 ]);

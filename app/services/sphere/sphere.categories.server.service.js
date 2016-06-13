@@ -10,11 +10,11 @@ var catById = {}
 var catBySlug = {}
 
 exports.getId = function(slug){
-  if(catBySlug.hasOwnProperty(slug)){
+  if(catBySlug[slug]){
     return catBySlug[slug].id
   }else{
     fetchCategories().then(function(){
-      if(catBySlug.hasOwnProperty(slug)){
+      if(catBySlug[slug]){
         return catBySlug[slug].id
       }else{
         return null
@@ -24,17 +24,41 @@ exports.getId = function(slug){
 }
 
 exports.getSlug = function(id){
-  if(catById.hasOwnProperty(id)){
+  if(catById[id]){
     return catById[id].slug[LANG]
   }else{
     fetchCategories().then(function(){
-      if(catById.hasOwnProperty(id)){
+      if(catById[id]){
         return catById[id].slug[LANG];
       }else{
         return null;
       }
     })
   }
+}
+
+exports.getName = function (id) {
+  if (catById[id]) {
+    return catById[id].name[LANG]
+  } else {
+    fetchCategories().then(function () {
+      if (catById[id]) {
+        return catById[id].name[LANG];
+      } else {
+        return null;
+      }
+    })
+  }
+}
+
+exports.getCategoryById = function (id) {
+  return fetchCategories().then(function () {
+    if (catById[id]) {
+      return catById[id];
+    } else {
+      return null;
+    }
+  })
 }
 
 

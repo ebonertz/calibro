@@ -78,3 +78,44 @@ exports.searchByText = function(req,res){
     }
   })
 }
+
+exports.listBy = function (req, res) {
+  var categoryA = req.params.categoryA,
+      categoryB = req.params.categoryB,
+      page = req.query.page,
+      perPage = req.query.perPage,
+      sortAttr = req.query.sortAttr,
+      sortAsc = req.query.sortAsc;
+
+
+  var categoryAId = null,
+      categoryBId = null,
+      attributes = req.body;
+
+  var categories = [];
+
+  if (categoryA) {
+    categoryAId = CategoriesService.getId(categoryA);
+    if (categoryAId)
+      categories.push(categoryAId);
+    else {
+      res.sendStatus(400);
+      return;
+    }
+  }
+
+  if (categoryB) {
+    categoryBId = CategoriesService.getId(categoryB);
+    if (categoryAId)
+      categories.push(categoryBId);
+    else {
+      res.sendStatus(400);
+      return;
+    }
+  }
+
+  ProductService.listBy(categories, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
+    res.json(result);
+  });
+}
+

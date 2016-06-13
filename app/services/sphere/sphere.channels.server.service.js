@@ -2,13 +2,18 @@
 
 var CommonService = require('./sphere.commons.server.service.js'),
     Promise = require('promise'),
+    _ = require ('lodash'),
     SphereClient = require('../../clients/sphere.server.client.js');
 
 var categories = [];
 var chanById = {};
 var chanByKey = {};
+var channels = [];
 var lastFetchTime;
 
+exports.listChannels = function () {
+ return channels;
+}
 exports.getByKey = function(key){
     // TODO: Block thread if channel not there (this is wrong)
     if(chanByKey.hasOwnProperty(key) && stillValidData()){
@@ -46,7 +51,7 @@ var stillValidData = function(){
 var fetchChannels = function(){
     var p = new Promise(function(resolve, reject){
         SphereClient.getClient().channels.all().fetch().then(function(results){
-            var channels = results.body.results;
+            channels = results.body.results;
 
             for(var i = 0; i < channels.length; i++){
                 var chan = channels[i];

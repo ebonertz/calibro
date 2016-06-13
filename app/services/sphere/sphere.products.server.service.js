@@ -2,6 +2,7 @@
 
 var SphereClient = require('../../clients/sphere.server.client.js'),
   Product = require('../../models/sphere/sphere.product.server.model.js').Product,
+    CategoriesService = require('./sphere.categories.server.service.js'),
     ChannelsService = require('./sphere.channels.server.service.js'),
     config = require('../../../config/config'),
     Promise = require('bluebird'),
@@ -18,6 +19,74 @@ exports.list = function(callback) {
 		callback(err, null);
 	});
 };
+
+exports.listBy = function (categories, attributes, page, perPage, sortAttr, sortAsc) {
+
+  return new Promise(function (resolve, reject) {
+
+    var productClient = SphereClient.getClient().productProjections,
+        categoriesObjects = [];
+
+    for (var i = 0; i < config.sphere.facets.length; i++)
+      productClient = productClient.facet(config.sphere.facets[i]);
+
+    for (var i = 0; i < categories.length; i++) {
+      productClient = productClient.filterByQuery('categories.id:"' + categories[i] + '"');
+      categoriesObjects.push(CategoriesService.getCategoryById(categories[i]));
+    }
+
+    var attributeKeys = Object.keys(attributes);
+
+    for (var i = 0; i < attributeKeys.length; i++) {
+      var queryString = "";
+      if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
+        queryString = attributes[attributeKeys[i]].value;
+      }
+      else {
+        queryString = '"' + attributes[attributeKeys[i]] + '"';
+      }
+      productClient = productClient.filterByQuery(config.sphere.product_types[attributeKeys[i]] + ':' + queryString);
+    }
+    if (page)
+      productClient = productClient.page(parseInt(page));
+
+    if (perPage)
+      productClient = productClient.perPage(parseInt(perPage));
+
+    if (sortAttr)
+      productClient = productClient.sort(sortAttr, (sortAsc === "true"));
+
+    productClient.staged(false).search().then(function (result) {
+
+      var cats = result.body.facets['categories.id'].terms;
+
+      _.each(cats, function (item) {
+        item.id = item.term;
+        item.term = CategoriesService.getName(item.term);
+      });
+      Promise.all(categoriesObjects).then(function (promises) {
+        var results = {
+          products: result.body.results,
+          facets: facetsShortener(result.body.facets),
+          pages: {
+            total: Math.ceil(result.body.total / perPage),
+            page: page,
+            perPage: perPage
+          },
+          total: result.body.total,
+          categories: promises
+        }
+
+        resolve(results)
+      });
+
+
+    });
+  });
+
+
+};
+
 
 exports.searchByCategory = function(categoryId, requestParams, callback){
   var fetcher = SphereClient.getClient().productProjections
@@ -36,11 +105,19 @@ exports.searchByCategory = function(categoryId, requestParams, callback){
   fetcher.search().then(function(resultArray) {
     // Convert products
     var products = resultArray.body.results;
-    for(var i = 0; i < products.length; i++){
-      products[i] = new Product(products[i])
-    }
 
-    var pageInfo = requestParams.getPageInfo()
+
+    var pageInfo = requestParams.getPageInfo();
+
+    _.each (products,function (product) {
+      _.each (product.masterVariant.prices, function (price) {
+        if (price.channel) {
+          var channel = ChannelsService.getById(price.channel.id);
+          price.channel = channel;
+        }
+
+      });
+    });
 
     // Return products and facets
     var results = {
@@ -172,6 +249,7 @@ exports.bySlugWithFacets = function (slug) {
 
       var results = {
         product: result.body.results[0],
+        channels: ChannelsService.listChannels(),
         facets: facetsShortener(result.body.facets, result.body.results[0].variants.length + 1)
       }
       return results;

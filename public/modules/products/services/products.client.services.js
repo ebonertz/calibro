@@ -15,6 +15,26 @@ angular.module('products').service('ProductService', ['$http', '$q', '$location'
       return deferred.promise;
     }
 
+
+    this.listBy = function (categoryA, categoryB, attributes, page, perPage, sortAttr, sortAsc) {
+      var queryString = urlString + '/categories';
+
+      if (categoryA != null)
+        queryString += '/' + categoryA;
+
+      if (categoryB != null)
+        queryString += '/' + categoryB;
+
+      queryString += '?page=' + (page == null ? 1 : page);
+      queryString += '&perPage=' + (perPage == null ? 10 : perPage);
+
+      if (sortAttr)
+        queryString += '&sortAttr=' + sortAttr + '&sortAsc=' + sortAsc;
+
+      return $http.post(queryString, attributes);
+
+    }
+
     // TODO: Change parameters to options = {filters: ..., facets: ..., ...}
     this.getByCategorySlug = function(slug, query, facets, sort, byQuery, pageSize, pageNum) {
       var deferred = $q.defer();
