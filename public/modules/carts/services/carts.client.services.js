@@ -111,10 +111,10 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             return deferred.promise;
         }
 
-        this.setShippingAddress = function (cartId, version, payload) {
+        this.setShippingAddress = function (cartId, payload) {
             var deferred = $q.defer();
 
-            $http.post(urlString + '/setShippingAddress/' + cartId + '/' + version, payload).success(function (data) {
+            $http.post(urlString + '/setShippingAddress/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
             }).error(function (error) {
                 deferred.reject(error);
@@ -123,10 +123,10 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             return deferred.promise;
         }
 
-        this.setBillingAddress = function (cartId, version, payload) {
+        this.setBillingAddress = function (cartId, payload) {
             var deferred = $q.defer();
 
-            $http.post(urlString + '/setBillingAddress/' + cartId + '/' + version, payload).success(function (data) {
+            $http.post(urlString + '/setBillingAddress/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
             }).error(function (error) {
                 deferred.reject(error);
@@ -135,10 +135,10 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
             return deferred.promise;
         }
 
-        this.setShippingMethod = function (cartId, version, payload) {
+        this.setShippingMethod = function (cartId, payload) {
             var deferred = $q.defer();
 
-            $http.post(urlString + '/setShippingMethod/' + cartId + '/' + version, payload).success(function (data) {
+            $http.post(urlString + '/setShippingMethod/' + cartId, payload).success(function (data) {
                 deferred.resolve(data);
             }).error(function (error) {
                 deferred.reject(error);

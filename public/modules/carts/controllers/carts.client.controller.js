@@ -66,10 +66,9 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
             });
         }
 
-        // Find existing Product
         $scope.findOne = function () {
             Cart.get({
-                id: $stateParams.id
+                cartId: $stateParams.id
             }, function (data) {
                 $scope.cart = data;
             });

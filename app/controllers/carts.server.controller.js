@@ -24,7 +24,7 @@ exports.byCustomer = function (req, res) {
 };
 
 exports.byId = function (req, res) {
-    var id = req.param('id');
+    var id = req.param('cartId');
 
     CommonService.byId(entity, id, function (err, result) {
         if (err) {
@@ -75,10 +75,9 @@ exports.removeLineItem = function (req, res) {
 
 exports.setShippingAddress = function (req, res) {
     var cartId = req.param('cartId'),
-        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setShippingAddress(cartId, version, payload, function (err, result) {
+    CartService.setShippingAddress(cartId, payload, function (err, result) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
@@ -90,10 +89,9 @@ exports.setShippingAddress = function (req, res) {
 
 exports.setBillingAddress = function (req, res) {
     var cartId = req.param('cartId'),
-        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setBillingAddress(cartId, version, payload, function (err, result) {
+    CartService.setBillingAddress(cartId, payload, function (err, result) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {
@@ -105,10 +103,9 @@ exports.setBillingAddress = function (req, res) {
 
 exports.setShippingMethod = function (req, res) {
     var cartId = req.param('cartId'),
-        version = parseInt(req.param('version')),
         payload = req.body;
 
-    CartService.setShippingMethod(cartId, version, payload, function (err, result) {
+    CartService.setShippingMethod(cartId, payload, function (err, result) {
         if (err) {
             return res.status(400).send(err.body.message);
         } else {

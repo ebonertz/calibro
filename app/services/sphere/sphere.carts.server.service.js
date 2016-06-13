@@ -64,30 +64,37 @@ exports.removeCustomLineItem = function (cartId, version, payload, callback) {
     });
 }
 
-exports.setShippingAddress = function (cartId, version, payload, callback) {
+exports.setShippingAddress = function (cartId, payload, callback) {
     if (payload)
         payload.action = actions.setShippingAddress;
 
-    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
-        callback(err, result);
+    SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
+            callback(err, result);
+        });
     });
+
 }
 
-exports.setBillingAddress = function (cartId, version, payload, callback) {
+exports.setBillingAddress = function (cartId, payload, callback) {
     if (payload)
         payload.action = actions.setBillingAddress;
 
-    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
-        callback(err, result);
+    SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
+            callback(err, result);
+        });
     });
+
 }
 
-exports.setShippingMethod = function (cartId, version, payload, callback) {
+exports.setShippingMethod = function (cartId, payload, callback) {
     if (payload)
         payload.action = actions.setShippingMethod;
-
-    CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
-        callback(err, result);
+    SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
+            callback(err, result);
+        });
     });
 }
 

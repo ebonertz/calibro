@@ -70,7 +70,11 @@ module.exports = {
         secure: true,
         host: 'cdn.contentful.com'
     },
-
+    braintree: {
+        merchantId: "j6jnrqf6cysjmswf",
+        publicKey: "65f59g3syk5y7mhz",
+        privateKey: "70c126bc6db1b0fefb9715e358bcc836"
+    },
     mailchimp: {
         key: 'bf21e8530000f313ca295c6be0bd98fe-us11',
         lists: {

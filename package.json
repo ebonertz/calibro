@@ -62,7 +62,9 @@
     "underscore": "^1.8.3",
     "underscore-mixins": "^0.1.4",
     "connect-multiparty": "*",
-    "fileupload": "*"
+    "fileupload": "*",
+    "braintree-sphere-service": "git+https://emaPerez@bitbucket.org/devgurus/braintree-sphere-service.git"
+
   },
   "devDependencies": {
     "supertest": "~0.14.0",

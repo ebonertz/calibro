@@ -263,17 +263,36 @@
                                         <label ng-click="selectBillingMethod({name: 'Credit Card'})" class="block-radio">
                                             <img src="/design/images/credit-card.jpg">
                                             <b style="margin-left: 13px;">Credit Card</b><br/>
-                                            <input type="radio" name="address" value="1">
                                         </label>
                                         <label ng-click="selectBillingMethod({name: 'PayPal'})" class="block-radio">
                                             <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg">
                                             <b style="margin-left: 13px">PayPal</b><br/>
-                                            <input type="radio" name="address" value="1">
                                         </label>
                                     </form>
 
                                 </div>
-                                <div ng-if="selectedBillingMethod == null || selectedBillingMethod.name == 'PayPal'" class="add-address-checkout" style="height: 220px;">
+                                <div ng-show="selectedBillingMethod == null" class="add-address-checkout" style="height: 220px;"></div>
+                                <div ng-show="selectedBillingMethod.name == 'PayPal'"
+                                     class="add-address-checkout" style="height: 220px;">
+                                    <b>Stay secure and protected</b>
+
+                                    <p>PayPal uses data encryption and anti-fraud technology to keep your information
+                                        secure, reducing the risk of online fraud.</p>
+                                    <br>
+
+                                    <form name="payPalCheckout" method="post" method="post">
+                                        <div id="paypal-container"></div>
+                                        <div ng-show="loadingPayPal==1">
+                                            <img src="/design/images/ajax-loader.gif"> Loading PayPal
+                                        </div>
+                                        <input type="hidden" name="amount"
+                                               value="{{cart.totalPrice.centAmount / 100}}"/>
+                                        <input type="hidden" ng-if="authentication.user" name="customerId"
+                                               value="{{authentication.user.id}}"/>
+                                        <input type="hidden" name="submitForSettlement" value="true"/>
+                                        <br/>
+                                    </form>
+
                                 </div>
                                 <div ng-if="selectedBillingMethod && selectedBillingMethod.name != 'PayPal'" class="add-address-checkout">
                                     <h6>Card information</h6>
@@ -300,7 +319,7 @@
                                         </div>
                                     </div>
                                     <div class="col col-md-6">
-                                        <div ng-if="selectedBillingMethod && ((selectedBillingMethod.name != 'PayPal' && validateCreditCard()) || selectedBillingMethod.name == 'PayPal')" class="continue">
+                                        <div class="continue">
                                             <a ng-click="setBillingMethod()" href=""
                                                class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
                                         </div>
@@ -525,7 +544,7 @@
                                                 </div>
                                             </div>
                                             <div class="col col-md-6">
-                                                <input type='submit' class="btn block blue outline radius" value="Pay"/>
+                                                <a ng-click="placeOrder($event)" href="" class="btn block blue outline radius">Place Order</a>
                                             </div>
                                         </div>
                                     </div>

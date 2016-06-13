@@ -38,7 +38,8 @@ module.exports = {
 				'public/lib/ng-file-upload/ng-file-upload-all.min.js',
 				'public/lib/ngprogress/build/ngprogress.js',
 				'public/lib/angular-loading-bar/build/loading-bar.min.js',
-				'public/lib/ng-lodash/build/ng-lodash.min.js'
+				'public/lib/ng-lodash/build/ng-lodash.min.js',
+				'public/lib/braintree-web/dist/braintree.js'
 			]
 		},
 		css: [

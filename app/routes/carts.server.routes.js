@@ -16,7 +16,7 @@ module.exports = function (app) {
     app.route('/api/carts/init')
         .get(carts.init);
 
-    app.route('/api/carts/:id')
+    app.route('/api/carts/:cartId')
         .get(carts.byId)
         .delete(commons.delete.bind({entity: entity}))
 
@@ -29,13 +29,13 @@ module.exports = function (app) {
     app.route('/api/carts/removeLineItem/:cartId/:version')
         .post(carts.removeLineItem);
 
-    app.route('/api/carts/setShippingAddress/:cartId/:version')
+    app.route('/api/carts/setShippingAddress/:cartId')
         .post(carts.setShippingAddress);
 
-    app.route('/api/carts/setBillingAddress/:cartId/:version')
+    app.route('/api/carts/setBillingAddress/:cartId')
         .post(carts.setBillingAddress);
 
-    app.route('/api/carts/setShippingMethod/:cartId/:version')
+    app.route('/api/carts/setShippingMethod/:cartId')
         .post(carts.setShippingMethod);
 
     app.route('/api/carts/changeLineItemQuantity/:cartId/:version')

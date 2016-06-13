@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory,AddressSelector) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', 'PaypalService', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, PaypalService, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
+        $scope.loadingPayPal = 0;
         $scope.billingMethods = [
             {name: 'Credit Card'},
             {name: 'PayPal'}
@@ -174,6 +175,43 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         $scope.selectBillingMethod = function (billingMethod) {
             $scope.selectedBillingMethod = billingMethod;
+            if ($scope.selectedBillingMethod.name == 'PayPal' && !$scope.paypal) {
+                $rootScope.cart.authorizeNet = null;
+
+                LoggerServices.info("Connecting to Paypal...")
+                $scope.loadingPayPal = 1;
+                var userId = Authentication.user ? Authentication.user.id : undefined;
+
+
+                BraintreeService.clientToken(userId).then(function (response) {
+                    if (response.success === true) {
+                        braintree.setup(response.clientToken, "custom", {
+                            paypal: {
+                                container: "paypal-container",
+                            },
+                            onPaymentMethodReceived: function (obj) {
+                                $scope.paypal.nonce = obj.nonce;
+                                $scope.paypal.email = obj.details.email;
+                                if (!$scope.paypalCancelButton) {
+                                    $scope.paypalCancelButton = $('#bt-pp-cancel')
+                                    $scope.paypalCancelButton.on('click', function () {
+                                        $scope.paypal.nonce = undefined;
+                                    });
+                                }
+                            },
+                            onError: function (obj) {
+                                $scope.loadingPayPal = 0;
+                                LoggerServices.warning(JSON.stringify(obj));
+                            },
+                            onReady: function (obj) {
+                                $scope.paypal = obj.paypal;
+                                $scope.loadingPayPal = 0;
+
+                            }
+                        });
+                    }
+                });
+            }
         }
 
         $scope.setShippingAddress = function (shippingAddress) {
@@ -185,7 +223,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }
 
                 $rootScope.loading = true;
-                CartService.setShippingAddress($rootScope.cart.id, $rootScope.cart.version, {address: finalShippingAddress}).then(function (result) {
+                CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
 
                     $rootScope.cart = result;
                     LoggerServices.success('Shipping address updated');
@@ -217,15 +255,29 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
 
         $scope.setBillingMethod = function () {
+            if (!$scope.selectedBillingMethod) {
+                LoggerServices.warning("Please select a billing method");
+                return;
+            }
+
             if (!$rootScope.loading) {
-                if ($scope.selectedBillingMethod) {
-                    if ($scope.selectedBillingMethod.name == 'PayPal') {
-                        PaypalService.setExpressCheckout($rootScope.cart.totalPrice.currencyCode, $rootScope.cart.totalPrice.centAmount / 100, $rootScope.cart.id).then(function (data) {
-                            $window.location.href = data;
+                if ((($scope.selectedBillingMethod.name === 'PayPal' && $scope.validatePaypal(true)) ||
+                    ($scope.selectedBillingMethod.name === 'Credit Card' && $scope.validateCreditCard()))) {
+
+                    if ($scope.selectedBillingMethod.name === 'Credit Card') {
+                        AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
+                            $scope.authorizeNet = data;
+                            $scope.showPhaseD();
+                            $rootScope.loading = false;
+                        }, function (err) {
+                            LoggerServices.warning(err);
                         });
-                    } else {
+                    }
+                    else {
                         $scope.showPhaseD();
                     }
+
+
                 }
             }
         }
@@ -239,16 +291,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }
 
                 $rootScope.loading = true;
-                CartService.setBillingAddress($rootScope.cart.id, $rootScope.cart.version, {address: finalBillingAddress}).then(function (result) {
-
+                CartService.setBillingAddress($rootScope.cart.id, {address: finalBillingAddress}).then(function (result) {
                     $rootScope.cart = result;
                     LoggerServices.success('Billing address updated');
 
-                    AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                        $scope.authorizeNet = data;
-                        $scope.showPhaseE();
-                        $rootScope.loading = false;
-                    });
 
                 });
             }
@@ -257,7 +303,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.setShippingMethod = function () {
             if (!$rootScope.loading && $scope.selectedShippingMethod) {
                 $rootScope.loading = true;
-                CartService.setShippingMethod($rootScope.cart.id, $rootScope.cart.version, {
+                CartService.setShippingMethod($rootScope.cart.id, {
                     shippingMethod: {
                         id: $scope.selectedShippingMethod.id,
                         typeId: "shipping-method"
@@ -278,23 +324,65 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         }
 
         $scope.placeOrder = function () {
-
-        }
-
-        $scope.createOrder = function () {
+            event.preventDefault();
             var order = new Order({
                 id: $rootScope.cart.id,
                 version: $rootScope.cart.version
             });
 
-            order.$save(function (response) {
-                console.log('Order created.');
-                $('#authorizeNetForm').submit();
+            order.$save(function (order) {
+                $scope.order = order;
+
+                var customerId = Authentication.user ? Authentication.user.id : undefined;
+                var cookieId = null;
+
+                CartService.init(customerId, cookieId).then(function (cart) {
+                    $rootScope.cart = cart.data;
+                });
+
+                processPaymentMethods (order);
             }, function (error) {
                 $rootScope.loading = false;
                 LoggerServices.warning(error.data);
             });
+
         }
+
+        var processPaymentMethods = function (order) {
+            var customerId = Authentication.user ? Authentication.user.id : undefined;
+            if ($scope.authorizeNet) {
+                LoggerServices.info('Sending payment info to Authorize.net. Please hold on.');
+                $('#authorizeNetForm').submit();
+                $scope.authorizeNet = undefined;
+
+            }
+            else if ($scope.paypal) {
+                var checkoutParameters = {
+                    payment_method_nonce: $scope.paypal.nonce,
+                    submitForSettlement: false,
+                    customerId: customerId,
+                    orderId: order.id
+                }
+
+                BraintreeService.checkout(checkoutParameters).then(function (response) {
+                    $scope.paypal = undefined;
+                    if (response.success === true) {
+                        LoggerServices.success("Payment was authorized");
+                        $location.path('/orders/' + order.id);
+                    }
+                    else {
+                        LoggerServices.warning("Payment was not authorized. Message: " + response.message + "Order:  " + order.id);
+                    }
+
+
+                });
+            }
+
+
+        };
+
+
+
 
         $scope.addCustomerAddress = function (address, valid) {
             console.log(valid);
@@ -515,6 +603,23 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 }
             }
             return null
+        };
+
+        $scope.validatePaypal = function (useMessages) {
+            var returnFlag = false;
+            if (!$scope.paypal  || !$scope.paypal.nonce) {
+                if (useMessages) {
+                    LoggerServices.warning('Please log in to your Paypal account');
+                }
+            }
+            else {
+                if (useMessages) {
+                    LoggerServices.success('Payment information updated');
+                }
+                returnFlag = true;
+
+            }
+            return returnFlag;
         };
 
 
