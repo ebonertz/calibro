@@ -1,5 +1,4 @@
 var OrderService = require('../services/sphere/sphere.orders.server.service.js'),
-    PaypalService = require('../services/paypal.server.service.js'),
     config = require('../../config/config'),
     CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js');
 
@@ -15,20 +14,6 @@ exports.create = function (req, res) {
     });
 };
 
-exports.fromPaypal = function (req, res) {
-    var cartId = req.param('cartId'),
-        version = req.query.version;
-
-    OrderService.fromPaypal(cartId, version, function (err, result) {
-        if (err) {
-            res.redirect(config.payments.errorUrl)
-        } else {
-            res.redirect('/#!/orders/' + result.id)
-        }
-    });
-
-
-}
 
 
 // TODO: Should be deleted when merge.
