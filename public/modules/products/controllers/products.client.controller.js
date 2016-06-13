@@ -402,8 +402,14 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
             $scope.price = $scope.currentVariant.prices[0];
 
-            if ($scope.currentVariant.images[0] != null)
+            if ($scope.currentVariant.images[0] != null) {
                 $scope.imgBig = $scope.currentVariant.images[0].url;
+            }
+            else {
+                  $scope.imgBig = $scope.product.masterVariant.images [0].url;
+                  $scope.currentVariant.images = $scope.product.masterVariant.images;
+            }
+
 
 
             //ProductService.inventory($scope.currentVariant.sku).then(function (result) {
