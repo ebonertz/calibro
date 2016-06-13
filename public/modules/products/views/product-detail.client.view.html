@@ -5,7 +5,6 @@
       <div class="breadcrumb">
     
       <span xmlns:v="http://rdf.data-vocabulary.org/#">
-      <!-- TODO, missing information on how to structure this -->
       <span typeof="v:Breadcrumb">
         <a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a>
         <a class="bc-link" rel="v:url" property="v:title" ng-href="/#!/categories/{{breadcrumbs.category}}">{{breadcrumbs.category}}</a> / 
@@ -35,11 +34,11 @@
         <meta itemprop="availability" ng-if="currentVariant.availability.isOnStock" content="In Stock">
         <meta itemprop="itemCondition" ng-if="currentVariant.attr.isNew" content="New">
         <span class="new-badge" ng-show="currentVariant.attr.isNew">New</span>
-        <span class="on-sale-badge" ng-if="currentVariant.basePrices[currency]">Sale</span>
+        <span class="on-sale-badge" ng-if="currentVariant.prices [0]">Sale</span>
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
-          <del bo-if="currentVariant.basePrices[currency]">
-            <span class="amount" >{{currentVariant.basePrices[currency] | spherePrice}}</span>
+          <del bo-if="currentVariant.prices [0].discounted">
+            <span class="amount" >{{currentVariant.prices[0].price | spherePrice}}</span>
           </del>
           <ins>
               <div class="notice outline red small" ng-show="error.distributionChannel">Please select an option</div>
@@ -47,7 +46,8 @@
                 <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="price.channel.key" name="channel" id="channel-{{price.channel.key}}"/>
                 <label for="channel-{{price.channel.key}}" class="channel-price">
                   <span bo-text="price.channel.name.en"></span>
-                  <span bo-text="price | spherePrice" style="float:right"></span>
+                  <span  bo-if="currentVariant.prices [0].discounted" bo-text="price.discounted | spherePrice" style="float:right"></span>
+                  <span  bo-if="!currentVariant.prices [0].discounted" bo-text="price | spherePrice" style="float:right"></span>
                 </label>
               </div>
           </ins>
@@ -64,13 +64,6 @@
           </select>
         </div>
 
-        <!--<div class="selection">-->
-          <!--<div class="selection-box">-->
-            <!--<label for="frameColor">Frame Color</label>-->
-            <!--<select ng-model="currentVariant" ng-options="variant as variant.attr.frameColor.label[lang] for variant in product.variants track by variant.id" ng-change="selectVariantFromKey"></select>-->
-          <!--</div>-->
-        <!--</div>-->
-
         <div class="add-to-cart">
           <button ng-click="decrementQuantity()" class="op" id="minus" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">&#45;</button>
           <input type="text" min="1" id="item-amount" value="{{quantity}}">
@@ -79,7 +72,7 @@
           <!--<button class="cart-add btn grey radius" ng-if="!currentVariant.availability.isOnStock">Add to Cart</button>-->
         </div>
         <div class="product-description" itemprop="description">
-          <p bo-text="product.description | locale"></p>
+          <p ng-bind-html="trustAsHtml(product.description.en)"></p>
         </div>
         <section class="meta">
           <div class="social-block">

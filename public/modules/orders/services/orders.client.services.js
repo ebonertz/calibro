@@ -5,11 +5,6 @@ angular.module('orders').service('OrderService', ['$http', '$q', '$location', '$
     function ($http, $q, $location, $window) {
         var urlString = '/api/orders';
 
-        this.fromPaypal = function (cartId, version) {
-            $window.location.href = urlString + '/fromPaypal/' + cartId + '?version=' + version;
-            //$http.get(urlString + '/fromPaypal/' + cartId + '?version=' + version);
-        }
-
 
     }
 ]);

@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'LoggerServices', 'lodash',
-    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, LoggerServices, _) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'LoggerServices', 'lodash','$sce',
+    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, LoggerServices, _,$sce) {
         $scope.authentication = Authentication;
         $scope.$location = $location;
         $scope.productFiltersMin = 0;
@@ -382,7 +382,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                         name: (gender.value.key + "'s " + $scope.breadcrumbs.category).toLowerCase(),
                         url: ("/#!/" + gender.value.key + "/" + $scope.breadcrumbs.category).toLowerCase()
                     };
-                    $scope.fetchRecommendedProducts($scope.product.categories[0].slug, gender.value.key)
+                    $scope.fetchRecommendedProducts($scope.product.categories[0].obj.slug.en, gender.value.key)
                         .then(function (result) {
                             $scope.$apply(function () {
                                 $scope.recommendedProducts = result
@@ -478,5 +478,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.isNew = function (product) {
             return _.find(product.attributes, {name: "isNew"});
         }
+
+        $scope.trustAsHtml = function (string) {
+            return $sce.trustAsHtml(string);
+        };
     }
 ]);

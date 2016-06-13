@@ -74,10 +74,6 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
             });
         };
 
-        $scope.placeOrder = function () {
-            OrderService.fromPaypal($rootScope.cart.id, $rootScope.cart.version);
-        };
-
 
     }
 ]);
