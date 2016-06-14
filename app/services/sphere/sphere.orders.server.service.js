@@ -1,7 +1,7 @@
 var MandrillService = require('../mandrill.server.service.js'),
     CommonService = require('./sphere.commons.server.service.js'),
     CustomObjectService = require('./sphere.custom-objects.server.service.js'),
-    CountryLookup = require('country-data').lookup,
+    SphereClient = require('../../clients/sphere.server.client.js'),
     config = require('../../../config/config'),
     entity = 'orders',
     container = 'Orders';
@@ -61,41 +61,6 @@ exports.changePaymentState = function (orderId, payload, callback) {
 }
 
 
-// TODO: Should be deleted when merge.
-exports.payOrder = function (orderId, receipt, callback) {
-
-    // Save info of Cart Payment in custom objects. Just in case we need them later.
-    var newCustomObject = {
-        container: 'checkoutInfo',
-        key: orderId,
-        value: receipt
-    };
-
-    CommonService.create('customObjects', newCustomObject);
-
-    /*
-     1 This transaction has been approved.
-     2 This transaction has been declined.
-     3 There has been an error processing this transaction.
-     4 This transaction is being held for review.
-     */
-
-    if (receipt.x_response_code == 1) {
-        exports.changePaymentState(orderId, {paymentState: 'Paid'}, function (err, resultOrder) {
-
-            if (err) {
-                callback(err, null);
-                return;
-            } else {
-                callback(null, resultOrder);
-            }
-
-        });
-    } else {
-        callback(new Error('Error in Authorize.net payment process.'), null);
-    }
-};
-
 exports.getOrderNumber = function(callback){
     CustomObjectService.find('Counters', container, function(err, result){
         if(err) callback(err)
@@ -116,3 +81,10 @@ exports.startOrderNumber = function(callback){
         else callback(null, result.value)
     })
 }
+
+exports.byId = function (id) {
+    return SphereClient.getClient().orders.byId(id)
+        .expand('paymentInfo.payments[*]').fetch().then(function (result) {
+            return result.body;
+        });
+};

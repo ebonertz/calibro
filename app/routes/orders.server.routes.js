@@ -16,14 +16,10 @@ module.exports = function (app) {
     	.get(commons.byCustomerOwn.bind({entity: entity}));
 
     app.route('/api/orders/:id')
-        .get(commons.byId.bind({entity: entity}));
+        .get(orders.byId.bind({entity: entity}));
 
     app.route('/api/orders/byCustomer/:customerId')
         .get(commons.byCustomer.bind({entity: entity}));
-
-    // TODO: Should be deleted when merge.
-    app.route('/api/orders/payOrder/:orderId')
-        .post(orders.payOrder);
 
 
 };

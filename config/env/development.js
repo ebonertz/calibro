@@ -102,13 +102,6 @@ module.exports = {
             orderConfirmation: 'orderconfirmation'
         }
     },
-    authorizenet: {
-        apiLoginID: '78qH88Btv',
-        transactionKey: '85k34Y4947T4pMkf',
-        timeCorrection: 10773 // Matias
-        // timeCorrection: 14373 // Luciano
-        //timeCorrection: -7288  // Sebas
-    },
     highIndex: {
         price: 30,
         slug: 'high-index-lens'

@@ -166,24 +166,24 @@
                                             <input type="text" name="streetNumber" placeholder="#"
                                                    ng-model="cart.shippingAddress.streetNumber" required/>
                                         </div>
-                                        <label>City</label>
-                                        <input type="text" name="city" placeholder="City"
-                                               ng-model="cart.shippingAddress.city" required/>
+                                        <select name="country" id="country" ng-model="cart.shippingAddress.country"
+                                                required>
+                                            <option disabled selected>Please choose a country</option>
+                                            <option value="US">United States</option>
+                                        </select>
                                         <label>State/Province</label>
                                         <select id="states"  ng-model="cart.shippingAddress.state"   required>
                                             <option value="" selected disabled>Choose Province/State</option>
                                             <option ng-selected="{{cart.shippingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.shippingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
 
                                         </select>
+                                        <label>City</label>
+                                        <input type="text" name="city" placeholder="City"
+                                               ng-model="cart.shippingAddress.city" required/>
+                                        <label for="country">Country</label>
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.shippingAddress.postalCode" required/>
-                                        <label for="country">Country</label>
-                                        <select name="country" id="country" ng-model="cart.shippingAddress.country"
-                                                required>
-                                            <option disabled selected>Please choose a country</option>
-                                            <option value="US">United States</option>
-                                        </select>
                                         <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
@@ -338,21 +338,21 @@
                                             <input type="text" name="streetNumber" placeholder="#"
                                                    ng-model="cart.billingAddress.streetNumber" required/>
                                         </div>
-                                        <label>City</label>
-                                        <input type="text" name="city" placeholder="City"
-                                               ng-model="cart.billingAddress.city" required/>
-                                        <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province"
-                                               ng-model="cart.billingAddress.state" required/>
-                                        <label>Zip/Postal</label>
-                                        <input type="text" name="postalCode" placeholder="ZIP/Postal"
-                                               ng-model="cart.billingAddress.postalCode" required/>
                                         <label for="country">Country</label>
                                         <select name="country" id="country" ng-model="cart.billingAddress.country"
                                                 required>
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
+                                        <label>State/Province</label>
+                                        <input type="text" name="state" placeholder="State/Province"
+                                               ng-model="cart.billingAddress.state" required/>
+                                        <label>City</label>
+                                        <input type="text" name="city" placeholder="City"
+                                               ng-model="cart.billingAddress.city" required/>
+                                        <label>Zip/Postal</label>
+                                        <input type="text" name="postalCode" placeholder="ZIP/Postal"
+                                               ng-model="cart.billingAddress.postalCode" required/>
                                         <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>

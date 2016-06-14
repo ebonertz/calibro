@@ -17,11 +17,8 @@ angular.module('orders').controller('OrdersController', ['$scope', 'Authenticati
             Order.get({
                 orderId: id
             }, function (data) {
+                $scope.paymentInfo = data.paymentInfo.payments [0].obj.paymentMethodInfo.method;
                 $scope.order = data;
-            });
-
-            CustomObjectService.find('checkoutInfo', $stateParams.orderId).then(function (customObject) {
-                $scope.paymentInfo = customObject;
             });
 
 

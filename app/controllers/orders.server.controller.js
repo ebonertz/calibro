@@ -1,6 +1,5 @@
 var OrderService = require('../services/sphere/sphere.orders.server.service.js'),
-    config = require('../../config/config'),
-    CustomObjectService = require('../services/sphere/sphere.custom-objects.server.service.js');
+    config = require('../../config/config');
 
 exports.create = function (req, res) {
     var cart = req.body;
@@ -14,20 +13,14 @@ exports.create = function (req, res) {
     });
 };
 
+exports.byId = function (req, res) {
+    var id = req.params.id;
 
+    OrderService.byId(id).then(function (result) {
+        res.json(result);
+    })
 
-// TODO: Should be deleted when merge.
-exports.payOrder = function (req, res) {
-    var orderId = req.param('orderId'),
-        payload = req.body;
-
-    OrderService.payOrder(orderId, payload, function (err, result) {
-        if (err) {
-            return res.status(400).send(err.body.message);
-        } else {
-            res.redirect('/#!/orders/' + result.id)
-        }
-    });
 };
+
 
 
