@@ -256,76 +256,35 @@
                         <hr>
                         <div class="panel-content">
                             <section class="inner">
-                                <div class="saved-addresses-checkout">
-                                    <h6>Choose billing method</h6>
 
-                                    <form>
-                                        <label ng-click="selectBillingMethod({name: 'Credit Card'})" class="block-radio">
-                                            <img src="/design/images/credit-card.jpg">
-                                            <b style="margin-left: 13px;">Credit Card</b><br/>
-                                        </label>
-                                        <label ng-click="selectBillingMethod({name: 'PayPal'})" class="block-radio">
-                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg">
-                                            <b style="margin-left: 13px">PayPal</b><br/>
-                                        </label>
-                                    </form>
-
-                                </div>
-                                <div ng-show="selectedBillingMethod == null" class="add-address-checkout" style="height: 220px;"></div>
-                                <div ng-show="selectedBillingMethod.name == 'PayPal'"
-                                     class="add-address-checkout" style="height: 220px;">
+                                <div>
                                     <b>Stay secure and protected</b>
 
                                     <p>PayPal uses data encryption and anti-fraud technology to keep your information
                                         secure, reducing the risk of online fraud.</p>
                                     <br>
-
-                                    <form name="payPalCheckout" method="post" method="post">
-                                        <div id="paypal-container"></div>
-                                        <div ng-show="loadingPayPal==1">
-                                            <img src="/design/images/ajax-loader.gif"> Loading PayPal
-                                        </div>
+                                    <form id="payment-form" method="post" action="/checkouts">
+                                        <div id="dropin-container"></div>
                                         <input type="hidden" name="amount"
                                                value="{{cart.totalPrice.centAmount / 100}}"/>
-                                        <input type="hidden" ng-if="authentication.user" name="customerId"
-                                               value="{{authentication.user.id}}"/>
-                                        <input type="hidden" name="submitForSettlement" value="true"/>
-                                        <br/>
-                                    </form>
+                                        <div class="row">
+                                            <div class="col col-md-6">
+                                                <div class="continue">
+                                                    <a ng-click="showPhaseB()" href=""
+                                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-6">
+                                                <div class="continue">
+                                                    <button class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}" type="submit">Next ></button>
+                                                </div>
+                                            </div>
 
-                                </div>
-                                <div ng-if="selectedBillingMethod && selectedBillingMethod.name != 'PayPal'" class="add-address-checkout">
-                                    <h6>Card information</h6>
-
-                                    <form id="add-address" name="addAddress" action="#">
-                                        <label>Number</label>
-                                        <input type="text" name="cardNumber" placeholder="Card Number"
-                                               ng-model="card.card_number" required maxlength="16"/>
-                                        <label>Expiration Date (<b>MMYY</b> format)</label>
-                                        <input type="text" name="cardExp" placeholder="Expiration Date"
-                                               ng-model="card.card_exp" required  maxlength="4"/>
-                                        <label>Security Code</label>
-                                        <input type="text" name="securityCode" placeholder="Security Code"
-                                               ng-model="card.card_security_code"  maxlength="4"/>
+                                        </div>
                                     </form>
                                 </div>
 
 
-                                <div class="row">
-                                    <div class="col col-md-6">
-                                        <div class="continue">
-                                            <a ng-click="showPhaseB()" href=""
-                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
-                                        </div>
-                                    </div>
-                                    <div class="col col-md-6">
-                                        <div class="continue">
-                                            <a ng-click="setBillingMethod()" href=""
-                                               class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">Next ></a>
-                                        </div>
-                                    </div>
-
-                                </div>
 
                             </section>
                         </div>
@@ -506,49 +465,21 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="place-order">
+                                    <br/>
 
-
-                                <FORM id="authorizeNetForm" name="authorizeNetForm" ng-if="authorizeNet && cart.lineItems != null && cart.lineItems.length > 0" method='post'
-                                      action='https://test.authorize.net/gateway/transact.dll'>
-
-                                    <INPUT type='hidden' name='x_login' value='{{authorizeNet.x_login}}'/>
-                                    <INPUT type='hidden' name='x_amount' value='{{authorizeNet.x_amount}}'/>
-                                    <INPUT type='hidden' name='x_fp_sequence' value='{{authorizeNet.x_fp_sequence}}'/>
-                                    <INPUT type='hidden' name='x_fp_timestamp' value='{{authorizeNet.x_fp_timestamp}}'/>
-                                    <INPUT type='hidden' name='x_fp_hash' value='{{authorizeNet.x_fp_hash}}'/>
-
-                                    <INPUT type='hidden' name='x_card_num' value='{{card.card_number}}'/>
-                                    <INPUT type='hidden' name='x_exp_date' value='{{card.card_exp}}'/>
-
-                                    <INPUT type='hidden' name='x_first_name' value='{{cart.billingAddress.firstName}}'/>
-                                    <INPUT type='hidden' name='x_last_name' value='{{cart.billingAddress.lastName}}'/>
-
-                                    <INPUT type='hidden' name='x_address' value='{{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}'/>
-                                    <INPUT type='hidden' name='x_city' value='{{cart.billingAddress.city}}'/>
-                                    <INPUT type='hidden' name='x_state' value='{{cart.billingAddress.state}}'/>
-                                    <INPUT type='hidden' name='x_country' value='{{cart.billingAddress.country}}'/>
-
-                                    <INPUT type='hidden' name='cart_id' value='{{cart.id}}'/>
-                                    <INPUT type='hidden' name='cart_version' value='{{cart.version}}'/>
-
-                                    <INPUT TYPE="HIDDEN" NAME="x_relay_always" VALUE="TRUE"/>
-
-                                    <div class="place-order">
-                                        <br/>
-
-                                        <div class="row">
-                                            <div class="col col-md-6">
-                                                <div class="continue">
-                                                    <a ng-click="showPhaseD()" href=""
-                                                       class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
-                                                </div>
-                                            </div>
-                                            <div class="col col-md-6">
-                                                <a ng-click="placeOrder($event)" href="" class="btn block blue outline radius">Place Order</a>
+                                    <div class="row">
+                                        <div class="col col-md-6">
+                                            <div class="continue">
+                                                <a ng-click="showPhaseD()" href=""
+                                                   class="{{loading ? 'btn outline radius block disabled' : 'btn outline green radius block'}}">< Back</a>
                                             </div>
                                         </div>
+                                        <div class="col col-md-6">
+                                            <a ng-click="placeOrder($event)" href="" class="btn block blue outline radius">Place Order</a>
+                                        </div>
                                     </div>
-                                </FORM>
+                                </div>
 
                             </section>
                         </div>

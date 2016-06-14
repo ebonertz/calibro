@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'AuthorizeNetService', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart, AuthorizeNetService, ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -52,6 +52,18 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.phaseD = false;
             $scope.phaseE = false;
             $scope.anchorScroll(null);
+            BraintreeService.clientToken().then(function (response) {
+                if (response.success === true) {
+                    braintree.setup(response.clientToken, "dropin", {
+                        container: 'dropin-container',
+                        onPaymentMethodReceived: function (obj) {
+                        $scope.paymentInfo = obj;   //"PayPalAccount
+                        $scope.showPhaseD();
+                            $scope.$apply();
+                        }
+                    });
+                }
+            });
         }
 
         $scope.showPhaseD = function () {
@@ -173,47 +185,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $rootScope.cart.billingAddress = billingAddress;
         }
 
-        $scope.selectBillingMethod = function (billingMethod) {
-            $scope.selectedBillingMethod = billingMethod;
-            if ($scope.selectedBillingMethod.name == 'PayPal' && !$scope.paypal) {
-                $rootScope.cart.authorizeNet = null;
-
-                LoggerServices.info("Connecting to Paypal...")
-                $scope.loadingPayPal = 1;
-                var userId = Authentication.user ? Authentication.user.id : undefined;
-
-
-                BraintreeService.clientToken(userId).then(function (response) {
-                    if (response.success === true) {
-                        braintree.setup(response.clientToken, "custom", {
-                            paypal: {
-                                container: "paypal-container",
-                            },
-                            onPaymentMethodReceived: function (obj) {
-                                $scope.paypal.nonce = obj.nonce;
-                                $scope.paypal.email = obj.details.email;
-                                if (!$scope.paypalCancelButton) {
-                                    $scope.paypalCancelButton = $('#bt-pp-cancel')
-                                    $scope.paypalCancelButton.on('click', function () {
-                                        $scope.paypal.nonce = undefined;
-                                    });
-                                }
-                            },
-                            onError: function (obj) {
-                                $scope.loadingPayPal = 0;
-                                LoggerServices.warning(JSON.stringify(obj));
-                            },
-                            onReady: function (obj) {
-                                $scope.paypal = obj.paypal;
-                                $scope.loadingPayPal = 0;
-
-                            }
-                        });
-                    }
-                });
-            }
-        }
-
         $scope.setShippingAddress = function (shippingAddress) {
             if (!$rootScope.loading) {
                 var finalShippingAddress = shippingAddress;
@@ -253,34 +224,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         }
 
-
-        $scope.setBillingMethod = function () {
-            if (!$scope.selectedBillingMethod) {
-                LoggerServices.warning("Please select a billing method");
-                return;
-            }
-
-            if (!$rootScope.loading) {
-                if ((($scope.selectedBillingMethod.name === 'PayPal' && $scope.validatePaypal(true)) ||
-                    ($scope.selectedBillingMethod.name === 'Credit Card' && $scope.validateCreditCard()))) {
-
-                    if ($scope.selectedBillingMethod.name === 'Credit Card') {
-                        AuthorizeNetService.get($rootScope.cart.totalPrice.centAmount / 100).then(function (data) {
-                            $scope.authorizeNet = data;
-                            $scope.showPhaseD();
-                            $rootScope.loading = false;
-                        }, function (err) {
-                            LoggerServices.warning(err);
-                        });
-                    }
-                    else {
-                        $scope.showPhaseD();
-                    }
-
-
-                }
-            }
-        }
 
         $scope.setBillingAddress = function (billingAddress) {
             if (!$rootScope.loading) {
@@ -350,22 +293,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         var processPaymentMethods = function (order) {
             var customerId = Authentication.user ? Authentication.user.id : undefined;
-            if ($scope.authorizeNet) {
-                LoggerServices.info('Sending payment info to Authorize.net. Please hold on.');
-                $('#authorizeNetForm').submit();
-                $scope.authorizeNet = undefined;
-
-            }
-            else if ($scope.paypal) {
+            if ($scope.paymentInfo) {
                 var checkoutParameters = {
-                    payment_method_nonce: $scope.paypal.nonce,
+                    payment_method_nonce: $scope.paymentInfo.nonce,
                     submitForSettlement: true,
                     customerId: customerId,
                     orderId: order.id
                 }
 
                 BraintreeService.checkout(checkoutParameters).then(function (response) {
-                    $scope.paypal = undefined;
+                    $scope.paymentInfo = undefined;
                     if (response.success === true) {
                         LoggerServices.success("Payment was authorized");
                         $location.path('/orders/' + order.id);
@@ -605,22 +542,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return null
         };
 
-        $scope.validatePaypal = function (useMessages) {
-            var returnFlag = false;
-            if (!$scope.paypal  || !$scope.paypal.nonce) {
-                if (useMessages) {
-                    LoggerServices.warning('Please log in to your Paypal account');
-                }
-            }
-            else {
-                if (useMessages) {
-                    LoggerServices.success('Payment information updated');
-                }
-                returnFlag = true;
-
-            }
-            return returnFlag;
-        };
 
 
     }
