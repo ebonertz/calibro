@@ -68,8 +68,10 @@
           <button ng-click="decrementQuantity()" class="op" id="minus" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">&#45;</button>
           <input type="text" min="1" id="item-amount" value="{{quantity}}">
           <button ng-click="incrementQuantity()" class="op" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'" id="more">&#43;</button>
-          <button ng-click="addToCart(currentVariant.availability.isOnStock)" class="cart-add btn radius" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">Add to Cart</button>
-          <!--<button class="cart-add btn grey radius" ng-if="!currentVariant.availability.isOnStock">Add to Cart</button>-->
+          <div class="addbtn {{isAvailable ? '' : 'disabled-div'}}">
+            <button ng-click="addToCart(currentVariant.availability.isOnStock)" class="cart-add btn radius" ng-class="currentVariant.availability.isOnStock ? 'blue' : 'grey'">Add to Cart</button>
+          </div>
+            <!--<button class="cart-add btn grey radius" ng-if="!currentVariant.availability.isOnStock">Add to Cart</button>-->
         </div>
         <div class="product-description" itemprop="description">
           <p ng-bind-html="trustAsHtml(product.description.en)"></p>

@@ -20,7 +20,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.currency = 'USD';
         $scope.error = {}
 
-        $scope.$utils = ProductUtils
+        $scope.$utils = ProductUtils;
         $scope.facetConfig = {
             'lensColor': {
                 'type': 'lenum',
@@ -322,15 +322,17 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         }
 
         $scope.addToCart = function (inStock) {
-            if (inStock) {
-                if (!$scope.distributionChannel) {
-                    $scope.error.distributionChannel = "Please select an option";
+            if ($scope.isAvailable) {
+                if (inStock) {
+                    if (!$scope.distributionChannel) {
+                        $scope.error.distributionChannel = "Please select an option";
+                    } else {
+                        $scope.error.distributionChannel = null;
+                        CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.distributionChannel, $scope.quantity);
+                    }
                 } else {
-                    $scope.error.distributionChannel = null;
-                    CartService.addToCart($scope.product.id, $scope.currentVariant.id, $scope.distributionChannel, $scope.quantity);
+                    LoggerServices.error("Product out of stock")
                 }
-            } else {
-                LoggerServices.error("Product out of stock")
             }
         };
 
@@ -410,7 +412,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                   $scope.imgBig = $scope.product.masterVariant.images [0].url;
                   $scope.currentVariant.images = $scope.product.masterVariant.images;
             }
-
+            $scope.isAvailable = true;
 
 
             //ProductService.inventory($scope.currentVariant.sku).then(function (result) {
