@@ -1,8 +1,8 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$rootScope', 'Authentication', 'LoggerServices', 'Cart',
-    function ($http, $q, $cookies, $rootScope, Authentication, LoggerServices, Cart) {
+angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$rootScope', 'Authentication', 'LoggerServices', 'Cart',
+    function ($http, $q, ipCookie, $rootScope, Authentication, LoggerServices, Cart) {
         var urlString = '/api/carts';
 
         this.pageLoad = function () {
@@ -16,8 +16,8 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 customerId = Authentication.user.id;
             }
 
-            if ($cookies.anonymousCart != null) {
-                cookieId = $cookies.anonymousCart;
+            if (ipCookie('anonymousCart', undefined, {path: '/'}) != null) {
+                cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
             }
 
             this.init(customerId, cookieId).then(function (cart) {
@@ -25,7 +25,7 @@ angular.module('carts').service('CartService', ['$http', '$q', '$cookies', '$roo
                 $rootScope.cart = cart;
 
                 if(customerId == null) {
-                    $cookies.anonymousCart = cart.id;
+                    ipCookie('anonymousCart', $rootScope.cart.id, {path: '/'});
                     console.log('Cart saved in cookie.');
                 }
 
