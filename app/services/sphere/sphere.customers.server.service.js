@@ -14,12 +14,48 @@ var updateCustomer = function(customer_id, actions){
 }
 
 exports.create = function (customer, callback) {
-    SphereClient.getClient().customers.create(customer).then(function (result) {
-        callback(null, result.body.customer);
-    }).error(function (err) {
-        console.log(err);
-        callback(err, null);
+    return getSequenceNewValue("customerNumberSequence").then(function (customerNumber) {
+        customer.customerNumber = customerNumber.toString();
+        return SphereClient.getClient().customers.save(customer).then(function (result) {
+            callback(null, result.body.customer);
+        }).error(function (err) {
+            console.log(err);
+            callback(err, null);
+        });
     });
+};
+
+var getSequenceNewValue = function (sequence) {
+    return SphereClient.getClient().customObjects
+        .where('key="' + sequence + '"')
+        .fetch()
+        .then(function (res) {
+            return res.body.results
+        }).then(function (results) {
+            if (!_.isEmpty(results)) {
+                return _.first(results);
+            } else {
+                return {
+                    value: 2000000
+                }
+            }
+        }).then(function (lastValue) {
+            return {
+                value: lastValue.value + 1,
+                version: lastValue.version
+            }
+        }).then(function (newValue) {
+            return SphereClient.getClient().customObjects.save({
+                container: sequence,
+                key: sequence,
+                value: newValue.value,
+                version: newValue.version
+            }).then(function (res) {
+                return res.body.value;
+            }).catch(function () {
+                return getSequenceNewValue(sequence);
+            })
+        });
 };
 
 exports.login = function (email, password, anonymousCartId, callback) {
