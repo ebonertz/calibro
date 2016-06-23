@@ -269,9 +269,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             return false;
         }
         $scope.priceRange = function () {
-            // var range = $scope.productFilters['price'].split("-");
-            // $scope.productFiltersMin = parseInt(range[0]);
-            // $scope.productFiltersMax = parseInt(range[1]);
+            var range = $scope.productFilters['price'].split("-");
+            $scope.productFiltersMin = parseInt(range[0]);
+            $scope.productFiltersMax = parseInt(range[1]);
             $scope.init();
             return;
         };
@@ -362,6 +362,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                 });
 
                 $scope.product.variants.unshift($scope.product.masterVariant);
+                if ($scope.currentVariant.prices.length === 1) {
+                    $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
+                }
                 $scope.facets = result.facets;
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
