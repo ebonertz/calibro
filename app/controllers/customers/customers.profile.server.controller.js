@@ -77,7 +77,7 @@ exports.resetPasswordEmail = function(req, res){
     path = config.serverPath+'/password/reset/'
 
   SphereClient.getClient().customers._save('/customers/password-token', {email: email}).then (function (result) {
-    MandrillService.sendPasswordToken(email, path+result.value).then(function(result){
+    MandrillService.sendPasswordToken(email, path + result.body.value).then(function(result){
       return res.json(result);
     }, function(err){
       res.status(400).send({message: "We could not send the email, please try again"})
