@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -279,8 +279,11 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 var customerId = Authentication.user ? Authentication.user.id : undefined;
                 var cookieId = null;
 
+                if (ipCookie('anonymousCart', undefined, {path: '/'}) != null) {
+                    cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
+                }
                 CartService.init(customerId, cookieId).then(function (cart) {
-                    $rootScope.cart = cart.data;
+                    $rootScope.cart = cart;
                 });
 
                 processPaymentMethods (order);
