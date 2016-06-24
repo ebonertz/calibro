@@ -275,17 +275,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             order.$save(function (order) {
                 $scope.order = order;
-
-                var customerId = Authentication.user ? Authentication.user.id : undefined;
-                var cookieId = null;
-
-                if (ipCookie('anonymousCart', undefined, {path: '/'}) != null) {
-                    cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
-                }
-                CartService.init(customerId, cookieId).then(function (cart) {
-                    $rootScope.cart = cart;
-                });
-
                 processPaymentMethods (order);
             }, function (error) {
                 $rootScope.loading = false;
@@ -313,6 +302,16 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     else {
                         LoggerServices.warning("Payment was not authorized. Message: " + response.message + "Order:  " + order.id);
                     }
+
+                    var customerId = Authentication.user ? Authentication.user.id : undefined;
+                    var cookieId = null;
+
+                    if (ipCookie('anonymousCart', undefined, {path: '/'}) != null) {
+                        cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
+                    }
+                    CartService.init(customerId, cookieId).then(function (cart) {
+                        $rootScope.cart = cart;
+                    });
 
 
                 });
