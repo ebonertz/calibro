@@ -19,26 +19,11 @@
   </div>
 </div>
 
-<!--
-<hr/>
-<div class="filter-block" id="categories">
-  <p class="filter-title">Category</p><a href="#" class="clearfilter">Clear</a>
-  <label class="check-option checked">
-    <input type="checkbox" uicheckbox value="frames" checked>
-    Frames <span class="cat-amount">(345)</span>
-  </label>
-  <label class="check-option checked">
-    <input type="checkbox" uicheckbox value="framesprescription" checked>
-    Frames + Prescription <span class="cat-amount">(204)</span>
-  </label>
-</div>
-<hr/> -->
-
-<div ng-repeat-start="(facetKey, facetOptions) in facetConfig track by facetKey" class="filter-block" id="{{facetKey}}-filter" ng-show="facets[$utils.attrKey(facetKey, facetOptions)].terms.length > 0" >
+<div ng-repeat-start="(facetKey, facetOptions) in facetConfig track by facetKey" class="filter-block" id="{{facetKey}}-filter"  ng-show="facets[facetKey].length > 0"  >
   <p class="filter-title">{{facetOptions.title}}</p><a class="clearfilter" ng-click="clearFilter(facetKey)">Clear</a>
-  <label ng-repeat="term in facets[$utils.attrKey(facetKey, facetOptions)].terms track by term.term" class="check-option">
-  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="productFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="init()">
+  <label ng-repeat="term in facets[facetKey] track by term.term" class="check-option">
+  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="selectedFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="init()">
   {{term.term | facets}} <!--<span class="cat-amount">({{term.count}})</span>-->
   </label>
 </div>
-<hr ng-show="facets[$utils.attrKey(facetKey, facetOptions)].terms.length > 0" ng-repeat-end/>
+<hr ng-show="facets[facetKey].length > 0" ng-repeat-end/>

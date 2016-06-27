@@ -35,115 +35,19 @@ angular.module('products').service('ProductService', ['$http', '$q', '$location'
 
     }
 
-    // TODO: Change parameters to options = {filters: ..., facets: ..., ...}
-    this.getByCategorySlug = function(slug, query, facets, sort, byQuery, pageSize, pageNum) {
-      var deferred = $q.defer();
+    this.search = function (text, attributes, page, perPage, sortAttr, sortAsc) {
+      var queryString = urlString + '/search/' + text;
 
-      var queryString = ""
-      for(var queryName in query){
-        queryString = queryString + queryName + "=" + query[queryName] + "&"
-      }
+      queryString += '?page=' + (page == null ? 1 : page);
+      queryString += '&perPage=' + (perPage == null ? 10 : perPage);
 
-      if(facets && facets.length > 0){
-        queryString = queryString + "facets="
+      if (sortAttr)
+        queryString += '&sortAttr=' + sortAttr + '&sortAsc=' + sortAsc;
 
-        for(var i = 0; i < facets.length; i++){
-          queryString = queryString + facets[i] + ";"
-        }
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(byQuery && byQuery.length > 0){
-        queryString = queryString + "byQuery="
-
-        for(var i = 0; i < byQuery.length; i++){
-          queryString = queryString + byQuery[i] + ";"
-        }
-
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(sort && Object.keys(sort).length > 0){
-        queryString = queryString + "sort="
-        for(var sortName in sort){
-          queryString = queryString + sortName + ":" + sort[sortName] + ";"
-        }
-
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(pageSize){
-       queryString = queryString + "pageSize=" + pageSize + "&";
-      }
-      if(pageNum){
-       queryString = queryString + "page=" + pageNum + "&";
-      }
-      
-      queryString = queryString.slice(0,-1);
-
-      var get_url = (queryString.length > 0 ? '/api/categories/'+slug+'?'+queryString : '/api/categories/'+slug);
-      // var local_url = '/'+location.hash.split('?')[0]+'?'+queryString; 
-      $http.get(get_url).success(function (data) {
-        deferred.resolve(data);
-      });
-
-      return deferred.promise;
+      return $http.post(queryString, attributes);
     }
 
-    this.searchByText = function(text, query, facets, sort, byQuery, pageSize, pageNum) {
-      var deferred = $q.defer();
 
-      var queryString = ""
-      for(var queryName in query){
-        queryString = queryString + queryName + "=" + query[queryName] + "&"
-      }
-
-      if(facets && facets.length > 0){
-        queryString = queryString + "facets="
-
-        for(var i = 0; i < facets.length; i++){
-          queryString = queryString + facets[i] + ";"
-        }
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(byQuery && byQuery.length > 0){
-        queryString = queryString + "byQuery="
-
-        for(var i = 0; i < byQuery.length; i++){
-          queryString = queryString + byQuery[i] + ";"
-        }
-
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(sort && Object.keys(sort).length > 0){
-        queryString = queryString + "sort="
-        for(var sortName in sort){
-          queryString = queryString + sortName + ":" + sort[sortName] + ";"
-        }
-
-        queryString = queryString.slice(0,-1).concat('&')
-      }
-
-      if(pageSize){
-        queryString = queryString + "pageSize=" + pageSize + "&";
-      }
-      if(pageNum){
-        queryString = queryString + "page=" + pageNum + "&";
-      }
-
-      queryString = queryString.slice(0,-1);
-
-      var get_url = (queryString.length > 0 ? '/api/products/byText/' + text + '?' +queryString : '/api/products/byText/'+text);
-      // var local_url = '/'+location.hash.split('?')[0]+'?'+queryString;
-
-      $http.get(get_url).success(function (data) {
-        deferred.resolve(data);
-      });
-
-      return deferred.promise;
-    }
 
 
   }

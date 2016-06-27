@@ -1,10 +1,9 @@
 'use strict';
 
-angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'ProductUtils', 'updateStatus', 'LoggerServices','AddressSelector',
-	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, ProductUtils, updateStatus, LoggerServices,AddressSelector) {
+angular.module('customers').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Customers', 'Authentication', 'Addresses', 'updateStatus', 'LoggerServices','AddressSelector',
+	function($scope, $http, $stateParams, $location, Customers, Authentication, Addresses, updateStatus, LoggerServices,AddressSelector) {
     $scope.dataStates = AddressSelector.dataStates;
     $scope.customer = angular.copy(Authentication.user);
-		$scope.$utils = ProductUtils;
 
 
 		// If user is not signed in then redirect back home
@@ -176,8 +175,6 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 
 		$scope.fetchOrders = function(){
 			$scope.orders = []
-			$scope.$utils = ProductUtils;
-			
 			$http.get('/api/orders/own').success(function(result){
 				console.log(result)
 				$scope.orders = result;

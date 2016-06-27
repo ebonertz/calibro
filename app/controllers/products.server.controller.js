@@ -2,9 +2,7 @@
 
 var ProductService = require('../services/sphere/sphere.products.server.service.js'),
   CommonService = require('../services/sphere/sphere.commons.server.service'),
-  CategoriesService = require('../services/sphere/sphere.categories.server.service'),
-  RequestParameters = require('../services/sphere/request-parameters.server.service.js'),
-  PostFilterService = require('../services/sphere/postfilters.server.service.js');
+  CategoriesService = require('../services/sphere/sphere.categories.server.service');
 
 /**
  *  Product detail page
@@ -37,46 +35,6 @@ exports.bySlug = function(req, res){
     res.sendStatus(400);
   });
 
-}
-
-exports.fetchCategoryProducts = function(req,res){
-  var slug = req.params.slug;
-
-  if(!slug)
-    return res.status(400);
-
-  // TODO: Assign req.query to RequestParameters here to send to ProductService
-  var params = new RequestParameters(req.query)
-
-  // Fetch category
-  var categoryId = CategoriesService.getId(slug)
-
-  ProductService.searchByCategory(categoryId, params, function(err, result){
-    if (err) {
-      return res.status(400);
-    } else {
-      result.products = PostFilterService.variantDisplay(result.products, params);
-      res.json(result);
-    }
-  })
-}
-
-exports.searchByText = function(req,res){
-  var text = req.params.text;
-
-  if(!text)
-    return res.status(400);
-
-  var params = new RequestParameters(req.query)
-
-  ProductService.searchByText(text, params, function(err, result){
-    if (err) {
-      return res.status(400);
-    } else {
-      result.products = PostFilterService.variantDisplay(result.products, params);
-      res.json(result);
-    }
-  })
 }
 
 exports.listBy = function (req, res) {
@@ -118,4 +76,20 @@ exports.listBy = function (req, res) {
     res.json(result);
   });
 }
+
+exports.search = function (req, res) {
+  var text = req.params.text,
+      page = req.query.page,
+      perPage = req.query.perPage,
+      sortAttr = req.query.sortAttr,
+      sortAsc = req.query.sortAsc;
+
+  var attributes = req.body;
+
+  ProductService.search(text, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
+    res.json(result);
+  });
+}
+
+
 

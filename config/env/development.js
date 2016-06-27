@@ -50,18 +50,34 @@ module.exports = {
         "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw",
         "product_types": {
             categories: "categories.id",
-            lensColor: "variants.attributes.lensColor.label.en",
-            frameColor: "variants.attributes.frameColor.label.en",
-            price: "variants.price.centAmount"
+            lensColor: "variants.attributes.lensColor.key",
+            frameColor: "variants.attributes.frameColor.key",
+            price: "variants.price.centAmount",
+            gender: "variants.attributes.gender.key",
+            width: "variants.attributes.width.key",
+            frameShape: "variants.attributes.frameShape.key",
+            frameMaterial: "variants.attributes.frameMaterial.en",
+            options:"variants.attributes.options.key"
+
         },
         "product_types_inv": {
             "categories.id": "categories",
-            "variants.attributes.lensColor.label.en": "lensColor",
-            "variants.attributes.frameColor.label.en": "frameColor",
-            "variants.price.centAmount": "price"
+            "variants.attributes.lensColor.key": "lensColor",
+            "variants.attributes.frameColor.key": "frameColor",
+            "variants.price.centAmount": "price",
+            "variants.attributes.gender.key":"gender" ,
+            "variants.attributes.width.key":"width",
+            "variants.attributes.frameShape.key":"frameShape",
+            "variants.attributes.frameMaterial.en":"frameMaterial",
+            "variants.attributes.options.key":"options"
         },
         "facets": [
-            "categories.id"
+            "categories.id",
+            "variants.attributes.frameColor.key",
+            "variants.attributes.width.key",
+            "variants.attributes.frameShape.key",
+            "variants.attributes.frameMaterial.en",
+            "variants.attributes.lensColor.key"
         ]
     },
     contenful: {
@@ -83,7 +99,7 @@ module.exports = {
         }
     },
     mandrill: {
-        key: 'cP6gybqxJGlJWMkAcvz5hw',//'G2aMt_7XNEFriFTfs1Otnw',
+        key: 'gpmiHrASlEYrO6WNjYDC7A',//'G2aMt_7XNEFriFTfs1Otnw',
         options: {
             from_email: 'welcome@focalioptics.com',
             from_name: 'Focali Optics',

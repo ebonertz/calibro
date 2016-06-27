@@ -32,15 +32,17 @@
                 <h1 class="page-title">{{pageTitle}}</h1>
 
                 <div class="sorters">
-                    <a ng-click="sortBy('name');" id="by-name" class="sorting active"
+                    <a ng-click="sortBy('name');" id="by-name"
+                       class="sorting {{selectedSort.name == 'name'?'active':''}}"
                        ng-class="sort.name == 'ASC' ? 'up' : 'down'">Sort by Name</a>
-                    <a ng-click="sortBy('price');" id="by-price" class="sorting"
+                    <a ng-click="sortBy('price');" id="by-price"
+                       class="sorting {{selectedSort.name == 'price'?'active':''}}"
                        ng-class="sort.price == 'ASC' ? 'up' : 'down'">Sort by Price</a>
                 </div>
                 <div class="category-filters">
-                    <a ng-click="optionFilter()"  class="cat-sort active" id="all">All</a>
-                    <a ng-click="optionFilter('frames')" class="cat-sort" id="frames">Frames</a>
-                    <a ng-click="optionFilter('prescription')" class="cat-sort" id="frames-prescription">Frames+ Prescription</a>
+                    <a ng-click="optionFilter()"  class="cat-sort {{selectedOptionFilter == 'ALL'? 'active':''}}" id="all">All</a>
+                    <a ng-click="optionFilter('FRAMES') " class="cat-sort {{selectedOptionFilter == 'FRAMES'? 'active':''}}" id="frames">Frames</a>
+                    <a ng-click="optionFilter('PRESCRIPTION')" class="cat-sort {{selectedOptionFilter == 'PRESCRIPTION'? 'active':''}}" id="frames-prescription">Frames+ Prescription</a>
                 </div>
             </div>
         </section>

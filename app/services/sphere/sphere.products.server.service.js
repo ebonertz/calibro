@@ -39,7 +39,13 @@ exports.listBy = function (categories, attributes, page, perPage, sortAttr, sort
 
     for (var i = 0; i < attributeKeys.length; i++) {
       var queryString = "";
-      if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
+      if (_.isObject(attributes[attributeKeys[i]]) && _.isArray(attributes[attributeKeys[i]])) {
+        _.each (attributes[attributeKeys[i]],function (attribute) {
+          queryString +=  '"' + attribute + '",';
+        });
+        queryString = queryString.substring(0, queryString.length - 1);
+      }
+      else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
         queryString = attributes[attributeKeys[i]].value;
       }
       else {
@@ -58,15 +64,25 @@ exports.listBy = function (categories, attributes, page, perPage, sortAttr, sort
 
     productClient.staged(false).search().then(function (result) {
 
+      var products = result.body.results;
       var cats = result.body.facets['categories.id'].terms;
 
       _.each(cats, function (item) {
         item.id = item.term;
         item.term = CategoriesService.getName(item.term);
       });
+      _.each (products,function (product) {
+        _.each (product.masterVariant.prices, function (price) {
+          if (price.channel) {
+            var channel = ChannelsService.getById(price.channel.id);
+            price.channel = channel;
+          }
+
+        });
+      });
       Promise.all(categoriesObjects).then(function (promises) {
         var results = {
-          products: result.body.results,
+          products: products,
           facets: facetsShortener(result.body.facets),
           pages: {
             total: Math.ceil(result.body.total / perPage),
@@ -87,90 +103,73 @@ exports.listBy = function (categories, attributes, page, perPage, sortAttr, sort
 
 };
 
+exports.search = function (text, attributes, page, perPage, sortAttr, sortAsc) {
 
-exports.searchByCategory = function(categoryId, requestParams, callback){
-  var fetcher = SphereClient.getClient().productProjections
-    .filterByQuery('categories.id:"'+categoryId+'"').facet('categories.id'); // Default byCategory
+  return new Promise(function (resolve, reject) {
 
-  //console.log(".filterByQuery('categories.id:\""+categoryId+"\"')")
-  //console.log(".facet('categories.id')")
+        var productClient = SphereClient.getClient().productProjections;
+        productClient = productClient.text(text, 'en');
 
-  // Query parameters
-  fetcher = requestParams.addByQueries(fetcher);
-  fetcher = requestParams.addFilters(fetcher);
-  fetcher = requestParams.addFacets(fetcher);
-  fetcher = requestParams.addSorts(fetcher);
-  fetcher = requestParams.addPaging(fetcher);
+        for (var i = 0; i < config.sphere.facets.length; i++)
+          productClient = productClient.facet(config.sphere.facets[i]);
 
-  fetcher.search().then(function(resultArray) {
-    // Convert products
-    var products = resultArray.body.results;
+        var attributeKeys = Object.keys(attributes);
 
+        for (var i = 0; i < attributeKeys.length; i++) {
+          var queryString = "";
+          if (_.isObject(attributes[attributeKeys[i]]) && _.isArray(attributes[attributeKeys[i]])) {
+            _.each (attributes[attributeKeys[i]],function (attribute) {
+              queryString +=  '"' + attribute + '",';
+            });
+            queryString = queryString.substring(0, queryString.length - 1);
+          }
+          else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
+            queryString = attributes[attributeKeys[i]].value;
+          }
+          else {
+            queryString = '"' + attributes[attributeKeys[i]] + '"';
+          }
+          productClient = productClient.filterByQuery(config.sphere.product_types[attributeKeys[i]] + ':' + queryString);
+        }
+        if (page)
+          productClient = productClient.page(parseInt(page));
 
-    var pageInfo = requestParams.getPageInfo();
+        if (perPage)
+          productClient = productClient.perPage(parseInt(perPage));
 
-    _.each (products,function (product) {
-      _.each (product.masterVariant.prices, function (price) {
-        if (price.channel) {
-          var channel = ChannelsService.getById(price.channel.id);
-          price.channel = channel;
+        if (sortAttr != null) {
+          productClient = productClient.sort(sortAttr, (sortAsc === "true"));
         }
 
-      });
-    });
 
-    // Return products and facets
-    var results = {
-      products: products,
-      facets: resultArray.body.facets,
-      pages:{
-        total: Math.ceil(resultArray.body.total / pageInfo.perPage),
-        current: pageInfo.current,
-        perPage: pageInfo.perPage
+        productClient.staged(config.sphere.staged).search().then(function (result) {
+
+          var cats = result.body.facets['categories.id'].terms;
+
+          _.each(cats, function (item) {
+            item.id = item.term;
+            item.term = CategoriesService.getName(item.term);
+          });
+
+          var results = {
+            products: result.body.results,
+            facets: facetsShortener(result.body.facets),
+            total: result.body.total,
+            pages: {
+              total: Math.ceil(result.body.total / perPage),
+              page: page,
+              perPage: perPage
+            }
+          }
+
+          resolve(results)
+
+        })
+
       }
-    }
-    callback(null, results);
-  }).error(function(err) {
-    console.log(err);
-    callback(err, null);
-  });
-}
+  );
+};
 
-exports.searchByText = function(text, requestParams, callback){
-  var fetcher = SphereClient.getClient().productProjections
-      .text(text, 'en').facet('categories.id')
-
-  fetcher = requestParams.addByQueries(fetcher);
-  fetcher = requestParams.addFilters(fetcher);
-  fetcher = requestParams.addFacets(fetcher);
-  fetcher = requestParams.addSorts(fetcher);
-  fetcher = requestParams.addPaging(fetcher);
-
-  fetcher.search().then(function(resultArray) {
-    // Convert products
-    var products = resultArray.body.results;
-    for(var i = 0; i < products.length; i++){
-      products[i] = new Product(products[i])
-    }
-
-    var pageInfo = requestParams.getPageInfo()
-
-    // Return products and facets
-    var results = {
-      products: products,
-      facets: resultArray.body.facets,
-      pages:{
-        total: Math.ceil(resultArray.body.total / pageInfo.perPage),
-        current: pageInfo.current,
-        perPage: pageInfo.perPage
-      }
-    }
-    callback(null, results);
-  }).error(function(err) {
-    console.log(err);
-    callback(err, null);
-  });
-}
 
 
 

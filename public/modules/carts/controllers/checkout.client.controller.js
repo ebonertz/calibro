@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'ProductUtils', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, ProductUtils, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -169,7 +169,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
 
         $scope.authentication = Authentication;
-        $scope.$utils = ProductUtils;
 
         $scope.selectShippingAddress = function (shippingAddress) {
             $scope.selectedShippingAddress = shippingAddress;

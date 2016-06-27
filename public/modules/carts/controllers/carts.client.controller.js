@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', 'ProductUtils', '$location', 'LoggerServices', 'Cart', '$stateParams', 'OrderService',
-    function ($scope, Authentication, CartService, $rootScope, ProductUtils, $location, LoggerServices, Cart, $stateParams, OrderService) {
+angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', '$location', 'LoggerServices', 'Cart', '$stateParams', 'OrderService',
+    function ($scope, Authentication, CartService, $rootScope, $location, LoggerServices, Cart, $stateParams, OrderService) {
         $scope.authentication = Authentication;
         $scope.isCheckout = $location.path().indexOf('checkout') > -1;
 

@@ -17,12 +17,20 @@ module.directive('latestProducts', ['ProductService', function (ProductService) 
             $scope.pageSize = $scope.length || 4;
 
             $scope.products = []
+            var filters = {};
+            if ($scope.gender) {
+                filters.gender = {
+                    value: "\""+$scope.gender.toUpperCase()+"\"",
+                    isText: false
+                };
+            }
 
-            ProductService.getByCategorySlug($scope.category, {gender: $scope.gender}, {}, $scope.sort, {}, $scope.pageSize, 1).then(function(resultsArray){
-                if(resultsArray.products.length > 0){
-                    $scope.products = resultsArray.products
+            ProductService.listBy($scope.category, undefined, filters, 1, $scope.pageSize, 'name.en', true).then(function (results) {
+                if (results.data.products.length > 0) {
+                    $scope.products = results.data.products;
+
                 }
-            })
+            });
         }
     }
 }])

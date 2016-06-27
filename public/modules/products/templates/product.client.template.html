@@ -1,6 +1,6 @@
 <div class="product" ng-class="{'on-sale': product.displayVariant.prices[0].discounted, 'no-stock': !product.displayVariant.availability.isOnStock}" bindonce="ready">
   <div class="product-extras">
-    <span class="new-badge" ng-if="isNew(product.displayVariant)">New</span>
+    <span class="new-badge" ng-if="product.displayVariant.isNew">New</span>
     <span class="on-sale-badge" bo-if="product.displayVariant.prices[0].discounted">Sale</span>
     <!-- <span class="no-stock-notice" ng-if="!product.displayVariant.availability.isOnStock">Out of Stock</span> -->
   </div>

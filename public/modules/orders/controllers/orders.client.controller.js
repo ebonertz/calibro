@@ -1,9 +1,8 @@
 'use strict';
 
-angular.module('orders').controller('OrdersController', ['$scope', 'Authentication', 'Order', '$stateParams', 'CustomObjectService', 'ProductUtils',
-    function ($scope, Authentication, Order, $stateParams, CustomObjectService, ProductUtils) {
+angular.module('orders').controller('OrdersController', ['$scope', 'Authentication', 'Order', '$stateParams',
+    function ($scope, Authentication, Order, $stateParams) {
         $scope.authentication = Authentication;
-        $scope.$utils = ProductUtils;
 
         $scope.findOne = function () {
             var id = null;

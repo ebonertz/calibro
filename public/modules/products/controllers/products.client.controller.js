@@ -1,205 +1,170 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ProductUtils', 'ContentfulService', 'LoggerServices', 'lodash','$sce',
-    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ProductUtils, ContentfulService, LoggerServices, _,$sce) {
+angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ContentfulService', 'LoggerServices', 'lodash','$sce',
+    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ContentfulService, LoggerServices, _,$sce) {
         $scope.authentication = Authentication;
         $scope.$location = $location;
         $scope.productFiltersMin = 0;
         $scope.productFiltersMax = 500;
-        $scope.perPage = 20;
-        $scope.page = 1;
+        $scope.pageSize = 20;
+        $scope.pageNum = 1;
         $scope.filterAttributes = {};
+        $scope.productFilters = {};
+        $scope.selectedFilters = {};
+        $scope.selectedOptionFilter = "ALL";
         $scope.sortAttributes = [
-            { name: 'Name', sortAttr: 'name.en', sortAsc: true },
-            { name: 'Lower Price', sortAttr: 'price', sortAsc: true },
-            { name: 'Higher Price', sortAttr: 'price', sortAsc: false }];
+            { name: 'name', sortAttr: 'name.en', sortAsc: true },
+            { name: 'price', sortAttr: 'price', sortAsc: true}];
+        $scope.selectedSort = $scope.sortAttributes[0];
+
 
         $scope.FETCHING = false; // Will keep track of fetches
         $scope.lang = 'en';
         $scope.currency = 'USD';
         $scope.error = {}
 
-        $scope.$utils = ProductUtils;
         $scope.facetConfig = {
             'lensColor': {
-                'type': 'lenum',
                 'title': 'Lens Color'
             },
             'frameColor': {
-                'type': 'lenum',
                 'title': 'Frame Color'
             },
             'width': {
-                'type': 'lenum',
                 'title': 'Frame Width'
             },
             'frameShape': {
-                'type': 'lenum',
                 'title': 'Frame Shape'
             },
             'frameMaterial': {
-                'type': 'ltext',
                 'title': 'Frame Material'
             },
 
         }
-        $scope.lenumFacets = ["width", "frameShape", "frameMaterial"];
         $scope.currentFilters = {};
         $scope.isAvailable = false;
 
-        // Find a list of Products
+
+
+        var processFilters = function () {
+            _.each(_.keys ($scope.facetConfig),function (filter) {
+                if ($scope.selectedFilters[filter]) {
+                    $scope.productFilters[filter] = _.keys ($scope.selectedFilters[filter]);
+                }
+            });
+        };
+
         $scope.find = function () {
-            ProductService.list().then(function (resultsArray) {
-                $scope.products = resultsArray;
+
+           if ($stateParams.gender) {
+                $scope.gender = $stateParams.gender;
+               processFilters ();
+
+                // Both genders will include unisex products
+               $scope.productFilters.gender = ["UNISEX"];
+               $scope.productFilters.gender.push ($scope.gender.toUpperCase());
+
+            }
+
+            //if (isNumeric($scope.priceRange.from) && isNumeric($scope.priceRange.to)) {
+            //    $scope.filterAttributes.price = {
+            //        value: "range (" + Math.ceil($scope.priceRange.from) * 100 + " to " + Math.ceil($scope.priceRange.to) * 100 + ")",
+            //        isText: false
+            //    };
+            //}
+            // Get category slug
+            $scope.category = $stateParams.slug;
+            //categoryB is not used
+            $stateParams.categoryB = undefined;
+            $scope.pageTitle = $scope.gender ? $scope.gender + "'s " + $scope.categoryA : $scope.categoryA;
+
+
+            ProductService.listBy($scope.category, $stateParams.categoryB, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
+                $scope.results = results.data;
+                $scope.products = results.data.products
+                $scope.facets = results.data.facets
+
+                $scope.pageSize = results.data.pages.perPage || $scope.pageSize;
+                $scope.pageNum = results.data.pages.current || $scope.pageNum;
+                $scope.totalPages = results.data.pages.total;
+
+                // For ng-repeat
+                $scope.pageRange = new Array($scope.totalPages);
+
+                // Default displayVariant is masterVariant, but server might return other if color filters are being applied
+                for (var i = 0; i < $scope.products.length; i++) {
+                    $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
+                }
+
             })
         };
 
         $scope.init = function () {
             if ($stateParams.slug) {
-                $scope.categoryPage();
+                $scope.find();
             } else {
-                $scope.searchByText();
+                $scope.search();
             }
 
         }
         $scope.optionFilter = function (value) {
             if (value) {
-                if (value == "prescription") {
-                    $scope.productFilters['options'] = '"PROGRESSIVE","SINGLEVISION"';
+                if (value == "PRESCRIPTION") {
+                    $scope.selectedOptionFilter = "PRESCRIPTION";
+                    $scope.productFilters['options'] = ["PROGRESSIVE","SINGLEVISION"];
                 }
-                if (value == "frames") $scope.productFilters['options'] = '"NONPRESCRIPTION"';
+                if (value == "FRAMES") {
+                    $scope.selectedOptionFilter = "FRAMES";
+                    $scope.productFilters['options'] = "NONPRESCRIPTION";
+                }
+
 
             } else {
+                $scope.selectedOptionFilter = "ALL";
                 delete $scope.productFilters['options'];
             }
             $scope.init();
         }
-        $scope.categoryPage = function (options) {
-            options = options || {}
 
-            // Makes sure no other fetches are being executed at the same time
-            if ($scope.FETCHING) {
-                console.log('Already fetching')
-                return
+        $scope.search = function () {
+            var text = $stateParams.text;
+            processFilters ();
+            $scope.category = 'Search';
+            $scope.pageTitle = 'Search';
+            if ($stateParams.gender) {
+                $scope.gender = $stateParams.gender;
+
+                // Both genders will include unisex products
+                $scope.productFilters.gender = {};
+                $scope.productFilters.gender =  {
+                    value: "\"UNISEX\",\""+$scope.gender.toUpperCase()+"\"",
+                    isText: false
+                };
             }
-            try {
-                $scope.FETCHING = true;
-
-                var query, gender;
-
-                // Get category slug
-                var slug = $stateParams.slug
-                $scope.category = slug;
-                $scope.productFilters = $scope.productFilters || {} // Init by default
 
 
-                // Add gender to filters if found in stateParams (url)
-                if ($stateParams.gender) {
-                    gender = $stateParams.gender;
-                    $scope.gender = gender;
+            ProductService.search(text, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
+                $scope.results = results.data;
+                $scope.products = results.data.products
+                $scope.facets = results.data.facets
 
-                    // Both genders will include unisex products
-                    $scope.productFilters.gender = {}
-                    $scope.productFilters.gender['UNISEX'] = true;
-                    $scope.productFilters.gender[gender.toUpperCase()] = true;
+                $scope.pageSize = results.data.pages.perPage || $scope.pageSize;
+                $scope.pageNum = results.data.pages.current || $scope.pageNum;
+                $scope.totalPages = results.data.pages.total;
+
+                // For ng-repeat
+                $scope.pageRange = new Array($scope.totalPages);
+
+                // Default displayVariant is masterVariant, but server might return other if color filters are being applied
+                for (var i = 0; i < results.data.products.length; i++) {
+                    $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
                 }
 
-                query = buildQuery();
+            })
 
-                $scope.sort = $scope.sort || {name: "ASC"}
-                $scope.pageSize = $scope.pageSize || 20; // TODO: Move to config
-                $scope.pageNum = options.pageNum || 1;
-
-                $scope.pageTitle = $scope.gender ? $scope.gender + "'s " + $scope.category : $scope.category;
-
-                var facets = Object.keys($scope.facetConfig)
-                ProductService.getByCategorySlug(slug, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function (resultsArray) {
-                    $scope.products = resultsArray.products
-                    $scope.facets = resultsArray.facets
-
-                    $scope.pageSize = resultsArray.pages.perPage || $scope.pageSize;
-                    $scope.pageNum = resultsArray.pages.current || $scope.pageNum;
-                    $scope.totalPages = resultsArray.pages.total;
-
-                    // For ng-repeat
-                    $scope.pageRange = new Array($scope.totalPages);
-
-                    // Default displayVariant is masterVariant, but server might return other if color filters are being applied
-                    for (var i = 0; i < resultsArray.products.length; i++) {
-                        $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
-                    }
-
-
-                })
-            } catch (e) {
-                console.log(e)
-            } finally {
-                $scope.FETCHING = false;
-            }
         }
 
-
-        $scope.searchByText = function (options) {
-            options = options || {}
-
-            // Makes sure no other fetches are being executed at the same time
-            if ($scope.FETCHING) {
-                console.log('Already fetching')
-                return
-            }
-            try {
-                $scope.FETCHING = true;
-
-                var slug, query, gender;
-
-                // Get category slug
-                var text = $stateParams.text
-                $scope.category = 'Search';
-                $scope.productFilters = $scope.productFilters || {} // Init by default
-
-                // Add gender to filters if found in stateParams (url)
-                if ($stateParams.gender) {
-                    gender = $stateParams.gender;
-                    $scope.gender = gender;
-
-                    // Both genders will include unisex products
-                    $scope.productFilters.gender = {}
-                    $scope.productFilters.gender['UNISEX'] = true;
-                    $scope.productFilters.gender[gender.toUpperCase()] = true;
-                }
-
-                query = buildQuery();
-
-                $scope.sort = $scope.sort || {name: "ASC"}
-                $scope.pageSize = $scope.pageSize || 20; // TODO: Move to config
-                $scope.pageNum = options.pageNum || 1;
-
-                $scope.pageTitle = 'Search';
-
-                var facets = Object.keys($scope.facetConfig)
-                ProductService.searchByText(text, query, facets, $scope.sort, $scope.byQuery, $scope.pageSize, $scope.pageNum).then(function (resultsArray) {
-                    $scope.products = resultsArray.products
-                    $scope.facets = resultsArray.facets
-
-                    $scope.pageSize = resultsArray.pages.perPage || $scope.pageSize;
-                    $scope.pageNum = resultsArray.pages.current || $scope.pageNum;
-                    $scope.totalPages = resultsArray.pages.total;
-
-                    // For ng-repeat
-                    $scope.pageRange = new Array($scope.totalPages);
-
-                    // Default displayVariant is masterVariant, but server might return other if color filters are being applied
-                    for (var i = 0; i < resultsArray.products.length; i++) {
-                        $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
-                    }
-                })
-            } catch (e) {
-                console.log(e)
-            } finally {
-                $scope.FETCHING = false;
-            }
-        }
 
 
         $scope.getCategory = function () {
@@ -214,18 +179,20 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                 if (!category) {
                     return
                 }
-
+                var filters = {};
                 if (gender) {
-                    $scope.query = {gender: gender}
-                } else {
-                    $scope.query = {}
+                    filters.gender = {
+                        value: "\""+gender+"\"",
+                        isText: false
+                    };
                 }
 
+
                 $scope.sort = {}
-                $scope.pageSize = pageSize || 5;
-                ProductService.getByCategorySlug(category, $scope.query, {}, $scope.sort, {}, $scope.pageSize, 1).then(function (resultsArray) {
-                    if (resultsArray.products.length > 0) {
-                        products = resultsArray.products
+                ProductService.listBy(category, undefined, filters, 1, pageSize || 5, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
+                    if (results.data.products.length > 0) {
+                        products = results.data.products;
+
                     }
 
                     resolve(products)
@@ -235,36 +202,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             return promise;
         }
 
-        var buildQuery = function () {
-            // Build query object
-            var query = {}
-            $scope.byQuery = []
-            for (var filterKey in $scope.productFilters) {
-                var filter = $scope.productFilters[filterKey];
-
-                if (typeof filter === "string") {
-                    query[filterKey] = filter;
-                    $scope.byQuery.push(filterKey)
-                } else {
-                    for (var value in filter) {
-                        // Add filter to query object if it has any true value
-                        if (filter[value]) {
-                            if (query.hasOwnProperty(filterKey)) {
-                                query[filterKey] = query[filterKey] + ";" + value
-                            } else {
-                                query[filterKey] = value
-                                $scope.byQuery.push(filterKey)
-                            }
-                        }
-                    }
-                }
-            }
-
-            return query;
-        }
-
         $scope.clearFilter = function (filterName) {
             delete $scope.productFilters[filterName];
+            delete $scope.selectedFilters[filterName];
             $scope.init();
             return false;
         }
@@ -296,9 +236,25 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             if ($scope.FETCHING) // Avoid queing sort requests
                 return
 
-            var value = ($scope.sort[sortName] == "ASC" ? "DESC" : "ASC")
-            $scope.sort = {}
-            $scope.sort[sortName] = value
+
+            //TODO remove this
+            if ($scope.sort) {
+                var value = ($scope.sort[sortName] == "ASC" ? "DESC" : "ASC")
+                $scope.sort[sortName] = value
+            }
+            else {
+                $scope.sort = {}
+            }
+            //UP to here
+
+
+            var newSort = _.find ($scope.sortAttributes, function (item) {
+                return item.name === sortName;
+            });
+            if (newSort.sortAttr == $scope.selectedSort.sortAttr) {
+                newSort.sortAsc = !$scope.selectedSort.sortAsc;
+            }
+            $scope.selectedSort = newSort;
             $scope.init();
             return false;
         }
@@ -479,10 +435,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             return name.replace(/([A-Z])/g, ' $1')
                 // uppercase the first character
                 .replace(/^./, function(str){ return str.toUpperCase(); })
-        }
-
-        $scope.isNew = function (product) {
-            return _.find(product.attributes, {name: "isNew"});
         }
 
         $scope.trustAsHtml = function (string) {

@@ -16,8 +16,16 @@ module.directive('productThumbnail', function () {
 			$scope.currency = 'USD'
 			$scope.lang = 'en'
 
+
 			if(!$scope.product.hasOwnProperty('displayVariant')){
 				$scope.product.displayVariant = $scope.product.masterVariant;
+			}
+			$scope.product.displayVariant.isNew = false;
+			for (var i = 0; i < $scope.product.displayVariant.attributes.length; i++) {
+				if ($scope.product.displayVariant.attributes[i].name == "isNew") {
+					$scope.product.displayVariant.isNew = true;
+					break;
+				}
 			}
 
 			$scope.ready = true;

@@ -1,9 +1,8 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', 'ProductUtils', '$location','$rootScope','$http','$window',
-	function($scope, Authentication, Menus, CartService, CustomerService, ProductUtils, $location,$rootScope,$http,$window) {
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', '$location','$rootScope','$http','$window',
+	function($scope, Authentication, Menus, CartService, CustomerService, $location,$rootScope,$http,$window) {
 		$scope.authentication = Authentication;
-		$scope.$utils = ProductUtils;
 
 		$scope.removeFromCart = function (item) {
 			CartService.removeFromCart(item);

@@ -34,7 +34,7 @@
         <meta itemprop="availability" ng-if="currentVariant.availability.isOnStock" content="In Stock">
         <meta itemprop="itemCondition" ng-if="currentVariant.attr.isNew" content="New">
         <span class="new-badge" ng-show="currentVariant.attr.isNew">New</span>
-        <span class="on-sale-badge" ng-if="currentVariant.prices [0]">Sale</span>
+        <span class="on-sale-badge" ng-if="currentVariant.prices [0].discounted">Sale</span>
         <span class="no-stock-notice" ng-if="!currentVariant.availability.isOnStock">Out of Stock</span>
         <div class="price">
           <del bo-if="currentVariant.prices [0].discounted">

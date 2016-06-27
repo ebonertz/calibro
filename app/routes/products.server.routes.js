@@ -17,11 +17,9 @@ module.exports = function(app) {
   app.route('/api/products/categories/:categoryA/:categoryB')
       .post(products.listBy);
   app.route('/api/products/id/:id').get(products.byId);
-  app.route('/api/products/byText/:text').get(products.searchByText);
+  app.route('/api/products/search/:text')
+      .post(products.search);
   app.route('/api/products/:slug').get(products.bySlug);
-
-  // Categories
-  app.route('/api/categories/:slug').get(products.fetchCategoryProducts);
 
 
 };
