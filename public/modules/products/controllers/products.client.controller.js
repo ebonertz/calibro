@@ -77,7 +77,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $scope.category = $stateParams.slug;
             //categoryB is not used
             $stateParams.categoryB = undefined;
-            $scope.pageTitle = $scope.gender ? $scope.gender + "'s " + $scope.categoryA : $scope.categoryA;
+            $scope.pageTitle = $scope.gender ? $scope.gender + "'s " + $scope.category : $scope.category;
 
 
             ProductService.listBy($scope.category, $stateParams.categoryB, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
