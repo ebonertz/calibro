@@ -9,9 +9,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.productFiltersMax = 500;
         $scope.pageSize = 20;
         $scope.pageNum = 1;
-        $scope.filterAttributes = {};
         $scope.productFilters = {};
         $scope.selectedFilters = {};
+        $scope.priceRange = $scope.productFiltersMin + "-" + $scope.productFiltersMax;
         $scope.selectedOptionFilter = "ALL";
         $scope.sortAttributes = [
             { name: 'name', sortAttr: 'name.en', sortAsc: true },
@@ -46,7 +46,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.isAvailable = false;
 
 
-
         var processFilters = function () {
             _.each(_.keys ($scope.facetConfig),function (filter) {
                 if ($scope.selectedFilters[filter]) {
@@ -67,12 +66,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 
             }
 
-            //if (isNumeric($scope.priceRange.from) && isNumeric($scope.priceRange.to)) {
-            //    $scope.filterAttributes.price = {
-            //        value: "range (" + Math.ceil($scope.priceRange.from) * 100 + " to " + Math.ceil($scope.priceRange.to) * 100 + ")",
-            //        isText: false
-            //    };
-            //}
+            var minPrice = Math.ceil($scope.productFiltersMin) * 100;
+            var maxPrice = Math.ceil($scope.productFiltersMax) * 100;
+            $scope.productFilters.price = {
+                value: "range (" + minPrice + " to " + maxPrice + ")",
+                isText: false
+            };
             // Get category slug
             $scope.category = $stateParams.slug;
             //categoryB is not used
@@ -208,10 +207,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $scope.init();
             return false;
         }
-        $scope.priceRange = function () {
-            var range = $scope.productFilters['price'].split("-");
-            $scope.productFiltersMin = parseInt(range[0]);
-            $scope.productFiltersMax = parseInt(range[1]);
+        $scope.priceChange = function (minValue,maxValue) {
+            $scope.productFiltersMin = parseInt(minValue);
+            $scope.productFiltersMax = parseInt(maxValue);
             $scope.init();
             return;
         };
@@ -219,14 +217,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         $scope.minChange = function (value) {
             if (value) {
                 $scope.productFiltersMin = value;
-                $scope.productFilters['price'] = value + "-" + $scope.productFiltersMax;
             }
             return;
         };
         $scope.maxChange = function (value) {
             if (value) {
                 $scope.productFiltersMax = value;
-                $scope.productFilters['price'] = $scope.productFiltersMin + "-" + value;
             }
             return;
         };
@@ -305,17 +301,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             products.$get({id: id}, function (result) {
                 $scope.product = result.product;
                 $scope.currentVariant = $scope.product.masterVariant;
-
-                $scope.currentVariant.attr = {};
-                _.each ($scope.currentVariant.attributes,function (item){
-                    if (item.value.label) {
-                        $scope.currentVariant.attr[item.name] = item.value.label.en ? item.value.label.en : item.value.label;
-
-                    }
-                    else {
-                        $scope.currentVariant.attr[item.name] = item.value.en ? item.value.en : item.value;
-                    }
-                });
+                $scope.currentVariant = setAttributes ($scope.currentVariant);
 
                 $scope.product.variants.unshift($scope.product.masterVariant);
                 if ($scope.currentVariant.prices.length === 1) {
@@ -358,11 +344,33 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             })
         };
 
+        var setAttributes = function (product) {
+          product.frameShape = _.find  (product.attributes, function (attr) {
+             return attr.name  == 'frameShape';
+          });
+            product.frameType = _.find  (product.attributes, function (attr) {
+                return attr.name  == 'frameType';
+            });
+            product.frameMaterial = _.find  (product.attributes, function (attr) {
+                return attr.name  == 'frameMaterial';
+            });
+            product.mirrorReflection = _.find  (product.attributes, function (attr) {
+                return attr.name  == 'mirrorReflection';
+            });
+            product.width = _.find  (product.attributes, function (attr) {
+                return attr.name  == 'width';
+            });
+            return product;
+        };
 
         var setCurrentVariant = function (variant) {
             $scope.currentVariant = variant;
+            $scope.currentVariant = setAttributes ($scope.currentVariant);
 
             $scope.price = $scope.currentVariant.prices[0];
+            if ($scope.currentVariant.prices.length === 1) {
+                $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
+            }
 
             if ($scope.currentVariant.images[0] != null) {
                 $scope.imgBig = $scope.currentVariant.images[0].url;

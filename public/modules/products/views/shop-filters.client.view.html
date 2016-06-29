@@ -1,14 +1,14 @@
 <div class="filter-block" id="price-filter">
   <p class="filter-title">Filter by Price</p><a class="clearfilter" ng-click="clearFilter('price')">Clear</a>
-  <label class="radio-price" ng-class="{'checked': productFilters['price'] == '0-99'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="0-99">
+  <label class="radio-price" ng-class="{'checked': priceRange == '0-99'}">
+    <input type="radio" ng-model="priceRange" ng-change="priceChange('0','99')" name="price" value="0-99">
     Below $100
   </label><br/>
-  <label class="radio-price" ng-class="{'checked': productFilters['price'] == '100-200'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="100-200">$100 - $200
+  <label class="radio-price" ng-class="{'checked': priceRange == '100-200'}">
+    <input type="radio" ng-model="priceRange" ng-change="priceChange('100','200')" name="price" value="100-200">$100 - $200
   </label><br/>
-  <label class="radio-price" ng-class="{'checked': productFilters['price'] == '200-500'}">
-    <input type="radio" ng-model="productFilters['price']" ng-change="priceRange()" name="price" value="200-500">$200 - $500
+  <label class="radio-price" ng-class="{'checked': priceRange == '200-500'}">
+    <input type="radio" ng-model="priceRange" ng-change="priceChange('200','500')" name="price" value="200-500">$200 - $500
   </label><br/>
 
   <div id="range">
