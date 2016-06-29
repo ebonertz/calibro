@@ -3,11 +3,12 @@
 /**
  * Module dependencies.
  */
-var shippingMethods = require('../controllers/shipping-methods.server.controller.js'),
-    commons = require('../controllers/commons.server.controller.js'),
-    entity = 'shippingMethods';
+var entity = 'shippingMethods';
 
 module.exports = function (app) {
+    var commons = require('../controllers/commons.server.controller.js')(app);
+    var shippingMethods = require('../controllers/shipping-methods.server.controller.js')(app);
+
     app.route('/shipping-methods')
         .get(commons.list.bind({entity: entity}))
         .post(commons.create.bind({entity: entity}));

@@ -1,95 +1,100 @@
 'use strict';
 
-var ProductService = require('../services/sphere/sphere.products.server.service.js'),
-  CommonService = require('../services/sphere/sphere.commons.server.service'),
-  CategoriesService = require('../services/sphere/sphere.categories.server.service');
 
-/**
- *  Product detail page
- */
+module.exports = function (app) {
+    var controller = {};
+    var ProductService = require('../services/sphere/sphere.products.server.service.js')(app),
+        CategoriesService = require('../services/sphere/sphere.categories.server.service')(app);
 
-exports.byId = function(req, res){
-  var id = req.params.id
+    /**
+     *  Product detail page
+     */
 
-  if(!id)
-    return res.status(400);
+    controller.byId = function (req, res) {
+        var id = req.params.id
 
-  ProductService.byId(id, function(err, result){
-    if (err) {
-      return res.status(400);
-    } else {
-      res.json(result);
+        if (!id)
+            return res.status(400);
+
+        ProductService.byId(id, function (err, result) {
+            if (err) {
+                return res.status(400);
+            } else {
+                res.json(result);
+            }
+        })
     }
-  })
-}
 
-exports.bySlug = function(req, res){
-  var slug = req.params.slug
+    controller.bySlug = function (req, res) {
+        var slug = req.params.slug
 
-  if(!slug)
-    return res.status(400)
+        if (!slug)
+            return res.status(400)
 
-  ProductService.bySlugWithFacets(slug).then(function (result) {
-    res.json(result);
-  }).error(function (err) {
-    res.sendStatus(400);
-  });
+        ProductService.bySlugWithFacets(slug).then(function (result) {
+            res.json(result);
+        }).error(function (err) {
+            res.sendStatus(400);
+        });
 
-}
-
-exports.listBy = function (req, res) {
-  var categoryA = req.params.categoryA,
-      categoryB = req.params.categoryB,
-      page = req.query.page,
-      perPage = req.query.perPage,
-      sortAttr = req.query.sortAttr,
-      sortAsc = req.query.sortAsc;
-
-
-  var categoryAId = null,
-      categoryBId = null,
-      attributes = req.body;
-
-  var categories = [];
-
-  if (categoryA) {
-    categoryAId = CategoriesService.getId(categoryA);
-    if (categoryAId)
-      categories.push(categoryAId);
-    else {
-      res.sendStatus(400);
-      return;
     }
-  }
 
-  if (categoryB) {
-    categoryBId = CategoriesService.getId(categoryB);
-    if (categoryAId)
-      categories.push(categoryBId);
-    else {
-      res.sendStatus(400);
-      return;
+    controller.listBy = function (req, res) {
+        var categoryA = req.params.categoryA,
+            categoryB = req.params.categoryB,
+            page = req.query.page,
+            perPage = req.query.perPage,
+            sortAttr = req.query.sortAttr,
+            sortAsc = req.query.sortAsc;
+
+
+        var categoryAId = null,
+            categoryBId = null,
+            attributes = req.body;
+
+        var categories = [];
+
+        if (categoryA) {
+            categoryAId = CategoriesService.getId(categoryA);
+            if (categoryAId)
+                categories.push(categoryAId);
+            else {
+                res.sendStatus(400);
+                return;
+            }
+        }
+
+        if (categoryB) {
+            categoryBId = CategoriesService.getId(categoryB);
+            if (categoryAId)
+                categories.push(categoryBId);
+            else {
+                res.sendStatus(400);
+                return;
+            }
+        }
+
+        ProductService.listBy(categories, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
+            res.json(result);
+        });
     }
-  }
 
-  ProductService.listBy(categories, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
-    res.json(result);
-  });
+    controller.search = function (req, res) {
+        var text = req.params.text,
+            page = req.query.page,
+            perPage = req.query.perPage,
+            sortAttr = req.query.sortAttr,
+            sortAsc = req.query.sortAsc;
+
+        var attributes = req.body;
+
+        ProductService.search(text, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
+            res.json(result);
+        });
+    }
+    return controller;
 }
 
-exports.search = function (req, res) {
-  var text = req.params.text,
-      page = req.query.page,
-      perPage = req.query.perPage,
-      sortAttr = req.query.sortAttr,
-      sortAsc = req.query.sortAsc;
-
-  var attributes = req.body;
-
-  ProductService.search(text, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
-    res.json(result);
-  });
-}
 
 
 

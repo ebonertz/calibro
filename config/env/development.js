@@ -125,5 +125,12 @@ module.exports = {
     orderPrefix: 'TEST',
     payments: {
         errorUrl: '/#!/checkout?jumpto=billingMethod'
+    },
+    logger: {
+        level: "debug"
+    },
+    papertrail: {
+        host: 'logs3.papertrailapp.com',
+        port: 16061
     }
 };

@@ -5,22 +5,23 @@
  */
 var passport = require('passport'),
 	path = require('path'),
-	config = require('./config'),
-    CommonService = require('../app/services/sphere/sphere.commons.server.service.js');
-	
+	config = require('./config');
 /**
  * Module init function.
  */
-module.exports = function() {
-   // Serialize the user for the session
+module.exports = function(app) {
+
+  var CommonService = require('../app/services/sphere/sphere.commons.server.service.js')(app);
+
+  // Serialize the user for the session
   passport.serializeUser(function(user, done) {
-    console.log("Serializing "+user.email)
+    app.logger.debug("Serializing "+user.email)
     done(null, user.id);
   });
 
   // Deserialize the user
   passport.deserializeUser(function(id, done) {
-    console.log("Deserializing "+id)
+    app.logger.debug("Deserializing "+id)
     CommonService.byId('customers', id, function(err, customer){
       done(err, customer)
     });
@@ -30,6 +31,7 @@ module.exports = function() {
   // var strategyFiles = './config/strategies/**/*.js'
   var strategyFiles = './config/strategies/local.js'
 	config.getGlobbedFiles(strategyFiles).forEach(function(strategy) {
-		require(path.resolve(strategy))();
+		require(path.resolve(strategy))(app);
 	});
+  return passport;
 };

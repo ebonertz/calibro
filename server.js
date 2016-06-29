@@ -32,7 +32,7 @@ var app = require('./config/express')(null);
 require('./config/phantom')();
 
 // Bootstrap passport config
-require('./config/passport')();
+require('./config/passport')(app);
 
 // Start the app by listening on <port>
 app.listen(config.port);
@@ -41,6 +41,6 @@ app.listen(config.port);
 exports = module.exports = app;
 
 // Logging initialization
-console.log('MEAN.JS application started on port ' + config.port);
+app.logger.info('Focali application started on port ' + config.port);
 
 

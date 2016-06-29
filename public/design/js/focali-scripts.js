@@ -8,7 +8,7 @@ $(function() {
     });
 });
 
-$('#price-range').noUiSlider({
+var slider = $('#price-range').noUiSlider({
 		start: [ 0, 500 ],
 		connect: true,
 		range: {
@@ -22,6 +22,7 @@ $('#price-range').noUiSlider({
 	$('#price-range').Link('upper').to($('#range-number-max'), null, wNumb({
 		decimals: 0
 	}));
+
 
 //Add class checked to radio button
 

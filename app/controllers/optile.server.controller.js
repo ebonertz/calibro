@@ -1,30 +1,36 @@
-var OptileService = require('../services/optile.server.service.js');
+module.exports = function (app) {
+    var controller = {};
+    var OptileService = require('../services/optile.server.service.js')(app);
 
-exports.list = function (req, res) {
-    var body = req.body;
+    controller.list = function (req, res) {
+        var body = req.body;
 
-    OptileService.list(body.country, body.customer, body.payment, function(err, data) {
+        OptileService.list(body.country, body.customer, body.payment, function(err, data) {
 
-        if(err) {
-            res.sendStatus(400);
-        } else {
-            res.json(data);
-        }
+            if(err) {
+                res.sendStatus(400);
+            } else {
+                res.json(data);
+            }
 
-    });
+        });
 
 
 
-};
+    };
 
-exports.return = function (req, res) {
+    controller.return = function (req, res) {
 
-};
+    };
 
-exports.cancel = function (req, res) {
+    controller.cancel = function (req, res) {
 
-};
+    };
 
-exports.notification = function (req, res) {
+    controller.notification = function (req, res) {
 
-};
+    };
+
+    return controller;
+}
+

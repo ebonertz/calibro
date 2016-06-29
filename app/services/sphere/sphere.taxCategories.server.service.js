@@ -1,7 +1,6 @@
 'use strict';
 
-var CommonService = require('./sphere.commons.server.service.js'),
-    Promise = require('promise'),
+var Promise = require('promise'),
     SphereClient = require('../../clients/sphere.server.client.js');
 
 var firstTax = {};
@@ -9,80 +8,87 @@ var taxById = {};
 var taxByKey = {};
 var lastFetchTime;
 
-exports.getByKey = function(key){
-    if(taxByKey.hasOwnProperty(key) && stillValidData()){
-        return taxByKey[key]
-    }else{
-        fetchTaxCategories().then(function(){
-            if(taxByKey.hasOwnProperty(key)){
-                return taxByKey[key]
-            }else{
-                return null
-            }
-        })
+module.exports = function (app) {
+    var CommonService = require('./sphere.commons.server.service.js') (app);
+    var service = {};
+
+    service.getByKey = function(key){
+        if(taxByKey.hasOwnProperty(key) && stillValidData()){
+            return taxByKey[key]
+        }else{
+            fetchTaxCategories().then(function(){
+                if(taxByKey.hasOwnProperty(key)){
+                    return taxByKey[key]
+                }else{
+                    return null
+                }
+            })
+        }
+    };
+
+    service.getById = function(id){
+        if(taxById.hasOwnProperty(id) && stillValidData()){
+            return taxById[id];
+        }else{
+            fetchTaxCategories().then(function(){
+                if(taxById.hasOwnProperty(id)){
+                    return taxById[id];
+                }else{
+                    return null;
+                }
+            })
+        }
+    };
+
+    service.getFirst = function(){
+        if(firstTax && stillValidData()){
+            return firstTax;
+        }else{
+            fetchTaxCategories().then(function(){
+                if(firstTax){
+                    return firstTax;
+                }else{
+                    return null;
+                }
+            })
+        }
     }
-};
 
-exports.getById = function(id){
-    if(taxById.hasOwnProperty(id) && stillValidData()){
-        return taxById[id];
-    }else{
-        fetchTaxCategories().then(function(){
-            if(taxById.hasOwnProperty(id)){
-                return taxById[id];
-            }else{
-                return null;
-            }
-        })
-    }
-};
+    var stillValidData = function(){
+        var maxHoursDifference = 24;
+        return ((new Date - lastFetchTime)/(1000*60*60) < maxHoursDifference);
+    };
 
-exports.getFirst = function(){
-    if(firstTax && stillValidData()){
-        return firstTax;
-    }else{
-        fetchTaxCategories().then(function(){
-            if(firstTax){
-                return firstTax;
-            }else{
-                return null;
-            }
-        })
-    }
-}
+    var fetchTaxCategories = function(){
+        var p = new Promise(function(resolve, reject){
+            SphereClient.getClient().taxCategories.all().fetch().then(function(results){
+                var taxCategories = results.body.results;
 
-var stillValidData = function(){
-    var maxHoursDifference = 24;
-    return ((new Date - lastFetchTime)/(1000*60*60) < maxHoursDifference);
-};
+                firstTax = taxCategories[0]
+                for(var i = 0; i < taxCategories.length; i++){
+                    var taxCategory = taxCategories[i];
+                    delete taxCategory.createdAt;
+                    delete taxCategory.lastModifiedAt;
 
-var fetchTaxCategories = function(){
-    var p = new Promise(function(resolve, reject){
-        SphereClient.getClient().taxCategories.all().fetch().then(function(results){
-            var taxCategories = results.body.results;
+                    taxById[taxCategory.id] = taxCategory;
+                    taxByKey[taxCategory.key] = taxCategory;
+                }
 
-            firstTax = taxCategories[0]
-            for(var i = 0; i < taxCategories.length; i++){
-                var taxCategory = taxCategories[i];
-                delete taxCategory.createdAt;
-                delete taxCategory.lastModifiedAt;
+                lastFetchTime = new Date();
 
-                taxById[taxCategory.id] = taxCategory;
-                taxByKey[taxCategory.key] = taxCategory;
-            }
+                resolve()
+            }).error(function (err) {
+                app.logger.error("Error fetching tax categories. Error: %s",JSON.stringify(err));
+                reject(err);
+            })
+        });
 
-            lastFetchTime = new Date();
-
-            resolve()
-        }).error(function (err) {
-            console.log(err);
-            reject(err);
-        })
-    });
-
-    return p
-};
+        return p
+    };
 
 // Run once on startup
-console.log("Initializing Sphere Tax Categories");
-fetchTaxCategories();
+    app.logger.debug("Initializing Sphere Tax Categories");
+    fetchTaxCategories();
+    return service;
+}
+

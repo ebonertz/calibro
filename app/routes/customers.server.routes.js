@@ -3,11 +3,12 @@
 /**
  * Module dependencies.
  */
-var customers = require('../controllers/customers.server.controller.js'),
-    commons = require('../controllers/commons.server.controller.js'),
-    entity = 'customers';
+var entity = 'customers';
 
 module.exports = function(app) {
+   var customers = require('../controllers/customers.server.controller.js')(app),
+        commons = require('../controllers/commons.server.controller.js')(app);
+
   // TODO: Disable list. Change findOne to me
 	app.route('/api/customers')
     .put(customers.update)

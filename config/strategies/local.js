@@ -5,12 +5,12 @@
  */
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js'),
-    CommonService = require('../../app/services/sphere/sphere.commons.server.service.js'),
     RememberService = require('../../app/services/remember.server.service.js');
 
-module.exports = function () {
 
+module.exports = function (app) {
+    var CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js')(app),
+        CommonService = require('../../app/services/sphere/sphere.commons.server.service.js')(app);
     // Use local strategy
     passport.use('sphere-login', new LocalStrategy({
             usernameField: 'email',
@@ -26,7 +26,7 @@ module.exports = function () {
                 var info = {cart: cart}
 
                 // Return remember info
-                if(req.body.rememberme){
+                if (req.body.rememberme) {
                     var rem = RememberService.getToken(customer.id),
                         remember = {
                             rem: rem,

@@ -14,7 +14,6 @@ var fs = require('fs'),
 	methodOverride = require('method-override'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
-	passport = require('passport'),
 	request = require('request'),
 /*	mongoStore = require('connect-mongo')({
 		session: session
@@ -24,6 +23,7 @@ var fs = require('fs'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
+
 
 module.exports = function(db) {
 	// Initialize express app
@@ -42,12 +42,16 @@ module.exports = function(db) {
 	app.locals.jsFiles = config.getJavaScriptAssets();
 	app.locals.cssFiles = config.getCSSAssets();
 
+	/**
+	 * Configure the logger
+	 */
+	require('./logger')(app, config);
+
+
 	//app.use(/^\/\?_escaped_fragment_=(.*)/i, function(req, res, next){
 	app.use(function(req, res, next){
 		var query = req.query["_escaped_fragment_"];
 		if(query && query.length > 0){
-			console.log("Query: "+query);
-
 			request('http://localhost:8888'+query, function (error, response, body) {
 				if (!error && response.statusCode == 200) {
 					res.send(body) // Print the google web page.
@@ -121,6 +125,9 @@ module.exports = function(db) {
 		})*/
 	}));
 
+
+	var passport = require('./passport') (app);
+
 	// use passport session
 	app.use(passport.initialize());
 	app.use(passport.session());
@@ -168,7 +175,7 @@ module.exports = function(db) {
 
 	if (process.env.NODE_ENV === 'secure') {
 		// Log SSL usage
-		console.log('Securely using https protocol');
+		app.logger.info('Securely using https protocol');
 
 		// Load SSL key and certificate
 		var privateKey = fs.readFileSync('./config/sslcerts/key.pem', 'utf8');

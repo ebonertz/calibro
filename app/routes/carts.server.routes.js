@@ -3,11 +3,11 @@
 /**
  * Module dependencies.
  */
-var carts = require('../controllers/carts.server.controller.js'),
-    commons = require('../controllers/commons.server.controller.js'),
-    entity = 'carts';
+var entity = 'carts';
 
 module.exports = function (app) {
+    var commons = require('../controllers/commons.server.controller.js')(app),
+        carts = require('../controllers/carts.server.controller.js')(app);
     app.route('/api/carts')
         .get(commons.list.bind({entity: entity}))
         .post(commons.create.bind({entity: entity}))

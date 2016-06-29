@@ -38,7 +38,7 @@ module.exports = function (app) {
         };
         SphereClient.getClient().orders.byId(parameters.orderId).fetch().then(function (resultOrder) {
             parameters.amount = resultOrder.body.totalPrice.centAmount / 100;
-            console.log ("Paying with paypal Order: " + parameters.orderId + " with amount of: " + parameters.amount);
+            app.logger.info ("Paying with paypal Order: " + parameters.orderId + " with amount of: " + parameters.amount);
             braintreeSphereService.payment.checkout(parameters).then(function (response) {
                 res.json(response);
             });

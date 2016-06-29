@@ -3,9 +3,10 @@
 /**
  * Module dependencies.
  */
-var optile = require('../controllers/optile.server.controller.js');
 
 module.exports = function (app) {
+    var optile = require('../controllers/optile.server.controller.js')(app);
+
     app.route('/optile/list')
         .post(optile.list);
 
