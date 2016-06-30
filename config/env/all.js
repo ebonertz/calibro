@@ -39,7 +39,8 @@ module.exports = {
 				'public/lib/ngprogress/build/ngprogress.js',
 				'public/lib/angular-loading-bar/build/loading-bar.min.js',
 				'public/lib/ng-lodash/build/ng-lodash.min.js',
-				'public/lib/braintree-web/dist/braintree.js'
+				'public/lib/braintree-web/dist/braintree.js',
+				'public/lib/stacktrace-js/dist/stacktrace.min.js'
 			]
 		},
 		css: [

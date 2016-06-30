@@ -24,7 +24,8 @@
     "angular-addthis": "~0.2.0",
     "angular-socialshare": "~1.4.1",
     "ng-lodash": "~0.3.0",
-    "braintree-web": "~2.24.1"
+    "braintree-web": "~2.24.1",
+    "stacktrace-js": "stacktrace#^1.3.0"
 
   }
 }
