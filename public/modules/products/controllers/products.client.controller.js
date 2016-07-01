@@ -367,6 +367,11 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $scope.currentVariant = variant;
             $scope.currentVariant = setAttributes ($scope.currentVariant);
 
+            _.each ($scope.currentVariant.prices, function (price){
+               price.channel = _.find ($scope.channels,function (channel) {
+                   return channel.id === price.channel.id;
+               })
+            });
             $scope.price = $scope.currentVariant.prices[0];
             if ($scope.currentVariant.prices.length === 1) {
                 $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
