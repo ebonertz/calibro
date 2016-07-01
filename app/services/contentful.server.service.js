@@ -39,6 +39,19 @@ exports.home = function (callback) {
     });
 };
 
+exports.help = function (callback) {
+    var entityId = '3wp9hYrKBikSOSsE80Y8KG';
+
+    exports.byId(entityId, function (err, entries) {
+        if (err) {
+            callback(err, null);
+        } else {
+            var entity = entries[0].fields;
+            callback(null, entity);
+        }
+    });
+};
+
 exports.eyewear = function (callback) {
     var entityId = 'voZfsMgZlQOgykUm66gmy';
 

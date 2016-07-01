@@ -9,6 +9,9 @@ module.exports = function (app) {
     app.route('/contentful/home')
         .get(contentful.home);
 
+    app.route('/contentful/help')
+      .get(contentful.help);
+
     app.route('/contentful/category/eyewear')
         .get(contentful.eyewear);
 

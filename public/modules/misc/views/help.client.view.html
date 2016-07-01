@@ -1,5 +1,5 @@
 <hr class="nav-divider"/>
-<div class="content-wrapper" ng-controller="HelpController">
+<div class="content-wrapper" ng-controller="HelpController"  ng-init="loadContent('help')">
     <section id="breadcrumbs">
         <div class="breadcrumb">
 		
@@ -12,7 +12,7 @@
     </section>
     <section class="page" id="help">
         <div class="content help">
-            <h1 class="page-title">Help and Support</h1>
+            <h1 class="page-title">{{contentfulData.name}}</h1>
             <section id="home-info-blocks">
                 <div class="info-block" id="help">
                     <section class="inside">
@@ -20,10 +20,9 @@
                             <img class="help-icon" src="design/images/homepage/help-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>24/H SUPPORT</h3>
+                            <h3>{{contentfulData.supportTitle}}</h3>
 
-                            <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                labore et dolore magna.</p>
+                            <p>{{contentfulData.supportText}}</p>
                         </div>
                     </section>
                 </div>
@@ -33,10 +32,9 @@
                             <img class="help-icon" src="design/images/help/contact-us-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>Contact Us</h3>
+                            <h3>{{contentfulData.contatTitle}}</h3>
 
-                            <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                labore et dolore magna.</p>
+                            <p>{{contentfulData.contactText}}</p>
                         </div>
                     </section>
                 </div>
@@ -46,10 +44,9 @@
                             <img class="help-icon" src="design/images/help/clock-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>We Call You Back</h3>
+                            <h3>{{contentfulData.callTitle}}</h3>
 
-                            <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                labore et dolore magna.</p>
+                            <p>{{contentfulData.callText}}</p>
                         </div>
                     </section>
                 </div>
@@ -73,50 +70,35 @@
                 <h4><a class="panel-trigger" href="#" id="orders">Orders</a></h4>
 
                 <div class="panel-content">
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta
-                        gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-                        penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam porta sem malesuada
-                        magna mollis euismod. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>{{contentfulData.ordersText}}</p>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Retail</a></h4>
 
                 <div class="panel-content">
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta
-                        gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-                        penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam porta sem malesuada
-                        magna mollis euismod. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>{{contentfulData.retailText}}</p>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Prescriptions</a></h4>
 
                 <div class="panel-content">
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta
-                        gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-                        penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam porta sem malesuada
-                        magna mollis euismod. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>{{contentfulData.prescriptionText}}</p>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Insurance, Payment and Gift Cards</a></h4>
 
                 <div class="panel-content">
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta
-                        gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-                        penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam porta sem malesuada
-                        magna mollis euismod. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>{{contentfulData.insuranceText}}</p>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Shipping, Returns and Exchanges</a></h4>
 
                 <div class="panel-content">
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta
-                        gravida at eget metus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque
-                        penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam porta sem malesuada
-                        magna mollis euismod. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                    <p>{{contentfulData.shippingText}}</p>
                 </div>
             </div>
         </div>

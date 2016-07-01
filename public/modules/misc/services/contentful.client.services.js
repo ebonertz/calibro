@@ -45,5 +45,15 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
             return deferred.promise;
         }
 
+        this.help = function () {
+            var deferred = $q.defer();
+
+            $http.get(urlString + '/help').success(function (data) {
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        }
+
     }
 ]);

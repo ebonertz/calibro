@@ -10,6 +10,16 @@ exports.home = function (req, res) {
     });
 };
 
+exports.help = function (req, res) {
+    ContentfulService.help(function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};
+
 exports.eyewear = function (req, res) {
     ContentfulService.eyewear(function (err, result) {
         if (err) {
