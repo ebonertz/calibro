@@ -419,7 +419,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                         // Attributes of Variant.
                         _.each(variant.attributes, function (attribute) {
 
-                            if (attribute.name == filterKey && (attribute.value.label == $scope.currentFilters[filterKey] || attribute.value.label.en == $scope.currentFilters[filterKey])) {
+                            if (attribute.name == filterKey && (attribute.value.key == $scope.currentFilters[filterKey] || attribute.value.label.en == $scope.currentFilters[filterKey])) {
                                 complies++;
                                 return;
                             }
