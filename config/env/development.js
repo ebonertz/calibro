@@ -122,7 +122,7 @@ module.exports = {
         price: 30,
         slug: 'high-index-lens'
     },
-    orderPrefix: 'TEST',
+    orderPrefix: 'FO',
     payments: {
         errorUrl: '/#!/checkout?jumpto=billingMethod'
     },
