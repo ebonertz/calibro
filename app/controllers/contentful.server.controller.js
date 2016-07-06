@@ -59,3 +59,15 @@ exports.womenSummer = function (req, res) {
         }
     });
 };
+
+exports.byTypeAndName = function (req, res) {
+    var type = req.query.type;
+    var name = req.query.name;
+    ContentfulService.byTypeAndName(type, name, function (err, result) {
+        if (err) {
+            return res.sendStatus(400);
+        } else {
+            res.json(result);
+        }
+    });
+};

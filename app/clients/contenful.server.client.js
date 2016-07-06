@@ -11,7 +11,6 @@ client = ContenfulClient.createClient({
     host: config.contenful.host
 });
 
-
 exports.getClient = function() {
     return client;
 }

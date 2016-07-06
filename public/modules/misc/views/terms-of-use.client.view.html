@@ -1,0 +1,22 @@
+<span ng-controller="TermsOfUseController"  ng-init="loadContent()">
+<hr class="nav-divider"/>
+<div class="content-wrapper">
+    <section id="breadcrumbs">
+        <div class="breadcrumb">
+		
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+			<span typeof="v:Breadcrumb">
+				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
+				<span class="breadcrumb-last" rel="v:url" property="v:title">Terms of Use</span>
+			</span></span>
+        </div>
+    </section>
+    <section class="page">
+        <div class="content about-us">
+            <h1 class="page-title">{{contentfulData.title}}</h1>
+            <p>{{contentfulData.description}}</p>
+        </div>
+        <hr/>
+    </section>
+</div>
+</span>

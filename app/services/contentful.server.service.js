@@ -96,6 +96,21 @@ exports.womenSummer = function (callback) {
     })
 };
 
+exports.byTypeAndName = function (type, name, callback) {
+    ContenfulClient.getClient().entries({
+        'content_type': type,
+        'fields.name': name
+    }, function (err, entries) {
+        if (err) {
+            callback(err, null);
+        } else {
+            var entity = entries[0].fields;
+            callback(null, entity);
+        }
+    });
+
+};
+
 var category = function (entityId, callback) {
     exports.byId(entityId, function (err, entries) {
         if (err) {

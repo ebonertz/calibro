@@ -4,7 +4,7 @@ angular.module('misc').controller('ContactusController', ['$scope', 'Authenticat
     function ($scope, Authentication, $http) {
         $scope.authentication = Authentication;
 
-        if($scope.authentication){
+        if($scope.authentication && $scope.authentication.user != null){
             $scope.contactUs = {}
             $scope.contactUs.email = $scope.authentication.user.email,
                 $scope.contactUs.name = $scope.authentication.user.name

@@ -16,6 +16,14 @@ angular.module('misc').config(['$stateProvider',
             state('help', {
                 url: '/help',
                 templateUrl: 'modules/misc/views/help.client.view.html'
+            }).
+            state('privacy', {
+            url: '/privacy',
+            templateUrl: 'modules/misc/views/privacy.client.view.html'
+            }).
+            state('terms-of-use', {
+                url: '/terms-of-use',
+                templateUrl: 'modules/misc/views/terms-of-use.client.view.html'
             });
     }
 ]);

@@ -55,5 +55,14 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
             return deferred.promise;
         }
 
+
+        this.byTypeAndName = function (type, name) {
+            return $http.get(urlString + '/byTypeAndName', {
+                params: {
+                    type: type,
+                    name: name
+                }
+            });
+        }
     }
 ]);

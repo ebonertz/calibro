@@ -23,4 +23,7 @@ module.exports = function (app) {
 
     app.route('/contentful/summer/women')
         .get(contentful.womenSummer);
+
+    app.route('/contentful/byTypeAndName')
+        .get(contentful.byTypeAndName);
 };
