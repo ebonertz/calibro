@@ -128,11 +128,11 @@
                                     <h6>Choose an existing address</h6>
 
                                     <form ng-if="authentication.user">
-                                        <label ng-repeat="address in authentication.user.addresses track by address.id"
-                                               ng-click="selectShippingAddress(address)" class="block-radio {{address.selected ? 'checked' : ''}}">
-                                            <b>{{address.firstName}} {{address.lastName}}</b><br/>
-                                            {{address.streetName}} {{address.streetNumber}}<br/>
-                                            {{address.phone}}
+                                        <label ng-repeat="shippingAddress in authentication.user.addresses track by shippingAddress.id"
+                                               ng-click="selectShippingAddress(shippingAddress)" class="block-radio {{shippingAddress.selected ? 'checked' : ''}}">
+                                            <b>{{shippingAddress.firstName}} {{shippingAddress.lastName}}</b><br/>
+                                            {{shippingAddress.streetName}} {{shippingAddress.streetNumber}}<br/>
+                                            {{shippingAddress.phone}}
                                             <input type="radio" name="address" value="1">
                                         </label>
                                     </form>
@@ -300,11 +300,11 @@
                                     <h6>Choose an existing address</h6>
 
                                     <form ng-if="authentication.user">
-                                        <label ng-repeat="address in authentication.user.addresses track by address.id"
-                                               ng-click="selectBillingAddress(address)" class="block-radio {{address.selected ? 'checked' : ''}}">
-                                            <b>{{address.firstName}} {{address.lastName}}</b><br/>
-                                            {{address.streetName}} {{address.streetNumber}}<br/>
-                                            {{address.phone}}
+                                        <label ng-repeat="billingAddress in authentication.user.addresses track by billingAddress.id"
+                                               ng-click="selectBillingAddress(billingAddress)" class="block-radio {{billingAddress.selected ? 'checked' : ''}}">
+                                            <b>{{billingAddress.firstName}} {{billingAddress.lastName}}</b><br/>
+                                            {{billingAddress.streetName}} {{billingAddress.streetNumber}}<br/>
+                                            {{billingAddress.phone}}
                                             <input type="radio" name="address" value="1">
                                         </label>
                                     </form>
@@ -445,6 +445,7 @@
                                             <td>{{cart.taxedPrice.totalGross | priceMath:cart.shippingInfo.shippingRate.price:'-' | spherePrice}}
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <td>Shipping</td>
                                             <td ng-if="cart.shippingInfo">
