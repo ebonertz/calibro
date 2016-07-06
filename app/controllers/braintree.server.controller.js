@@ -4,6 +4,8 @@ var SphereClient = require('../clients/sphere.server.client.js');
 
 module.exports = function (app) {
     var controller = {};
+    config.sphere.api_host = config.sphere.api_url;
+    config.sphere.oauth_url = config.sphere.auth_url;
     var options = {
         braintree: config.braintree,
         sphere: config.sphere,

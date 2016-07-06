@@ -43,11 +43,11 @@ module.exports = {
         }
     },
     sphere: {
-        "api_host": "api.sphere.io",
-        "oauth_url": "auth.sphere.io",
-        "project_key": "reactionsphere-test",
-        "client_id": "r_IHigKd7TDtvC7nX_XDIQYB",
-        "client_secret": "nL9sXy3IGCB8tmn1k_oPNxTeZqH25UVw",
+        "api_url": "api.commercetools.co",
+        "auth_url": "auth.commercetools.co",
+        "project_key": "focali-stage",
+        "client_id": "iqRSwXQh_ITTkTR8Pf87rR1u",
+        "client_secret": "Yn8Jcws_CtkzZHnaz1go4shoAeBt8A0-",
         "product_types": {
             categories: "categories.id",
             lensColor: "variants.attributes.lensColor.key",

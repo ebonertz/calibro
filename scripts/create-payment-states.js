@@ -9,8 +9,8 @@ var restClient = new SphereRest({
         client_id: config.sphere.client_id,
         client_secret: config.sphere.client_secret
     },
-    host: config.sphere.api_host,
-    oauth_host: config.sphere.oauth_url,
+    host: config.sphere.api_url,
+    oauth_host: config.sphere.auth_url,
     user_agent: 'sphere-node-sdk'
 });
 

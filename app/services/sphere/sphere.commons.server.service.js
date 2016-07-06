@@ -164,7 +164,7 @@ module.exports = function (app) {
         };
 
         var endpoint = {
-            "host": config.sphere.oauth_url,
+            "host": config.sphere.auth_url,
             "path": "/oauth/token?grant_type=client_credentials&scope=manage_project:" + config.sphere.project_key,
             "method": "POST",
             "port": 443,
