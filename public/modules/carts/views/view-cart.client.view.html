@@ -69,7 +69,7 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{(cart.totalPrice.centAmount -
+                                            <td>{{(cart.taxedPrice.totalGross -
                                                 cart.shippingInfo.shippingRate.price.centAmount) / 100}} {{cart.totalPrice.currencyCode}}
                                             </td>
                                         </tr>
@@ -88,7 +88,7 @@
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>{{cart.totalPrice | spherePrice}}</h6></td>
+                                            <td><h6>{{cart.taxedPrice.totalGross | spherePrice}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>

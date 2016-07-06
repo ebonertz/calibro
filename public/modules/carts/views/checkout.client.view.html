@@ -442,13 +442,7 @@
                                         <tbody>
                                         <tr>
                                             <td>Sub Total</td>
-                                            <td>{{cart.totalPrice | priceMath:cart.shippingInfo.shippingRate.price:'-' | spherePrice}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Taxes</td>
-                                            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions">
-                                                {{taxPortion.amount | spherePrice}}
+                                            <td>{{cart.taxedPrice.totalGross | priceMath:cart.shippingInfo.shippingRate.price:'-' | spherePrice}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -460,7 +454,7 @@
                                         </tr>
                                         <tr>
                                             <td><h6>Order Total</h6></td>
-                                            <td><h6>{{cart.totalPrice | spherePrice}}</h6></td>
+                                            <td><h6>{{cart.taxedPrice.totalGross | spherePrice}}</h6></td>
                                         </tr>
                                         </tbody>
                                     </table>

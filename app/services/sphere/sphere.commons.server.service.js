@@ -93,7 +93,7 @@ module.exports = function (app) {
     }
 
     service.byCustomer = function (entity, customerId, callback) {
-        SphereClient.getClient()[entity].where('customerId="' + customerId + '"').fetch().then(function (result) {
+        SphereClient.getClient()[entity].where('customerId="' + customerId + '"').all().fetch().then(function (result) {
             callback(null, result.body.results);
         }).error(function (err) {
             app.logger.error("Error finding by customer entity: %s. Error: %s",entity,JSON.stringify(err));

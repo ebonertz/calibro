@@ -42,7 +42,7 @@
 						{{order.lineItems | totalItems}}
 					</td>					
 					<td class="order-total-price">
-						{{order.totalPrice | spherePrice }}
+						{{order.taxedPrice.totalGross | spherePrice }}
 					</td>
 					<td class="order-date">
 						{{order.createdAt | sphereDate | localeDate}}
