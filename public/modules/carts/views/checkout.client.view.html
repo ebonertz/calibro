@@ -184,7 +184,7 @@
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.shippingAddress.postalCode" required/>
-                                        <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
+                                        <input ng-if="authentication.user && validateShippingAddress()" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>
@@ -353,7 +353,7 @@
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.billingAddress.postalCode" required/>
-                                        <input ng-if="authentication.user" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
+                                        <input ng-if="authentication.user && validateBillingAddress()" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
                                 </div>

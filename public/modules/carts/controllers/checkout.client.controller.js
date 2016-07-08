@@ -351,6 +351,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.shippingAddress.streetNumber &&
                 $rootScope.cart.shippingAddress.firstName &&
                 $rootScope.cart.shippingAddress.lastName &&
+                $rootScope.cart.shippingAddress.postalCode &&
+                $rootScope.cart.shippingAddress.city &&
                 $rootScope.cart.shippingAddress.country;
         };
 
@@ -361,6 +363,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.cart.billingAddress.streetNumber &&
                 $rootScope.cart.billingAddress.firstName &&
                 $rootScope.cart.billingAddress.lastName &&
+                $rootScope.cart.billingAddress.postalCode &&
+                $rootScope.cart.billingAddress.city &&
                 $rootScope.cart.billingAddress.country;
         };
 
