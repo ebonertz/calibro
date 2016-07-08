@@ -2,9 +2,7 @@
 
 module.exports = {
 	app: {
-		title: 'focali-mean',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'MongoDB, Express, AngularJS, Node.js'
+		title: 'Focali Optics'
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
