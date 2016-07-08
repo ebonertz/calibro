@@ -5,7 +5,7 @@ module.exports = {
     serverPath: 'http://localhost:3000',
     rememberMeKey: 'CmzvV20rf32IwFeReDhXBCzHtrB64qm8',
     app: {
-        title: 'focali-mean - Development Environment'
+        title: 'Focali Optics'
     },
     facebook: {
         clientID: process.env.FACEBOOK_ID || 'APP_ID',
