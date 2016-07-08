@@ -91,10 +91,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                 // For ng-repeat
                 $scope.pageRange = new Array($scope.totalPages);
 
-                // Default displayVariant is masterVariant, but server might return other if color filters are being applied
-                for (var i = 0; i < $scope.products.length; i++) {
-                    $scope.products[i].displayVariant = $scope.products[i].displayVariant || $scope.products[i].masterVariant;
-                }
 
             })
         };

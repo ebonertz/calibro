@@ -85,6 +85,15 @@ module.exports = function (app) {
             }
 
           });
+          if (product.masterVariant.isMatchingVariant === true) {
+            product.displayVariant = product.masterVariant;
+          }
+          else {
+            product.displayVariant = _.find (product.variants, function (variant) {
+              return variant.isMatchingVariant === true
+            });
+          }
+
         });
         Promise.all(categoriesObjects).then(function (promises) {
           var results = {
@@ -155,6 +164,17 @@ module.exports = function (app) {
             _.each(cats, function (item) {
               item.id = item.term;
               item.term = CategoriesService.getName(item.term);
+            });
+            _.each (result.body.results,function (product) {
+              if (product.masterVariant.isMatchingVariant === true) {
+                product.displayVariant = product.masterVariant;
+              }
+              else {
+                product.displayVariant = _.find (product.variants, function (variant) {
+                  return variant.isMatchingVariant === true
+                });
+              }
+
             });
 
             var results = {
