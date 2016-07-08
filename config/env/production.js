@@ -10,6 +10,10 @@ module.exports = {
 		css: 'public/dist/application.min.css',
 		js: 'public/dist/application.min.js'
 	},
+	rememberMeKey: process.env.REMEMBER_ME_KEY,
+	app: {
+		title: 'Focali Optics'
+	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
 		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
@@ -44,5 +48,95 @@ module.exports = {
 				pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
 			}
 		}
+	},
+	sphere: {
+		"api_url": process.env.SPHERE_API_URL,
+		"auth_url": process.env.SPHERE_AUTH_URL,
+		"project_key": process.env.SPHERE_PROJECT_KEY,
+		"client_id": process.env.SPHERE_CLIENT_ID,
+		"client_secret": process.env.SPHERE_CLIENT_SECRET,
+		"product_types": {
+			categories: "categories.id",
+			lensColor: "variants.attributes.lensColor.key",
+			frameColor: "variants.attributes.frameColor.key",
+			price: "variants.price.centAmount",
+			gender: "variants.attributes.gender.key",
+			width: "variants.attributes.width.key",
+			frameShape: "variants.attributes.frameShape.key",
+			frameMaterial: "variants.attributes.frameMaterial.en",
+			options:"variants.attributes.options.key"
+
+		},
+		"product_types_inv": {
+			"categories.id": "categories",
+			"variants.attributes.lensColor.key": "lensColor",
+			"variants.attributes.frameColor.key": "frameColor",
+			"variants.price.centAmount": "price",
+			"variants.attributes.gender.key":"gender" ,
+			"variants.attributes.width.key":"width",
+			"variants.attributes.frameShape.key":"frameShape",
+			"variants.attributes.frameMaterial.en":"frameMaterial",
+			"variants.attributes.options.key":"options"
+		},
+		"facets": [
+			"categories.id",
+			"variants.attributes.frameColor.key",
+			"variants.attributes.width.key",
+			"variants.attributes.frameShape.key",
+			"variants.attributes.frameMaterial.en",
+			"variants.attributes.lensColor.key"
+		]
+	},
+	contenful: {
+		space: process.env.CONTENTFUL_SPACE,
+		accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+		secure: true,
+		host: process.env.CONTENTFUL_HOST,
+	},
+	braintree: {
+		merchantId: process.env.BRAINTREE_MERCHANT_ID,
+		publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+		privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+		environment: process.env.BRAINTREE_ENVIRONMENT || 'sandbox'
+
+	},
+	mailchimp: {
+		key: process.env.MAILCHIMP_KEY,
+		lists: {
+			'newsletter': '8c5a60f754',
+			'offers': '76ed47a5ac'
+		}
+	},
+	mandrill: {
+		key: process.env.MANDRILL_KEY,
+		options: {
+			from_email: process.env.MANDRILL_FROM_EMAIL,
+			from_name: process.env.MANDRILL_FROM_NAME,
+		},
+		addresses: {
+			contactus_email: 'support@focalioptics.com',
+			prescriptions_email: 'support@focalioptics.com',
+			orders_export: 'support@focalioptics.com',
+		},
+		templates: {
+			welcome: 'welcome',
+			contactus: 'contact-us',
+			passwordtoken: 'password-token',
+			attachment: 'attachment',
+			order: 'order',
+			orderConfirmation: 'orderconfirmation'
+		}
+	},
+	highIndex: {
+		price: 30,
+		slug: 'high-index-lens'
+	},
+	orderPrefix: 'FO',
+	logger: {
+		level: "debug"
+	},
+	papertrail: {
+		host: 'logs3.papertrailapp.com',
+		port: 16061
 	}
 };

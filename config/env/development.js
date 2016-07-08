@@ -123,9 +123,6 @@ module.exports = {
         slug: 'high-index-lens'
     },
     orderPrefix: 'FO',
-    payments: {
-        errorUrl: '/#!/checkout?jumpto=billingMethod'
-    },
     logger: {
         level: "debug"
     },
