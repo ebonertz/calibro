@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ContentfulService', 'LoggerServices', 'lodash','$sce',
-    function ($scope, $stateParams, $location, Authentication, Products, ProductService, CartService, ContentfulService, LoggerServices, _,$sce) {
+angular.module('products').controller('ProductsController', ['$scope', '$rootScope','$stateParams', '$location', 'Authentication', 'Products', 'ProductService', 'CartService', 'ContentfulService', 'LoggerServices', 'lodash','$sce',
+    function ($scope, $rootScope,$stateParams, $location, Authentication, Products, ProductService, CartService, ContentfulService, LoggerServices, _,$sce) {
         $scope.authentication = Authentication;
         $scope.$location = $location;
         $scope.productFiltersMin = 0;
@@ -44,7 +44,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
         }
         $scope.currentFilters = {};
         $scope.isAvailable = false;
-
+        $scope.product = {};
 
         var processFilters = function () {
             _.each(_.keys ($scope.facetConfig),function (filter) {
@@ -296,6 +296,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             var products = new Products({id: id})
             products.$get({id: id}, function (result) {
                 $scope.product = result.product;
+                $rootScope.productShare = result.product;
                 $scope.currentVariant = $scope.product.masterVariant;
                 $scope.currentVariant = setAttributes ($scope.currentVariant);
 
@@ -335,7 +336,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                 }
 
                 //$scope.variantImages = flattenImages($scope.product.variants)
-
 
             })
         };

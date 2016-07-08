@@ -224,3 +224,23 @@ angular.module('core').directive('scrollTop', function() {
         }
     }
 });
+
+
+angular.module('core').directive('addthisToolbox', ['$timeout','$location','$rootScope', function($timeout,$location,$rootScope) {
+    return {
+        restrict : 'A',
+        transclude : true,
+        replace : true,
+        template : '<div ng-transclude></div>',
+        link : function($scope, element, attrs) {
+            setTimeout(function () {
+                addthis.init();
+                addthis.toolbox($(element).get(), {}, {
+                    url:$location.absUrl(),
+                    title : $rootScope.productShare? $rootScope.productShare.name.en:"",
+                    description : $rootScope.productShare? $rootScope.productShare.description.en:""
+                });
+            },4000);
+        }
+    };
+}]);
