@@ -7,7 +7,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         $scope.$location = $location;
         $scope.productFiltersMin = 0;
         $scope.productFiltersMax = 500;
-        $scope.pageSize = 20;
+        $scope.pageSize = 25;
         $scope.pageNum = 1;
         $scope.productFilters = {};
         $scope.selectedFilters = {};
@@ -60,9 +60,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 $scope.gender = $stateParams.gender;
                processFilters ();
 
-                // Both genders will include unisex products
+                // Both genders will includoe unisex products
                $scope.productFilters.gender = ["UNISEX"];
                $scope.productFilters.gender.push ($scope.gender.toUpperCase());
+               if ($scope.gender.toUpperCase() == "MEN") {
+                   $scope.productFilters.gender.push ("Mens");
+               }
+               else if ($scope.gender.toUpperCase() == "WOMEN") {
+                   $scope.productFilters.gender.push ("Womens");
+               }
 
             }
 
@@ -132,8 +138,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
                 // Both genders will include unisex products
                 $scope.productFilters.gender = {};
+                var genderAlias;
+                if ($scope.gender.toUpperCase() == "MEN") {
+                    genderAlias ="Mens";
+                }
+                else if ($scope.gender.toUpperCase() == "WOMEN") {
+                    genderAlias = "Womens";
+                }
                 $scope.productFilters.gender =  {
-                    value: "\"UNISEX\",\""+$scope.gender.toUpperCase()+"\"",
+                    value: "\"UNISEX\",\""+$scope.gender.toUpperCase()+"\",\""+genderAlias+"\"",
                     isText: false
                 };
             }
@@ -305,13 +318,18 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
                 }
                 $scope.facets = result.facets;
+
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
                 $scope.imgBig = $scope.currentVariant.images[0]['url'];
 
                 _.each(Object.keys(result.facets), function (key) {
                     if (result.facets[key].length > 0) {
-                        $scope.facetsArray.push({name: key, value: result.facets[key]});
+                        var name = key;
+                        if (key === "lensColor" && result.product.categories[0].obj.name.en === "Eyewear") {
+                            name = "LensOption"
+                        }
+                        $scope.facetsArray.push({name: name, value: result.facets[key]});
                     }
 
                 });
