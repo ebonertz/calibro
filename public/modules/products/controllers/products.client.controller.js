@@ -409,8 +409,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 $scope.imageThumbnails = $scope.currentVariant.images;
             }
             else {
-                  $scope.imgBig = $scope.product.masterVariant.images [0].url;
-                  $scope.imageThumbnails = $scope.product.masterVariant.images;
+                  $scope.imgBig = '/design/image-not-found.jpg';
+                  $scope.imageThumbnails = null;
             }
             $scope.isAvailable = true;
 
