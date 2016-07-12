@@ -16,12 +16,12 @@
     <section id="product-details" itemscope itemtype="http://schema.org/Product">
       <div class="product-images">
         <div class="img-big" style="margin-bottom: 15px;">
-          <img itemprop="image" ng-src="{{imgBig}}" ng-hide="currentVariant.images.length == 0"/>
+          <img itemprop="image" ng-src="{{imgBig}}" ng-hide="imgBig == undefined"/>
         </div>
 
         <span class="thumbnails"  ng-repeat="image in imageThumbnails">
           <a class="thumbnail-wrapper">
-          <img class="thumbnail" ng-mouseover="switchImageBig(image.url)" ng-mouseleave="switchImageBig(currentVariant.images[0].url)" class="thumbnail" ng-src="{{image.url | size: 'small'}}" data-image="{{image.url}}"/>
+          <img class="thumbnail" ng-mouseover="switchImageBig(image.url)" ng-mouseleave="switchImageBig(imageThumbnails[0].url)" class="thumbnail" ng-src="{{image.url | size: 'small'}}" data-image="{{image.url}}"/>
           </a>
         </span>
       </div>

@@ -329,7 +329,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
                 }
                 $scope.facets = result.facets;
-
+                if (result.product.categories[0].obj.slug.en === "eyewear") {
+                    delete $scope.facets.mirrorColor
+                }
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
                 $scope.imgBig = $scope.currentVariant.images[0]['url'];
@@ -454,32 +456,30 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             if (notUndefinedFacetLength == Object.keys($scope.currentFilters).length) {
                 // Variants.
-                var wasVariantFound = false;
-                _.each($scope.product.variants, function (variant) {
+                var variantFound = _.find($scope.product.variants, function (variant) {
                     var complies = 0;
 
                     _.each(Object.keys($scope.currentFilters), function (filterKey) {
                         // Attributes of Variant.
                         _.each(variant.attributes, function (attribute) {
-
-                            if (attribute.name == filterKey && (attribute.value.key == $scope.currentFilters[filterKey] || attribute.value.label.en == $scope.currentFilters[filterKey])) {
+                           if (attribute.name == filterKey && (attribute.value.key == $scope.currentFilters[filterKey] || attribute.value.label.en == $scope.currentFilters[filterKey])) {
                                 complies++;
                                 return;
                             }
 
-                        })
+                        });
 
-                    })
+                    });
 
                     // If complies = filters, we found it.
-                    if (Object.keys($scope.currentFilters).length == complies) {
-                        setCurrentVariant(variant);
-                        wasVariantFound = true;
-                        return;
-                    }
+                    return Object.keys($scope.currentFilters).length == complies;
+
 
                 });
-                if (!wasVariantFound) {
+                if (variantFound != undefined) {
+                    setCurrentVariant(variantFound);
+                }
+                else {
                     $scope.isAvailable = false;
                     LoggerServices.warning('This variant is not available.');
                     return;
