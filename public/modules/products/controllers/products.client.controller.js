@@ -322,8 +322,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             products.$get({id: id}, function (result) {
                 $scope.product = result.product;
                 $rootScope.productShare = result.product;
-                $scope.currentVariant = $scope.product.masterVariant;
-                $scope.currentVariant = setAttributes ($scope.currentVariant);
+                $scope.currentVariant = setAttributes ($scope.product.masterVariant);
 
                 $scope.product.variants.unshift($scope.product.masterVariant);
                 if ($scope.currentVariant.prices.length === 1) {
@@ -334,11 +333,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
                 $scope.imgBig = $scope.currentVariant.images[0]['url'];
+                $scope.imageThumbnails = $scope.currentVariant.images;
 
                 _.each(Object.keys(result.facets), function (key) {
                     if (result.facets[key].length > 0) {
                         var displayName = key;
-                        if (key === "lensColor" && result.product.categories[0].obj.name.en === "Eyewear") {
+                        if (key === "lensColor" && result.product.categories[0].obj.slug.en === "eyewear") {
                             displayName = "LensOption"
                         }
                         $scope.facetsArray.push({name: key, value: result.facets[key],displayName:displayName});
@@ -390,8 +390,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         };
 
         var setCurrentVariant = function (variant) {
-            $scope.currentVariant = variant;
-            $scope.currentVariant = setAttributes ($scope.currentVariant);
+            $scope.currentVariant = setAttributes (variant);
 
             _.each ($scope.currentVariant.prices, function (price){
                price.channel = _.find ($scope.channels,function (channel) {
@@ -405,10 +404,11 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             if ($scope.currentVariant.images[0] != null) {
                 $scope.imgBig = $scope.currentVariant.images[0].url;
+                $scope.imageThumbnails = $scope.currentVariant.images;
             }
             else {
                   $scope.imgBig = $scope.product.masterVariant.images [0].url;
-                  $scope.currentVariant.images = $scope.product.masterVariant.images;
+                  $scope.imageThumbnails = $scope.product.masterVariant.images;
             }
             $scope.isAvailable = true;
 
@@ -428,8 +428,25 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
         }
 
+        var changeImageForOptical = function (attrKey,attrValue) {
+            if (attrKey === "frameColor" && $scope.product.categories[0].obj.slug.en === "eyewear") {
+                var foundVariant = _.find($scope.product.variants, function (variant) {
+                    var foundAttribute = _.find(variant.attributes, function (attribute) {
+                        return (attribute.name == attrKey && (attribute.value.key == attrValue || attribute.value.label.en == attrValue));                        return foundVariant != undefined;
+                    });
+                    return foundAttribute != undefined;
+                });
+                if (foundVariant) {
+                    $scope.imgBig = foundVariant.images[0]['url'];
+                    $scope.imageThumbnails = foundVariant.images;
+                }
+
+            }
+        }
+
         $scope.selectVariant = function (attrKey, attrValue) {
 
+            changeImageForOptical (attrKey,attrValue);
             $scope.currentFilters[attrKey] = attrValue;
             var notUndefinedFacetLength = _.filter($scope.facetsArray, function (filter) {
                 return filter.value.length > 0
