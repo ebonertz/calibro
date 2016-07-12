@@ -39,7 +39,7 @@ module.exports = function (app) {
 
                         CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
                             if(!err && customer != null && customer.email != null) {
-                                MandrillService.orderConfirmation(customer.email,orderCreated, config.serverPath + '/#!/orders/' + orderCreated.id);
+                                MandrillService.orderConfirmation(customer,orderCreated);
                             }else{
                                 app.logger.error("Error creating order. Error: %s",JSON.stringify(err));
                             }
