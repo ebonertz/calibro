@@ -65,7 +65,8 @@ module.exports = {
 			width: "variants.attributes.width.key",
 			frameShape: "variants.attributes.frameShape.key",
 			frameMaterial: "variants.attributes.frameMaterial.en",
-			options:"variants.attributes.options.key"
+			options:"variants.attributes.options.key",
+			mirrorColor: "variants.attributes.mirrorColor.key"
 
 		},
 		"product_types_inv": {
@@ -77,7 +78,8 @@ module.exports = {
 			"variants.attributes.width.key":"width",
 			"variants.attributes.frameShape.key":"frameShape",
 			"variants.attributes.frameMaterial.en":"frameMaterial",
-			"variants.attributes.options.key":"options"
+			"variants.attributes.options.key":"options",
+			"variants.attributes.mirrorColor.key": "mirrorColor"
 		},
 		"facets": [
 			"categories.id",
@@ -85,7 +87,8 @@ module.exports = {
 			"variants.attributes.width.key",
 			"variants.attributes.frameShape.key",
 			"variants.attributes.frameMaterial.en",
-			"variants.attributes.lensColor.key"
+			"variants.attributes.lensColor.key",
+			"variants.attributes.mirrorColor.key"
 		]
 	},
 	contenful: {
