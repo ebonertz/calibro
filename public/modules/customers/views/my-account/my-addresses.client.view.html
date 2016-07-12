@@ -22,8 +22,7 @@
           	<div data-ng-show="addAddressSuccess" class="text-center text-danger">
             	<div class="notice outline green small" data-ng-bind="addAddressSuccess"></div>
           	</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-			
+			<p></p>
 			<table id="user-addressses">
 				<thead>
 					<th class="address">Address</th>
@@ -34,7 +33,7 @@
 				<tbody>
 					<tr class="saved-address" ng-repeat="address in customer.addresses track by address.id">
 						<td>
-							{{address.streetNumber}} {{address.streetName}}<br/>
+							{{address.streetName}} <br>{{address.additionalStreetInfo}}<br/>
 							{{address.postalCode}}, {{address.city}}, {{address.state}}<br/>
 						</td>
 						<td>
@@ -78,12 +77,12 @@
 					<input type="text" id="company" name="company" placeholder="Company" data-ng-model="newAddress.company" />
 				</div> 
 				<div class="form-field-half">
-					<label for="streetName">Street Name*</label>
+					<label for="streetName">Street Address*</label>
 					<input type="text" id="streetName" name="streetName" data-ng-model="newAddress.streetName" placeholder="Street Name" required />
 				</div>
 				<div class="form-field-half">
-					<label for="streetNumber">Street Number*</label>
-					<input type="text" id="streetNumber" name="streetNumber" data-ng-model="newAddress.streetNumber" placeholder="Street Number" required />
+					<label for="additionalStreetInfo">Additional Address Information</label>
+					<input type="text" id="additionalStreetInfo" name="additionalStreetInfo" data-ng-model="newAddress.additionalStreetInfo" placeholder="Street Information" />
 				</div>
 				<div class="form-field">
 					<label for="city">City*</label>
@@ -92,6 +91,7 @@
 				<br />
 				<div class="form-field-half">
 					<label for="state">State/Province*</label>
+					<option disabled selected value="">Please choose a state/province</option>
 					<select id="state" name="state" data-ng-model="newAddress.state"   required placeholder="State/Province">
 						<option  ng-repeat="ds in dataStates['US']" value="{{ds.code}}">{{ds.name}}</option>
 					</select>

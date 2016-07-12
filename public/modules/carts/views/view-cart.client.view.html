@@ -52,14 +52,14 @@
                                 <div class="checkout-totals" id="billing">
                                     <h6>Payment Information</h6>
                                     <b>{{cart.billingAddress.firstName}} {{cart.billingAddress.lastName}}</b><br/>
-                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}<br/>
+                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.additionalStreetInfo}}<br/>
                                     {{cart.billingAddress.phone}}
 
                                 </div>
                                 <div class="checkout-totals" id="shipping">
                                     <h6>Shipping Information</h6>
                                     <b>{{cart.shippingAddress.firstName}} {{cart.shippingAddress.lastName}}</b><br/>
-                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.streetNumber}}<br/>
+                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.additionalStreetInfo}}<br/>
                                     {{cart.shippingAddress.phone}}
 
                                 </div>

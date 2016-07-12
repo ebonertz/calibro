@@ -120,8 +120,6 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 			var addresses = $scope.customer.addresses
 			for(var i = 0; i < addresses.length; i++){
 				if(addresses[i].id == id){
-					// Convert streetNumber or it won't get set
-					addresses[i].streetNumber = parseInt(addresses[i].streetNumber);
 					return addresses[i]
 				}
 			}

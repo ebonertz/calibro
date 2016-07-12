@@ -9,7 +9,9 @@ var Address = function(opt){
     this.company = opt.company
 
   this.streetName = opt.streetName
-  this.streetNumber = opt.streetNumber.toString()
+  if(opt.additionalStreetInfo) {
+    this.additionalStreetInfo = opt.additionalStreetInfo
+  }
 
   this.city = opt.city
   this.state = opt.state

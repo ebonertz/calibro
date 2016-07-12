@@ -131,7 +131,7 @@
                                         <label ng-repeat="shippingAddress in authentication.user.addresses track by shippingAddress.id"
                                                ng-click="selectShippingAddress(shippingAddress)" class="block-radio {{shippingAddress.selected ? 'checked' : ''}}">
                                             <b>{{shippingAddress.firstName}} {{shippingAddress.lastName}}</b><br/>
-                                            {{shippingAddress.streetName}} {{shippingAddress.streetNumber}}<br/>
+                                            {{shippingAddress.streetName}} <br> {{shippingAddress.additionalStreetInfo}}<br/>
                                             {{shippingAddress.phone}}
                                             <input type="radio" name="address" value="1">
                                         </label>
@@ -161,14 +161,13 @@
                                             <input type="text" name="streetName" placeholder="Street Name"
                                                    ng-model="cart.shippingAddress.streetName" required/>
                                         </div>
-                                        <div class="form-field-small-quarter">
-                                            <label>#</label>
-                                            <input type="text" name="streetNumber" placeholder="#"
-                                                   ng-model="cart.shippingAddress.streetNumber" required/>
-                                        </div>
+                                        <label>Additional Address Information</label>
+                                        <input type="text" name="additionalStreetInfo" placeholder="Additional Address Information"
+                                                   ng-model="cart.shippingAddress.additionalStreetInfo"/>
+                                        <label for="country">Country</label>
                                         <select name="country" id="country" ng-model="cart.shippingAddress.country"
                                                 required>
-                                            <option disabled selected>Please choose a country</option>
+                                            <option value="" disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
                                         <label>State/Province</label>
@@ -180,7 +179,6 @@
                                         <label>City</label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
-                                        <label for="country">Country</label>
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal"
                                                ng-model="cart.shippingAddress.postalCode" required/>
@@ -303,7 +301,7 @@
                                         <label ng-repeat="billingAddress in authentication.user.addresses track by billingAddress.id"
                                                ng-click="selectBillingAddress(billingAddress)" class="block-radio {{billingAddress.selected ? 'checked' : ''}}">
                                             <b>{{billingAddress.firstName}} {{billingAddress.lastName}}</b><br/>
-                                            {{billingAddress.streetName}} {{billingAddress.streetNumber}}<br/>
+                                            {{billingAddress.streetName}} <br>{{billingAddress.additionalStreetInfo}}<br/>
                                             {{billingAddress.phone}}
                                             <input type="radio" name="address" value="1">
                                         </label>
@@ -333,11 +331,9 @@
                                             <input type="text" name="streetName" placeholder="Street Name"
                                                    ng-model="cart.billingAddress.streetName" required/>
                                         </div>
-                                        <div class="form-field-small-quarter">
-                                            <label>#</label>
-                                            <input type="text" name="streetNumber" placeholder="#"
-                                                   ng-model="cart.billingAddress.streetNumber" required/>
-                                        </div>
+                                        <label>Additional Address Information</label>
+                                        <input type="text" name="additionalStreetInfo" placeholder="Additional Address Information"
+                                                   ng-model="cart.billingAddress.additionalStreetInfo" />
                                         <label for="country">Country</label>
                                         <select name="country" id="country" ng-model="cart.billingAddress.country"
                                                 required>
@@ -345,8 +341,11 @@
                                             <option value="US">United States</option>
                                         </select>
                                         <label>State/Province</label>
-                                        <input type="text" name="state" placeholder="State/Province"
-                                               ng-model="cart.billingAddress.state" required/>
+                                        <select id="state"  ng-model="cart.billingAddress.state"   required>
+                                            <option value="" selected disabled>Choose Province/State</option>
+                                            <option ng-selected="{{cart.billingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.billingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
+
+                                        </select>
                                         <label>City</label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.billingAddress.city" required/>
@@ -425,14 +424,14 @@
                                 <div class="checkout-totals" id="billing">
                                     <h6>Payment Information</h6>
                                     <b>{{cart.billingAddress.firstName}} {{cart.billingAddress.lastName}}</b><br/>
-                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.streetNumber}}<br/>
+                                    {{cart.billingAddress.streetName}} {{cart.billingAddress.additionalStreetInfo}}<br/>
                                     {{cart.billingAddress.phone}}
 
                                 </div>
                                 <div class="checkout-totals" id="shipping">
                                     <h6>Shipping Information</h6>
                                     <b>{{cart.shippingAddress.firstName}} {{cart.shippingAddress.lastName}}</b><br/>
-                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.streetNumber}}<br/>
+                                    {{cart.shippingAddress.streetName}} {{cart.shippingAddress.additionalStreetInfo}}<br/>
                                     {{cart.shippingAddress.phone}}
 
                                 </div>

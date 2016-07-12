@@ -125,7 +125,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
                         for (var i = 0; i < Authentication.user.addresses.length; i++) {
                             if ($rootScope.cart.shippingAddress.streetName == Authentication.user.addresses[i].streetName &&
-                                $rootScope.cart.shippingAddress.streetNumber == Authentication.user.addresses[i].streetNumber &&
                                 $rootScope.cart.shippingAddress.firstName == Authentication.user.addresses[i].firstName &&
                                 $rootScope.cart.shippingAddress.lastName == Authentication.user.addresses[i].lastName) {
                                 Authentication.user.addresses[i].selected = true;
@@ -348,7 +347,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return $rootScope.cart &&
                 $rootScope.cart.shippingAddress &&
                 $rootScope.cart.shippingAddress.streetName &&
-                $rootScope.cart.shippingAddress.streetNumber &&
                 $rootScope.cart.shippingAddress.firstName &&
                 $rootScope.cart.shippingAddress.lastName &&
                 $rootScope.cart.shippingAddress.postalCode &&
@@ -360,7 +358,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return $rootScope.cart &&
                 $rootScope.cart.billingAddress &&
                 $rootScope.cart.billingAddress.streetName &&
-                $rootScope.cart.billingAddress.streetNumber &&
                 $rootScope.cart.billingAddress.firstName &&
                 $rootScope.cart.billingAddress.lastName &&
                 $rootScope.cart.billingAddress.postalCode &&
