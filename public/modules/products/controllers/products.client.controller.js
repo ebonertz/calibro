@@ -13,6 +13,18 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         $scope.selectedFilters = {};
         $scope.priceRange = $scope.productFiltersMin + "-" + $scope.productFiltersMax;
         $scope.selectedOptionFilter = "ALL";
+        $scope.colorMapping = {
+            "Gold": ["GOLD"],
+            "Silver": ["SILVER"],
+            "Red": ["RED","RED/TORTOISE"],
+            "Blue": ["BLUE","DARK BLUE","BLUE/TEAL"],
+            "Black": ["BLACK","BLACK/CLEAR","BLACK ONYX FADE"],
+            "Brown": ["BROWN","BROWN/TAN","PINK/BROWN","DARK BROWN","BROWN TORTOISE SHELL","MAHOGANY/BROWN","TORTISE SHELL BROWN","BROWN/AQUA"],
+            "Green": ["GREEN","LIGHT GREEN","MILITARY GREEN","GREEN/TORTOISE"],
+            "Grey": ["GREY","GREY (OLIVE)","GRAY FADE","GRAY/CLEAR","GRAY","GRAY (OLIVE)","GRANITE GRAY","GREY/DRIFTWOOD","GRAY/DRIFTWOOD"],
+            "Purple": []
+        };
+        $scope.colors = _.keys ($scope.colorMapping);
         $scope.sortAttributes = [
             { name: 'name', sortAttr: 'name.en', sortAsc: true },
             { name: 'price', sortAttr: 'price', sortAsc: true}];
@@ -325,11 +337,11 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
                 _.each(Object.keys(result.facets), function (key) {
                     if (result.facets[key].length > 0) {
-                        var name = key;
+                        var displayName = key;
                         if (key === "lensColor" && result.product.categories[0].obj.name.en === "Eyewear") {
-                            name = "LensOption"
+                            displayName = "LensOption"
                         }
-                        $scope.facetsArray.push({name: name, value: result.facets[key]});
+                        $scope.facetsArray.push({name: key, value: result.facets[key],displayName:displayName});
                     }
 
                 });
