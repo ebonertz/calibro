@@ -2,6 +2,8 @@
 
 var MandrillClient = require('../clients/mandrill.server.client.js');
 var _ = require('lodash');
+var config = require('../../config/config');
+
 module.exports = function (app) {
 	var service = {};
 	
@@ -148,15 +150,28 @@ module.exports = function (app) {
 		}
 		return service.send_one(options)
 	}
-	service.orderConfirmation = function(email, order, link){
+	service.orderConfirmation = function(customer, order){
 
 		var lineItems = [];
+		var discount = 0;
 		_.each(order.lineItems,function(lineItem){
 			var item = {};
 			item.quantity = lineItem.quantity;
 			item.name = lineItem.name.en;
-			item.price = lineItem.price.value.centAmount /100;
+			item.sku = lineItem.variant.sku;
+			item.subtotal = lineItem.price.value.centAmount /100 * item.quantity;
 			item.currency = lineItem.price.value.currencyCode;
+
+			var frameColor = _.first(_.filter(lineItem.variant.attributes,{name:'frameColor'}));
+			item.frameColor = frameColor ? frameColor.value.label.en:"";
+
+			var lensColor = _.first(_.filter(lineItem.variant.attributes,{name:'lensColor'}));
+			item.lensOption = lensColor ? lensColor.value.label.en:"";
+
+			var mirrorColor = _.first(_.filter(lineItem.variant.attributes,{name:'mirrorColor'}));
+			item.mirrorColor = mirrorColor ? mirrorColor.value.label.en:"";
+
+			discount  = lineItem.discountedPrice ? discount + lineItem.discountedPrice.includedDiscounts[0].discountedAmount.centAmount/100:discount;
 			lineItems.push(item);
 		});
 
@@ -165,21 +180,29 @@ module.exports = function (app) {
 			currency : order.shippingInfo.price.currencyCode
 		};
 		var totalPrice = {
-			price : order.totalPrice.centAmount / 100,
-			currency : order.totalPrice.currencyCode
+			price : order.taxedPrice.totalGross.centAmount / 100,
+			currency : order.taxedPrice.totalGross.currencyCode
 		};
 		var subTotal = {
-			price : totalPrice.price -shippingPrice.price,
-			currency : order.totalPrice.currencyCode
+			price : order.taxedPrice.totalNet.centAmount / 100,
+			currency : order.taxedPrice.totalNet.currencyCode
 		};
 
 		var orderDate = order.createdAt.substr(8,2) + "/"+order.createdAt.substr(5,2)+ "/" + order.createdAt.substr(0,4);
 		var options = {
-			email: email,
+			email: customer.email,
 			template: 'orderConfirmation',
 			global_merge_vars: [
 				{
-					"name": "orderDate",
+					"name":"customerfirstName",
+					"content":customer.firstName
+				},
+				{
+					"name":"orderNumber",
+					"content":order.orderNumber
+				},
+				{
+					"name": "order_createdat_formatted",
 					"content": orderDate
 				},
 				{
@@ -196,19 +219,35 @@ module.exports = function (app) {
 				},
 				{
 					"name": "totalPrice",
-					"content": totalPrice
+					"content": totalPrice.price
 				},
 				{
-					"name": "subTotal",
-					"content": subTotal
+					"name": "orderSubtotal",
+					"content": subTotal.price
 				},
 				{
-					"name": "shippingPrice",
-					"content": shippingPrice
+					"name": "shippingCost",
+					"content": shippingPrice.price
+				},
+				{
+					"name": "tax",
+					"content": totalPrice.price - subTotal.price
 				},
 				{
 					"name": "link",
-					"content": link
+					"content": config.serverPath
+				},
+				{
+					"name": "shippingMethod",
+					"content": order.shippingInfo.shippingMethodName
+				},
+				{
+					"name": "paymentInfo",
+					"content": "Credit Card"
+				},
+				{
+					"name": "discount",
+					"content": discount
 				}
 			]
 		}
