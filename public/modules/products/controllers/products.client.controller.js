@@ -63,11 +63,19 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         $scope.product = {};
 
         var processFilters = function () {
+
             _.each(_.keys ($scope.facetConfig),function (filter) {
                 if ($scope.selectedFilters[filter]) {
                     $scope.productFilters[filter] = _.keys ($scope.selectedFilters[filter]);
                 }
             });
+            if ($scope.selectedFilters["width"]) {
+                var values = _.uniq(_.flatten(_.map(_.keys($scope.selectedFilters['width']), function (item) {
+                    return $scope.widthMapping [item];
+                })));
+                $scope.productFilters['width'] = values;
+
+            }
         };
 
         var mapFacets = function (facets) {
@@ -248,9 +256,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     delete $scope.productFilters[filterName];
                     delete $scope.selectedFilters[filterName];
                 }
-            }
-            if ($scope.selectedFilters ['width']) {
-
             }
             $scope.init ();
         };
