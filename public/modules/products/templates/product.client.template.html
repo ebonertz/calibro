@@ -4,8 +4,8 @@
     <span class="on-sale-badge" bo-if="product.displayVariant.prices[0].discounted">Sale</span>
     <!-- <span class="no-stock-notice" ng-if="!product.displayVariant.availability.isOnStock">Out of Stock</span> -->
   </div>
-  <a bo-href="'/#!/products/'+(product.slug | locale)" class="product-cover"><img ng-src="{{product.displayVariant.images[0]['url'] | size: 'medium'}}"/></a>
-  <a bo-href="'/#!/products/'+(product.slug | locale)" class="product-title"><b bo-text="product.name | locale"></b></a>
+  <a  href="/#!/products/{{product.slug | locale}}" ng-click="setProductSkuDisplay(product.displayVariant.sku)" class="product-cover"><img ng-src="{{product.displayVariant.images[0]['url'] | size: 'medium'}}"/></a>
+  <a href="/#!/products/{{product.slug | locale}}" ng-click="setProductSkuDisplay(product.displayVariant.sku)" class="product-title"><b bo-text="product.name | locale"></b></a>
   <span class="price">
 
     <del bo-if="product.displayVariant.prices[0].discounted">

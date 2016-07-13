@@ -99,8 +99,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             ProductService.listBy($scope.category, $stateParams.categoryB, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
                 $scope.results = results.data;
-                $scope.products = results.data.products
-                $scope.facets = results.data.facets
+                $scope.products = results.data.products;
+                $scope.facets = results.data.facets;
 
                 $scope.pageSize = results.data.pages.perPage || $scope.pageSize;
                 $scope.pageNum = results.data.pages.current || $scope.pageNum;
@@ -322,9 +322,16 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             products.$get({id: id}, function (result) {
                 $scope.product = result.product;
                 $rootScope.productShare = result.product;
-                $scope.currentVariant = setAttributes ($scope.product.masterVariant);
 
                 $scope.product.variants.unshift($scope.product.masterVariant);
+                var parameterVariant = $scope.product.masterVariant;
+                if($rootScope.productSkuDisplay){
+                     parameterVariant = _.find($scope.product.variants,{sku:$rootScope.productSkuDisplay});
+
+                }
+                $scope.currentVariant = setAttributes (parameterVariant);
+
+
                 if ($scope.currentVariant.prices.length === 1) {
                     $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
                 }
@@ -334,8 +341,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 }
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
-                $scope.imgBig = $scope.currentVariant.images[0]['url'];
-                $scope.imageThumbnails = $scope.currentVariant.images;
+
+                if ($scope.currentVariant.images[0] != null) {
+                    $scope.imgBig = $scope.currentVariant.images[0].url;
+                    $scope.imageThumbnails = $scope.currentVariant.images;
+                }
+                else {
+                    $scope.imgBig = '/design/image-not-found.jpg';
+                    $scope.imageThumbnails = null;
+                }
 
                 _.each(Object.keys(result.facets), function (key) {
                     if (result.facets[key].length > 0) {
@@ -347,6 +361,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     }
 
                 });
+                _.each($scope.facetsArray,function(facet){
+                    var value = _.find($scope.currentVariant.attributes,{name:facet.name});
+                    if(value){
+                        $scope.selectVariant(facet.name,value.value.key);
+                    }
+                });
+
+
+
 
                 // Breadcrumbs
                 $scope.breadcrumbs = {};
@@ -439,8 +462,14 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     return foundAttribute != undefined;
                 });
                 if (foundVariant) {
-                    $scope.imgBig = foundVariant.images[0]['url'];
-                    $scope.imageThumbnails = foundVariant.images;
+                    if (foundVariant.images[0] != null) {
+                        $scope.imgBig = foundVariant.images[0].url;
+                        $scope.imageThumbnails = foundVariant.images;
+                    }
+                    else {
+                        $scope.imgBig = '/design/image-not-found.jpg';
+                        $scope.imageThumbnails = null;
+                    }
                 }
 
             }

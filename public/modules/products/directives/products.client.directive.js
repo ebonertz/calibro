@@ -2,7 +2,7 @@
 
 var module = angular.module('products');
 
-module.directive('productThumbnail', function () {
+module.directive('productThumbnail', function ($rootScope) {
 	return {
 		templateUrl: 'modules/products/templates/product.client.template.html',
 		restrict: 'E',
@@ -29,6 +29,10 @@ module.directive('productThumbnail', function () {
 			}
 
 			$scope.ready = true;
+
+			$scope.setProductSkuDisplay = function(sku){
+				$rootScope.productSkuDisplay = sku;
+			};
 		}
 	}
 })

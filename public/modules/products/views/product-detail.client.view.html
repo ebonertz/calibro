@@ -58,7 +58,7 @@
         <div  ng-repeat="facet in facetsArray" class="selection">
           <b class="section-box">Choose {{formatFacetName(facet.displayName)}}</b>
           <select ng-change="selectVariant(facet.name, currentFilters[facet.name])"
-                  ng-model="currentFilters[facet.name]">
+                  ng-model="currentFilters[facet.name]" class="active">
             <option value="" disabled selected>{{formatFacetName(facet.displayName)}}</option>
             <option ng-repeat="value in facet.value">{{value.term}}</option>
           </select>
