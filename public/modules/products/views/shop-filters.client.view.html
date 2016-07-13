@@ -22,7 +22,7 @@
 <div ng-repeat-start="(facetKey, facetOptions) in facetConfig track by facetKey" class="filter-block" id="{{facetKey}}-filter"  ng-show="facets[facetKey].length > 0"  >
   <p class="filter-title">{{facetOptions.title}}</p><a class="clearfilter" ng-click="clearFilter(facetKey)">Clear</a>
   <label ng-repeat="term in facets[facetKey] track by term.term" class="check-option">
-  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="selectedFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="init()">
+  <input uicheckbox type="checkbox" value="{{term.term.toLowerCase()}}" ng-model="selectedFilters[facetKey][term.term]" name="{{term.term.toLowerCase()}}" ng-change="selectFilter(facetKey,term.term)">
   {{term.term | facets}} <!--<span class="cat-amount">({{term.count}})</span>-->
   </label>
 </div>

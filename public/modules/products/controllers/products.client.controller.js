@@ -24,7 +24,11 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             "Grey": ["GREY","GREY (OLIVE)","GRAY FADE","GRAY/CLEAR","GRAY","GRAY (OLIVE)","GRANITE GRAY","GREY/DRIFTWOOD","GRAY/DRIFTWOOD"],
             "Purple": []
         };
-        $scope.colors = _.keys ($scope.colorMapping);
+        $scope.widthMapping = {
+            "SMALL": ["SMALL","SMALL/MEDIUM"],
+            "MEDIUM": ["MEDIUM","SMALL/MEDIUM","MEDIUM/LARGE"],
+            "LARGE": ["LARGE","MEDIUM/LARGE"]
+        }
         $scope.sortAttributes = [
             { name: 'name', sortAttr: 'name.en', sortAsc: true },
             { name: 'price', sortAttr: 'price', sortAsc: true}];
@@ -66,6 +70,21 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             });
         };
 
+        var mapFacets = function (facets) {
+            if (facets['width']) {
+                var result = _.map(facets["width"], function (item) {
+                    return _.filter(_.keys($scope.widthMapping), function (elem) {
+                        return item.term.indexOf(elem) != -1;
+                    });
+                });
+                facets['width'] = _.map(_.uniq(_.flatten(result)), function (item) {
+                    return {term: item}
+                });
+
+
+            }
+            return facets;
+        }
         $scope.find = function () {
 
            if ($stateParams.gender) {
@@ -100,7 +119,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             ProductService.listBy($scope.category, $stateParams.categoryB, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
                 $scope.results = results.data;
                 $scope.products = results.data.products;
-                $scope.facets = results.data.facets;
+                $scope.facets = mapFacets(results.data.facets);
 
                 $scope.pageSize = results.data.pages.perPage || $scope.pageSize;
                 $scope.pageNum = results.data.pages.current || $scope.pageNum;
@@ -166,8 +185,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             ProductService.search(text, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
                 $scope.results = results.data;
-                $scope.products = results.data.products
-                $scope.facets = results.data.facets
+                $scope.products = results.data.products;
+                $scope.facets = mapFacets(results.data.facets);
 
                 $scope.pageSize = results.data.pages.perPage || $scope.pageSize;
                 $scope.pageNum = results.data.pages.current || $scope.pageNum;
@@ -221,6 +240,20 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             return promise;
         }
+
+        $scope.selectFilter = function (filterName,term) {
+            if ($scope.selectedFilters [filterName][term] === false) {
+                delete $scope.selectedFilters [filterName][term];
+                if (_.isEmpty($scope.selectedFilters [filterName])) {
+                    delete $scope.productFilters[filterName];
+                    delete $scope.selectedFilters[filterName];
+                }
+            }
+            if ($scope.selectedFilters ['width']) {
+
+            }
+            $scope.init ();
+        };
 
         $scope.clearFilter = function (filterName) {
             delete $scope.productFilters[filterName];
