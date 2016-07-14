@@ -233,8 +233,8 @@ angular.module('core').directive('addthisToolbox', ['$timeout','$location','$roo
         replace : true,
         template : '<div ng-transclude></div>',
         link : function($scope, element, attrs) {
+            addthis.init();
             setTimeout(function () {
-                addthis.init();
                 addthis.toolbox($(element).get(), {}, {
                     url:$location.absUrl(),
                     title : $rootScope.productShare? $rootScope.productShare.name.en:"",
