@@ -79,6 +79,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         };
 
         var mapFacets = function (facets) {
+            //order facets
+            facets  = _.reduce(_.keys (facets),function (result,key) {
+                result [key] = _.sortBy(facets [key], 'term');
+                return result;
+            },{});
+
             if (facets['width']) {
                 var result = _.map(facets["width"], function (item) {
                     return _.filter(_.keys($scope.widthMapping), function (elem) {
@@ -492,7 +498,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         }
 
         var changeImageForOptical = function (attrKey,attrValue) {
-            if (attrKey === "frameColor" && $scope.product.categories[0].obj.slug.en === "eyewear") {
+            if (attrKey === "frameColor") {
                 var foundVariant = _.find($scope.product.variants, function (variant) {
                     var foundAttribute = _.find(variant.attributes, function (attribute) {
                         return (attribute.name == attrKey && (attribute.value.key == attrValue || attribute.value.label.en == attrValue));                        return foundVariant != undefined;
