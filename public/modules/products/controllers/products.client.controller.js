@@ -14,15 +14,17 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         $scope.priceRange = $scope.productFiltersMin + "-" + $scope.productFiltersMax;
         $scope.selectedOptionFilter = "ALL";
         $scope.colorMapping = {
-            "Gold": ["GOLD"],
-            "Silver": ["SILVER"],
-            "Red": ["RED","RED/TORTOISE"],
-            "Blue": ["BLUE","DARK BLUE","BLUE/TEAL"],
-            "Black": ["BLACK","BLACK/CLEAR","BLACK ONYX FADE"],
-            "Brown": ["BROWN","BROWN/TAN","PINK/BROWN","DARK BROWN","BROWN TORTOISE SHELL","MAHOGANY/BROWN","TORTISE SHELL BROWN","BROWN/AQUA"],
-            "Green": ["GREEN","LIGHT GREEN","MILITARY GREEN","GREEN/TORTOISE"],
-            "Grey": ["GREY","GREY (OLIVE)","GRAY FADE","GRAY/CLEAR","GRAY","GRAY (OLIVE)","GRANITE GRAY","GREY/DRIFTWOOD","GRAY/DRIFTWOOD"],
-            "Purple": []
+            "GOLD": ["GOLD","BLACK/GOLD"],
+            "SILVER": ["SILVER","GUNMETAL"],
+            "RED": ["RED","RED/TORTOISE","RED/BLACK","RED/GREY FADE","BLACK/RED","BLUE/RED/WHITE","ROSE"],
+            "BLUE": ["BLUE","DARK BLUE","BLUE/TEAL","BLACK/BLUE","BLUE/BLACK","BLUE/GREY","BLUE/TORTOISE","BLUE/GRAY","BLUE/WHITE MARBLE","BLUE/RED/WHITE"],
+            "BLACK": ["BLACK","BLACK/BLUE","BLACK/CLEAR","BLACK ONYX FADE", "RED/BLACK","BLACK/GRAY","BLUE/BLACK","BLACK/GOLD","BLACK/RED","BLACK/WHITE MARBLE","BLACK/GREY MARBLE","BLACK/GRAY MARBLE","BLACK/GRAY TORTOISE SHELL"],
+            "BROWN": ["BROWN","COPPER BRINDLE","BROWN/TAN","PINK/BROWN","DARK BROWN","BROWN TORTOISE SHELL","MAHOGANY/BROWN","TORTISE SHELL BROWN","BROWN/AQUA","BRONZE","GREEN/BROWN","GREEN/BROWN FADE","BROWN/CLEAR","BROWN TORTOISE SHELL/PINK"],
+            "GREEN": ["GREEN","LIGHT GREEN","MILITARY GREEN","GREEN/TORTOISE","GREEN/BROWN","GREEN/BROWN FADE"],
+            "GRAY": ["GREY","GREY (OLIVE)","GRAY FADE","GRAY/CLEAR","GRAY","GRAY (OLIVE)","GRANITE GRAY","GREY/DRIFTWOOD","GRAY/DRIFTWOOD","BLACK/GRAY","BLUE/GREY","BLUE/GRAY","RED/GREY FADE","BLACK/GREY MARBLE","BLACK/GRAY MARBLE","BLACK/GRAY TORTOISE SHELL"],
+            "PURPLE": ["BLACK/PURPLE"],
+            "WHITE": ["BLONDE TORTOISE SHELL","BLUE/WHITE MARBLE","BLACK/WHITE MARBLE","BLUE/RED/WHITE","FROSTED CLEAR/WHITE"],
+            "TORTOISE": ["BLONDE TORTOISE SHELL","BLUE/TORTOISE","BROWN TORTOISE SHELL","TORTOISE","MARBLED COPPER","BROWN TORTOISE SHELL/PINK"]
         };
         $scope.widthMapping = {
             "SMALL": ["SMALL","SMALL/MEDIUM"],
@@ -76,6 +78,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 $scope.productFilters['width'] = values;
 
             }
+            if ($scope.selectedFilters["frameColor"]) {
+                var values = _.uniq(_.flatten(_.map(_.keys($scope.selectedFilters['frameColor']), function (item) {
+                    return $scope.colorMapping [item];
+                })));
+                $scope.productFilters['frameColor'] = values;
+
+            }
         };
 
         var mapFacets = function (facets) {
@@ -92,6 +101,24 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     });
                 });
                 facets['width'] = _.map(_.uniq(_.flatten(result)), function (item) {
+                    return {term: item}
+                });
+
+
+            }
+            if (facets['frameColor']) {
+                var result = _.map (_.keys($scope.colorMapping),function (key) {
+                    var match =_.find ($scope.colorMapping[key], function (mappingColors) {
+                       return !_.isUndefined(_.find (facets['frameColor'],function (facetColor){
+                            return mappingColors == facetColor.term;
+                        }));
+                    })
+                    if (!_.isUndefined (match)) {
+                        return key;
+                    }
+                    return undefined;
+                });
+                facets['frameColor'] = _.map(_.compact(result), function (item) {
                     return {term: item}
                 });
 
