@@ -88,12 +88,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         };
 
         var mapFacets = function (facets) {
-            //order facets
-            facets  = _.reduce(_.keys (facets),function (result,key) {
-                result [key] = _.sortBy(facets [key], 'term');
-                return result;
-            },{});
-
             if (facets['width']) {
                 var result = _.map(facets["width"], function (item) {
                     return _.filter(_.keys($scope.widthMapping), function (elem) {
@@ -124,6 +118,11 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
 
             }
+            //order facets
+            facets  = _.reduce(_.keys (facets),function (result,key) {
+                result [key] = _.sortBy(facets [key], 'term');
+                return result;
+            },{});
             return facets;
         }
         $scope.find = function () {
