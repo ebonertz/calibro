@@ -6,13 +6,13 @@
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
-				<span class="breadcrumb-last" rel="v:url" property="v:title">Help</span>
+				<span class="breadcrumb-last" rel="v:url" property="v:title">Support</span>
 			</span></span>
         </div>
     </section>
     <section class="page" id="help">
         <div class="content help">
-            <h1 class="page-title">{{contentfulData.name}}</h1>
+            <h1 class="page-title" ng-bind-html="trustAsHtml(contentfulData.name)"></h1>
             <section id="home-info-blocks">
                 <div class="info-block" id="help">
                     <section class="inside">
@@ -20,7 +20,7 @@
                             <img class="help-icon" src="design/images/homepage/help-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>{{contentfulData.supportTitle}}</h3>
+                            <h3 ng-bind-html="trustAsHtml(contentfulData.supportTitle)"></h3>
 
                             <p ng-bind-html="trustAsHtml(contentfulData.supportText)"/>
                         </div>
@@ -32,7 +32,7 @@
                             <img class="help-icon" src="design/images/help/contact-us-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>{{contentfulData.contatTitle}}</h3>
+                            <h3 ng-bind-html="trustAsHtml(contentfulData.contatTitle)"></h3>
 
                             <p ng-bind-html="trustAsHtml(contentfulData.contactText)"/>
                         </div>
@@ -44,7 +44,7 @@
                             <img class="help-icon" src="design/images/help/clock-icon.png"/>
                         </div>
                         <div class="help-block-content">
-                            <h3>{{contentfulData.callTitle}}</h3>
+                            <h3 ng-bind-html="trustAsHtml(contentfulData.callTitle)"></h3>
 
                             <p ng-bind-html="trustAsHtml(contentfulData.callText)"/>
                         </div>
