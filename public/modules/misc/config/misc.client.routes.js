@@ -13,8 +13,8 @@ angular.module('misc').config(['$stateProvider',
                 url: '/about-us',
                 templateUrl: 'modules/misc/views/about-us.client.view.html'
             }).
-            state('help', {
-                url: '/help',
+            state('support', {
+                url: '/support',
                 templateUrl: 'modules/misc/views/help.client.view.html'
             }).
             state('privacy', {

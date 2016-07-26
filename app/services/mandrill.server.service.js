@@ -78,7 +78,7 @@ module.exports = function (app) {
 
 	service.contactUs = function(email, name, message){
 		var options = {
-			email: MandrillClient.addresses.contactus_email,
+			email: email,
 			template: 'contactus',
 			template_content: [
 				{

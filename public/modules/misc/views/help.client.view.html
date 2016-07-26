@@ -22,7 +22,7 @@
                         <div class="help-block-content">
                             <h3>{{contentfulData.supportTitle}}</h3>
 
-                            <p>{{contentfulData.supportText}}</p>
+                            <p ng-bind-html="trustAsHtml(contentfulData.supportText)"/>
                         </div>
                     </section>
                 </div>
@@ -34,7 +34,7 @@
                         <div class="help-block-content">
                             <h3>{{contentfulData.contatTitle}}</h3>
 
-                            <p>{{contentfulData.contactText}}</p>
+                            <p ng-bind-html="trustAsHtml(contentfulData.contactText)"/>
                         </div>
                     </section>
                 </div>
@@ -46,7 +46,7 @@
                         <div class="help-block-content">
                             <h3>{{contentfulData.callTitle}}</h3>
 
-                            <p>{{contentfulData.callText}}</p>
+                            <p ng-bind-html="trustAsHtml(contentfulData.callText)"/>
                         </div>
                     </section>
                 </div>
@@ -67,38 +67,39 @@
     <section class="faqs">
         <div class="panels">
             <div class="ex-panel active">
-                <h4><a class="panel-trigger" href="#" id="orders">Orders</a></h4>
+                <h4><a class="panel-trigger" href="#" id="orders">Lens Treatments</a></h4>
 
                 <div class="panel-content">
-                    <p>{{contentfulData.ordersText}}</p>
+                    <p ng-bind-html="trustAsHtml(contentfulData.ordersText)"/>
                 </div>
             </div>
             <div class="ex-panel">
-                <h4><a class="panel-trigger" href="#" id="orders">Retail</a></h4>
+                <h4><a class="panel-trigger" href="#" id="orders">Lens Information</a></h4>
 
                 <div class="panel-content">
-                    <p>{{contentfulData.retailText}}</p>
+                    <p ng-bind-html="trustAsHtml(contentfulData.retailText)"/>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Prescriptions</a></h4>
 
                 <div class="panel-content">
-                    <p>{{contentfulData.prescriptionText}}</p>
+
+                    <p ng-bind-html="trustAsHtml(contentfulData.prescriptionText)"/>
                 </div>
             </div>
             <div class="ex-panel">
-                <h4><a class="panel-trigger" href="#" id="orders">Insurance, Payment and Gift Cards</a></h4>
+                <h4><a class="panel-trigger" href="#" id="orders">Insurance (HSA/FSA)</a></h4>
 
                 <div class="panel-content">
-                    <p>{{contentfulData.insuranceText}}</p>
+                    <p ng-bind-html="trustAsHtml(contentfulData.insuranceText)"/>
                 </div>
             </div>
             <div class="ex-panel">
                 <h4><a class="panel-trigger" href="#" id="orders">Shipping, Returns and Exchanges</a></h4>
 
                 <div class="panel-content">
-                    <p>{{contentfulData.shippingText}}</p>
+                    <p ng-bind-html="trustAsHtml(contentfulData.shippingText)"/>
                 </div>
             </div>
         </div>
