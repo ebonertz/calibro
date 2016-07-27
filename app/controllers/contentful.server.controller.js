@@ -31,7 +31,8 @@ exports.home = function (req, res) {
         if (err) {
             return res.sendStatus(400);
         } else {
-            var notProcessableKeys = ['heroText','heroButtonText','slide2Text','slide2ButtonText','orderEmail','orderPhone'];
+            var notProcessableKeys = ['heroText','heroButtonText','slide2Text','slide2ButtonText','orderEmail','orderPhone',
+                'heroButtonUrl','slide2ButtonUrl','eyewearHimButtonUrl','eyewearHerButtonUrl','sunglassesHimButtonUrl','sunglassesHerButtonUrl'];
             res.json(mapPropertiesToHtml(result, notProcessableKeys));
         }
     });
