@@ -21,10 +21,6 @@ angular.module('customers').config(['$stateProvider',
                 url: '/edit-address/:id',
                 templateUrl: 'modules/customers/views/my-account/edit-address.client.view.html'
             }).
-            state('edit-card', {
-                url: '/edit-card',
-                templateUrl: 'modules/customers/views/my-account/edit-card.client.view.html'
-            }).
             state('my-addresses', {
                 url: '/my-addresses',
                 templateUrl: 'modules/customers/views/my-account/my-addresses.client.view.html'
@@ -32,10 +28,6 @@ angular.module('customers').config(['$stateProvider',
             state('my-orders', {
                 url: '/my-orders',
                 templateUrl: 'modules/customers/views/my-account/my-orders.client.view.html'
-            }).
-            state('my-payment-methods', {
-                url: '/my-payment-methods',
-                templateUrl: 'modules/customers/views/my-account/my-payment-methods.client.view.html'
             }).
             state('order-details', {
                 url: '/order-details',
