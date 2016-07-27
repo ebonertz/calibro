@@ -86,8 +86,8 @@
                     <div class="block-content">
                         <h4>About Us</h4>
 
-                        <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                        <a href="/about-us">Learn More...</a>
+                        <p ng-bind-html="trustAsHtml(contentfulData.aboutUsText)"></p>
+                        <a href="#!/about-us">Learn More...</a>
                     </div>
                 </section>
             </div>
@@ -99,8 +99,8 @@
                     <div class="block-content">
                         <h4>Help</h4>
 
-                        <p>Lorem ipsum dolor amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                        <a href="/help">Learn More...</a>
+                        <p ng-bind-html="trustAsHtml(contentfulData.helpText)"></p>
+                        <a href="#!/support">Learn More...</a>
                     </div>
                 </section>
             </div>
