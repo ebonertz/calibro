@@ -13,9 +13,15 @@ marked.setOptions({
     smartypants: false
 });
 
-function mapPropertiesToHtml(result) {
+function mapPropertiesToHtml(result, notProcess) {
+
     _.each(_.keys(result), function (key) {
-        result [key] = marked (result[key]); 
+        var shouldNotProcess = _.find (notProcess, function(item) {
+            return item == key;
+        });
+        if (typeof result [key] === "string" && !shouldNotProcess) {
+            result [key] = marked (result[key]);
+        }
     });
     return result;
 };
@@ -25,7 +31,8 @@ exports.home = function (req, res) {
         if (err) {
             return res.sendStatus(400);
         } else {
-            res.json(mapPropertiesToHtml(result));
+            var notProcessableKeys = ['heroText','heroButtonText','slide2Text','slide2ButtonText','orderEmail','orderPhone'];
+            res.json(mapPropertiesToHtml(result, notProcessableKeys));
         }
     });
 };

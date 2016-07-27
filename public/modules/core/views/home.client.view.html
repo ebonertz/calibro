@@ -8,13 +8,13 @@
                             <img ng-src="{{contentfulData.slide1.fields.file.url}}"/>
 
                             <div class="content">
-                                <h2>{{contentfulData.heroText}}</h2>
+                                <h2 ng-bind-html="trustAsHtml(contentfulData.heroText)"></h2>
                                 <a href="{{contentfulData.heroButtonUrl}}" class="btn blue radius">{{contentfulData.heroButtonText}}</a>
                             </div>
                         </li>
                         <li><img ng-src="{{contentfulData.slide2.fields.file.url}}"/>
                             <div class="content">
-                                <h2>{{contentfulData.slide2Text}}</h2>
+                                <h2 ng-bind-html="trustAsHtml(contentfulData.slide2Text)"></h2>
                                 <a href="{{contentfulData.slide2ButtonUrl}}" class="btn blue radius">{{contentfulData.slide2ButtonText}}</a>
                             </div>
 
@@ -34,8 +34,8 @@
         </section>
         <section id="home-eyewear" class="home-category-module">
             <div class="intro">
-                <h2>{{contentfulData.eyewearTitle}}</h2>
-                <p>{{contentfulData.eyewearDescription}}</p>
+                <h2 ng-bind-html="trustAsHtml(contentfulData.eyewearTitle)"></h2>
+                <p ng-bind-html="trustAsHtml(contentfulData.eyewearDescription)"></p>
             </div>
             <div class="clearfix"></div>
             <div class="eyewear-cover">
@@ -45,32 +45,32 @@
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
                 <img src="{{contentfulData.eyewearImage1.fields.file.url}}" width="362" height="226"/>
-                <a href="{{contentfulData.eyewearHimButtonUrl}}" class="btn blue radius">{{contentfulData.eyewearHimButtonText}}</a>
+                <a href="{{contentfulData.eyewearHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHimButtonText)"></span></a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
                 <img ng-src="{{contentfulData.eyewearImage2.fields.file.url}}" width="362" height="226"/>
-                <a href="{{contentfulData.eyewearHerButtonUrl}}" class="btn blue radius">{{contentfulData.eyewearHerButtonText}}</a>
+                <a href="{{contentfulData.eyewearHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHerButtonText)"></span></a>
             </div>
         </section>
         <!--Sunglasses-->
         <hr/>
         <section id="home-sunglasses" class="home-category-module">
             <div class="intro">
-                <h2>{{contentfulData.sunglassesTitle}}</h2>
-                <p>{{contentfulData.sunglassesDescription}}</p>
+                <h2 ng-bind-html="trustAsHtml(contentfulData.sunglassesTitle)"></h2>
+                <p ng-bind-html="trustAsHtml(contentfulData.sunglassesDescription)"></p>
             </div>
             <div class="clearfix"></div>
             <div class="eyewear-gender">
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
                 <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
-                <a href="{{contentfulData.sunglassesHimButtonUrl}}" class="btn blue radius">{{contentfulData.sunglassesHimButtonText}}</a>
+                <a href="{{contentfulData.sunglassesHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHimButtonText)"></span></a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
                 <img ng-src="{{contentfulData.sunglassesImage2.fields.file.url}}" width="362" height="226"/>
-                <a href="{{contentfulData.sunglassesHerButtonUrl}}" class="btn blue radius">{{contentfulData.sunglassesHerButtonText}}</a>
+                <a href="{{contentfulData.sunglassesHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHerButtonText)"></span></a>
             </div>
             <div class="sunglasses-cover">
                 <img class="circle" src="{{contentfulData.sunglassesSideImage.fields.file.url}}" width="364" height="361" alt="Focali Eyewear"/>
@@ -111,8 +111,7 @@
                 <a href="mailto:orders@focali.com"><img src="/design/images/homepage/email-icon.png"/> {{contentfulData.orderEmail}}</a>
                 <a href="tel:+123 456 7890-00"><img src="/design/images/homepage/phone-icon.png"/> {{contentfulData.orderPhone}}</a>
             </div>
-            <div class="store-hours">
-                {{contentfulData.workTime}}
+            <div class="store-hours" ng-bind-html="trustAsHtml(contentfulData.workTime)">
             </div>
         </section>
         <hr/>

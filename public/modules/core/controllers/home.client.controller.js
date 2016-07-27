@@ -1,10 +1,14 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'ContentfulService', '$stateParams', 'LoggerServices',
-	function($scope, Authentication, ContentfulService, $stateParams, LoggerServices) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'ContentfulService', '$stateParams', 'LoggerServices','$sce',
+	function($scope, Authentication, ContentfulService, $stateParams, LoggerServices,$sce) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 		$scope.lang = 'en';
+
+		$scope.trustAsHtml = function (string) {
+			return $sce.trustAsHtml(string);
+		};
 
 		if ($stateParams.hasOwnProperty('gender')) {
 			$scope.gender = $stateParams.gender;
