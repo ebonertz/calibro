@@ -3,7 +3,7 @@
 	<div class="content-wrapper" >
 		<section id="subpage-head">
 			<div class="subpage-hero">
-				<h1 class="subpage-title">{{contentfulData.imageTitle}}</h1>
+				<h1 class="subpage-title" ng-bind-html="trustAsHtml(contentfulData.imageTitle)"></h1>
 				<img src="{{contentfulData.mainImage.fields.file.url}}"/>
 			</div>
 		</section>
@@ -23,8 +23,8 @@
 	</section>
 	<section class="page">
 		<div class="content about-us">
-			<h1 class="page-title">{{contentfulData.title}}</h1>
-			<p>{{contentfulData.description}}</p>
+			<h1 class="page-title" ng-bind-html="trustAsHtml(contentfulData.title)"></h1>
+			<p ng-bind-html="trustAsHtml(contentfulData.description)"></p>
 		</div>
 		<hr/>
 	</section>

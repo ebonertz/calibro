@@ -13,8 +13,8 @@
     </section>
     <section class="page">
         <div class="content about-us">
-            <h1 class="page-title">{{contentfulData.title}}</h1>
-            <p>{{contentfulData.description}}</p>
+            <h1 class="page-title" ng-bind-html="trustAsHtml(contentfulData.title)"></h1>
+            <p ng-bind-html="trustAsHtml(contentfulData.description)"></p>
         </div>
         <hr/>
     </section>
