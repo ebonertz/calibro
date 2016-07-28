@@ -5,7 +5,9 @@ module.exports = {
     serverPath: 'http://focali-stage.ct-app.com/',
     rememberMeKey: 'CmzvV20rf32IwFeReDhXBCzHtrB64qm8',
     app: {
-        title: 'Focali Optics'
+        title: 'Focali Optics',
+        googleTagManagerKey: 'GTM-THL5RH'
+
     },
     facebook: {
         clientID: process.env.FACEBOOK_ID || 'APP_ID',

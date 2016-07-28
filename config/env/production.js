@@ -13,7 +13,9 @@ module.exports = {
 	},
 	rememberMeKey: process.env.REMEMBER_ME_KEY,
 	app: {
-		title: 'Focali Optics'
+		title: 'Focali Optics',
+		googleTagManagerKey: process.env.GOOGLE_TAG_KEY
+
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
