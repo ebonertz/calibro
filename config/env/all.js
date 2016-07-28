@@ -2,7 +2,8 @@
 
 module.exports = {
 	app: {
-		title: 'Focali Optics'
+		title: 'Focali Optics',
+		description: 'Focali Optics',
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',

@@ -391,6 +391,12 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             var products = new Products({id: id})
             products.$get({id: id}, function (result) {
                 $scope.product = result.product;
+                if (result.product.metaTitle) {
+                    $('title').text(result.product.metaTitle.en);
+                }
+                if (result.product.metaDescription) {
+                    $('meta[name=description]').attr('content', result.product.metaDescription.en);
+                }
                 $rootScope.productShare = result.product;
 
                 $scope.product.variants.unshift($scope.product.masterVariant);

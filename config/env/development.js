@@ -132,5 +132,8 @@ module.exports = {
     papertrail: {
         host: 'logs3.papertrailapp.com',
         port: 16061
+    },
+    prerenderio: {
+        token: process.env.PRERENDERIO_TOKEN
     }
 };

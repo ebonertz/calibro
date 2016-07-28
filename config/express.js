@@ -76,6 +76,7 @@ module.exports = function(db) {
 		},
 		level: 9
 	}));
+	app.use(require('prerender-node').set('prerenderToken', config.prerenderio.token));
 
 	// Showing stack errors
 	app.set('showStackError', true);
