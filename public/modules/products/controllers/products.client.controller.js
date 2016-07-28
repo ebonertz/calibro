@@ -158,6 +158,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             ProductService.listBy($scope.category, $stateParams.categoryB, $scope.productFilters, $scope.pageNum, $scope.pageSize, $scope.selectedSort.sortAttr, $scope.selectedSort.sortAsc).then(function (results) {
                 $scope.results = results.data;
+                $scope.categoryInfo = $scope.results.categories[0];
+                if ($scope.categoryInfo.metaTitle) {
+                    $('title').text($scope.categoryInfo.metaTitle.en);
+                }
+                if ($scope.categoryInfo.metaDescription) {
+                    $('meta[name=description]').attr('content', $scope.categoryInfo.metaDescription.en);
+                }
                 $scope.products = results.data.products;
                 $scope.facets = mapFacets(results.data.facets);
 
