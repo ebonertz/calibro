@@ -15,20 +15,20 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
             return deferred.promise;
         }
 
-        this.eyewear = function () {
+        this.eyewear = function (gender) {
             var deferred = $q.defer();
 
-            $http.get(urlString + '/category/eyewear').success(function (data) {
+            $http.get(urlString + '/category/eyewear/' + gender).success(function (data) {
                 deferred.resolve(data);
             });
 
             return deferred.promise;
         }
 
-        this.sunglasses = function () {
+        this.sunglasses = function (gender) {
             var deferred = $q.defer();
 
-            $http.get(urlString + '/category/sunglasses').success(function (data) {
+            $http.get(urlString + '/category/sunglasses/' + gender).success(function (data) {
                 deferred.resolve(data);
             });
 

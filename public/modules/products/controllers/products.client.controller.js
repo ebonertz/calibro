@@ -180,13 +180,21 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         };
 
         $scope.init = function () {
-            if ($stateParams.slug) {
-                $scope.find();
+           if ($stateParams.slug) {
+               $scope.loadContent($stateParams.gender,$stateParams.slug);
+               $scope.find();
             } else {
                 $scope.search();
             }
 
         }
+
+        $scope.loadContent = function(gender, slug){
+            ContentfulService[slug](gender).then(function(data) {
+                $scope.contentfulData = data;
+            });
+        }
+
         $scope.optionFilter = function (value) {
             if (value) {
                 if (value == "PRESCRIPTION") {

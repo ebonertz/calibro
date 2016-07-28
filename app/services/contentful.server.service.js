@@ -52,26 +52,40 @@ exports.help = function (callback) {
     });
 };
 
-exports.eyewear = function (callback) {
-    var entityId = 'voZfsMgZlQOgykUm66gmy';
-
-    category(entityId, function(err, data) {
-        if(err)
+exports.eyewear = function (gender,callback) {
+    var entityId;
+    if (gender == 'men') {
+        entityId = "6jbTL9KhPOA8KA0sCQ4Y6I";
+    }
+   else {
+        entityId = '32Mzd4XlIkEYK4U2m2GOqM';
+    }
+    exports.byId(entityId, function (err, entries) {
+        if (err) {
             callback(err, null);
-        else
-            callback(null, data);
-    })
+        } else {
+            var entity = entries[0].fields;
+            callback(null, entity);
+        }
+    });
+
 };
 
-exports.sunglasses = function (callback) {
-    var entityId = '5TG6wlAVIQCiuGmsecsWkC';
-
-    category(entityId, function(err, data) {
-        if(err)
+exports.sunglasses = function (gender,callback) {
+    if (gender == 'men') {
+        entityId = "4TSQucctC8AOKeUaUA8Qc8";
+    }
+    else {
+        entityId = '3ifY0yAVI4wuukGIU2OOkA';
+    }
+    exports.byId(entityId, function (err, entries) {
+        if (err) {
             callback(err, null);
-        else
-            callback(null, data);
-    })
+        } else {
+            var entity = entries[0].fields;
+            callback(null, entity);
+        }
+    });
 };
 
 exports.menSummer = function (callback) {
@@ -109,26 +123,6 @@ exports.byTypeAndName = function (type, name, callback) {
         }
     });
 
-};
-
-var category = function (entityId, callback) {
-    exports.byId(entityId, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            var entity = entries[0].fields;
-
-            // TODO: Populate products.
-            ProductService.bySku([entity.menProduct], function(err, result){
-                entity.menProduct = result;
-
-                ProductService.bySku([entity.womenProduct], function(err, result){
-                    entity.womenProduct = result;
-                    callback(null, entity);
-                });
-            });
-        }
-    });
 };
 
 var summer = function (entityId, callback) {

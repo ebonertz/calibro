@@ -12,10 +12,10 @@ module.exports = function (app) {
     app.route('/contentful/help')
       .get(contentful.help);
 
-    app.route('/contentful/category/eyewear')
+    app.route('/contentful/category/eyewear/:gender')
         .get(contentful.eyewear);
 
-    app.route('/contentful/category/sunglasses')
+    app.route('/contentful/category/sunglasses/:gender')
         .get(contentful.sunglasses);
 
     app.route('/contentful/summer/men')

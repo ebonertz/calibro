@@ -49,7 +49,8 @@ exports.help = function (req, res) {
 };
 
 exports.eyewear = function (req, res) {
-    ContentfulService.eyewear(function (err, result) {
+    var gender = req.params.gender;
+    ContentfulService.eyewear(gender,function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
@@ -59,7 +60,8 @@ exports.eyewear = function (req, res) {
 };
 
 exports.sunglasses = function (req, res) {
-    ContentfulService.sunglasses(function (err, result) {
+    var gender = req.params.gender;
+    ContentfulService.sunglasses(gender,function (err, result) {
         if (err) {
             return res.sendStatus(400);
         } else {
