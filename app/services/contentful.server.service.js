@@ -57,7 +57,7 @@ exports.eyewear = function (gender,callback) {
     if (gender == 'men') {
         entityId = "6jbTL9KhPOA8KA0sCQ4Y6I";
     }
-   else {
+   else if (gender == 'women'){
         entityId = '32Mzd4XlIkEYK4U2m2GOqM';
     }
     exports.byId(entityId, function (err, entries) {
@@ -75,7 +75,7 @@ exports.sunglasses = function (gender,callback) {
     if (gender == 'men') {
         entityId = "4TSQucctC8AOKeUaUA8Qc8";
     }
-    else {
+    else if (gender == 'women'){
         entityId = '3ifY0yAVI4wuukGIU2OOkA';
     }
     exports.byId(entityId, function (err, entries) {
