@@ -78,12 +78,12 @@ module.exports = function (app) {
 
 	service.contactUs = function(email, name, message){
 		var options = {
-			email: email,
+			email: MandrillClient.addresses.contactus_email,
 			template: 'contactus',
-			template_content: [
+			global_merge_vars: [
 				{
-					"name": "name",
-					"content": name
+					"name":"name",
+					"content":name
 				},
 				{
 					"name": "email",
@@ -102,14 +102,10 @@ module.exports = function (app) {
 		var options = {
 			email: email,
 			template: 'passwordtoken',
-			template_content: [
+			global_merge_vars: [
 				{
-					"name": "email",
-					"content": email
-				},
-				{
-					"name": "link",
-					"content": link
+					"name":"link",
+					"content":link
 				}
 			]
 		}
