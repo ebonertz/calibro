@@ -588,7 +588,16 @@ header{
 				font-size: 60px;
 				margin: 0;
 				font-weight: 400;
+				@media (max-width:@screen-sm-max){
+					text-align: center;
+					font-size: 20px;
+				}
+				@media (max-width:@screen-md-max) and (min-width:@screen-sm-min){
+					text-align:center;
+					font-size: 15px;
+				}
 			}
+
 		}
 	}
 	.dots{
