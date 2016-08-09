@@ -102,11 +102,25 @@
                             <prescription-box header="No" size="2" ng-click="selectHighIndex(false)">Please do not use high-index lenses with my prescription.</prescription-box>
                         </div>
 
+                        <div ng-show"$parent.blueblock" id="blueblock">
+                          <br />
+                          <hr />
+                          <h6> Do you want the Blue Block AR reflective coating option?</h6>
+                          <prescription-box header="Yes" size="2" ng-click="selectBlueBlock(true)" ng-class="{selected: blueBlockLine() !=null}">Please use Blue Block AR treatment for an additional $20 </prescription-box>
+                          <prescription-box header="No" size="2" ng-click="selectBlueBlock(false)"> Please do not use Blue Block AR treatment </prescription-box>
+                        </div>
+
+
                         <div ng-show="$parent.highindex" id="next">
                             <br />
                             <hr />
                             <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
                         </div>
+
+
+
+
+
                     </div>
                     <div ng-if="!phasePrescription && showPrescriptionSummary">
                         <h4>Prescription Summary</h4>
