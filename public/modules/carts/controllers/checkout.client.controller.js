@@ -125,7 +125,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                       if ($rootScope.cart.shippingAddress != null) {
 
-                          if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
+                          if (Authentication.user && Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
                               for (var i = 0; i < Authentication.user.addresses.length; i++) {
                                   if ($rootScope.cart.shippingAddress.streetName == Authentication.user.addresses[i].streetName &&
                                     $rootScope.cart.shippingAddress.firstName == Authentication.user.addresses[i].firstName &&
