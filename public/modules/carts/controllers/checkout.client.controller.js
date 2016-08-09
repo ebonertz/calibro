@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie','$http',
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -91,7 +91,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             var has = 0;
             for (var i in $rootScope.cart.lineItems) {
                 var line = $rootScope.cart.lineItems[i];
-                if (line.distributionChannel.key && line.distributionChannel.key != 'nonprescription') {
+                if (line.distributionChannel.key && line.distributionChannel.key != 'nonprescription' || line.distributionChannel.obj && line.distributionChannel.obj.key && line.distributionChannel.obj.key != 'nonprescription') {
                     has += line.quantity;
                 }
             }
@@ -115,37 +115,42 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         var init = function () {
             if ($rootScope.cart != null) {
-                if ($scope.cartPrescriptionCount() > 0) {
-                    $scope.showPhasePrescription();
-                    $scope.showPrescriptionSummary = true;
-                }
+                $http.get('/api/carts/'+$rootScope.cart.id)
+                  .then(function(cart){
+                      $rootScope.cart = cart.data;
+                      if ($scope.cartPrescriptionCount() > 0) {
+                          $scope.showPhasePrescription();
+                          $scope.showPrescriptionSummary = true;
+                      }
 
-                if ($rootScope.cart.shippingAddress != null) {
+                      if ($rootScope.cart.shippingAddress != null) {
 
-                    if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
-                        for (var i = 0; i < Authentication.user.addresses.length; i++) {
-                            if ($rootScope.cart.shippingAddress.streetName == Authentication.user.addresses[i].streetName &&
-                                $rootScope.cart.shippingAddress.firstName == Authentication.user.addresses[i].firstName &&
-                                $rootScope.cart.shippingAddress.lastName == Authentication.user.addresses[i].lastName) {
-                                Authentication.user.addresses[i].selected = true;
-                            }
-                        }
+                          if (Authentication.user.addresses != null && Authentication.user.addresses.length > 0) {
+                              for (var i = 0; i < Authentication.user.addresses.length; i++) {
+                                  if ($rootScope.cart.shippingAddress.streetName == Authentication.user.addresses[i].streetName &&
+                                    $rootScope.cart.shippingAddress.firstName == Authentication.user.addresses[i].firstName &&
+                                    $rootScope.cart.shippingAddress.lastName == Authentication.user.addresses[i].lastName) {
+                                      Authentication.user.addresses[i].selected = true;
+                                  }
+                              }
 
-                    }
+                          }
 
-                    $rootScope.loading = true;
+                          $rootScope.loading = true;
 
-                    ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
-                        $scope.shippingMethods = data;
+                          ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
+                              $scope.shippingMethods = data;
 
-                        $rootScope.loading = false;
+                              $rootScope.loading = false;
 
-                    });
+                          });
 
-                    if (!$scope.$$phase)
-                        $scope.$apply();
+                          if (!$scope.$$phase)
+                              $scope.$apply();
 
-                }
+                      }
+
+                  });
 
             } else {
                 console.log("Cart is still null. Loading delay?");

@@ -216,7 +216,7 @@ module.exports = function (app) {
             } else {
                 res.json(result);
             }
-        });
+        },'lineItems[*].distributionChannel');
     };
 
     return controller;

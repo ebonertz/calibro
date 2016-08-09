@@ -74,13 +74,23 @@ module.exports = function (app) {
     };
 
 
-    service.byId = function (entity, id, callback) {
-        SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
-            callback(null, result.body);
-        }).error(function (err) {
-            app.logger.error("Error finding by id entity: %s. Error: %s",entity,JSON.stringify(err));
-            callback(err, null);
-        });
+    service.byId = function (entity, id, callback,expand) {
+        if(expand){
+            SphereClient.getClient()[entity].expand(expand).byId(id).fetch().then(function (result) {
+                callback(null, result.body);
+            }).error(function (err) {
+                app.logger.error("Error finding by id entity: %s. Error: %s",entity,JSON.stringify(err));
+                callback(err, null);
+            });
+        }else{
+            SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
+                callback(null, result.body);
+            }).error(function (err) {
+                app.logger.error("Error finding by id entity: %s. Error: %s",entity,JSON.stringify(err));
+                callback(err, null);
+            });
+        }
+
     };
 
     service.getBySlug = function (entity, slug, callback) {
