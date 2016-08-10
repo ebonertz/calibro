@@ -4,6 +4,7 @@ var config = require('../../config/config');
 module.exports = function (app) {
     var controller = {};
     var PrescriptionService = require('../services/sphere/sphere.prescriptions.server.service.js')(app);
+    var MandrillService = require('../services/mandrill.server.service.js')(app);
 
     var UploadFileService = require('../services/upload-file.server.services.js')(app);
 
@@ -17,6 +18,7 @@ module.exports = function (app) {
             if (err) {
                 return res.sendStatus(400);
             } else {
+                MandrillService.prescription( config.mandrill.addresses.prescriptions_email, contents.data);
                 res.json(result);
             }
         });

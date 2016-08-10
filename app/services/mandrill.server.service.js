@@ -62,6 +62,52 @@ module.exports = function (app) {
 		return p;
 	}
 
+	service.sendWithoutTemplate = function (options, callback) {
+		if(!options.email) {
+			app.logger.error("No email to send to")
+			return new Promise(function(reject){reject("No email")})
+		}
+
+		var to = {
+			email: options.email,
+			name: options.name,
+		}
+		var global_merge_vars = options.global_merge_vars;
+
+		var message = {
+			to: [to],
+			from_email: MandrillClient.options.from_email,
+			from_name: MandrillClient.options.from_name,
+			subject: options.subject || null,
+			html: options.html || null,
+			attachments: options.attachments || null
+		};
+
+
+		var p = new Promise(function(resolve, reject){
+			MandrillClient.mandrill('/messages/send', {
+				message: message
+			}, function(error, response) {
+				//uh oh, there was an error ! REJECT
+				if (error) reject(error);
+
+				//everything's good, lets see what mandrill said
+				else resolve(response);
+			});
+		})
+
+		return p;
+	}
+
+	service.prescription = function(email,data){
+		var options = {
+			email: email,
+			html: '<p>PRESCRIPTION NEEDED</p><p>Call doctor ' + data.doctorName + ' from clinic ' + data.state + ' for prescription to patient : ' + data.patientName + " date of birth:" + data.patientBirth + " Doctor phone " + data.phoneNumber+'<p></p>',
+			subject: 'Prescription needed'
+		}
+		return service.sendWithoutTemplate(options)
+	};
+
 	service.welcome = function (email) {
 		var options = {
 			email: email,
