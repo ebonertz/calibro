@@ -483,8 +483,122 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
                 //$scope.variantImages = flattenImages($scope.product.variants)
 
+                $scope.facetsArrayCopy = angular.copy($scope.facetsArray);
+                removeFacetsOptionsNotAvailable();
             })
+
         };
+
+        var removeFacetsOptionsNotAvailable = function(){
+
+            if(!$scope.facetsArrayCopy){
+                return;
+            }
+            $scope.facetsArray = angular.copy($scope.facetsArrayCopy);
+            var key = 'frameColor';
+            var firstValue = $scope.currentFilters[key];
+
+            var variants = _.filter($scope.product.variants, function (variant) {
+                var exists = false;
+                _.each(variant.attributes, function (attribute) {
+                    if (attribute.name == key && (attribute.value.key == $scope.currentFilters[key] || attribute.value.label.en == $scope.currentFilters[key])) {
+                        exists = true;
+                    }
+
+                });
+                return exists;
+
+
+            });
+
+            if($scope.currentFilters['lensColor']){
+                variants = _.filter(variants, function (variant) {
+                    var existsLensColor = false;
+                    var existsFrameColor = false;
+                    _.each(variant.attributes, function (attribute) {
+                        _.each(_.find($scope.facetsArray, { name :'lensColor'}).value, function (lensColor) {
+                            if ( attribute.name == 'lensColor' && (attribute.value.key == lensColor.term || attribute.value.label.en == lensColor.term)) {
+                                existsLensColor = true;
+                            }
+                            if ( attribute.name == 'frameColor' && (attribute.value.key == firstValue || attribute.value.label.en == firstValue)) {
+                                existsFrameColor = true;
+                            }
+                        })
+
+
+                    });
+                    return existsLensColor && existsFrameColor;
+                });
+                _.each($scope.facetsArray, function(facet){
+                    if(facet.name == 'lensColor') {
+                        _.remove(facet.value, function (facetValue) {
+                            var remove = true;
+                            _.each(variants, function (variant) {
+                                _.each(variant.attributes, function (attribute) {
+                                    if (attribute.name == 'lensColor' && (attribute.value.key == facetValue.term || attribute.value.label.en == facetValue.term)) {
+                                        remove = false;
+                                    }
+                                });
+                            });
+                            return remove;
+                        });
+                    }
+                });
+            }
+            if($scope.currentFilters['mirrorColor']){
+
+                variants = _.filter(variants, function (variant) {
+                    var existsMirrorColor = false;
+                    var existsLensColor = false;
+                    var existsFrameColor = false;
+                    _.each(variant.attributes, function (attribute) {
+                        _.each(_.find($scope.facetsArray, { name :'mirrorColor'}).value, function (mirrorColor) {
+                            if (attribute.name == 'mirrorColor' && (attribute.value.key == mirrorColor.term || attribute.value.label.en == mirrorColor.term)) {
+                                existsMirrorColor = true;
+                            }
+                            if ( attribute.name == 'lensColor' && (attribute.value.key == $scope.currentFilters['lensColor'] || attribute.value.label.en == $scope.currentFilters['lensColor'])) {
+                                existsLensColor = true;
+                            }
+                            if ( attribute.name == 'frameColor' && (attribute.value.key == firstValue || attribute.value.label.en == firstValue)) {
+                                existsFrameColor = true;
+                            }
+                        })
+
+
+                    });
+                    return existsMirrorColor && existsLensColor && existsFrameColor;
+
+
+                });
+                _.each($scope.facetsArray, function(facet){
+                    if(facet.name == 'mirrorColor') {
+                        _.remove(facet.value, function (facetValue) {
+                            var remove = true;
+                            _.each(variants, function (variant) {
+                                _.each(variant.attributes, function (attribute) {
+                                    if (attribute.name == 'mirrorColor' && (attribute.value.key == facetValue.term || attribute.value.label.en == facetValue.term)) {
+                                        remove = false;
+                                    }
+                                });
+                            });
+                            return remove;
+                        });
+                        var existFilter = _.find(facet.value, { term: $scope.currentFilters['mirrorColor']});
+                        if(!existFilter){
+                            $scope.currentFilters['mirrorColor'] = facet.value[0].term;
+                        }
+                    }
+                });
+
+            }else {
+                _.each($scope.facetsArray, function (facet) {
+                    if (facet.name == 'mirrorColor') {
+                        facet.value = [];
+                    }
+                });
+            }
+        };
+
 
         var setAttributes = function (product) {
           product.frameShape = _.find  (product.attributes, function (attr) {
@@ -566,15 +680,18 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             }
         }
 
-        $scope.selectVariant = function (attrKey, attrValue) {
 
+        $scope.selectVariant = function (attrKey, attrValue) {
             changeImageForOptical (attrKey,attrValue);
             $scope.currentFilters[attrKey] = attrValue;
             var notUndefinedFacetLength = _.filter($scope.facetsArray, function (filter) {
                 return filter.value.length > 0
             }).length;
+            removeFacetsOptionsNotAvailable();
 
             if (notUndefinedFacetLength == Object.keys($scope.currentFilters).length) {
+
+
                 // Variants.
                 var variantFound = _.find($scope.product.variants, function (variant) {
                     var complies = 0;
@@ -598,6 +715,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 });
                 if (variantFound != undefined) {
                     setCurrentVariant(variantFound);
+
                 }
                 else {
                     $scope.isAvailable = false;
