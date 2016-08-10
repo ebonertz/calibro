@@ -206,6 +206,50 @@ module.exports = function (app) {
         })
     };
 
+    controller.addBlueBlock = function (req, res) {
+        var cartId = req.param('cartId'),
+            version = parseInt(req.param('version')),
+            payload = req.body;
+
+        var addLine = function (version) {
+            CartService.addBlueBlock(cartId, version, req.body, function (err, result) {
+                if (err) {
+                    return res.status(400).send(err.body.message);
+                } else {
+                    var cart = new Cart(result);
+                    res.json(cart);
+                }
+            })
+        };
+
+        // Remove + add if already have the line (can't update quantity)
+        if (payload.lineId) {
+            CartService.removeBlueBlock(cartId, version, payload.lineId, function (err, result) {
+                if (result)
+                    addLine(result.version)
+                else
+                    return res.status(400)
+            });
+        } else {
+            addLine(version)
+        }
+    };
+
+    controller.removeBlueBlock = function (req, res) {
+        var cartId = req.param('cartId'),
+            version = parseInt(req.param('version')),
+            payload = req.body;
+
+        CartService.removeBlueBlock(cartId, version, payload.lineId, function (err, result) {
+            if (err) {
+                return res.status(400).send(err.body.message);
+            } else {
+                var cart = new Cart(result);
+                res.json(cart);
+            }
+        })
+    };
+
     controller.init = function (req, res) {
         var customerId = req.query.customer,
             cookieId = req.query.cookie;
@@ -216,7 +260,7 @@ module.exports = function (app) {
             } else {
                 res.json(result);
             }
-        });
+        },'lineItems[*].distributionChannel');
     };
 
     return controller;

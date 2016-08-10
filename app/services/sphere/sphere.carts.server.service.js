@@ -19,14 +19,18 @@ module.exports = function (app) {
     }
 
 
-    service.byCustomer = function (customerId, callback) {
+    service.byCustomer = function (customerId, callback,expand) {
         var path = '?customerId=' + customerId;
 
-        CommonService.GET_ApiCall(entity, path, function (err, data) {
-            if (err)
-                callback(err, null)
-            else
-                callback(null, data)
+        SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt',false).expand(expand).all().fetch().then(function (result) {
+            if(result.body.results && result.body.results.length>0){
+                callback(null, result.body.results[0]);
+            }else{
+                callback(null, result.body.results);
+            }
+        }).error(function (err) {
+            app.logger.error("Error finding by customer entity: %s. Error: %s",entity,JSON.stringify(err));
+            callback(err, null);
         });
     };
 
@@ -155,7 +159,43 @@ module.exports = function (app) {
     };
 
 
-    service.init = function (userId, cookieId, callback) {
+    service.addBlueBlock = function (cartId, version, payload, callback) {
+        var quantity = payload.quantity;
+        if (quantity < 1)
+            return callback("No lines to apply high-index to");
+
+        var taxCategory = TaxCategoryService.getFirst();
+        var payload = {
+            'name': {
+                'en': "Blue Block",
+            },
+            'quantity': quantity,
+            'money': {
+                // Move to config
+                "currencyCode": "USD",
+                "centAmount": config.blueBlock.price * 100 || 3000
+            },
+            'slug': config.blueBlock.slug,
+            'taxCategory': {
+                typeId: 'tax-category',
+                id: taxCategory.id
+            }
+        };
+
+        service.addCustomLineItem(cartId, version, payload, function (err, result) {
+            callback(err, result);
+        });
+    };
+
+  // Proxy
+    service.removeBlueBlock = function (cartId, version, lineId, callback) {
+        var payload = {
+            customLineItemId: lineId
+        };
+        service.removeCustomLineItem(cartId, version, payload, callback);
+    };
+
+    service.init = function (userId, cookieId, callback,expand) {
         SphereClient.setClient();
         var newCart = {
             "currency": "USD",
@@ -186,7 +226,7 @@ module.exports = function (app) {
                         callback(null, cart);
                     }
                 }
-            });
+            },expand);
 
         } else {
 
@@ -229,7 +269,7 @@ module.exports = function (app) {
                         }
 
                     }
-                });
+                },expand);
 
             }
         }

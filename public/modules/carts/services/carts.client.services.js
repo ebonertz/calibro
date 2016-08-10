@@ -195,6 +195,32 @@ angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$roo
             return deferred.promise;
         }
 
+        // New code to add Blue Block Line Item
+
+        this.addBlueBlock = function (cartId, version, payload) {
+          var deferred = $q.defer();
+
+          $http.post(urlString + '/blueBlock/' + cartId + '/' + version, payload).success(function (data){
+            deferred.resolve(data);
+          }).error(function (error){
+            deferred.reject(error);
+          });
+
+          return deferred.promise;
+        }
+
+        this.removeBlueBlock = function (cartId, version, payload) {
+            var deferred = $q.defer();
+
+            $http.post(urlString + '/removeBlueBlock/' + cartId + '/' + version, payload).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
         this.init = function (customerId, cookieId) {
             var deferred = $q.defer();
 

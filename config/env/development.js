@@ -127,6 +127,10 @@ module.exports = {
         price: 30,
         slug: 'high-index-lens'
     },
+    blueBlock: {
+        price: 20,
+        slug: 'blue-block'
+    },
     orderPrefix: 'FO',
     logger: {
         level: "debug"

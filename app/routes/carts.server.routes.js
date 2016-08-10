@@ -49,4 +49,10 @@ module.exports = function (app) {
 
     app.route('/api/carts/removeHighIndex/:cartId/:version')
         .post(carts.removeHighIndex);
+
+    app.route('/api/carts/blueblock/:cartId/:version')
+        .post(carts.addBlueBlock);
+
+    app.route('/api/carts/removeBlueBlock/:cartId/:version')
+        .post(carts.removeBlueBlock);
 };
