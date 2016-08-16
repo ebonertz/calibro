@@ -166,15 +166,21 @@
                                         <label>Last Name</label>
                                         <input type="text" name="lastName" placeholder="Last Name"
                                                ng-model="cart.shippingAddress.lastName" required/>
+
+                                      <!-- New field for email address. Should display only when not logged in -->
+                                        <label>Email</label>
+                                        <input type="text" name="email" placeholder="Email"
+                                               ng-model="cart.shippingAddress.email" required/>
+
                                         <label>Phone</label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
                                                ng-model="cart.shippingAddress.phone" required/>
 
-                                        <div class="form-field-big-quarter">
+                                        <!-- <div class="form-field-big-quarter"> -->
                                             <label>Address</label>
                                             <input type="text" name="streetName" placeholder="Street Name"
                                                    ng-model="cart.shippingAddress.streetName" required/>
-                                        </div>
+                                        <!-- </div> -->
                                         <label>Additional Address Information</label>
                                         <input type="text" name="additionalStreetInfo" placeholder="Additional Address Information"
                                                    ng-model="cart.shippingAddress.additionalStreetInfo"/>
