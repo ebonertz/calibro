@@ -1,7 +1,7 @@
 <div class="content-wrapper" data-ng-controller="ProfileController">
 	<section id="breadcrumbs">
 		<div class="breadcrumb">
-		
+
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
@@ -70,12 +70,12 @@
 				<div class="form-field-half">
 					<label for="lastName">Last Name*</label>
 					<input type="text" id="lastName" name="lastName" placeholder="Last Name" data-ng-model="newAddress.lastName" required/>
-				</div> 
+				</div>
 				<br />
 				<div class="form-field">
 					<label for="company">Company</label>
 					<input type="text" id="company" name="company" placeholder="Company" data-ng-model="newAddress.company" />
-				</div> 
+				</div>
 				<div class="form-field-half">
 					<label for="streetName">Street Address*</label>
 					<input type="text" id="streetName" name="streetName" data-ng-model="newAddress.streetName" placeholder="Street Name" required />
@@ -86,7 +86,7 @@
 				</div>
 				<div class="form-field">
 					<label for="city">City*</label>
-					<input type="text" id="city" name="city" placeholder="City" data-ng-model="newAddress.city" required />				
+					<input type="text" id="city" name="city" placeholder="City" data-ng-model="newAddress.city" required />
 				</div>
 				<br />
 				<div class="form-field-half">
@@ -98,12 +98,17 @@
 				</div>
 				<div class="form-field-half">
 					<label for="postalCode">Zip/Postal*</label>
-					<input type="text" name="postalCode" id="postalCode" placeholder="ZIP/Postal" data-ng-model="newAddress.postalCode" required />
+					<input type="text" name="postalCode" id="postalCode" placeholder="ZIP/Postal" data-ng-model="newAddress.postalCode" maxlength="10" required />
 				</div>
 				<div class="form-field-half">
 					<label for="phone">Phone*</label>
 					<input type="text" id="phone" name="phone" data-ng-model="newAddress.phone" placeholder="Phone #" />
 				</div>
+				<!-- <div class="form-field-half">
+					<label for="email">Email*</label>
+					<input type="text" id="email" name="email" data-ng-model="newAddress.email" placeholder="Email" />
+				</div> -->
+
 				<div data-ng-show="addAddressError" class="text-center text-danger">
                 	<div class="notice outline red small" data-ng-bind="addAddressError"></div>
               	</div>

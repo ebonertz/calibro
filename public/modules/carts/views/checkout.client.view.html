@@ -157,7 +157,7 @@
 
                                 </div>
                                 <div class="add-address-checkout">
-                                    <h6>Enter New Shipping Address</h6>
+                                    <h6>Enter Shipping Address</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
                                         <label>First Name</label>
@@ -168,8 +168,8 @@
                                                ng-model="cart.shippingAddress.lastName" required/>
 
                                       <!-- New field for email address. Should display only when not logged in -->
-                                        <label>Email</label>
-                                        <input type="text" name="email" placeholder="Email"
+                                        <label ng-if="!authentication.user">Email</label>
+                                        <input type="text" name="email" placeholder="Email" ng-if="!authentication.user"
                                                ng-model="cart.shippingAddress.email" required/>
 
                                         <label>Phone</label>
@@ -200,7 +200,7 @@
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
                                         <label>Zip/Postal</label>
-                                        <input type="text" name="postalCode" placeholder="ZIP/Postal"
+                                        <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.shippingAddress.postalCode" required/>
                                         <input ng-if="authentication.user && validateShippingAddress()" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
@@ -344,7 +344,7 @@
                                                ng-model="cart.billingAddress.lastName" required/>
                                         <label>Phone</label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
-                                               ng-model="cart.billingAddress.phone"/>
+                                               ng-model="cart.billingAddress.phone" required/>
 
                                         <div class="form-field-big-quarter">
                                             <label>Address</label>
@@ -370,7 +370,7 @@
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.billingAddress.city" required/>
                                         <label>Zip/Postal</label>
-                                        <input type="text" name="postalCode" placeholder="ZIP/Postal"
+                                        <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.billingAddress.postalCode" required/>
                                         <input ng-if="authentication.user && validateBillingAddress()" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
