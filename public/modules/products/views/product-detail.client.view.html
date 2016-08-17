@@ -23,7 +23,7 @@
           <a class="thumbnail-wrapper">
           <img class="thumbnail" ng-mouseover="switchImageBig(image.url)" class="thumbnail" ng-src="{{image.url | size: 'small'}}" data-image="{{image.url}}"/>
           </a>
-        </span>
+        </span> <br>
       </div>
       <div class="product-details">
         <h1 itemprop="name" class="product-title" bo-text="product.name | locale"></h1>
@@ -43,6 +43,7 @@
           <ins>
               <div class="notice outline red small" ng-show="error.distributionChannel">Please select an option</div>
               <div ng-repeat="price in currentVariant.prices | currency track by price.id" class="channel-option" >
+                <br>
                 <input type="radio" data-ng-model="$parent.distributionChannel" ng-value="channelInfo (price).key" name="channel" id="channel-{{channelInfo (price).key}}"/>
                 <label for="channel-{{channelInfo (price).key}}" class="channel-price">
                   <span ng-bind="channelInfo(price).name.en"></span>
@@ -92,6 +93,8 @@
       </div>
 
     </section>
+
+
     <section id="product-extra">
       <div class="tabs">
         <a class="tab active" href="#" data-tab="features">Features</a>
