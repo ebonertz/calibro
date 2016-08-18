@@ -478,7 +478,11 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                             $scope.prescription.strength = $scope.prescription.data.strength;
                         } else if ($scope.prescription.method == 'calldoctor') {
                             $scope.prescription.calldoctor = $scope.prescription.data;
+                        } else {
+                          $scope.prescription.method = 'sendlater';
+                          console.log('Will send prescriptions later')
                         }
+
 
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
@@ -517,7 +521,12 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
-                        $scope.highindex = true;
+                        // $scope.highindex = true;
+                        $scope.prescription.sendlater = null;
+                        $scope.prescription.calldoctor = null;
+                        data = null;
+
+
                     })
                     break;
 
