@@ -76,7 +76,7 @@ module.filter('channel', function(){
                 }
             }
 
-            if(!return_price && price) return_price = price[0];
+            if(!return_price && price) return_price = price;
 
             return return_price;
         }
