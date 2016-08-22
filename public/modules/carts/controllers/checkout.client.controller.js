@@ -538,6 +538,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         };
 
         $scope.uploadPrescription = function (files) {
+            $scope.prescription.method = 'upload';
             $scope.progressbar = $scope.progressbar || ngProgressFactory.createInstance();
             $scope.progressbar.set(0);
             //$scope.progressbar.color('#00A2E1');
