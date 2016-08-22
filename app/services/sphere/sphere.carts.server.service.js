@@ -20,13 +20,11 @@ module.exports = function (app) {
 
 
     service.byCustomer = function (customerId, callback,expand) {
-        var path = '?customerId=' + customerId;
-
         SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt',false).expand(expand).all().fetch().then(function (result) {
             if(result.body.results && result.body.results.length>0){
                 callback(null, result.body.results[0]);
             }else{
-                callback(null, result.body.results);
+                callback(null, null);
             }
         }).error(function (err) {
             app.logger.error("Error finding by customer entity: %s. Error: %s",entity,JSON.stringify(err));
