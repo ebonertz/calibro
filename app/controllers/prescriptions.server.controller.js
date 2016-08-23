@@ -18,7 +18,7 @@ module.exports = function (app) {
             if (err) {
                 return res.sendStatus(400);
             } else {
-                MandrillService.prescription( config.mandrill.addresses.prescriptions_email, contents.data);
+                MandrillService.prescription( config.mandrill.addresses.prescriptions_email, contents.data,req.body.method);
                 res.json(result);
             }
         });

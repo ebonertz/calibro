@@ -99,10 +99,14 @@ module.exports = function (app) {
 		return p;
 	}
 
-	service.prescription = function(email,data){
+	service.prescription = function(email,data,method){
+		var html = "The prescription will be sent later by the customer";
+		if (method == 'calldoctor') {
+			html = '<p>PRESCRIPTION NEEDED</p><p>Call doctor ' + data.doctorName + ' from clinic ' + data.state + ' for prescription to patient : ' + data.patientName + " date of birth:" + data.patientBirth + " Doctor phone " + data.phoneNumber+'<p></p>'
+		}
 		var options = {
 			email: email,
-			html: '<p>PRESCRIPTION NEEDED</p><p>Call doctor ' + data.doctorName + ' from clinic ' + data.state + ' for prescription to patient : ' + data.patientName + " date of birth:" + data.patientBirth + " Doctor phone " + data.phoneNumber+'<p></p>',
+			html: html,
 			subject: 'Prescription needed'
 		}
 		return service.sendWithoutTemplate(options)
