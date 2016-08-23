@@ -428,7 +428,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 }
                 $scope.facets = result.facets;
                 if (result.product.categories[0].obj.slug.en === "eyewear") {
-                    delete $scope.facets.mirrorColor
+                    delete $scope.facets.mirrorColor;
+                    delete $scope.facets.lensColor;
                 }
                 $scope.channels = result.channels;
                 $scope.facetsArray = [];
