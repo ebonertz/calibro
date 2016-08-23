@@ -11,35 +11,40 @@ angular.module('core').directive('hero', function () {
     }
 });
 
-angular.module('core').directive('cartFadeInClass', function () {
+angular.module('core').directive('cartFadeInClass', ['$detection', function ($detection) {
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
+            var mobile = $detection.isAndroid() || $detection.isiOS() || $detection.isWindowsPhone() || $detection.isBB10();
+            if (!mobile) {
+                $(element).mouseover(function () {
+                    //$('.cart-preview').fadeIn().removeClass('hidden');
+                    $(element.parent().children()[1]).fadeIn().removeClass('hidden');
+                });
+                $(element).mouseleave(function () {
+                    $(element.parent().children()[1]).addClass('hidden');
+                });
+            }
 
-            $(element).mouseover(function () {
-                //$('.cart-preview').fadeIn().removeClass('hidden');
-                $(element.parent().children()[1]).fadeIn().removeClass('hidden');
-            });
-            $(element).mouseleave(function () {
-                $(element.parent().children()[1]).addClass('hidden');
-            });
 
         }
     }
-});
+}]);
 
-angular.module('core').directive('cartFadeOutClass', function () {
+angular.module('core').directive('cartFadeOutClass', ['$detection', function ($detection) {
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
-
-            $(element).mouseleave(function () {
-                $(element).fadeOut().addClass('hidden');
-            });
+            var mobile = $detection.isAndroid() || $detection.isiOS() || $detection.isWindowsPhone() || $detection.isBB10();
+            if (!mobile) {
+                $(element).mouseleave(function () {
+                    $(element).fadeOut().addClass('hidden');
+                });
+            }
 
         }
     }
-});
+}]);
 
 angular.module('core').directive('priceRange', function () {
     return {
