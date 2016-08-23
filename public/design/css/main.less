@@ -599,6 +599,9 @@ header{
 			bottom: 15%;
 			z-index: 99;
 			text-align: center;
+		    @media (max-width:@screen-md-max) {
+			  bottom: 25%;
+			}
 			h2{
 				color: white;
 				font-size: 30px;
@@ -653,6 +656,9 @@ header{
 	font-size: 14px;
 	text-transform: uppercase;
 	padding: 40px 15px;
+    @media (max-width: @screen-md-max) {
+	  margin-right: 10px;
+  }
 }
 .home-category-module{
 	margin-bottom: 40px;
@@ -913,7 +919,10 @@ header{
 		}
 	}
 	.shop-intro-text{
-		.make-lg-column(12);
+	  .make-lg-column(12);
+	  @media (max-width: @screen-md-max) {
+		padding-left: 30px;
+	  }
 
 	}
 	//Eyewear

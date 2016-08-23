@@ -20,6 +20,9 @@ angular.module('core').directive('cartFadeInClass', function () {
                 //$('.cart-preview').fadeIn().removeClass('hidden');
                 $(element.parent().children()[1]).fadeIn().removeClass('hidden');
             });
+            $(element).mouseleave(function () {
+                $(element.parent().children()[1]).addClass('hidden');
+            });
 
         }
     }
