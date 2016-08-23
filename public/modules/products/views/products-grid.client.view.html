@@ -1,5 +1,5 @@
 <section class="inner">
-	<product-thumbnail product="product" data-ng-repeat="product in products track by product.id"></product-thumbnail>
+	<product-thumbnail product="product" ng-click="redirectToProduct(product.slug.en,product.displayVariant.sku)"  data-ng-repeat="product in products track by product.id"></product-thumbnail>
 </section>
 <div class="pagination">
 	<a class="arrow" id="prev" rel="prev" ng-show="$parent.pageNum > 1" ng-click="find({pageNum: pageNum-1})"></a>

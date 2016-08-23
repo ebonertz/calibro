@@ -743,5 +743,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             return channel;
         }
 
+        $scope.redirectToProduct = function (slug,sku) {
+            $rootScope.productSkuDisplay = sku;
+            $location.path("/products/" + slug);
+        }
+
     }
 ]);
