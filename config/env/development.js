@@ -141,5 +141,8 @@ module.exports = {
     },
     prerenderio: {
         token: process.env.PRERENDERIO_TOKEN
+    },
+    ziptax:{
+        apikey: "3H66ULRU7PLY"
     }
 };

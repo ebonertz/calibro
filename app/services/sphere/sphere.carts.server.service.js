@@ -4,6 +4,7 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
 
 module.exports = function (app) {
     var CommonService = require('./sphere.commons.server.service.js') (app),
+        ZipTaxService = require('../../services/ziptax.server.services.js') (app),
         TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
     var service = {};
     var actions = {
@@ -74,6 +75,15 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
+                //ZipTaxService.setTaxValues(result.shippingAddress.postalCode, result.id, result.version).then(function(newCart){
+                //    CartService.recalculateCustomTax(newCart).then(function(result){
+                //        var cart = new Cart(result);
+                //        res.json(cart);
+                //    });
+                //}).error(function(err){
+                //    logger.error('Error setting tax values from ziptax: %s', err);
+                //    return res.status(400).send(err.body.message);
+                //});
                 callback(err, result);
             });
         });
@@ -197,7 +207,8 @@ module.exports = function (app) {
         SphereClient.setClient();
         var newCart = {
             "currency": "USD",
-            "customerId": userId
+            "customerId": userId,
+            "taxMode": "External"
         };
 
         if (userId) {

@@ -67,7 +67,8 @@
     "connect-multiparty": "*",
     "fileupload": "*",
     "braintree-sphere-service": "git+https://emaPerez@bitbucket.org/devgurus/braintree-sphere-service.git",
-    "prerender-node": "^2.3.0"
+    "prerender-node": "^2.3.0",
+    "ziptax": "^0.1.1"
 
   },
   "devDependencies": {

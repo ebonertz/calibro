@@ -151,5 +151,8 @@ module.exports = {
 	},
 	prerenderio: {
 		token: process.env.PRERENDERIO_TOKEN
+	},
+	ziptax:{
+		apikey: process.env.ZP_API_KEY
 	}
 };

@@ -21,9 +21,6 @@ angular.module('core').directive('cartFadeInClass', ['$detection', function ($de
                     //$('.cart-preview').fadeIn().removeClass('hidden');
                     $(element.parent().children()[1]).fadeIn().removeClass('hidden');
                 });
-                $(element).mouseleave(function () {
-                    $(element.parent().children()[1]).addClass('hidden');
-                });
             }
 
 
