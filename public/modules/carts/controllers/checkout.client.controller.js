@@ -459,13 +459,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.prescription.strength = $scope.prescription.data.strength;
                     } else if ($scope.prescription.method == 'calldoctor') {
                         $scope.prescription.calldoctor = $scope.prescription.data;
-                        $scope.highindex = true;
                         $scope.anchorScroll('calldoctor');
                     } else if ($scope.prescription.method == 'sendlater') {
-                        $scope.highindex = true;
                         $scope.anchorScroll('lensType');
                     } else if ($scope.prescription.method == 'upload') {
-                        $scope.highindex = true;
                         $scope.file = result.value.data;
                     }
                 }
@@ -525,7 +522,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     if (valid) {
                         data = $scope.prescription.calldoctor
                         save('prescription', 'calldoctor', data, function () {
-                            $scope.highindex = true;
                             $scope.anchorScroll('calldoctor');
                         });
                     }
@@ -534,7 +530,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
-                        // $scope.highindex = true;
                         $scope.prescription.sendlater = null;
                         $scope.prescription.calldoctor = null;
                         data = null;
@@ -545,7 +540,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                 case 'upload':
                     save('prescription', 'upload', $scope.file, function () {
-                        $scope.highindex = true;
                     })
             }
         };
@@ -581,7 +575,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         LoggerServices.success("Prescription uploaded")
                         $scope.prescription.method = 'upload';
-                        $scope.highindex = true;
 
                         $scope.file = data; // {new_filename, original_filename, file_size}
                         $scope.savePrescription('upload')
