@@ -263,6 +263,18 @@ module.exports = function (app) {
         },'lineItems[*].distributionChannel');
     };
 
+    controller.refreshCart = function (req, res) {
+        var cookieId = req.query.cookie;
+
+        CartService.refreshCart(cookieId, function (err, result) {
+            if (err) {
+                return res.status(400).send(err.body.message);
+            } else {
+                res.json(result);
+            }
+        },'lineItems[*].distributionChannel');
+    };
+
     controller.cartEyewearPrescriptionCount = function (req, res) {
         var id = req.param('cartId');
         CartService.cartEyewearPrescriptionCount(id, function (err, result) {

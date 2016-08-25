@@ -1,13 +1,13 @@
 var SphereClient = require('../../clients/sphere.server.client.js'),
     config = require('../../../config/config'),
-    _ = require ('lodash');
-    entity = 'carts';
+    _ = require('lodash');
+entity = 'carts';
 
 module.exports = function (app) {
-    var CommonService = require('./sphere.commons.server.service.js') (app),
-        ZipTaxService = require('../../services/ziptax.server.services.js') (app),
-        Cart = require('../../models/sphere/sphere.cart.server.model.js') (app);
-        TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
+    var CommonService = require('./sphere.commons.server.service.js')(app),
+        ZipTaxService = require('../../services/ziptax.server.services.js')(app),
+        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
+    TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
     var service = {};
     var actions = {
         addLineItem: 'addLineItem',
@@ -22,15 +22,15 @@ module.exports = function (app) {
     }
 
 
-    service.byCustomer = function (customerId, callback,expand) {
-        SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt',false).expand(expand).all().fetch().then(function (result) {
-            if(result.body.results && result.body.results.length>0){
+    service.byCustomer = function (customerId, callback, expand) {
+        SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt', false).expand(expand).all().fetch().then(function (result) {
+            if (result.body.results && result.body.results.length > 0) {
                 callback(null, result.body.results[0]);
-            }else{
+            } else {
                 callback(null, null);
             }
         }).error(function (err) {
-            app.logger.error("Error finding by customer entity: %s. Error: %s",entity,JSON.stringify(err));
+            app.logger.error("Error finding by customer entity: %s. Error: %s", entity, JSON.stringify(err));
             callback(err, null);
         });
     };
@@ -75,7 +75,7 @@ module.exports = function (app) {
         if (payload)
             payload.action = actions.setShippingAddress;
 
-        SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
                 //ZipTaxService.setTaxValues(result.shippingAddress.postalCode, result.id, result.version).then(function(newCart){
                 //    CartService.recalculateCustomTax(newCart).then(function(result){
@@ -96,7 +96,7 @@ module.exports = function (app) {
         if (payload)
             payload.action = actions.setBillingAddress;
 
-        SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
                 callback(err, result);
             });
@@ -107,7 +107,7 @@ module.exports = function (app) {
     service.setShippingMethod = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingMethod;
-        SphereClient.getClient().carts.byId(cartId).fetch().then (function (cart) {
+        SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
                 callback(err, result);
             });
@@ -197,7 +197,7 @@ module.exports = function (app) {
         });
     };
 
-  // Proxy
+    // Proxy
     service.removeBlueBlock = function (cartId, version, lineId, callback) {
         var payload = {
             customLineItemId: lineId
@@ -205,7 +205,7 @@ module.exports = function (app) {
         service.removeCustomLineItem(cartId, version, payload, callback);
     };
 
-    service.init = function (userId, cookieId, callback,expand) {
+    service.init = function (userId, cookieId, callback, expand) {
         SphereClient.setClient();
         var newCart = {
             "currency": "USD",
@@ -237,7 +237,7 @@ module.exports = function (app) {
                         callback(null, cart);
                     }
                 }
-            },expand);
+            }, expand);
 
         } else {
 
@@ -280,10 +280,47 @@ module.exports = function (app) {
                         }
 
                     }
-                },expand);
+                }, expand);
 
             }
         }
+
+    }
+
+
+    service.refreshCart = function (cookieId, callback, expand) {
+        SphereClient.setClient();
+        var newCart = {
+            "currency": "USD",
+            "taxMode": "External"
+        };
+
+            CommonService.byId('carts', cookieId, function (err, cart) {
+                if (err) {
+                    CommonService.create('carts', newCart, function (err, cart) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            app.logger.debug("Cart refreshed A - Cart ID: " + cart.id);
+                            callback(null, cart);
+                        }
+                    });
+                } else {
+                    newCart ['lineItems'] = cart.lineItems;
+                    CommonService.create('carts', newCart, function (err, cart) {
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            app.logger.debug("Refresh cart B - Cart ID: " + cart.id);
+                            callback(null, cart);
+                        }
+                    });
+
+                }
+            }, expand);
+
+
+
 
     }
 
@@ -317,20 +354,20 @@ module.exports = function (app) {
                 var productIds = _.chain(cart.lineItems).map("productId").map(function (id) {
                     return '"' + id + '"';
                 }).value();
+                var eyewearPrescriptionAmount = 0;
 
                 SphereClient.getClient().productProjections.staged(false).expand('categories[*]').where('id in (' + productIds.join(',') + ')').all().fetch().then(function (result) {
 
-                    var  eyewearPrescriptionAmount = 0;
                     if (result.body.results && result.body.results.length > 0) {
                         var eyewearProductArray = _.reduce(result.body.results, function (eyewearProducts, product) {
                             if (product.categories[0].obj.slug.en === "eyewear") {
-                                eyewearProducts.push (product);
+                                eyewearProducts.push(product);
                             }
                             return eyewearProducts;
                         }, []);
 
-                        _.each (eyewearProductArray,function (product) {
-                            var lineItem = _.find (cart.lineItems, function (item) {
+                        _.each(eyewearProductArray, function (product) {
+                            var lineItem = _.find(cart.lineItems, function (item) {
                                 return item.productId == product.id;
                             });
                             if (lineItem.distributionChannel.key && lineItem.distributionChannel.key != 'nonprescription' || lineItem.distributionChannel.obj && lineItem.distributionChannel.obj.key && lineItem.distributionChannel.obj.key != 'nonprescription') {

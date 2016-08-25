@@ -16,6 +16,9 @@ module.exports = function (app) {
     app.route('/api/carts/init')
         .get(carts.init);
 
+    app.route('/api/carts/refreshCart')
+        .get(carts.refreshCart);
+
     app.route('/api/carts/cartEyewearPrescriptionCount')
         .get(carts.cartEyewearPrescriptionCount);
 

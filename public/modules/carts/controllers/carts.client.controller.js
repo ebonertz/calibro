@@ -1,13 +1,29 @@
 'use strict';
 
-angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', '$location', 'LoggerServices', 'Cart', '$stateParams', 'OrderService',
-    function ($scope, Authentication, CartService, $rootScope, $location, LoggerServices, Cart, $stateParams, OrderService) {
+angular.module('carts').controller('CartController', ['$scope', 'Authentication', 'CartService', '$rootScope', '$location', 'LoggerServices', 'Cart', '$stateParams', 'OrderService','ipCookie',
+    function ($scope, Authentication, CartService, $rootScope, $location, LoggerServices, Cart, $stateParams, OrderService,ipCookie) {
         $scope.authentication = Authentication;
         $scope.isCheckout = $location.path().indexOf('checkout') > -1;
 
         $scope.proceedToCheckout = function () {
-            if ($rootScope.cart != null && $rootScope.cart.lineItems != null && $rootScope.cart.lineItems.length > 0)
-                $location.path('/checkout');
+            if ($rootScope.cart != null && $rootScope.cart.lineItems != null && $rootScope.cart.lineItems.length > 0) {
+                var cookieId = null;
+                if (ipCookie('anonymousCart', undefined, {path: '/'}) != null) {
+                    cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
+                }
+                if (!Authentication.user && cookieId) {
+                    CartService.refreshCart(cookieId).then(function (cart) {
+                        $rootScope.cart = cart;
+                        $location.path('/checkout');
+                    });
+                }
+                else {
+                    $location.path('/checkout');
+                }
+
+
+            }
+
         }
 
         $scope.removeFromCart = function (item) {
