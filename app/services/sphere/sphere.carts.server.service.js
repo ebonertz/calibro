@@ -1,10 +1,12 @@
 var SphereClient = require('../../clients/sphere.server.client.js'),
     config = require('../../../config/config'),
+    _ = require ('lodash');
     entity = 'carts';
 
 module.exports = function (app) {
     var CommonService = require('./sphere.commons.server.service.js') (app),
         ZipTaxService = require('../../services/ziptax.server.services.js') (app),
+        Cart = require('../../models/sphere/sphere.cart.server.model.js') (app);
         TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
     var service = {};
     var actions = {
@@ -303,6 +305,50 @@ module.exports = function (app) {
                 }
             }
         });
+    };
+
+    service.cartEyewearPrescriptionCount = function (cartId, callback) {
+        CommonService.byId('carts', cartId, function (err, result) {
+            if (err) {
+                if (callback)
+                    callback(err, null);
+            } else {
+                var cart = new Cart(result);
+                var productIds = _.chain(cart.lineItems).map("productId").map(function (id) {
+                    return '"' + id + '"';
+                }).value();
+
+                SphereClient.getClient().productProjections.staged(false).expand('categories[*]').where('id in (' + productIds.join(',') + ')').all().fetch().then(function (result) {
+
+                    var  eyewearPrescriptionAmount = 0;
+                    if (result.body.results && result.body.results.length > 0) {
+                        var eyewearProductArray = _.reduce(result.body.results, function (eyewearProducts, product) {
+                            if (product.categories[0].obj.slug.en === "eyewear") {
+                                eyewearProducts.push (product);
+                            }
+                            return eyewearProducts;
+                        }, []);
+
+                        _.each (eyewearProductArray,function (product) {
+                            var lineItem = _.find (cart.lineItems, function (item) {
+                                return item.productId == product.id;
+                            });
+                            if (lineItem.distributionChannel.key && lineItem.distributionChannel.key != 'nonprescription' || lineItem.distributionChannel.obj && lineItem.distributionChannel.obj.key && lineItem.distributionChannel.obj.key != 'nonprescription') {
+                                eyewearPrescriptionAmount += lineItem.quantity;
+                            }
+                        });
+                        callback(null, eyewearPrescriptionAmount);
+                    } else {
+                        callback(null, eyewearPrescriptionAmount);
+                    }
+                }).error(function (err) {
+                    app.logger.error("Error executing isAnyEyewear Error: %s", JSON.stringify(err));
+                    callback(err, eyewearPrescriptionAmount);
+                });
+
+            }
+        });
+
     };
 
     return service;

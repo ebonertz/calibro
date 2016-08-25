@@ -5,11 +5,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
+        $scope.eyewearPrescriptionCount = 0;
         $scope.billingMethods = [
             {name: 'Credit Card'},
             {name: 'PayPal'}
         ];
-
+        $scope.highindex = false;
+        $scope.blueBlock = false;
 
         $scope.anchorScroll = function (where) {
             $location.hash(where);
@@ -112,13 +114,24 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
         $scope.showPrescriptionSummary = false;
 
+        var determineHighIndexBlueBlockVisibility = function () {
+            CartService.cartEyewearPrescriptionCount($rootScope.cart.id).then(function (result) {
+                $scope.cartEyewearPrescriptionCount = result;
+                if (result > 0) {
+                    $scope.highindex = true;
+                    $scope.blueBlock = true;
+                }
+            });
 
+
+        }
         var init = function () {
             if ($rootScope.cart != null) {
                 $http.get('/api/carts/'+$rootScope.cart.id)
                   .then(function(cart){
                       $rootScope.cart = cart.data;
                       if ($scope.cartPrescriptionCount() > 0) {
+                          determineHighIndexBlueBlockVisibility();
                           $scope.showPhasePrescription();
                           $scope.showPrescriptionSummary = true;
                       }
@@ -380,7 +393,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             var highIndexLine = $scope.highIndexLine();
             var payload = {
-                quantity: $scope.cartPrescriptionCount(),
+                quantity: $scope.cartEyewearPrescriptionCount,
                 lineId: highIndexLine ? highIndexLine.id : null
             };
 
@@ -408,11 +421,11 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             var blueBlockLine = $scope.blueBlockLine();
             var payload = {
-                quantity: $scope.cartPrescriptionCount(),
+                quantity: $scope.cartEyewearPrescriptionCount,
                 lineId: blueBlockLine ? blueBlockLine.id : null
             };
 
-            // Don't remove if there's high-index line
+            // Don't remove if there's blueBlock line
             if (!blueBlockLine && !status) {
                 return
             }

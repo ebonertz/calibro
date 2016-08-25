@@ -263,5 +263,17 @@ module.exports = function (app) {
         },'lineItems[*].distributionChannel');
     };
 
+    controller.cartEyewearPrescriptionCount = function (req, res) {
+        var id = req.param('cartId');
+        CartService.cartEyewearPrescriptionCount(id, function (err, result) {
+            if (err) {
+                return res.status(400).send(err.body.message);
+            } else {
+                res.json(result);
+            }
+        })
+
+    };
+
     return controller;
 };

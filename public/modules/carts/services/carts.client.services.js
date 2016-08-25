@@ -247,5 +247,17 @@ angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$roo
             return deferred.promise;
         }
 
+        this.cartEyewearPrescriptionCount = function (cartId) {
+            var deferred = $q.defer();
+            var path = urlString + '/cartEyewearPrescriptionCount?cartId=' + cartId;
+            $http.get(path).success(function (data) {
+                deferred.resolve(parseInt (data));
+            }).error(function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
     }
 ]);

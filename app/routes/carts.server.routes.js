@@ -16,6 +16,9 @@ module.exports = function (app) {
     app.route('/api/carts/init')
         .get(carts.init);
 
+    app.route('/api/carts/cartEyewearPrescriptionCount')
+        .get(carts.cartEyewearPrescriptionCount);
+
     app.route('/api/carts/:cartId')
         .get(carts.byId)
         .delete(commons.delete.bind({entity: entity}))
@@ -55,4 +58,5 @@ module.exports = function (app) {
 
     app.route('/api/carts/removeBlueBlock/:cartId/:version')
         .post(carts.removeBlueBlock);
+
 };
