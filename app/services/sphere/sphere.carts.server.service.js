@@ -77,16 +77,44 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                //ZipTaxService.setTaxValues(result.shippingAddress.postalCode, result.id, result.version).then(function(newCart){
-                //    CartService.recalculateCustomTax(newCart).then(function(result){
-                //        var cart = new Cart(result);
-                //        res.json(cart);
-                //    });
-                //}).error(function(err){
-                //    logger.error('Error setting tax values from ziptax: %s', err);
-                //    return res.status(400).send(err.body.message);
-                //});
-                callback(err, result);
+                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function(taxValue){
+                    var externalTaxRate = {
+                        name: result.shippingAddress.postalCode,
+                        amount: taxValue,
+                        country: "US"
+
+                    };
+                    //set taxes to line items
+                    var actions = [];
+                    _.each (result.lineItems, function (item){
+                       var payload = {
+                           action: "setLineItemTaxRate",
+                           lineItemId: item.id,
+                           externalTaxRate: externalTaxRate
+                       }
+                        actions.push (payload);
+                    });
+
+                    //set taxes to customLineitems
+                    _.each (result.customLineItems, function (item){
+                        var payload = {
+                            action: "setCustomLineItemTaxRate",
+                            customLineItemId: item.id,
+                            externalTaxRate: externalTaxRate
+                        }
+                        actions.push (payload);
+                    });
+                    actions.push ({
+                        action: "recalculate",
+                        updateProductData: true
+                    });
+                    CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
+                        callback(err, cart);
+                    });
+                }).error(function(err){
+                    logger.error('Error setting tax values from ziptax: %s', err);
+                    return res.status(400).send(err.body.message);
+                });
             });
         });
 
@@ -107,9 +135,28 @@ module.exports = function (app) {
     service.setShippingMethod = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingMethod;
+
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                callback(err, result);
+                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function (taxValue) {
+                    var externalTaxRate = {
+                        name: result.shippingAddress.postalCode,
+                        amount: taxValue,
+                        country: "US"
+
+                    };
+                    var actions = [];
+                    actions.push({
+                        action: "setShippingMethodTaxRate",
+                        externalTaxRate: externalTaxRate
+                    });
+                    actions.push({
+                        action: "recalculate"
+                    });
+                    CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
+                        callback(err, cart);
+                    });
+                });
             });
         });
     }

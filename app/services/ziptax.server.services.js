@@ -5,6 +5,19 @@ var client = require('../clients/ziptax.server.client.js').getClient(),
 module.exports = function (app) {
     var service = {};
 
+    service.getTaxByZipCode = function (zipCode) {
+        return new Promise(function (resolve, reject) {
+            client.lookup(zipCode, function (err, result) {
+                if (err) {
+                    reject(err);
+                } else {
+                    var tax = result.results[0];
+                    resolve(tax.taxSales);
+                }
+            });
+        });
+    };
+
     service.setTaxValues = function (zipCode, cartId, version) {
         return new Promise(function (resolve, reject) {
             client.lookup(zipCode, function (err, result) {
