@@ -144,5 +144,10 @@ module.exports = {
     },
     ziptax:{
         apikey: "3H66ULRU7PLY"
+    },
+    cloudinary: {
+        api_key: "317299721992649",
+        api_secret: "k4HCOKsvs9YHDUJWAmF2OL7180o",
+        cloud_name: "dswl4guqu"
     }
 };

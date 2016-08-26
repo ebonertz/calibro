@@ -99,16 +99,24 @@ module.exports = function (app) {
 		return p;
 	}
 
-	service.prescription = function(email,data,method){
-		var html = "The prescription will be sent later by the customer";
+	service.prescription = function(email,data,method,orderNumber){
+		var html;
 		if (method == 'calldoctor') {
-			html = '<p>PRESCRIPTION NEEDED</p><p>Call doctor ' + data.doctorName + ' from clinic ' + data.state + ' for prescription to patient : ' + data.patientName + " date of birth:" + data.patientBirth + " Doctor phone " + data.phoneNumber+'<p></p>'
+			html = '<p>PRESCRIPTION NEEDED</p><p>Order: '+orderNumber+'</p>><p>Call doctor ' + data.doctorName + ' from clinic ' + data.state + ' for prescription to patient : ' + data.patientName + " date of birth:" + data.patientBirth + " Doctor phone " + data.phoneNumber+'<p></p>'
+		}
+		else if (method == "upload") {
+			html = '<p>PRESCRIPTION</p><p>Order: '+orderNumber+'</p><p>The customer upload the prescription file : <a href="' +data.secure_url+'">Prescription image</a><p></p>'
+
+		}
+		else {
+			html = "<p>Order: "+orderNumber+"</p><p>The prescription will be sent later by the customer</p>";
 		}
 		var options = {
 			email: email,
 			html: html,
 			subject: 'Prescription needed'
 		}
+		app.logger.info ("Sending prescription email for method: %s",method);
 		return service.sendWithoutTemplate(options)
 	};
 

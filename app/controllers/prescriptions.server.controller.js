@@ -10,15 +10,16 @@ module.exports = function (app) {
 
     controller.create = function (req, res) {
         var cartId = req.param('cartId'),
+            version = req.param ('version'),
             contents = req.body;
 
         delete contents._id;
+        delete contents.version;
 
-        PrescriptionService.create(cartId, contents, function (err, result) {
+        PrescriptionService.create(cartId,version, contents, function (err, result) {
             if (err) {
                 return res.sendStatus(400);
             } else {
-                MandrillService.prescription( config.mandrill.addresses.prescriptions_email, contents.data,req.body.method);
                 res.json(result);
             }
         });
@@ -37,37 +38,21 @@ module.exports = function (app) {
     }
 
     controller.upload = function (req, res) {
-        // TODO: Check cart
         // TODO: Check file size
         // TODO: Check file extension
 
-        // TODO: Move to upload service
-        // Should upload to temp and send an email when order is created. This is just the simple way around.
-
-        PrescriptionService.getLastUploadId(function (err, result) {
+       UploadFileService.upload(req, function (err, file_data) {
             if (err) {
                 return res.sendStatus(400)
             } else {
-                var counter = result.value + 1,
-                    options = {
-                        subject: 'Prescription #' + counter,
-                        filename: 'prescription-' + counter
-                    }
-                UploadFileService.uploadAndEmail(req, config.mandrill.addresses.prescriptions_email, options, function (err, file_data) {
-                    if (err) {
-                        return res.sendStatus(400)
-                    } else {
-                        PrescriptionService.updateLastUploadId(counter);
-                        res.json({
-                            new_filename: file_data.new_name,
-                            original_filename: file_data.original_name,
-                            file_size: (file_data.size / (1024 * 1024)).toFixed(2) + "MB"
-                        })
-                    }
+                res.json({
+                    original_filename: file_data.original_filename,
+                    file_size: (file_data.bytes / (1024 * 1024)).toFixed(2) + "MB",
+                    url: file_data.url,
+                    secure_url: file_data.secure_url
                 })
             }
         })
-
 
     };
 

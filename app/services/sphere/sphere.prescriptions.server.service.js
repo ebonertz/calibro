@@ -2,11 +2,33 @@
 
 var container = 'Prescriptions';
 
-module.exports = function (app) {
-    var  CustomObjectService = require('./sphere.custom-objects.server.service.js')(app);
+    module.exports = function (app) {
+    var  CustomObjectService = require('./sphere.custom-objects.server.service.js')(app),
+        CommonService = require('./sphere.commons.server.service.js') (app);
+
     var service = {};
-    service.create = function(id, content, callback) {
-        CustomObjectService.create(container, id, content, callback);
+    service.create = function(cartId,version, content, callback) {
+        CustomObjectService.create(container, cartId, content, function (err, prescription) {
+            var payload = {
+                action: "setCustomType",
+                typeKey: "orderCustomType",
+                fields: {
+                    prescriptionId: prescription.id
+                }
+            };
+            CommonService.updateWithVersion('carts', cartId, version, [payload], function (err, cart) {
+                app.logger.debug('Updating cart prescription id: ' + cart);
+                if (err) {
+                    callback(err,cart);
+                } else {
+                    var result = {
+                        cart: cart,
+                        prescription: prescription
+                    };
+                    callback(null,result);
+                }
+            });
+        });
     };
 
     service.byId = function (id, callback) {

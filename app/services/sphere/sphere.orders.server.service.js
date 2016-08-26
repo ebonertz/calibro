@@ -19,32 +19,47 @@ module.exports = function (app) {
         // Review high-index before creating the order
 
         // We need the next order number from counter container
-        service.getOrderNumber(function(err, result){
-            if(err) callback(err)
-            else{
+        service.getOrderNumber(function (err, result) {
+            if (err) callback(err)
+            else {
                 var orderNumber = result + 1;
-                object.orderNumber = config.orderPrefix+orderNumber.toString();
+                object.orderNumber = config.orderPrefix + orderNumber.toString();
 
                 CommonService.create(entity, object, function (err, orderCreated) {
-                    if(err) {
+                    if (err) {
                         // TODO: Find next order number instead of guessing one by one
-                        if(String(err).indexOf("duplicate") > 0 && String(err).indexOf("orderNumber")){
+                        if (String(err).indexOf("duplicate") > 0 && String(err).indexOf("orderNumber")) {
                             // Hope getting to the expected order number
                             CustomObjectService.create('Counters', container, orderNumber);
                         }
                         callback(err, null);
                     } else {
-                        // TODO: Some error control to assure CustomObject update
                         CustomObjectService.create('Counters', container, orderNumber);
+                        if (orderCreated.custom && orderCreated.custom.fields.prescriptionId) {
+                            CustomObjectService.byCustomObjectId(orderCreated.custom.fields.prescriptionId, function (err, custom) {
+                                MandrillService.prescription(config.mandrill.addresses.prescriptions_email, custom.value.data, custom.value.method,orderCreated.orderNumber);
+                            });
+                        }
 
-                        CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
-                            if(!err && customer != null && customer.email != null) {
-                                MandrillService.orderConfirmation(customer,orderCreated);
-                            }else{
-                                app.logger.error("Error creating order. Error: %s",JSON.stringify(err));
-                            }
+                        // TODO: Some error control to assure CustomObject update
+                        if (orderCreated.customerId) {
+                            CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
+                                if (!err && customer != null && customer.email != null) {
+                                    MandrillService.orderConfirmation(customer, orderCreated);
+                                } else {
+                                    app.logger.error("Error creating order. Error: %s", JSON.stringify(err));
+                                }
 
-                        });
+                            });
+                        }
+                        else if (orderCreated.billingAddress.email) {
+                            MandrillService.orderConfirmation(orderCreated.billingAddress, orderCreated);
+                        }
+                        else if (orderCreated.shippingAddress.email) {
+                            MandrillService.orderConfirmation(orderCreated.shippingAddress, orderCreated);
+
+                        }
+
 
                         callback(null, orderCreated);
                     }
@@ -65,23 +80,23 @@ module.exports = function (app) {
     }
 
 
-    service.getOrderNumber = function(callback){
-        CustomObjectService.find('Counters', container, function(err, result){
-            if(err) callback(err)
-            if(!result){
+    service.getOrderNumber = function (callback) {
+        CustomObjectService.find('Counters', container, function (err, result) {
+            if (err) callback(err)
+            if (!result) {
                 service.startOrderNumber(callback)
-            }else{
+            } else {
                 var number = parseInt(result.value);
-                if(typeof number !== "number") service.startOrderNumber(callback)
+                if (typeof number !== "number") service.startOrderNumber(callback)
                 else callback(null, number)
             }
         })
     };
 
 // Start a new count if one couldn't be found
-    service.startOrderNumber = function(callback){
-        CustomObjectService.create('Counters', container, 1, function(err, result){
-            if(err) callback(err);
+    service.startOrderNumber = function (callback) {
+        CustomObjectService.create('Counters', container, 1, function (err, result) {
+            if (err) callback(err);
             else callback(null, result.value)
         })
     }

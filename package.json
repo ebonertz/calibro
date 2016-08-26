@@ -68,7 +68,9 @@
     "fileupload": "*",
     "braintree-sphere-service": "git+https://emaPerez@bitbucket.org/devgurus/braintree-sphere-service.git",
     "prerender-node": "^2.3.0",
-    "ziptax": "^0.1.1"
+    "ziptax": "^0.1.1",
+    "cloudinary": "^1.4.1"
+
 
   },
   "devDependencies": {

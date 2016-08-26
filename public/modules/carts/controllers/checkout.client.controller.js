@@ -463,7 +463,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     } else if ($scope.prescription.method == 'sendlater') {
                         $scope.anchorScroll('lensType');
                     } else if ($scope.prescription.method == 'upload') {
-                        $scope.file = result.value.data;
+                        $scope.prescription.upload = result.value.data;
                     }
                 }
             });
@@ -479,11 +479,12 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.loading = true;
                 new Prescription({
                     _id: $rootScope.cart.id,
+                    version: $rootScope.cart.version,
                     type: type,
                     method: method,
                     data: data
                 }).$save(function (response) {
-                        $scope.prescription = response.value;
+                        $scope.prescription = response.prescription;
                         if ($scope.prescription.type == 'reader') {
                             $scope.prescription.strength = $scope.prescription.data.strength;
                         } else if ($scope.prescription.method == 'calldoctor') {
@@ -493,7 +494,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                           console.log('Will send prescriptions later')
                         }
 
-
+                        $rootScope.cart = response.cart;
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
                         callback(response);
@@ -539,7 +540,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     break;
 
                 case 'upload':
-                    save('prescription', 'upload', $scope.file, function () {
+                    save('prescription', 'upload', $scope.prescription.upload, function () {
                     })
             }
         };
@@ -576,7 +577,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         LoggerServices.success("Prescription uploaded")
                         $scope.prescription.method = 'upload';
 
-                        $scope.file = data; // {new_filename, original_filename, file_size}
+                        $scope.prescription.upload = data; // {new_filename, original_filename, file_size}
                         $scope.savePrescription('upload')
                         //$timeout(function () {
                         //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;

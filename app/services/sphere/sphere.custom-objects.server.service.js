@@ -35,6 +35,15 @@ module.exports = function (app) {
         })
     }
 
+    service.byCustomObjectId = function (id, callback) {
+        SphereClient.getClient().customObjects.byId(id).fetch().then(function(result){
+            callback(null, result.body)
+        }).error(function(err){
+            app.logger.error("Error finding by id custom objects %s",JSON.stringify(err));
+            callback(err, null)
+        })
+    }
+
     service.create = function(container, key, value, callback){
         var payload = {
             container: container,
