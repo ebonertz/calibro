@@ -1101,7 +1101,7 @@ header{
 			margin-top: -5px;
 			.amount{
 				font-family: 'Noto Serif', serif;
-				color: #b2b2b2;
+				color: #green;
 			}
 			ins{
 				text-decoration: none;
@@ -1496,8 +1496,15 @@ header{
 		}
 		.price{
 			display: block;
+			font-family: 'Open Sans', sans-serif;
 			margin: 15px 0;
-			font-family: 'Noto Serif', serif;
+
+
+			@media(max-width:@screen-sm-max){
+				margin-top: 55px;
+				margin-bottom: 15px;
+				}
+
 
 			del{
 				color: @red;
@@ -1511,6 +1518,8 @@ header{
 				vertical-align: middle;
 			}
 		}
+
+
 		.product-description{
 			font-size: 14px;
 			margin-bottom: 45px;
@@ -1521,10 +1530,15 @@ header{
 	}
 
 	.channel-option {
-	  	font-size: 80%;
+	  	font-size: 75%;
 			@media(max-width:@screen-sm-max){
-				padding: 20px;
+				padding: 15px;
 			}
+	}
+	.notice {
+		@media(max-width:@screen-sm-max){
+			margin-top: 35px;
+		}
 	}
 }
 //Global Styles - Shop Related
