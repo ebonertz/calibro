@@ -2211,7 +2211,7 @@ table#cart{
 	.prescription-box{
 	  	//width: 50%;
 	  	display: inline-block;
-	  	padding: 20px 15px;
+	  	padding: 15px 15px;
 	  	cursor: pointer;
 	 	opacity: 0.9;
 
@@ -2232,6 +2232,11 @@ table#cart{
 	  	.content {
 		  	height: 60px;
 		  	overflow: hidden;
+
+				@media(max-width:@screen-sm-max) {
+					font-size: 12px;
+					height: 140px;
+				}
 
 		  	label {
 			  	margin-top: 4px;
