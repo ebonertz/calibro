@@ -38,8 +38,8 @@
                                 <label>Only .pdf, .jpg and .png files</label>
                             </prescription-box>
 
-                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; $parent.highindex=false; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
-                            <prescription-box header="Send It Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater'); $parent.highindex=true" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
+                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
+                            <prescription-box header="Send It Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater');" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
 
                             <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
                                 <br />
@@ -111,7 +111,7 @@
                         </div>
 
 
-                        <div ng-show="$parent.highindex" id="next">
+                        <div id="next">
                             <br />
                             <hr />
                             <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
