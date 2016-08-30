@@ -22,8 +22,8 @@
                         <div id="lensType">
                             <hr />
                             <h6>What kind of glasses do you need?</h6>
-                            <prescription-box header="prescription" size="2" ng-click="$parent.highindex = false; $parent.proceedCheckout = false; prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
-                            <prescription-box header="reader" size="2" ng-click="$parent.highindex = false; $parent.proceedCheckout = false; prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
+                            <prescription-box header="prescription" size="2" ng-click="prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
+                            <prescription-box header="reader" size="2" ng-click="prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
                         </div>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
                             <br />
