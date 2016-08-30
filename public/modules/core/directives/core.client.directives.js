@@ -2,8 +2,8 @@ angular.module('core').directive('hero', function () {
     return {
         link: function (scope, element, attrs) {
             $(element).unslider({
-                speed: 500,               //  The speed to animate each slide (in milliseconds)
-                delay: 900,              //  The delay between slide animations (in milliseconds)
+                speed: 800,               //  The speed to animate each slide (in milliseconds)
+                delay: 4000,              //  The delay between slide animations (in milliseconds)
                 dots: true,               //  Display dot navigation
                 fluid: true              //  Support responsive design. May break non-responsive designs
             });
