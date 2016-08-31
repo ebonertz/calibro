@@ -2,7 +2,7 @@
 
 module.exports = {
 	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/focali-mean',
-	serverPath: 'http://focali-stage.ct-app.com/',
+	serverPath: 'https://focalioptics.com/',
 	assets: {
 		lib: {
 			css: 'public/dist/vendor.min.css',
