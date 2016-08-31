@@ -1,4 +1,4 @@
-    'use strict';
+'use strict';
 
 module.exports = {
     db: 'mongodb://localhost/focali-mean-dev',
@@ -45,11 +45,11 @@ module.exports = {
         }
     },
     sphere: {
-        "api_url": "api.commercetools.co",
-        "auth_url": "auth.commercetools.co",
-        "project_key": "focali-stage",
-        "client_id": "iqRSwXQh_ITTkTR8Pf87rR1u",
-        "client_secret": "Yn8Jcws_CtkzZHnaz1go4shoAeBt8A0-",
+        "api_url": process.env.SPHERE_API_URL || "api.commercetools.co",
+        "auth_url": process.env.SPHERE_AUTH_URL || "auth.commercetools.co",
+        "project_key": process.env.SPHERE_PROJECT_KEY || "focali-stage",
+        "client_id": process.env.SPHERE_CLIENT_ID || "iqRSwXQh_ITTkTR8Pf87rR1u",
+        "client_secret": process.env.SPHERE_CLIENT_SECRET || "Yn8Jcws_CtkzZHnaz1go4shoAeBt8A0-",
         "product_types": {
             categories: "categories.id",
             lensColor: "variants.attributes.lensColor.key",
@@ -92,9 +92,10 @@ module.exports = {
         host: 'cdn.contentful.com'
     },
     braintree: {
-        merchantId: "j6jnrqf6cysjmswf",
-        publicKey: "65f59g3syk5y7mhz",
-        privateKey: "70c126bc6db1b0fefb9715e358bcc836"
+        merchantId: process.env.BRAINTREE_MERCHANT_ID || "j6jnrqf6cysjmswf",
+        publicKey: process.env.BRAINTREE_PUBLIC_KEY || "65f59g3syk5y7mhz",
+        privateKey: process.env.BRAINTREE_PRIVATE_KEY || "70c126bc6db1b0fefb9715e358bcc836",
+        environment: process.env.BRAINTREE_ENVIRONMENT || 'sandbox'
     },
     mailchimp: {
         key: 'bf21e8530000f313ca295c6be0bd98fe-us11',
@@ -143,11 +144,11 @@ module.exports = {
         token: process.env.PRERENDERIO_TOKEN
     },
     ziptax:{
-        apikey: "3H66ULRU7PLY"
+        apikey: process.env.ZIP_API_KEY || "3H66ULRU7PLY"
     },
     cloudinary: {
-        api_key: "317299721992649",
-        api_secret: "k4HCOKsvs9YHDUJWAmF2OL7180o",
-        cloud_name: "dswl4guqu"
+        api_key: process.env.CLOUDINARY_API_KEY || "317299721992649",
+        api_secret: process.env.CLOUDINARY_API_SECRET || "k4HCOKsvs9YHDUJWAmF2OL7180o",
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME ||"dswl4guqu"
     }
 };
