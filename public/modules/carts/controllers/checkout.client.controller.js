@@ -489,7 +489,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.prescription.type = response.prescription.value.type;
 
                         if ($scope.prescription.type == 'reader') {
-                            $scope.prescription.strength = $scope.prescription.data.strength;
+                            $scope.prescription.strength = $scope.prescription.value.data.strength;
                         } else if ($scope.prescription.method == 'calldoctor') {
                             $scope.prescription.calldoctor = $scope.prescription.value.data;
                         }else if ($scope.prescription.method == 'sendlater') {
@@ -533,7 +533,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
-
                     })
                     break;
 
