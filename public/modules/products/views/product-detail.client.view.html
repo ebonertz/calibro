@@ -119,7 +119,7 @@
       <div class="cross-sells">
         <h3>Recommended Products</h3>
         <section class="products cross-products">
-          <product-thumbnail product="product" data-ng-repeat="product in recommendedProducts track by product.id"></product-thumbnail>
+          <product-thumbnail product="product" ng-click="redirectToProduct(product.slug.en,product.displayVariant.sku)" data-ng-repeat="product in recommendedProducts track by product.id"></product-thumbnail>
         </section>
       </div>
     </section>

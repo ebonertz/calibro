@@ -105,7 +105,7 @@ module.exports = function (app) {
                 newPassword: password
             }
 
-            CommonService.post('customers', '/api/customers/password/reset', payload, function (err, result) {
+            CommonService.post('customers', '/customers/password/reset', payload, function (err, result) {
                 if (err) {
                     return res.status(400).send({message: err.message})
                 } else {

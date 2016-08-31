@@ -2,7 +2,7 @@
 
 module.exports = {
     db: 'mongodb://localhost/focali-mean-dev',
-    serverPath: process.env.SERVER_PATH,
+    serverPath: process.env.SERVER_PATH || 'http://focali-stage.ct-app.com/',
     rememberMeKey: 'CmzvV20rf32IwFeReDhXBCzHtrB64qm8',
     app: {
         title: 'Focali Optics',
