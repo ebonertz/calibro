@@ -9,6 +9,11 @@ module.exports = function(app) {
    var customers = require('../controllers/customers.server.controller.js')(app),
         commons = require('../controllers/commons.server.controller.js')(app);
 
+    app.route('/api/addresses').post(customers.addAddress)
+    app.route('/api/addresses/:id')
+        .put(customers.updateAddress)
+        .delete(customers.deleteAddress);
+
   // TODO: Disable list. Change findOne to me
 	app.route('/api/customers')
     .put(customers.update)
@@ -24,11 +29,6 @@ module.exports = function(app) {
   app.route('/api/auth/signin').post(customers.signin);
   app.route('/api/auth/signout').get(customers.signout);
   app.route('/api/auth/token').post(customers.signWithToken);
-
-  app.route('/api/addresses').post(customers.addAddress)
-  app.route('/api/addresses/:id')
-    .put(customers.updateAddress)
-    .delete(customers.deleteAddress);
 
   app.route('/api/subscribe/:listName').post(customers.subscribe);
   app.route('/api/unsubscribe/:listName').post(customers.unsubscribe);

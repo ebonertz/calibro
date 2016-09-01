@@ -167,8 +167,9 @@ module.exports = function (app) {
                 }
             })
         } else {
-            app.logger.warn ("A new address can't be added without a customer");
-            res.status(400);
+            var message = "A new address can't be added without a customer";
+            app.logger.warn(message);
+            res.status(400).send({message: message});
         }
     }
 
