@@ -145,10 +145,11 @@ module.exports = function (app) {
     }
 
     controller.addAddress = function (req, res) {
+        app.logger.info ("Requesting to add new address: %s",JSON.stringify(req.body));
         var customer = req.user;
 
         if (customer) {
-
+            app.logger.info ("Customer that will add a new address: %s",JSON.stringify(customer));
             var address = new Address(req.body);
 
             var actions = [{
@@ -158,12 +159,15 @@ module.exports = function (app) {
 
             CommonService.update('customers', customer.id, actions, function (err, result) {
                 if (err) {
+                    app.logger.error ("Error adding new address %s",JSON.stringify (err));
                     return res.status(400).send({message: err.message})
                 } else {
+                    app.logger.info  ("Adding new address result %s",JSON.stringify (result));
                     return res.json(result);
                 }
             })
         } else {
+            app.logger.warn ("A new address can't be added without a customer");
             res.status(400);
         }
     }
