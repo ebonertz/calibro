@@ -297,7 +297,7 @@ module.exports = function (app) {
 				},
 				{
 					"name": "paymentInfo",
-					"content": "Credit Card"
+					"content": order.paymentInfo.payments[0].obj.paymentMethodInfo.method
 				},
 				{
 					"name": "discount",

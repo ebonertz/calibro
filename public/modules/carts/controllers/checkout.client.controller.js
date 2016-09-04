@@ -304,7 +304,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             if ($scope.paymentInfo) {
                 var checkoutParameters = {
                     payment_method_nonce: $scope.paymentInfo.nonce,
-                    submitForSettlement: true,
+                    submitForSettlement: false,
                     customerId: customerId,
                     orderId: order.id
                 }
