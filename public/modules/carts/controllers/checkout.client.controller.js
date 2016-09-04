@@ -233,7 +233,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     });
 
                 }, function (err) {
-                    LoggerServices.warning("Couldn't set shipping address, please try again");
+                    LoggerServices.warning(err);
                     $rootScope.loading = false;
                 });
             }

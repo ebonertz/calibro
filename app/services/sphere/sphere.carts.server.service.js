@@ -29,7 +29,7 @@ module.exports = function (app) {
             } else {
                 callback(null, null);
             }
-        }).error(function (err) {
+        }).catch(function (err) {
             app.logger.error("Error finding by customer entity: %s. Error: %s", entity, JSON.stringify(err));
             callback(err, null);
         });
@@ -111,9 +111,9 @@ module.exports = function (app) {
                     CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
                         callback(err, cart);
                     });
-                }).error(function(err){
-                    logger.error('Error setting tax values from ziptax: %s', err);
-                    return res.status(400).send(err.body.message);
+                }).catch(function(err){
+                    app.logger.error('Error setting tax values from ziptax: %s', err);
+                    callback(err, null);;
                 });
             });
         });
@@ -425,7 +425,7 @@ module.exports = function (app) {
                     } else {
                         callback(null, eyewearPrescriptionAmount);
                     }
-                }).error(function (err) {
+                }).catch(function (err) {
                     app.logger.error("Error executing isAnyEyewear Error: %s", JSON.stringify(err));
                     callback(err, eyewearPrescriptionAmount);
                 });

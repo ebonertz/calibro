@@ -12,7 +12,13 @@ module.exports = function (app) {
                     reject(err);
                 } else {
                     var tax = result.results[0];
-                    resolve(tax.taxSales);
+                    if (tax) {
+                        resolve(tax.taxSales);
+                    }
+                    else {
+                        reject ("Invalid Zip Code. Please use a valid Zip Code.");
+                    }
+
                 }
             });
         });
