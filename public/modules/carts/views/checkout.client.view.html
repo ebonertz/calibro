@@ -33,9 +33,7 @@
                             <prescription-box header="Upload a picture" size="3"
                                               ngf-select="true" ngf-change="uploadPrescription($files)" ngf-multiple="false"  ngf-allow-dir="false"
                                               ng-class="{selected: prescription.method == 'upload'}" id="upload-prescription">
-                                <!--I will attach a copy of my prescription and upload it from my computer.-->
-                                I will upload my prescription from my computer.
-                                <label>Only .pdf, .jpg and .png files</label>
+                            I will upload my prescription from my computer. (.pdf, .jpg or .png)
                             </prescription-box>
 
                             <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
@@ -98,15 +96,15 @@
                             <br />
                             <hr />
                             <h6>Do you want high-index lenses if necessary?</h6>
-                            <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index lenses for an additional $30 if I have a strong prescription.</prescription-box>
+                            <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index (thinner) lenses for an additional $30 if I have a strong prescription. (see Support page for more details) </prescription-box>
                             <prescription-box header="No" size="2" ng-click="selectHighIndex(false)">Please do not use high-index lenses with my prescription.</prescription-box>
                         </div>
 
                         <div ng-show="blueBlock" id="blueblock">
                           <br />
                           <hr />
-                          <h6> Do you want the Blue Block AR reflective coating option?</h6>
-                          <prescription-box header="Yes" size="2" ng-click="selectBlueBlock(true)" ng-class="{selected: blueBlockLine() !=null}">Please use Blue Block AR treatment for an additional $20 </prescription-box>
+                          <h6> Do you want the Blue Block AR treatment?</h6>
+                          <prescription-box header="Yes" size="2" ng-click="selectBlueBlock(true)" ng-class="{selected: blueBlockLine() !=null}">Please add Blue Block AR treatment that blocks harmful High-Enery Visible light (HEV), known to cause Digital Eye Strain and Macular Degeneration for an additional $20. (see Support page for more details)</prescription-box>
                           <prescription-box header="No" size="2" ng-click="selectBlueBlock(false)"> Please do not use Blue Block AR treatment </prescription-box>
                         </div>
 
