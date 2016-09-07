@@ -13,7 +13,7 @@ module.exports = {
 	},
 	rememberMeKey: process.env.REMEMBER_ME_KEY,
 	app: {
-		title: 'Focali Optics Production',
+		title: 'Focali Optics '+process.env.NODE_ENV,
 		googleTagManagerKey: process.env.GOOGLE_TAG_KEY
 
 	},
