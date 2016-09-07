@@ -330,8 +330,8 @@ header{
 		ul{
 			list-style: 0;
 			padding-left: 0;
-			margin-top: 20;
-			font-size: 16px;
+			margin-top: 30px;
+			font-size: 13px;
 			li {
 				display: inline-block;
 				margin: 0 15px;
@@ -381,6 +381,7 @@ header{
 					border-radius: 3px;
 					display: none;
 					opacity: 0;
+					margin-top: -6px;
 					li {
 						display: block;
 						margin: 0px;
@@ -568,6 +569,7 @@ header{
 //Slider
 .slider-wrapper{
 	background: #dfdbd2 url('../images/slider/slider-bg.png') repeat-x left bottom;
+	height: 500px;
 }
 @media (max-width:@screen-sm-max) {
 
@@ -580,7 +582,7 @@ header{
 	// .make-lg-column(12);
 	padding: 0px;
 	position: relative;
-	min-height: 500px;
+	height: 500px;
 	text-align: center;
 	overflow-y: hidden;
 	ul{
@@ -889,41 +891,25 @@ header{
 //Subpages
 
 #subpage-head{
-	min-height: 500px;
-	@media (max-width:@screen-xs-max){
-		height: 250px;
-		min-height: 1px;
 
-	}
 	.subpage-hero{
-		.make-lg-column(12);
 		padding: 0px;
 		overflow: hidden;
-		@media(min-width:@screen-sm-min) and (max-width:@screen-md-max){
-			img{
-				max-width: none;
-				min-width: 100%;
 
-			}
-		}
-		@media (max-width:@screen-xs-max){
-			height: 250px;
-			img{
-				max-width: none;
-				min-width: 100%;
-				min-height: 100%;
-				margin-top: -25%;
-				margin-left: -50%;
-				height: auto;
-				width: auto;
-			}
-		}
+		img {
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+		height: auto;
+		max-height: 500px;
+		max-width: 1700px;
+	  }
 
 		@media (max-width:@screen-sm-max){
-			height:350px;
 			img{
-				max-width: 150%;
-
+				width: 150%;
+				margin-top: -10%;
+				margin-left: -25%;
 			}
 		}
 
