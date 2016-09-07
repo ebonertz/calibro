@@ -5,7 +5,7 @@ module.exports = {
     serverPath: process.env.SERVER_PATH || 'http://focali-stage.ct-app.com/',
     rememberMeKey: 'CmzvV20rf32IwFeReDhXBCzHtrB64qm8',
     app: {
-        title: 'Focali Optics',
+        title: 'Focali Optics'+process.env.NODE_ENV,
         googleTagManagerKey: 'GTM-THL5RH'
 
     },
