@@ -188,7 +188,7 @@ var defaultAssets = require ('./config/env/all');
 	grunt.registerTask('lint', ['jshint', 'csslint']);
 
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
+	grunt.registerTask('build', ['csslint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
