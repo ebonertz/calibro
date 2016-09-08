@@ -29,8 +29,8 @@ module.exports = {
 				'public/design/js/focali-scripts.js',
 				'public/lib/optile/ajax-integration-1.1.min.js',
 				'public/lib/angular-cookie/angular-cookie.min.js',
-				'public/lib/angular-toastr/dist/angular-toastr.js',
-				'public/lib/angular-bindonce/bindonce.js',
+				'public/lib/angular-toastr/dist/angular-toastr.min.js',
+				'public/lib/angular-bindonce/bindonce.min.js',
 				'public/lib/angular-socialshare/angular-socialshare.min.js',
 				'public/lib/angular-addthis/dist/angular-addthis.min.js',
 				'public/lib/es5-shim/es5-shim.min.js',
@@ -54,6 +54,10 @@ module.exports = {
 			'public/application.js',
 			'public/modules/*/*.js',
 			'public/modules/*/*[!tests]*/*.js'
+		],
+		less: [
+			'public/*/design/less/*.less',
+			'public/design/css/main.less',
 		],
 		tests: [
 			'public/lib/angular-mocks/angular-mocks.js',

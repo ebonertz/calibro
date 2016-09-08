@@ -50,6 +50,13 @@ var defaultAssets = require ('./config/env/all');
 				options: {
 					livereload: true
 				}
+			},
+			clientLESS: {
+				files: defaultAssets.assets.less,
+				tasks: ['less', 'csslint'],
+				options: {
+					livereload: true
+				}
 			}
 		},
 		jshint: {
@@ -66,6 +73,18 @@ var defaultAssets = require ('./config/env/all');
 			},
 			all: {
 				src: watchFiles.clientCSS
+			}
+		},
+		less: {
+			dist: {
+				files: [{
+					expand: true,
+					src: defaultAssets.assets.less,
+					ext: '.css',
+					rename: function(base, src) {
+						return src.replace('/less/', '/css/');
+					}
+				}]
 			}
 		},
 		uglify: {

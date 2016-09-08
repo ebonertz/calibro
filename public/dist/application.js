@@ -41,7 +41,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 		$locationProvider.hashPrefix('!');
 		//$httpProvider.interceptors.push('headTagsInterceptor');
 	}
-]).run(function ($rootScope, CartService, CustomerService, $anchorScroll, $FB) {
+]).run(["$rootScope", "CartService", "CustomerService", "$anchorScroll", "$FB", function ($rootScope, CartService, CustomerService, $anchorScroll, $FB) {
 	CustomerService.checkCookieAndLogin();
 	CartService.pageLoad();
 	//console.log(Authentication)
@@ -55,7 +55,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	});
 
 	$FB.init('841888042555433');
-}).constant('appDefaults', ApplicationConfiguration.defaults);
+}]).constant('appDefaults', ApplicationConfiguration.defaults);
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {
@@ -1965,7 +1965,7 @@ angular.module('core').directive('addthisToolbox', ['$timeout','$location','$roo
 
 var LOCALE = 'en';
 
-angular.module('core').filter('locale', function(appDefaults){
+angular.module('core').filter('locale', ["appDefaults", function(appDefaults){
     return function(input){
         var locale = appDefaults.locale || LOCALE;
         if(input)
@@ -1973,7 +1973,7 @@ angular.module('core').filter('locale', function(appDefaults){
         else
             return ''
     }
-})
+}])
 
 angular.module('core').filter('priceTimes', function(){
     return function(price, times){
@@ -2048,9 +2048,9 @@ angular.module('core').filter('size', function () {
  */
 angular.module('core').provider(
     "$exceptionHandler", {
-        $get: function (exceptionLoggingService) {
+        $get: ["exceptionLoggingService", function (exceptionLoggingService) {
             return (exceptionLoggingService);
-        }
+        }]
     }
 );
 
@@ -4077,7 +4077,7 @@ module.directive('latestProducts', ['ProductService', function (ProductService) 
 
 var module = angular.module('products');
 
-module.directive('productThumbnail', function ($rootScope) {
+module.directive('productThumbnail', ["$rootScope", function ($rootScope) {
 	return {
 		templateUrl: 'modules/products/templates/product.client.template.html',
 		restrict: 'E',
@@ -4110,7 +4110,7 @@ module.directive('productThumbnail', function ($rootScope) {
 			};
 		}
 	}
-})
+}])
 
 
 'use strict';
@@ -4158,7 +4158,7 @@ module.filter('spherePrice', function(){
 });
 
 // Returns an array with all the prices with the selected currency
-module.filter('currency', function(appDefaults){
+module.filter('currency', ["appDefaults", function(appDefaults){
     return function(input, currency){
         var prices = [];
 
@@ -4175,7 +4175,7 @@ module.filter('currency', function(appDefaults){
 
         return prices;
     }
-});
+}]);
 
 module.filter('channel', function(){
     return function(input, channel){
