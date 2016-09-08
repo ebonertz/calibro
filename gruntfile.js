@@ -28,7 +28,6 @@ var defaultAssets = require ('./config/env/all');
 			},
 			serverJS: {
 				files: watchFiles.serverJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
@@ -41,7 +40,6 @@ var defaultAssets = require ('./config/env/all');
 			},
 			clientJS: {
 				files: watchFiles.clientJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
