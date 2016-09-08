@@ -1,10 +1,8 @@
 {
   "verbose": true,
-  "ignore": ["*.test.js", "public/*", ".git/"],
+  "script": "server.js",
+  "ignore": ["*.test.js", ".git/"],
   "execMap": {
-    "js": "node --debug"
-  },
-  "env": {
-  	"NODE_ENV": "development"
+    "js": "node"
   }
 }
