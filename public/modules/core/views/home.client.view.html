@@ -1,30 +1,29 @@
 <div ng-controller="HomeController" ng-init="loadContent('home')">
-    <div class="slider-wrapper">
-        <div class="content-wrapper">
-            <section id="home-slider">
-                <div class="hero slider" hero>
-                    <ul>
-                        <li>
-                            <img ng-src="{{contentfulData.slide1.fields.file.url}}"/>
 
+
+    <div class="slider-wrapper">
+                <div class="hero slider">
+                    <ul>
+                      <li>
+                            <img class="hero-image" ng-src="{{contentfulData.slide1.fields.file.url}}"/>
                             <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.heroText)"></h2>
                                 <a href="{{contentfulData.heroButtonUrl}}" class="btn blue radius">{{contentfulData.heroButtonText}}</a>
                             </div>
                         </li>
-                        <li><img ng-src="{{contentfulData.slide2.fields.file.url}}"/>
+                        <!-- <li>
+                          <img class="hero-image" ng-src="{{contentfulData.slide2.fields.file.url}}"/>
                             <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.slide2Text)"></h2>
                                 <a href="{{contentfulData.slide2ButtonUrl}}" class="btn blue radius">{{contentfulData.slide2ButtonText}}</a>
                             </div>
-
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
-            </section>
-        </div>
     </div>
-    <div class="content-wrapper">
+
+
+        <div class="content-wrapper">
         <section id="breadcrumbs">
             <div class="breadcrumb">
 			<span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb">
