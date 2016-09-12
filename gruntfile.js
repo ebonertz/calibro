@@ -1,7 +1,6 @@
 'use strict';
 
 var init = require('./config/init')();
-var config = require('./config/config');
 var defaultAssets = require ('./config/env/all');
 
 
