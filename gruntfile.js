@@ -28,7 +28,6 @@ var defaultAssets = require ('./config/env/all');
 			},
 			serverJS: {
 				files: watchFiles.serverJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
@@ -41,7 +40,6 @@ var defaultAssets = require ('./config/env/all');
 			},
 			clientJS: {
 				files: watchFiles.clientJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
@@ -49,6 +47,13 @@ var defaultAssets = require ('./config/env/all');
 			clientCSS: {
 				files: watchFiles.clientCSS,
 				tasks: ['csslint'],
+				options: {
+					livereload: true
+				}
+			},
+			clientLESS: {
+				files: defaultAssets.assets.less,
+				tasks: ['less', 'csslint'],
 				options: {
 					livereload: true
 				}
@@ -68,6 +73,18 @@ var defaultAssets = require ('./config/env/all');
 			},
 			all: {
 				src: watchFiles.clientCSS
+			}
+		},
+		less: {
+			dist: {
+				files: [{
+					expand: true,
+					src: defaultAssets.assets.less,
+					ext: '.css',
+					rename: function(base, src) {
+						return src.replace('/less/', '/css/');
+					}
+				}]
 			}
 		},
 		uglify: {
@@ -188,7 +205,7 @@ var defaultAssets = require ('./config/env/all');
 	grunt.registerTask('lint', ['jshint', 'csslint']);
 
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
+	grunt.registerTask('build', ['csslint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
