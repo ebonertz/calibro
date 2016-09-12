@@ -612,10 +612,6 @@ header{
 					max-width:110%;
 					height: 400px;
 						}
-
-				.content {
-					margin-bottom: 200px;
-				}
 			}
 
 
@@ -644,41 +640,42 @@ header{
 			bottom: 35%;
 			z-index: 99;
 			text-align: center;
-	@media (max-width:@screen-lg) and (min-width:@screen-md-min){
-		bottom: 10%;
-	}
-	@media (max-width:@screen-sm-max){
-		bottom: 5%;
-	}
-
-h2 {
-			color: white;
-			font-size: 30px;
-			margin: 0;
-			font-weight: 400;
-			text-shadow: 1px -1px 2px #111;
-
-// Mid Size
-
-			@media (max-width:@screen-lg) and (min-width:@screen-md-min){
-				text-align:center;
-				font-size: 20px;
-			}
-// Mid
-			@media (max-width:@screen-md-max) and (min-width:@screen-sm-min){
-				font-color: blue;
-			}
-
-//Mobile
-
-				@media (max-width:@screen-sm-max){
-					text-align: center;
-					font-size: 15px;
-					font-color: blue;
-					margin-top: -380px;
-				}
-			}
 		}
+// 	@media (max-width:@screen-lg) and (min-width:@screen-md-min){
+// 		bottom: 10%;
+// 	}
+// 	@media (max-width:@screen-sm-max){
+// 		bottom: 5%;
+// 	}
+//
+// h2 {
+// 			color: white;
+// 			font-size: 30px;
+// 			margin: 0;
+// 			font-weight: 400;
+// 			text-shadow: 1px -1px 2px #111;
+//
+// // Mid Size
+//
+// 			@media (max-width:@screen-lg) and (min-width:@screen-md-min){
+// 				text-align:center;
+// 				font-size: 20px;
+// 			}
+// // Mid
+// 			@media (max-width:@screen-md-max) and (min-width:@screen-sm-min){
+// 				font-color: blue;
+// 			}
+//
+// //Mobile
+//
+// 				@media (max-width:@screen-sm-max){
+// 					text-align: center;
+// 					font-size: 15px;
+// 					font-color: blue;
+// 					margin-top: -380px;
+// 				}
+// 			}
+// 		}
 
 
 
@@ -733,7 +730,7 @@ h2 {
 	}
 }
 #homepage-information{
-	padding: 25px 0;
+	padding: 15px 0;
 	text-transform: uppercase;
 	.contact-data{
 		.make-sm-column(9);
@@ -753,7 +750,7 @@ h2 {
 	}
 	.store-hours{
 		.make-sm-column(3);
-		text-align: right;
+		text-align: center;
 		@media (max-width:@screen-xs-max){
 			text-align: center;
 		}
@@ -892,15 +889,22 @@ h2 {
 		margin-right: auto;
 		height: auto;
 		max-height: 500px;
-		max-width: 1700px;
 	  }
 
-		@media (max-width:@screen-sm-max){
-			img{
-				width: 150%;
-				margin-top: -10%;
-				margin-left: -25%;
+		// @media (max-width:@screen-sm-max){
+		// 	img{
+		// 		width: 150%;
+		// 		margin-top: -10%;
+		// 		margin-left: -25%;
+		// 	}
+		// }
+
+		@media (max-width:@screen-md-max) and (min-width:@screen-sm-min) {
+			img {
+				width: 100%;
+				max-height: 300px;
 			}
+
 		}
 
 			h1{

@@ -1,19 +1,18 @@
 <span ng-controller="AboutUsController"  ng-init="loadContent()">
 <div class="slider-wrapper">
-	<div class="content-wrapper" >
 		<section id="subpage-head">
 			<div class="subpage-hero">
 				<h1 class="subpage-title" ng-bind-html="trustAsHtml(contentfulData.imageTitle)"></h1>
-				<img src="{{contentfulData.mainImage.fields.file.url}}"/>
+				<img src="{{contentfulData.mainImage.fields.file.url}}" />
 			</div>
 		</section>
-	</div>
 </div>
 <hr class="nav-divider"/>
+<br>
 <div class="content-wrapper">
 	<section id="breadcrumbs">
 		<div class="breadcrumb">
-		
+
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
