@@ -3306,9 +3306,8 @@ header a:hover {
   text-decoration: none;
 }
 .slider-wrapper {
-  height: 500px;
+  max-height: 500px;
   width: 100%;
-  background-color: none;
 }
 .hero {
   padding: 0px;
@@ -3334,29 +3333,55 @@ header a:hover {
 }
 .hero ul li img {
   width: 100%;
-  max-height: 500px;
+  max-height: 450px;
+  height: auto;
 }
 .hero ul li a {
   font-family: 'Open Sans', Helvetica Neue, Arial, sans-serif;
   font-size: 15px;
   text-shadow: 1px -1px 2px #111;
 }
-@media (max-width: 1200px) and (min-width: 768px) {
+@media (max-width: 1200px) and (min-width: 992px) {
   .slider-wrapper {
-    height: 360px;
+    height: 500px;
   }
   .slider-wrapper li img {
-    max-width: 110%;
-    height: 360px;
+    max-width: 100%;
+    max-height: 350px;
+    height: auto;
+  }
+}
+@media (max-width: 1199px) {
+  .slider-wrapper {
+    max-height: 400px;
+  }
+  .slider-wrapper li img {
+    width: 100%;
+    max-height: 350px;
+    height: auto;
   }
 }
 @media (max-width: 991px) {
   .slider-wrapper {
-    height: 220px;
+    max-height: 350px;
+    height: auto;
+    width: 100%;
   }
   .slider-wrapper li img {
-    width: 120%;
-    height: 220px;
+    width: 100%;
+    max-height: 220px;
+    height: auto;
+  }
+}
+@media (max-width: 767px) {
+  .slider-wrapper {
+    max-height: 200px;
+    width: 100%;
+  }
+  .slider-wrapper li img {
+    width: 100%;
+    max-height: 200px;
+    height: auto;
     margin-right: auto;
     margin-left: auto;
   }
