@@ -3306,20 +3306,18 @@ header a:hover {
   text-decoration: none;
 }
 .slider-wrapper {
-  background: #dfdbd2 url('../images/slider/slider-bg.png') repeat-x left bottom;
   height: 500px;
-}
-@media (max-width: 991px) {
-  .slider-wrapper {
-    height: 250px;
-  }
+  width: 100%;
+  background-color: none;
 }
 .hero {
   padding: 0px;
   position: relative;
-  height: 500px;
+  height: auto;
   text-align: center;
   overflow-y: hidden;
+  overflox-x: hidden;
+  width: 100%;
 }
 .hero ul {
   margin-top: 0px;
@@ -3327,101 +3325,50 @@ header a:hover {
   padding-left: 0px;
   width: 100%;
 }
-.hero li {
+.hero ul li {
   list-style: none;
   float: left;
   min-height: 500px;
   position: relative;
+  width: 100%;
 }
-.hero li a {
+.hero ul li img {
+  width: 100%;
+  max-height: 500px;
+}
+.hero ul li a {
   font-family: 'Open Sans', Helvetica Neue, Arial, sans-serif;
   font-size: 15px;
   text-shadow: 1px -1px 2px #111;
 }
+@media (max-width: 1200px) and (min-width: 768px) {
+  .slider-wrapper {
+    height: 360px;
+  }
+  .slider-wrapper li img {
+    max-width: 110%;
+    height: 360px;
+  }
+}
 @media (max-width: 991px) {
-  .hero li img {
-    max-width: 400px;
-    height: 250px;
+  .slider-wrapper {
+    height: 220px;
+  }
+  .slider-wrapper li img {
+    width: 120%;
+    height: 220px;
     margin-right: auto;
     margin-left: auto;
   }
-  .hero li a {
-    display: none;
-  }
 }
-@media (max-width: 1199px) and (min-width: 768px) {
-  .hero li img {
-    max-width: 110%;
-    height: 250px;
-  }
-  .hero li a {
-    display: none;
-  }
-}
-.hero li .content {
+.content {
   position: absolute;
   width: 100%;
-  padding: 0 30px;
-  margin: 0 auto;
+  padding: 0 20px;
   display: block;
-  bottom: 15%;
+  bottom: 35%;
   z-index: 99;
   text-align: center;
-}
-@media (max-width: 1199px) {
-  .hero li .content {
-    bottom: 25%;
-  }
-}
-.hero li .content h2 {
-  color: white;
-  font-size: 30px;
-  margin: 0;
-  font-weight: 400;
-  text-shadow: 1px -1px 2px #111;
-}
-@media (max-width: 991px) {
-  .hero li .content h2 {
-    text-align: center;
-    font-size: 15px;
-    margin-top: -250px;
-  }
-}
-@media (max-width: 1199px) and (min-width: 768px) {
-  .hero li .content h2 {
-    text-align: center;
-    font-size: 30px;
-    margin-bottom: -100px;
-  }
-}
-@media (768px) {
-  .hero .dots {
-    position: absolute;
-    bottom: 5px;
-    z-index: 99;
-    width: 100%;
-    padding-left: 0;
-    text-align: center;
-  }
-  .hero .dots li {
-    min-height: 0;
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 0 4px;
-    text-indent: -999em;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-    float: none;
-    -webkit-transition: background .5s, opacity .5s;
-    -moz-transition: background .5s, opacity .5s;
-    transition: background .5s, opacity .5s;
-  }
-  .hero .dots li.active {
-    background: #6195ca;
-    opacity: 1;
-  }
 }
 .breadcrumb {
   position: relative;
@@ -3538,7 +3485,7 @@ header a:hover {
   font-family: 'Noto Serif', serif;
 }
 #homepage-information {
-  padding: 25px 0;
+  padding: 15px 0;
   text-transform: uppercase;
 }
 #homepage-information .contact-data {
@@ -3571,7 +3518,7 @@ header a:hover {
   min-height: 1px;
   padding-left: 15px;
   padding-right: 15px;
-  text-align: right;
+  text-align: center;
   color: #b2b2b2;
 }
 @media (min-width: 768px) {
@@ -3769,13 +3716,11 @@ header a:hover {
   margin-right: auto;
   height: auto;
   max-height: 500px;
-  max-width: 1700px;
 }
-@media (max-width: 991px) {
+@media (max-width: 1199px) and (min-width: 768px) {
   #subpage-head .subpage-hero img {
-    width: 150%;
-    margin-top: -10%;
-    margin-left: -25%;
+    width: 100%;
+    max-height: 300px;
   }
 }
 #subpage-head .subpage-hero h1 {
