@@ -130,7 +130,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $http.get('/api/carts/'+$rootScope.cart.id)
                   .then(function(cart){
                       $rootScope.cart = cart.data;
-                      if ($scope.cartPrescriptionCount() > 0) {
+                        $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+                        if ($scope.cartPrescriptionCount() > 0) {
                           determineHighIndexBlueBlockVisibility();
                           $scope.showPhasePrescription();
                           $scope.showPrescriptionSummary = true;
@@ -213,6 +214,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
 
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                     LoggerServices.success('Shipping address updated');
 
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
@@ -252,6 +254,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.loading = true;
                 CartService.setBillingAddress($rootScope.cart.id, {address: finalBillingAddress}).then(function (result) {
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                     LoggerServices.success('Billing address updated');
                     $scope.showPhaseE();
 
@@ -269,6 +272,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }
                 }).then(function (result) {
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
                     LoggerServices.success('Shipping method updated');
                     $scope.showPhaseC();
