@@ -59,14 +59,17 @@
                 Discount <span style="font-size: 10px;"> </span>
             </td>
             <td class="amount" colspan="2">
+                <span class="amount" ng-bind-html="cart.totalDiscount | spherePrice:'':'-'"></span>
             </td>
+
         </tr>
         <tr id="final-order-price" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">
                 <b>Order Total</b>
             </td>
             <td id="price-total" class="amount" colspan="2">
-                {{cart.taxedPrice ? (cart.taxedPrice.totalGross  | spherePrice) : '-'}}
+                <span ng-if="cart.shippingInfo"> {{cart.taxedPrice ? (cart.taxedPrice.totalGross  | spherePrice) : '-'}}</span>
+                <span ng-if="!cart.shippingInfo">{{cart.totalPrice | spherePrice}}</span>
             </td>
         </tr>
     </table>
