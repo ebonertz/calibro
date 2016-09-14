@@ -593,7 +593,7 @@ header{
 			width: 100%;
 				img {
 					width: 100%;
-					max-height: 450px;
+					max-height: 700px;
 					height: auto;
 				}
 					a {
@@ -604,6 +604,23 @@ header{
 				}
 			}
 		}
+
+// Large Desktop screen
+
+@media (min-width:@screen-lg-desktop) {
+
+	.slider-wrapper {
+		max-height: 700px;
+		width: 100%
+	}
+
+	li img {
+	max-height: 700px;
+	min-height: 500px;
+	height: auto;
+	width: 100%;
+ }
+}
 
 // Mid size Screen Slider
 
@@ -637,7 +654,7 @@ header{
 		width: 100%;
 		li img {
 			width: 100%;
-			max-height:220px;
+			max-height:300px;
 			height: auto;
 		}
 	}
@@ -648,12 +665,13 @@ header{
 @media (max-width:@screen-xs-max) {
 
 .slider-wrapper{
-	max-height: 200px;
+	max-height: 220px;
 	width: 100%;
 
 	li img {
 			width: 100%;
-			max-height: 200px;
+			max-height: 220px;
+			min-height: 180px;
 			height: auto;
 			margin-right: auto;
 			margin-left: auto;
@@ -663,18 +681,19 @@ header{
 
 //Slider Button and text
 
-.content{
-			position: absolute;
-			width: 100%;
-			padding: 0 20px;
-			display: block;
-			bottom: 35%;
-			z-index: 99;
-			text-align: center;
-		}
+// .content{
+// 			position: absolute;
+// 			width: 100%;
+// 			padding: 0 20px;
+// 			display: block;
+// 			bottom: 35%;
+// 			z-index: 99;
+// 			text-align: center;
+// 		}
 // 	@media (max-width:@screen-lg) and (min-width:@screen-md-min){
 // 		bottom: 10%;
 // 	}
+
 // 	@media (max-width:@screen-sm-max){
 // 		bottom: 5%;
 // 	}
@@ -2333,6 +2352,8 @@ table#cart{
 	  	.content {
 		  	height: 100px;
 		  	overflow: hidden;
+				font-size: 15px;
+				display:block;
 
 				@media(max-width:@screen-sm-max) {
 					font-size: 12px;
@@ -2343,6 +2364,7 @@ table#cart{
 			  	margin-top: 4px;
 			}
 		}
+
 	}
   	.summary {
 	  	text-transform: uppercase;

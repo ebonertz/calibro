@@ -3333,13 +3333,25 @@ header a:hover {
 }
 .hero ul li img {
   width: 100%;
-  max-height: 450px;
+  max-height: 700px;
   height: auto;
 }
 .hero ul li a {
   font-family: 'Open Sans', Helvetica Neue, Arial, sans-serif;
   font-size: 15px;
   text-shadow: 1px -1px 2px #111;
+}
+@media (min-width: 1200px) {
+  .slider-wrapper {
+    max-height: 700px;
+    width: 100%;
+  }
+  li img {
+    max-height: 700px;
+    min-height: 500px;
+    height: auto;
+    width: 100%;
+  }
 }
 @media (max-width: 1200px) and (min-width: 992px) {
   .slider-wrapper {
@@ -3369,31 +3381,23 @@ header a:hover {
   }
   .slider-wrapper li img {
     width: 100%;
-    max-height: 220px;
+    max-height: 300px;
     height: auto;
   }
 }
 @media (max-width: 767px) {
   .slider-wrapper {
-    max-height: 200px;
+    max-height: 220px;
     width: 100%;
   }
   .slider-wrapper li img {
     width: 100%;
-    max-height: 200px;
+    max-height: 220px;
+    min-height: 180px;
     height: auto;
     margin-right: auto;
     margin-left: auto;
   }
-}
-.content {
-  position: absolute;
-  width: 100%;
-  padding: 0 20px;
-  display: block;
-  bottom: 35%;
-  z-index: 99;
-  text-align: center;
 }
 .breadcrumb {
   position: relative;
@@ -5732,6 +5736,8 @@ table#cart .remove-item {
 .checkout-steps .prescription-box .content {
   height: 100px;
   overflow: hidden;
+  font-size: 15px;
+  display: block;
 }
 @media (max-width: 991px) {
   .checkout-steps .prescription-box .content {
