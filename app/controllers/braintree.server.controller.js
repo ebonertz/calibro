@@ -32,16 +32,23 @@ module.exports = function (app) {
         var nonceFromTheClient = req.body.payment_method_nonce;
         var customerId = req.body.customerId;
         var submitForSettlement = req.body.submitForSettlement;
-        var parameters = {
-            customerId: customerId,
-            submitForSettlement: submitForSettlement,
-            nonceFromTheClient: nonceFromTheClient,
-            orderId: req.body.orderId
-        };
-        SphereClient.getClient().orders.byId(parameters.orderId).fetch().then(function (resultOrder) {
+        var orderId = req.body.orderId;
+
+        SphereClient.getClient().orders.byId(orderId).fetch().then(function (resultOrder) {
             var resultOrder = resultOrder.body;
+            var parameters = {
+                customerId: customerId,
+                submitForSettlement: submitForSettlement,
+                nonceFromTheClient: nonceFromTheClient,
+                orderId: orderId,
+                orderNumber: resultOrder.orderNumber
+
+            };
             parameters.amount = resultOrder.totalPrice.centAmount / 100;
-            app.logger.info ("Paying Order: " + parameters.orderId + " with amount of: " + parameters.amount);
+            if (resultOrder.taxedPrice) {
+                parameters.amount = resultOrder.taxedPrice.totalGross.centAmount / 100;
+            }
+           app.logger.info ("Paying Order: " + parameters.orderId + " with amount of: " + parameters.amount);
             braintreeSphereService.payment.checkout(parameters).then(function (response) {
                 if (response.success === true) {
                     SphereClient.getClient().orders.byId(parameters.orderId)
