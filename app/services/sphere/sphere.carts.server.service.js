@@ -344,6 +344,7 @@ module.exports = function (app) {
 
             CommonService.byId('carts', cookieId, function (err, cart) {
                 if (err) {
+                  console.log(err, 'byid');
                     CommonService.create('carts', newCart, function (err, cart) {
                         if (err) {
                             callback(err, null);
@@ -353,15 +354,7 @@ module.exports = function (app) {
                         }
                     });
                 } else {
-                    newCart ['lineItems'] = cart.lineItems;
-                    CommonService.create('carts', newCart, function (err, cart) {
-                        if (err) {
-                            callback(err, null);
-                        } else {
-                            app.logger.debug("Refresh cart B - Cart ID: " + cart.id);
-                            callback(null, cart);
-                        }
-                    });
+                    callback(null,cart)
 
                 }
             }, expand);

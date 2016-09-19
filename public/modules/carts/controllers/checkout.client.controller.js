@@ -130,6 +130,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $http.get('/api/carts/'+$rootScope.cart.id)
                   .then(function(cart){
                       $rootScope.cart = cart.data;
+                      console.log($rootScope.cart.totalDiscount, cart, 'discount')
                         $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                         if ($scope.cartPrescriptionCount() > 0) {
                           determineHighIndexBlueBlockVisibility();
@@ -215,6 +216,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                     $rootScope.cart = result;
                     $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+                    debugger;
                     LoggerServices.success('Shipping address updated');
 
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
