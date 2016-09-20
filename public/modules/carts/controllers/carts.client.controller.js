@@ -33,6 +33,9 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                     CartService.refreshCart(cookieId).then(function (cart) {
                         $rootScope.cart = cart;
                         $location.path('/checkout');
+                      }, function(err) {
+                        LoggerServices.error("There was an error with refreshing the cart totals");
+                      }
                     });
                 }
                 else {
