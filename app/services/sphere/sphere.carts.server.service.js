@@ -344,7 +344,6 @@ module.exports = function (app) {
 
             CommonService.byId('carts', cookieId, function (err, cart) {
                 if (err) {
-                  console.log(err, 'byid');
                     CommonService.create('carts', newCart, function (err, cart) {
                         if (err) {
                             callback(err, null);

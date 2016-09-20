@@ -33,8 +33,6 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                     CartService.refreshCart(cookieId).then(function (cart) {
                         $rootScope.cart = cart;
                         $location.path('/checkout');
-                    }, function(err) {
-                      console.error(err)
                     });
                 }
                 else {

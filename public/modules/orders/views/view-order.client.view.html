@@ -2,7 +2,7 @@
 <div class="content-wrapper" ng-controller="OrdersController" ng-init="findOne()">
     <section id="breadcrumbs">
         <div class="breadcrumb">
-		
+
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
@@ -39,10 +39,10 @@
                     <h6>Totals</h6>
                     <table id="final-totals">
                         <tbody>
-                        <tr>
+                        <!-- <tr>
                             <td>Sub Total</td>
                             <td>{{order.totalPrice | spherePrice}}</td>
-                        </tr>
+                        </tr> -->
                          <tr>
                             <td>Taxes</td>
                             <td ng-repeat="taxPortion in order.taxedPrice.taxPortions">
