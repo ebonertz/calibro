@@ -476,7 +476,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.savedPrescription = {}
             var data = {}
 
-            // Fast fix
             $scope.prescription = $scope.prescription || {}
 
             var save = function (type, method, data, callback) {
