@@ -501,6 +501,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         }
 
                         $rootScope.cart = response.cart;
+                        $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
                         callback(response);
