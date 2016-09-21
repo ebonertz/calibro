@@ -410,6 +410,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 $rootScope.cart = result;
                 if (status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                 $rootScope.loading = false;
             }, function (err) {
                 $rootScope.loading = false;
@@ -438,6 +439,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 $rootScope.cart = result;
                 if (status) LoggerServices.success('Added Blue Block AR'); // I have the feeling no feedback should be given when no index lenses are selected
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                 $rootScope.loading = false;
             }, function (err) {
                 $rootScope.loading = false;
@@ -476,7 +478,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.savedPrescription = {}
             var data = {}
 
-            // Fast fix
             $scope.prescription = $scope.prescription || {}
 
             var save = function (type, method, data, callback) {
@@ -501,6 +502,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         }
 
                         $rootScope.cart = response.cart;
+                        $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
                         callback(response);
