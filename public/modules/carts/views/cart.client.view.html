@@ -44,6 +44,9 @@
                         <div class="item-cart-price">
                             <div ng-if="!lineItem.discountedPrice" ng-bind="lineItem.price | priceTimes:lineItem.quantity | spherePrice"></div>
                             <div ng-if="lineItem.discountedPrice" ng-bind="lineItem.discountedPrice | priceTimes:lineItem.quantity | spherePrice"></div>
+                            <!--<div ng-if="lineItem.discountedPrice">-{{lineItem.discountedPrice.includedDiscounts | sumDiscounts | priceTimes:lineItem.quantity | spherePrice}}</div>-->
+                            <!--<span ng-if="lineItem.discountedPrice" class="discount-text">(-{{lineItem.discountedPrice | priceDiscount:lineItem.discountedPrice | spherePrice }}{{$utils.getCurrencySimbol(lineItem.discountedPrice.value.currencyCode)}} {{((lineItem.price.value.centAmount * lineItem.quantity) - (lineItem.discountedPrice.value.centAmount * lineItem.quantity)) / 100}})</span>-->
+                        </div>
                     </td>
                     <td class="remove-item">
                         <a ng-click="removeFromCart(lineItem)" href="" class="remove-from-cart"></a>
