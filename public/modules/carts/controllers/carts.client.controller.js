@@ -50,7 +50,7 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
             CartService.removeFromCart(item);
             $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
-        };
+          };
 
         $scope.addDiscountCode = function (code) {
             if (code != null) {
