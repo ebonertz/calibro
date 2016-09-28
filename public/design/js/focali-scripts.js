@@ -1,27 +1,27 @@
-//Hompage Slider
-$(function() {
-    $('.hero').unslider({
-    	speed: 500,               //  The speed to animate each slide (in milliseconds)
-    	delay: 5000,              //  The delay between slide animations (in milliseconds)
-    	dots: true,               //  Display dot navigation
-    	fluid: true              //  Support responsive design. May break non-responsive designs
-    });
-});
-
-var slider = $('#price-range').noUiSlider({
-		start: [ 0, 500 ],
-		connect: true,
-		range: {
-			'min': 0,
-			'max': 500
-		}
-	});
-	$('#price-range').Link('lower').to($('#range-number-min'), null, wNumb({
-		decimals: 0
-	}));
-	$('#price-range').Link('upper').to($('#range-number-max'), null, wNumb({
-		decimals: 0
-	}));
+// //Hompage Slider
+// $(function() {
+//     $('.hero').unslider({
+//     	speed: 500,               //  The speed to animate each slide (in milliseconds)
+//     	delay: 5000,              //  The delay between slide animations (in milliseconds)
+//     	dots: true,               //  Display dot navigation
+//     	fluid: true              //  Support responsive design. May break non-responsive designs
+//     });
+// });
+//
+// var slider = $('#price-range').noUiSlider({
+// 		start: [ 0, 500 ],
+// 		connect: true,
+// 		range: {
+// 			'min': 0,
+// 			'max': 500
+// 		}
+// 	});
+// 	$('#price-range').Link('lower').to($('#range-number-min'), null, wNumb({
+// 		decimals: 0
+// 	}));
+// 	$('#price-range').Link('upper').to($('#range-number-max'), null, wNumb({
+// 		decimals: 0
+// 	}));
 
 
 //Add class checked to radio button
@@ -64,9 +64,9 @@ $('.thumbnail-wrapper').click(function() {
 	var url = $(this).data('url');
 	$('.img-big img').fadeOut();
 		setTimeout(function(){
-		$('.img-big img').attr('src', url);	
+		$('.img-big img').attr('src', url);
 		$('.img-big img').fadeIn();
-		
+
 		},500);
 	$(this).addClass('active');
 	return false;
@@ -114,11 +114,11 @@ $(".item-total").each(function() {
     }
 });
 }
-//Do initial Cart calculation 
+//Do initial Cart calculation
 $(document).ready(totalsCalc);
-//Sum unit price 
+//Sum unit price
 $('.edit-quantity #more').each(function(){
-		
+
 		$(this).click(function() {
 			var thisUnitPrice = $(this).parents('.product-row').children('.product-price').text().replace('$', '');
 			var currentTotal = $(this).parents('.product-row').children('.item-total').text().replace('$', '');
@@ -135,16 +135,16 @@ $('.edit-quantity #minus').each(function() {
 		var thisUnitPrice = $(this).parents('.product-row').children('.product-price').text().replace('$', '');
 		var currentTotal = $(this).parents('.product-row').children('.item-total').text().replace('$', '');
 		var newTotal = (Number(parseFloat(currentTotal) - parseFloat(thisUnitPrice)).toFixed(2));
-		var itemsAdded = $(this).parents('.edit-quantity').children('#item-amount').val();	
+		var itemsAdded = $(this).parents('.edit-quantity').children('#item-amount').val();
 		var route = $(this).parents('.product-row').find('#item-amount');
 		if(itemsAdded  == '1'){
 			return false;
 		} else {
-			
+
 			$(this).parents('.product-row').children('.item-total').text('$' + newTotal);
 			route.val(Number(route.val()) - 1);
 			totalsCalc();
-		}	
+		}
 	});
 });
 
@@ -155,12 +155,12 @@ $('.remove-from-cart').click(function() {
 		$(this).remove();
 		totalsCalc();
 	});
-	
+
 	$('.cart-alerts').removeClass('not-showing').text('The product has been removed');
 	setTimeout(function() {
-		$('.cart-alerts').addClass('not-showing');		
+		$('.cart-alerts').addClass('not-showing');
 	}, 3000);
-	
+
 	return false;
 })
 
@@ -208,5 +208,5 @@ $(function() {
 		$('.site-search-wrapper').removeClass('showing');
 		return false;
 	});
-	
+
 });
