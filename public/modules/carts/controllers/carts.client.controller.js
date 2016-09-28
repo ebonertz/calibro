@@ -22,6 +22,12 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
         }
 
 
+        $scope.checkContents = function () {
+          $rootscope.cart.lineItems.length != 0;
+
+          }
+
+
 
         $scope.proceedToCheckout = function () {
             if ($rootScope.cart != null && $rootScope.cart.lineItems != null && $rootScope.cart.lineItems.length > 0) {
@@ -50,7 +56,7 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
             CartService.removeFromCart(item);
             $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
-        };
+          };
 
         $scope.addDiscountCode = function (code) {
             if (code != null) {
