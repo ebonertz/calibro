@@ -89,5 +89,17 @@ module.exports = function (app) {
             });
     };
 
+    service.updatePaymentState = function(id){
+        return SphereClient.getClient().orders.byId(id).fetch().then(function (result) {
+            return SphereClient.getClient().orders.byId(result.body.id)
+              .update({
+                  version:result.body.version,
+                  actions:[{
+                      action:'changePaymentState',
+                      paymentState:'Paid'
+                  }]
+              });
+          });
+    };
     return service;
 }

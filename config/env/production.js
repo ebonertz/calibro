@@ -146,8 +146,8 @@ module.exports = {
 		level: "debug"
 	},
 	papertrail: {
-		host: 'logs3.papertrailapp.com',
-		port: 16061
+		host: process.env.PAPERTRAIL_HOST,
+		port: process.env.PAPERTRAIL_PORT
 	},
 	prerenderio: {
 		token: process.env.PRERENDERIO_TOKEN
