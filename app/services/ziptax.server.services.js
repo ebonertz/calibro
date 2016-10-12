@@ -13,7 +13,9 @@ module.exports = function (app) {
                 } else {
                     var tax = result.results[0];
                     if (tax) {
-                        resolve(tax.taxSales);
+                        //Keep this only as zip code validation now but assign 0 to all taxes
+                        //resolve(tax.taxSales);
+                        resolve(0);
                     }
                     else {
                         reject ("Invalid Zip Code. Please use a valid Zip Code.");
