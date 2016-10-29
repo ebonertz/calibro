@@ -30,9 +30,7 @@
                 Taxes <span style="font-size: 10px;"> </span>
             </td>
             <td></td>
-            <td ng-repeat="taxPortion in cart.taxedPrice.taxPortions track by $index" id="sub-amount" class="amount">
-                {{taxPortion.amount | spherePrice}}
-            </td>
+            <td id="sub-amount" class="amount"> {{cart.taxedPrice | sumTaxes | spherePrice}}</td>
         </tr>
         <!-- <tr class="subtotal" ng-if="!(cart.lineItems == null || cart.lineItems.length == 0)">
             <td class="concept">

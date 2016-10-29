@@ -143,12 +143,14 @@ module.exports = {
     prerenderio: {
         token: process.env.PRERENDERIO_TOKEN
     },
-    ziptax:{
-        apikey: process.env.ZIP_API_KEY || "3H66ULRU7PLY"
-    },
     cloudinary: {
         api_key: process.env.CLOUDINARY_API_KEY || "317299721992649",
         api_secret: process.env.CLOUDINARY_API_SECRET || "k4HCOKsvs9YHDUJWAmF2OL7180o",
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME ||"dswl4guqu"
+    },
+    avalara: {
+        key: "MjAwMDE4OTY4Nzo3MkExQzhGNUU2MjE3Njg3",
+        url: "https://development.avalara.net/1.0/tax/get"
     }
+
 };

@@ -152,12 +152,13 @@ module.exports = {
 	prerenderio: {
 		token: process.env.PRERENDERIO_TOKEN
 	},
-	ziptax:{
-		apikey: process.env.ZIP_API_KEY
-	},
 	cloudinary: {
 		api_key: process.env.CLOUDINARY_API_KEY,
 		api_secret: process.env.CLOUDINARY_API_SECRET,
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME
+	},
+	avalara: {
+		key: process.env.AVALARA_API_KEY,
+		url: process.env.AVALARA_URL
 	}
 };

@@ -5,7 +5,7 @@ entity = 'carts';
 
 module.exports = function (app) {
     var CommonService = require('./sphere.commons.server.service.js')(app),
-        ZipTaxService = require('../../services/ziptax.server.services.js')(app),
+        AvalaraService = require('../../services/avalara.server.services.js')(app),
         Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
     TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
     var service = {};
@@ -77,10 +77,10 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function(taxValue){
+                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(taxRate){
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: taxValue,
+                        amount: parseFloat(taxRate),
                         country: "US"
 
                     };
@@ -112,7 +112,7 @@ module.exports = function (app) {
                         callback(err, cart);
                     });
                 }).catch(function(err){
-                    app.logger.error('Error setting tax values from ziptax: %s', err);
+                    app.logger.error('Error setting tax values from Avalara: %s', err);
                     callback(err, null);;
                 });
             });
@@ -138,10 +138,10 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function (taxValue) {
+                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (taxRate) {
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: taxValue,
+                        amount: parseFloat(taxRate),
                         country: "US"
 
                     };

@@ -77,3 +77,16 @@ angular.module('core').filter('size', function () {
         return input;
     };
 });
+
+angular.module('core').filter('sumTaxes', function(){
+    return function(taxedPrice){
+        var totalTaxes = {
+            currencyCode: taxedPrice.taxPortions[0].amount.currencyCode,
+            centAmount: 0,
+        };
+        for(var i in taxedPrice.taxPortions){
+            totalTaxes.centAmount += taxedPrice.taxPortions[i].amount.centAmount
+        }
+        return totalTaxes;
+    }
+});
