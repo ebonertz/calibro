@@ -56,6 +56,10 @@ module.exports = function (app) {
 
         }
         options.body = JSON.stringify (bodyObject);
+        app.logger.debug ("Avalara request %s",options.body);
+        app.logger.debug ("Avalara url %s",config.avalara.url);
+        app.logger.debug ("Avalara key %s",config.avalara.key);
+
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
