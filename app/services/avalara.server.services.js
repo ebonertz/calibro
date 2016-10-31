@@ -56,7 +56,6 @@ module.exports = function (app) {
 
         }
         options.body = JSON.stringify (bodyObject);
-``
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
