@@ -3,14 +3,14 @@
 module.exports = {
 	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/focali-mean',
 	serverPath: process.env.SERVER_PATH || 'http://focali-stage.ct-app.com/',
-	//assets: {
-	//	lib: {
-	//		css: 'public/dist/vendor.min.css',
-	//		js: 'public/dist/vendor.min.js'
-	//	},
-	//	css: 'public/dist/application.min.css',
-	//	js: 'public/dist/application.min.js'
-	//},
+	assets: {
+		lib: {
+			css: 'public/dist/vendor.min.css',
+			js: 'public/dist/vendor.min.js'
+		},
+		css: 'public/dist/application.min.css',
+		js: 'public/dist/application.min.js'
+	},
 	rememberMeKey: process.env.REMEMBER_ME_KEY,
 	app: {
 		title: 'Focali Optics',
@@ -146,18 +146,19 @@ module.exports = {
 		level: "debug"
 	},
 	papertrail: {
-		host: 'logs3.papertrailapp.com',
-		port: 16061
+		host: process.env.PAPERTRAIL_HOST,
+		port: process.env.PAPERTRAIL_PORT
 	},
 	prerenderio: {
 		token: process.env.PRERENDERIO_TOKEN
-	},
-	ziptax:{
-		apikey: process.env.ZIP_API_KEY
 	},
 	cloudinary: {
 		api_key: process.env.CLOUDINARY_API_KEY,
 		api_secret: process.env.CLOUDINARY_API_SECRET,
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME
+	},
+	avalara: {
+		key: process.env.AVALARA_API_KEY,
+		url: process.env.AVALARA_URL
 	}
 };

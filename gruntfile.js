@@ -1,9 +1,10 @@
 'use strict';
 
 var init = require('./config/init')();
-var config = require('./config/config');
+var defaultAssets = require ('./config/env/all');
 
-module.exports = function(grunt) {
+
+	module.exports = function(grunt) {
 	// Unified Watch Object
 	var watchFiles = {
 		serverViews: ['app/views/**/*.*'],
@@ -26,7 +27,6 @@ module.exports = function(grunt) {
 			},
 			serverJS: {
 				files: watchFiles.serverJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
@@ -39,7 +39,6 @@ module.exports = function(grunt) {
 			},
 			clientJS: {
 				files: watchFiles.clientJS,
-				tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
@@ -47,6 +46,13 @@ module.exports = function(grunt) {
 			clientCSS: {
 				files: watchFiles.clientCSS,
 				tasks: ['csslint'],
+				options: {
+					livereload: true
+				}
+			},
+			clientLESS: {
+				files: defaultAssets.assets.less,
+				tasks: ['less', 'csslint'],
 				options: {
 					livereload: true
 				}
@@ -68,6 +74,18 @@ module.exports = function(grunt) {
 				src: watchFiles.clientCSS
 			}
 		},
+		less: {
+			dist: {
+				files: [{
+					expand: true,
+					src: defaultAssets.assets.less,
+					ext: '.css',
+					rename: function(base, src) {
+						return src.replace('/less/', '/css/');
+					}
+				}]
+			}
+		},
 		uglify: {
 			production: {
 				options: {
@@ -82,7 +100,7 @@ module.exports = function(grunt) {
 			combine: {
 				files: {
 					'public/dist/application.min.css': '<%= applicationCSSFiles %>',
-					'public/dist/vendor.min.css': config.assets.lib.css
+					'public/dist/vendor.min.css': defaultAssets.assets.lib.css
 				}
 			}
 		},
@@ -92,7 +110,7 @@ module.exports = function(grunt) {
 					stripBanners: true
 				},
 				files: {
-					'public/dist/vendor.min.js': config.assets.lib.js
+					'public/dist/vendor.min.js': defaultAssets.assets.lib.js
 				}
 			}
 		},
@@ -100,7 +118,6 @@ module.exports = function(grunt) {
 			dev: {
 				script: 'server.js',
 				options: {
-					nodeArgs: ['--debug'],
 					ext: 'js,html',
 					watch: watchFiles.serverViews.concat(watchFiles.serverJS)
 				}
@@ -128,7 +145,6 @@ module.exports = function(grunt) {
 		},
 		concurrent: {
 			default: ['nodemon', 'watch'],
-			debug: ['nodemon', 'watch', 'node-inspector'],
 			options: {
 				logConcurrentOutput: true,
 				limit: 10
@@ -171,8 +187,8 @@ module.exports = function(grunt) {
 	// A Task for loading the configuration object
 	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
 
-		grunt.config.set('applicationJavaScriptFiles', config.assets.js);
-		grunt.config.set('applicationCSSFiles', config.assets.css);
+		grunt.config.set('applicationJavaScriptFiles', defaultAssets.assets.js);
+		grunt.config.set('applicationCSSFiles', defaultAssets.assets.css);
 	});
 
 	// Default task(s).
@@ -188,7 +204,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('lint', ['jshint', 'csslint']);
 
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
+	grunt.registerTask('build', ['csslint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin','concat']);
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);

@@ -81,6 +81,7 @@ var buildFiles = function(intgs){
                     "Ship to First Name": value.shippingAddress.firstName,
                     "Ship to Last Name": value.shippingAddress.lastName,
                     "Ship to Phone": value.shippingAddress.phone,
+                    "Ship to Email":value.shippingAddress.email,
                     "Ship to Company Name": value.shippingAddress.company,
                     "Ship to Street Name":  value.shippingAddress.streetName,
                     "Ship to Street Number": value.shippingAddress.streetNumber,

@@ -224,6 +224,3 @@ module.exports = function (app) {
 
     return service;
 }
-
-
-

@@ -1,30 +1,29 @@
 <div ng-controller="HomeController" ng-init="loadContent('home')">
-    <div class="slider-wrapper">
-        <div class="content-wrapper">
-            <section id="home-slider">
-                <div class="hero slider" hero>
-                    <ul>
-                        <li>
-                            <img ng-src="{{contentfulData.slide1.fields.file.url}}"/>
 
-                            <div class="content">
+
+    <div class="slider-wrapper">
+                <div class="hero slider">
+                    <ul>
+                      <li>
+                            <img class="hero-image" ng-src="{{contentfulData.newhero.fields.file.url}}"/>
+                            <!-- <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.heroText)"></h2>
                                 <a href="{{contentfulData.heroButtonUrl}}" class="btn blue radius">{{contentfulData.heroButtonText}}</a>
-                            </div>
+                            </div> -->
                         </li>
-                        <li><img ng-src="{{contentfulData.slide2.fields.file.url}}"/>
+                        <!-- <li>
+                          <img class="hero-image" ng-src="{{contentfulData.slide2.fields.file.url}}"/>
                             <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.slide2Text)"></h2>
                                 <a href="{{contentfulData.slide2ButtonUrl}}" class="btn blue radius">{{contentfulData.slide2ButtonText}}</a>
                             </div>
-
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
-            </section>
-        </div>
     </div>
-    <div class="content-wrapper">
+
+
+        <div class="content-wrapper">
         <section id="breadcrumbs">
             <div class="breadcrumb">
 			<span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb">
@@ -39,17 +38,17 @@
             </div>
             <div class="clearfix"></div>
             <div class="eyewear-cover">
-                <img class="circle" ng-src="{{contentfulData.eyewearSideImage.fields.file.url}}" width="364" height="361" alt="Focali Eyewear"/>
+                <img class="circle" ng-src="{{contentfulData.eyewearSideImage.fields.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear"/>
             </div>
             <div class="eyewear-gender">
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img src="{{contentfulData.eyewearImage1.fields.file.url}}" width="362" height="226"/>
+                <img src="{{contentfulData.eyewearImage1.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
                 <a href="{{contentfulData.eyewearHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHimButtonText)"></span></a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
-                <img ng-src="{{contentfulData.eyewearImage2.fields.file.url}}" width="362" height="226"/>
+                <img ng-src="{{contentfulData.eyewearImage2.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
                 <a href="{{contentfulData.eyewearHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHerButtonText)"></span></a>
             </div>
         </section>
@@ -64,16 +63,16 @@
             <div class="eyewear-gender">
                 <h4>For Him</h4>
                 <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url}}" width="362" height="226"/>
+                <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
                 <a href="{{contentfulData.sunglassesHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHimButtonText)"></span></a>
             </div>
             <div class="eyewear-gender">
                 <h4>For Her</h4>
-                <img ng-src="{{contentfulData.sunglassesImage2.fields.file.url}}" width="362" height="226"/>
+                <img ng-src="{{contentfulData.sunglassesImage2.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
                 <a href="{{contentfulData.sunglassesHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHerButtonText)"></span></a>
             </div>
             <div class="sunglasses-cover">
-                <img class="circle" src="{{contentfulData.sunglassesSideImage.fields.file.url}}" width="364" height="361" alt="Focali Eyewear"/>
+                <img class="circle" src="{{contentfulData.sunglassesSideImage.fields.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear"/>
             </div>
         </section>
         <hr/>

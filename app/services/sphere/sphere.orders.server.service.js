@@ -42,25 +42,6 @@ module.exports = function (app) {
                         }
 
                         // TODO: Some error control to assure CustomObject update
-                        if (orderCreated.customerId) {
-                            CommonService.byId('customers', orderCreated.customerId, function (err, customer) {
-                                if (!err && customer != null && customer.email != null) {
-                                    MandrillService.orderConfirmation(customer, orderCreated);
-                                } else {
-                                    app.logger.error("Error creating order. Error: %s", JSON.stringify(err));
-                                }
-
-                            });
-                        }
-                        else if (orderCreated.billingAddress.email) {
-                            MandrillService.orderConfirmation(orderCreated.billingAddress, orderCreated);
-                        }
-                        else if (orderCreated.shippingAddress.email) {
-                            MandrillService.orderConfirmation(orderCreated.shippingAddress, orderCreated);
-
-                        }
-
-
                         callback(null, orderCreated);
                     }
 
@@ -108,5 +89,17 @@ module.exports = function (app) {
             });
     };
 
+    service.updatePaymentState = function(id){
+        return SphereClient.getClient().orders.byId(id).fetch().then(function (result) {
+            return SphereClient.getClient().orders.byId(result.body.id)
+              .update({
+                  version:result.body.version,
+                  actions:[{
+                      action:'changePaymentState',
+                      paymentState:'Paid'
+                  }]
+              });
+          });
+    };
     return service;
 }

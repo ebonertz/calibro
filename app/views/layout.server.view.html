@@ -12,6 +12,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="google-site-verification" content="QjywabUYbpMTUfIAuf_C0hq4xvNjLpFDpMlFSDIJHbM" />
 
 	<!-- Semantic META -->
 	<meta name="description" content="{{description}}">
@@ -32,41 +33,42 @@
 	<meta name="twitter:image" content="/img/brand/logo.png">
 
 	<!-- Fav Icon -->
-	<link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+	<link href="/design/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
 
 
 	<!-- FOCALI -->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300|Noto+Serif:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet/less" href="design/css/main.less">
-	<script src="/lib/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript">less = { env: 'development' };</script>
-	<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56aa847133532c11&async=1"></script>
+	<link async href='//fonts.googleapis.com/css?family=Open+Sans:400,300|Noto+Serif:400,700' rel='stylesheet' type='text/css'>
+	<link async rel="stylesheet/less" href="design/css/main.css">
+	<script async src="/lib/jquery/dist/jquery.min.js"></script>
+	<script async src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56aa847133532c11&async=1"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
 
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
 </head>
 
 <body class="ng-cloak">
 
+	<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PBL6RP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PBL6RP');</script>
+<!-- End Google Tag Manager -->
+
+
 	<script>
 		dataLayer = [];
 	</script>
-	<!-- Google Tag Manager -->
-	<noscript><iframe src="//www.googletagmanager.com/ns.html?id={{googleTagManagerKey}}"
-					  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-			'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','{{googleTagManagerKey}}');</script>
-	<!-- End Google Tag Manager -->
 	<div id="main-header" data-ng-include="'/modules/core/views/header.client.view.html'"></div>
 	<div data-ui-view></div>
 	<div data-ng-include="'/modules/core/views/footer.client.view.html'"></div>

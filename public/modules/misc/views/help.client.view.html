@@ -2,7 +2,7 @@
 <div class="content-wrapper" ng-controller="HelpController"  ng-init="loadContent('help')">
     <section id="breadcrumbs">
         <div class="breadcrumb">
-		
+
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
 				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
@@ -11,8 +11,9 @@
         </div>
     </section>
     <section class="page" id="help">
-        <div class="content help">
+        <div class="help">
             <h1 class="page-title" ng-bind-html="trustAsHtml(contentfulData.name)"></h1>
+
             <section id="home-info-blocks">
                 <div class="info-block" id="help">
                     <section class="inside">
@@ -80,7 +81,7 @@
                 </div>
             </div>
             <div class="ex-panel">
-                <h4><a class="panel-trigger" href="#" id="orders">Insurance (HSA/FSA)</a></h4>
+                <h4><a class="panel-trigger" href="#" id="orders">Payments and Insurance (HSA/FSA)</a></h4>
 
                 <div class="panel-content">
                     <p ng-bind-html="trustAsHtml(contentfulData.insuranceText)"/>

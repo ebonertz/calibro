@@ -81,7 +81,7 @@ module.exports = function (app) {
 
         CartService.setShippingAddress(cartId, payload, function (err, result) {
             if (err) {
-                return res.status(400).send(err.body.message);
+                return res.status(400).send(err);
             } else {
                 var cart = new Cart(result);
                 res.json(cart);

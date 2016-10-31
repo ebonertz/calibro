@@ -130,7 +130,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $http.get('/api/carts/'+$rootScope.cart.id)
                   .then(function(cart){
                       $rootScope.cart = cart.data;
-                      if ($scope.cartPrescriptionCount() > 0) {
+                        $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+                        if ($scope.cartPrescriptionCount() > 0) {
                           determineHighIndexBlueBlockVisibility();
                           $scope.showPhasePrescription();
                           $scope.showPrescriptionSummary = true;
@@ -213,6 +214,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 CartService.setShippingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
 
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                     LoggerServices.success('Shipping address updated');
 
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
@@ -233,7 +235,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     });
 
                 }, function (err) {
-                    LoggerServices.warning("Couldn't set shipping address, please try again");
+                    LoggerServices.warning(err);
                     $rootScope.loading = false;
                 });
             }
@@ -252,6 +254,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 $rootScope.loading = true;
                 CartService.setBillingAddress($rootScope.cart.id, {address: finalBillingAddress}).then(function (result) {
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                     LoggerServices.success('Billing address updated');
                     $scope.showPhaseE();
 
@@ -269,6 +272,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }
                 }).then(function (result) {
                     $rootScope.cart = result;
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
                     LoggerServices.success('Shipping method updated');
                     $scope.showPhaseC();
@@ -304,7 +308,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             if ($scope.paymentInfo) {
                 var checkoutParameters = {
                     payment_method_nonce: $scope.paymentInfo.nonce,
-                    submitForSettlement: true,
+                    submitForSettlement: false,
                     customerId: customerId,
                     orderId: order.id
                 }
@@ -406,6 +410,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 $rootScope.cart = result;
                 if (status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                 $rootScope.loading = false;
             }, function (err) {
                 $rootScope.loading = false;
@@ -434,6 +439,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
                 $rootScope.cart = result;
                 if (status) LoggerServices.success('Added Blue Block AR'); // I have the feeling no feedback should be given when no index lenses are selected
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                 $rootScope.loading = false;
             }, function (err) {
                 $rootScope.loading = false;
@@ -472,7 +478,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.savedPrescription = {}
             var data = {}
 
-            // Fast fix
             $scope.prescription = $scope.prescription || {}
 
             var save = function (type, method, data, callback) {
@@ -489,7 +494,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.prescription.type = response.prescription.value.type;
 
                         if ($scope.prescription.type == 'reader') {
-                            $scope.prescription.strength = $scope.prescription.data.strength;
+                            $scope.prescription.strength = $scope.prescription.value.data.strength;
                         } else if ($scope.prescription.method == 'calldoctor') {
                             $scope.prescription.calldoctor = $scope.prescription.value.data;
                         }else if ($scope.prescription.method == 'sendlater') {
@@ -497,9 +502,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         }
 
                         $rootScope.cart = response.cart;
+                        $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
                         callback(response);
+                        console.log(response.cart);
+
                     }, function (response) {
                         $scope.error = response.data.message;
                         $rootScope.loading = false;
@@ -533,7 +542,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
-
                     })
                     break;
 

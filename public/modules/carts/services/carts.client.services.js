@@ -1,8 +1,8 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$rootScope', 'Authentication', 'LoggerServices', 'Cart',
-    function ($http, $q, ipCookie, $rootScope, Authentication, LoggerServices, Cart) {
+angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$rootScope', 'Authentication', 'LoggerServices', 'Cart','lodash',
+    function ($http, $q, ipCookie, $rootScope, Authentication, LoggerServices, Cart,_) {
         var urlString = '/api/carts';
 
         this.pageLoad = function () {
@@ -270,6 +270,34 @@ angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$roo
             });
 
             return deferred.promise;
+        }
+
+        this.calculateDiscountCode = function (cart) {
+            var totalDiscountCents = 0,
+                totalDiscount = {
+                    centAmount: 0,
+                    currencyCode: 'USD'
+                };
+
+            if (cart != null) {
+                _.each(cart.lineItems, function (lineItem) {
+                    var pricePerItemCentAmount = 0;
+
+                    if (lineItem.discountedPricePerQuantity && lineItem.discountedPricePerQuantity.length > 0) {
+                        _.each(lineItem.discountedPricePerQuantity, function (discountedPricePerQuantity) {
+                            if(discountedPricePerQuantity.discountedPrice.includedDiscounts && discountedPricePerQuantity.discountedPrice.includedDiscounts.length > 0){
+                                _.each(discountedPricePerQuantity.discountedPrice.includedDiscounts, function (includedDiscount) {
+                                    totalDiscountCents += includedDiscount.discountedAmount.centAmount * discountedPricePerQuantity.quantity;
+                                });
+                            }
+                        });
+                    }
+                });
+
+                totalDiscount.centAmount = totalDiscountCents;
+            }
+
+            return totalDiscount;
         }
 
     }

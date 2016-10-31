@@ -1,14 +1,14 @@
 <section data-ng-controller="ProductsController" data-ng-init="init()">
-    <div class="slider-wrapper">
-        <div class="content-wrapper">
+    <!-- <div class="slider-wrapper">
+        <div class="content-wrapper"> -->
             <section id="subpage-head">
                 <div class="subpage-hero">
                     <h1 class="subpage-title"></h1>
                     <img  ng-src="{{contentfulData.subHeaderImage.fields.file.url}}" />
                 </div>
             </section>
-        </div>
-    </div>
+        <!-- </div>
+    </div> -->
     <div class="content-wrapper">
         <section id="breadcrumbs">
             <div class="breadcrumb">
@@ -40,9 +40,9 @@
                        ng-class="sort.price == 'ASC' ? 'up' : 'down'">Sort by Price</a>
                 </div>
                 <div class="category-filters">
-                    <a ng-click="optionFilter()"  class="cat-sort {{selectedOptionFilter == 'ALL'? 'active':''}}" id="all">All</a>
-                    <a ng-click="optionFilter('FRAMES') " class="cat-sort {{selectedOptionFilter == 'FRAMES'? 'active':''}}" id="frames">Frames</a>
-                    <a ng-click="optionFilter('PRESCRIPTION')" class="cat-sort {{selectedOptionFilter == 'PRESCRIPTION'? 'active':''}}" id="frames-prescription">Frames+ Prescription</a>
+                    <div ng-click="optionFilter()"  class="cat-sort {{selectedOptionFilter == 'ALL'? 'active':''}}" id="all">Filter Options</div>
+                    <!-- <a ng-click="optionFilter('FRAMES') " class="cat-sort {{selectedOptionFilter == 'FRAMES'? 'active':''}}" id="frames">Frames</a>
+                    <a ng-click="optionFilter('PRESCRIPTION')" class="cat-sort {{selectedOptionFilter == 'PRESCRIPTION'? 'active':''}}" id="frames-prescription">Frames+ Prescription</a> -->
                 </div>
             </div>
         </section>

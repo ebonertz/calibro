@@ -57,11 +57,13 @@
             </table>
         </div>
 
-        <div ng-include="'modules/carts/views/side-cart.client.view.html'"></div>
-
-
-
-
+        <!-- <div ng-include="'modules/carts/views/side-cart.client.view.html'"></div> -->
 
     </section>
+
+    <div ng-controller="CartController" class="proceed">
+        <!-- <div class="empty-notice" ng-if="checkContents == 0 "> Your Cart Is Empty </div> -->
+        <a ng-if="!isCheckout" ng-click="proceedToCheckout()" href="" class="btn block radius blue proceed">Proceed To Checkout</a>
+
+    </div>
 </div>

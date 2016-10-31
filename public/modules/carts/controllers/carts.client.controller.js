@@ -5,6 +5,30 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
         $scope.authentication = Authentication;
         $scope.isCheckout = $location.path().indexOf('checkout') > -1;
 
+        var init = function () {
+            $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
+        };
+
+        if ($rootScope.cart == null) {
+            var cartWatch = $rootScope.$watch('cart', function (cart) {
+                if (cart != null) {
+                    cartWatch()
+                    init();
+                }
+            })
+        } else {
+            init();
+        }
+
+
+        $scope.checkContents = function () {
+          $rootscope.cart.lineItems.length != 0;
+
+          }
+
+
+
         $scope.proceedToCheckout = function () {
             if ($rootScope.cart != null && $rootScope.cart.lineItems != null && $rootScope.cart.lineItems.length > 0) {
                 var cookieId = null;
@@ -15,6 +39,8 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                     CartService.refreshCart(cookieId).then(function (cart) {
                         $rootScope.cart = cart;
                         $location.path('/checkout');
+                    }, function(err) {
+                        LoggerServices.error("There was an error with refreshing the cart totals");
                     });
                 }
                 else {
@@ -28,7 +54,9 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
 
         $scope.removeFromCart = function (item) {
             CartService.removeFromCart(item);
-        };
+            $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
+          };
 
         $scope.addDiscountCode = function (code) {
             if (code != null) {
@@ -40,6 +68,8 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                     $rootScope.cart = result;
                     $rootScope.loading = false;
                     LoggerServices.success('Discount applied.');
+                    $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
                 }, function (error) {
                     $rootScope.loading = false;
                     LoggerServices.warning(error);
@@ -58,6 +88,8 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                 $rootScope.cart = result;
                 $rootScope.loading = false;
                 LoggerServices.success('Quantity updated.');
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
             }, function (error) {
                 item.quantity--;
                 $rootScope.loading = false;
@@ -75,6 +107,8 @@ angular.module('carts').controller('CartController', ['$scope', 'Authentication'
                 $rootScope.cart = result;
                 $rootScope.loading = false;
                 LoggerServices.success('Quantity updated.');
+                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+
             }, function (error) {
                 item.quantity++;
                 $rootScope.loading = false;

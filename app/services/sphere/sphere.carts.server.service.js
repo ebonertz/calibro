@@ -5,7 +5,7 @@ entity = 'carts';
 
 module.exports = function (app) {
     var CommonService = require('./sphere.commons.server.service.js')(app),
-        ZipTaxService = require('../../services/ziptax.server.services.js')(app),
+        AvalaraService = require('../../services/avalara.server.services.js')(app),
         Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
     TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
     var service = {};
@@ -29,7 +29,7 @@ module.exports = function (app) {
             } else {
                 callback(null, null);
             }
-        }).error(function (err) {
+        }).catch(function (err) {
             app.logger.error("Error finding by customer entity: %s. Error: %s", entity, JSON.stringify(err));
             callback(err, null);
         });
@@ -77,10 +77,10 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function(taxValue){
+                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(taxRate){
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: taxValue,
+                        amount: parseFloat(taxRate),
                         country: "US"
 
                     };
@@ -111,9 +111,9 @@ module.exports = function (app) {
                     CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
                         callback(err, cart);
                     });
-                }).error(function(err){
-                    logger.error('Error setting tax values from ziptax: %s', err);
-                    return res.status(400).send(err.body.message);
+                }).catch(function(err){
+                    app.logger.error('Error setting tax values from Avalara: %s', err);
+                    callback(err, null);;
                 });
             });
         });
@@ -138,10 +138,10 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                ZipTaxService.getTaxByZipCode(result.shippingAddress.postalCode).then(function (taxValue) {
+                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (taxRate) {
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: taxValue,
+                        amount: parseFloat(taxRate),
                         country: "US"
 
                     };
@@ -353,15 +353,7 @@ module.exports = function (app) {
                         }
                     });
                 } else {
-                    newCart ['lineItems'] = cart.lineItems;
-                    CommonService.create('carts', newCart, function (err, cart) {
-                        if (err) {
-                            callback(err, null);
-                        } else {
-                            app.logger.debug("Refresh cart B - Cart ID: " + cart.id);
-                            callback(null, cart);
-                        }
-                    });
+                    callback(null,cart)
 
                 }
             }, expand);
@@ -425,7 +417,7 @@ module.exports = function (app) {
                     } else {
                         callback(null, eyewearPrescriptionAmount);
                     }
-                }).error(function (err) {
+                }).catch(function (err) {
                     app.logger.error("Error executing isAnyEyewear Error: %s", JSON.stringify(err));
                     callback(err, eyewearPrescriptionAmount);
                 });

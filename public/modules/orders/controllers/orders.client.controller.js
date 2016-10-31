@@ -16,7 +16,7 @@ angular.module('orders').controller('OrdersController', ['$scope', 'Authenticati
             Order.get({
                 orderId: id
             }, function (data) {
-                $scope.paymentInfo = data.paymentInfo.payments [0].obj.paymentMethodInfo.method;
+                $scope.paymentInfo = data.paymentInfo!=null && data.paymentInfo.payments!=null && data.paymentInfo.payments.length>0 ? data.paymentInfo.payments[0].obj.paymentMethodInfo.method:'Credit Card';
                 $scope.order = data;
             });
 

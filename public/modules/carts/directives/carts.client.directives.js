@@ -8,7 +8,7 @@ angular.module('carts').directive('prescriptionBox', function () {
         replace: true,
         link: function ($scope, $element, $attrs) {
             // We don't want watches here!
-            $element.find('.header').text($attrs.header);
+            $element.find('h6').text($attrs.header);
             $element.css('width', Math.floor(100/$attrs.size - 1)+"%");
             $element.on('click', function(){
                 $element.parent().find('.prescription-box').removeClass('selected');

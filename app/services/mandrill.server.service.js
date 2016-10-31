@@ -297,7 +297,7 @@ module.exports = function (app) {
 				},
 				{
 					"name": "paymentInfo",
-					"content": "Credit Card"
+					"content": order.paymentInfo!=null && !_.isEmpty(order.paymentInfo.payments)?order.paymentInfo.payments[0].obj.paymentMethodInfo.method:"Credit Card"
 				},
 				{
 					"name": "discount",
