@@ -149,8 +149,8 @@ module.exports = {
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME ||"dswl4guqu"
     },
     avalara: {
-        key: "MjAwMDE4OTY4Nzo3MkExQzhGNUU2MjE3Njg3",
-        url: "https://development.avalara.net/1.0/tax/get"
+        key: process.env.AVALARA_API_KEY || "MjAwMDE4OTY4Nzo3MkExQzhGNUU2MjE3Njg3",
+        url: process.env.AVALARA_URL || "https://development.avalara.net/1.0/tax/get"
     }
 
 };
