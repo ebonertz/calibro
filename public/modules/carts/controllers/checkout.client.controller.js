@@ -6,6 +6,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.card = {};
         $scope.loadingPayPal = 0;
         $scope.eyewearPrescriptionCount = 0;
+        $scope.setAsBilling = false;
         $scope.billingMethods = [
             {name: 'Credit Card'},
             {name: 'PayPal'}
@@ -60,8 +61,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         container: 'dropin-container',
                         onPaymentMethodReceived: function (obj) {
                         $scope.paymentInfo = obj;   //"PayPalAccount
-                        $scope.showPhaseD();
-                            $scope.$apply();
+                        if ($rootScope.cart.billingAddress) {
+                          $scope.showPhaseE();
+                        }
+                        else {
+                            $scope.showPhaseD();
+                        }
+                        $scope.$apply();
                         }
                     });
                 }
@@ -216,7 +222,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     $rootScope.cart = result;
                     $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
                     LoggerServices.success('Shipping address updated');
-
                     ShippingMethodService.byLocationOneCurrency('US', null, 'USD', 'US').then(function (data) {
                         $scope.shippingMethods = data;
 
@@ -228,9 +233,23 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                                 }
                             }
                         }
+                        //set billing address
+                        if ($scope.setAsBilling) {
+                            CartService.setBillingAddress($rootScope.cart.id, {address: finalShippingAddress}).then(function (result) {
+                                $rootScope.cart = result;
+                                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+                                LoggerServices.success('Billing address updated');
+                                $rootScope.loading = false;
+                                $scope.showPhaseB();
 
-                        $rootScope.loading = false;
-                        $scope.showPhaseB();
+                            });
+                        }
+
+                        else {
+                            $rootScope.loading = false;
+                            $scope.showPhaseB();
+                        }
+
 
                     });
 
@@ -617,6 +636,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             }
             return null
         };
+
+        $scope.setAsBillingAddress = function (status) {
+            $scope.setAsBilling = status;
+        }
 
 
 
