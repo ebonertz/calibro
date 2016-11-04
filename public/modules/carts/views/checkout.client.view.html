@@ -120,7 +120,7 @@
 
 
                     </div>
-                    <div ng-if="!phasePrescription && showPrescriptionSummary">
+                    <div ng-if="!phasePrescription && showPrescriptionSummary && !phaseA">
                         <h4>Prescription Summary</h4>
                         <hr />
                         <span class="summary"><b>Prescription type:</b></span> <span class="summary" ng-bind="prescription.type"></span>
@@ -136,8 +136,8 @@
                         <hr>
                         <div class="panel-content">
                             <section class="inner">
-                                <div class="saved-addresses-checkout">
-                                    <h6>Choose an existing address</h6>
+                                <div ng-if="authentication.user" class="saved-addresses-checkout">
+                                    <h6 >Choose an existing address</h6>
 
                                     <form ng-if="authentication.user">
                                         <label ng-repeat="shippingAddress in authentication.user.addresses track by shippingAddress.id"
@@ -148,12 +148,6 @@
                                             <input type="radio" name="address" value="1">
                                         </label>
                                     </form>
-
-                                    <div ng-if="!authentication.user" class="text-center text-danger" style="position: relative;top: 32px;">
-                                        <div id="shipping-error" class="notice outline red small">No addresses. Please log in.</div>
-                                        <br>
-                                        <br>
-                                    </div>
 
                                 </div>
                                 <div class="add-address-checkout">
@@ -202,6 +196,10 @@
                                         <label>Zip/Postal</label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.shippingAddress.postalCode" required/>
+                                        <div class="checkbox-same">
+                                                <input id="same-as-check" type="checkbox" ng-model="setAsBilling" ng-change="setAsBillingAddress(setAsBilling)" value="1">
+                                                <label id="same-as-label">Set this address as billing address.</label>
+                                        </div>
                                         <input ng-if="authentication.user && validateShippingAddress()" ng-click="addCustomerAddress(cart.shippingAddress, addAddress.$valid)"
                                                type="button" class="btn blue radius small" value="Save Address"/>
                                     </form>
@@ -314,7 +312,7 @@
                         <hr>
                         <div class="panel-content">
                             <section class="inner">
-                                <div class="saved-addresses-checkout">
+                                <div ng-if="authentication.user" class="saved-addresses-checkout">
                                     <h6>Choose an existing address</h6>
 
                                     <form ng-if="authentication.user">
@@ -327,9 +325,6 @@
                                         </label>
                                     </form>
 
-                                    <div ng-if="!authentication.user" class="text-center text-danger" style="position: relative;top: 32px;">
-                                        <div class="notice outline red small">No addresses. Please log in.</div>
-                                    </div>
 
                                 </div>
                                 <div class="add-address-checkout">
