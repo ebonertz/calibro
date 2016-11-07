@@ -151,8 +151,10 @@ module.exports = {
     avalara: {
         key: process.env.AVALARA_API_KEY || "MjAwMDE4OTY4Nzo3MkExQzhGNUU2MjE3Njg3",
         url: process.env.AVALARA_URL || "https://development.avalara.net/1.0/tax/get",
-        prescriptionTaxCode: process.env.PRESCRIPTION_TAX_CODE || "PH150122",
-        nonPrescriptionTaxCode: process.env.NONPRESCRIPTION_TAX_CODE || "PH150121"
+        prescriptionSunglassTaxCode: process.env.PRESCRIPTION_SUNGLASS_TAX_CODE || "PH050460",
+        nonPrescriptionSunglassTaxCode: process.env.NONPRESCRIPTION_SUNGLASS_TAX_CODE || "PH050461",
+        prescriptionEyewearTaxCode: process.env.PRESCRIPTION_EYEWEAR_TAX_CODE || "PH150132",
+        nonPrescriptionEyewearTaxCode: process.env.NONPRESCRIPTION_EYEWEAR_TAX_CODE || "PH150131"
     }
 
 };

@@ -4,7 +4,9 @@ var _ = require('lodash'),
     Promise = require('bluebird');
 
 module.exports = function (app) {
-    var   ChannelService = require('./sphere/sphere.channels.server.service')(app);
+    var ChannelService = require('./sphere/sphere.channels.server.service')(app);
+    var ProductService = require('./sphere/sphere.products.server.service')(app);
+
     var service = {};
     service.LINE_ITEM_TAX = 1;
     service.SHIPPING_TAX = 2;
@@ -27,7 +29,6 @@ module.exports = function (app) {
         }
     };
     service.getSalesOrderTax = function (cart,type) {
-        var options = REQUEST_OPTIONS;
         var bodyObject = {
             "DocDate": (new Date()).toISOString().slice(0, 10),
             "CustomerCode": cart.customerId || "anonymous",
@@ -45,17 +46,35 @@ module.exports = function (app) {
         };
         switch (type) {
             case service.LINE_ITEM_TAX:
-                bodyObject.Lines = calculateLineItems(cart);
-                break;
+                return calculateLineItems(cart).then (function (lineItems) {
+                    bodyObject.Lines = lineItems;
+                    return bodyObject;
+                }).then (function (bodyObject) {
+                     return sendRequest (bodyObject,cart.id);
+                });
             case service.SHIPPING_TAX:
-                bodyObject.Lines.push(calculateShippingItem(cart));
-                break;
+                return calculateShippingItem(cart).then (function (shippingLineItem) {
+                    bodyObject.Lines.push(shippingLineItem);
+                    return bodyObject;
+                }).then (function (bodyObject) {
+                    return sendRequest (bodyObject,cart.id);
+                });
             case service.BOTH_TAX:
-                bodyObject.Lines = calculateLineItems(cart);
-                bodyObject.Lines.push(calculateShippingItem(cart));
-                break;
+                return calculateLineItems(cart).then (function (shippingLineItem) {
+                    bodyObject.Lines = shippingLineItem;
+                    bodyObject.Lines.push(calculateShippingItem(cart));
+                    return bodyObject;
+                }).then (function (bodyObject) {
+                    return sendRequest (bodyObject,cart.id);
+                });
 
         }
+
+
+    };
+
+    function sendRequest (bodyObject,cartId) {
+        var options = REQUEST_OPTIONS;
         options.body = JSON.stringify (bodyObject);
         app.logger.debug ("Avalara request: %s",options.body);
         return new Promise(function (resolve, reject) {
@@ -69,10 +88,10 @@ module.exports = function (app) {
                 }
                 else if (result.ResultCode === "Success") {
                     _.each (result.TaxLines, function (taxLine, index) {
-                        app.logger.debug ("Tax line %s for cart %s is %s", index, cart.id, taxLine.Rate);
+                        app.logger.debug ("Tax line %s for cart %s is %s", index, cartId, taxLine.Rate);
                     });
                     if (result.TaxLines.length > 1) {
-                        app.logger.debug ("Cart cart %s has %s tax lines", cart.id, result.TaxLines.length);
+                        app.logger.debug ("Cart cart %s has %s tax lines", cartId, result.TaxLines.length);
                     }
                     resolve(parseFloat(result.TotalTax));
                 }
@@ -82,35 +101,53 @@ module.exports = function (app) {
                 }
             });
         });
-
-    };
-
+    }
     function calculateLineItems (cart) {
         var lineItems = [];
-        _.each (cart.lineItems, function (item) {
-            var distributionChannel = ChannelService.getById (item.distributionChannel.id);
-            var taxCode;
-            if (distributionChannel.key == 'nonprescription') {
-                taxCode =  config.avalara.nonPrescriptionTaxCode;
-            }
-            else if (distributionChannel.key == 'singlevision'){
-                taxCode =  config.avalara.prescriptionTaxCode;
-            }
-            lineItems.push({
-                "LineNo": item.id,
-                "DestinationCode": cart.shippingAddress.id,
-                "OriginCode": ORIGIN_ADDRESS.AddressCode,
-                "Qty": item.quantity,
-                "Amount": Number(parseInt(item.totalPrice.centAmount / 100).toFixed(0)),
-                "Description": item.name.en,
-                "ItemCode": item.productSlug.en,
-                "TaxCode": taxCode
+        return Promise.map(cart.lineItems, function (item){
+            return new Promise(function (resolve, reject) {
+                ProductService.byId (item.productId, function (error, product) {
+                    if (error) {
+                        app.logger.error ("Error calculating Avalara taxes %s", JSON.stringify(error));
+                        reject (error);
+                    }
+                    var distributionChannel = ChannelService.getById (item.distributionChannel.id);
+                    var taxCode;
+                    if (distributionChannel.key == 'nonprescription') {
+                        if (product.categories[0].slug === 'eyewear') {
+                            taxCode = config.avalara.nonPrescriptionEyewearTaxCode;
+                        }
+                        else {
+                            taxCode = config.avalara.nonPrescriptionSunglassTaxCode;
+                        }
+                    }
+                    else if (distributionChannel.key == 'singlevision') {
+                        if (product.categories[0].slug === 'eyewear') {
+                            taxCode = config.avalara.prescriptionEyewearTaxCode;
+                        }
+                        else {
+                            taxCode = config.avalara.prescriptionSunglassTaxCode;
+                        }
+                    }
+                    lineItems.push({
+                        "LineNo": item.id,
+                        "DestinationCode": cart.shippingAddress.id,
+                        "OriginCode": ORIGIN_ADDRESS.AddressCode,
+                        "Qty": item.quantity,
+                        "Amount": Number(parseInt(item.totalPrice.centAmount / 100).toFixed(0)),
+                        "Description": item.name.en,
+                        "ItemCode": item.productSlug.en,
+                        "TaxCode": taxCode
+                    });
+                    resolve (lineItems);
+                });
             });
+        }).then (function (done) {
+            return lineItems;
         });
-        return lineItems;
     }
     function calculateShippingItem (cart) {
-        return {
+       var item = {
             "LineNo": 1,
             "DestinationCode": cart.shippingAddress.id,
             "OriginCode": ORIGIN_ADDRESS.AddressCode,
@@ -119,6 +156,8 @@ module.exports = function (app) {
             "Amount": Number(parseInt(cart.shippingInfo.price.centAmount / 100).toFixed(0)),
             "Description": cart.shippingInfo.shippingMethodName
         };
+        return Promise.resolve(item);
     }
+
     return service;
 }
