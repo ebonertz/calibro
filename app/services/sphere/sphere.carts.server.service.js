@@ -74,13 +74,13 @@ module.exports = function (app) {
     service.setShippingAddress = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingAddress;
-
+        app.logger.debug  ("Setting address: %s",JSON.stringify(payload.address));
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(taxRate){
+                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(totalTax){
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: parseFloat(taxRate),
+                        amount:  totalTax == 0 ? 0 : totalTax/ (result.totalPrice.centAmount/100),
                         country: "US"
 
                     };
@@ -138,10 +138,10 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (taxRate) {
+                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (totalTax) {
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
-                        amount: parseFloat(taxRate),
+                        amount: totalTax == 0 ? 0 : totalTax/ (result.shippingInfo.price.centAmount/100),
                         country: "US"
 
                     };
