@@ -60,7 +60,7 @@ module.exports = function (app) {
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
-                app.logger.debug ("Avalara response: %s",options.body);
+                app.logger.debug ("Avalara response: %s",result);
 
                 if (error) {
                     app.logger.warn ("Error calculating Avalara tax %s", JSON.stringify(error));
