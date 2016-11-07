@@ -62,10 +62,10 @@ module.exports = function (app) {
             case service.BOTH_TAX:
                 return calculateLineItems(cart).then (function (shippingLineItem) {
                     bodyObject.Lines = shippingLineItem;
-                    bodyObject.Lines.push(calculateShippingItem(cart));
-                    return bodyObject;
-                }).then (function (bodyObject) {
-                    return sendRequest (bodyObject,cart.id);
+                    return calculateShippingItem(cart).then (function (shippingLineItem) {
+                        bodyObject.Lines.push(shippingLineItem);
+                        return sendRequest(bodyObject, cart.id);
+                    });
                 });
 
         }
@@ -93,7 +93,7 @@ module.exports = function (app) {
                     if (result.TaxLines.length > 1) {
                         app.logger.debug ("Cart cart %s has %s tax lines", cartId, result.TaxLines.length);
                     }
-                    resolve(parseFloat(result.TotalTax));
+                    resolve(result);
                 }
                 else {
                     app.logger.warn (result.Messages[0].Details);

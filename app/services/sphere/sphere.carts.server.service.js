@@ -77,16 +77,25 @@ module.exports = function (app) {
         app.logger.debug  ("Setting address: %s",JSON.stringify(payload.address));
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(totalTax){
-                    var externalTaxRate = {
-                        name: result.shippingAddress.postalCode,
-                        amount:  totalTax == 0 ? 0 : totalTax/ (result.totalPrice.centAmount/100),
-                        country: "US"
-
-                    };
+                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(avalaraTax){
                     //set taxes to line items
                     var actions = [];
+
                     _.each (result.lineItems, function (item){
+                        var taxLine = _.find(avalaraTax.TaxLines,function (taxLine) {
+                            if (taxLine.LineNo == item.id){
+                                return true;
+                            }
+                            return false;
+                        });
+                        var tax = parseFloat (taxLine.Tax);
+                        var rate = parseFloat (taxLine.Rate);
+                        var externalTaxRate = {
+                            name: result.shippingAddress.postalCode,
+                            amount:  tax == 0 ? 0 : rate,
+                            country: "US"
+
+                        };
                        var payload = {
                            action: "setLineItemTaxRate",
                            lineItemId: item.id,
@@ -138,7 +147,8 @@ module.exports = function (app) {
 
         SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
             CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (totalTax) {
+                AvalaraService.getSalesOrderTax(result,AvalaraService.SHIPPING_TAX).then(function (avalaraTax) {
+                    var totalTax = parseFloat(avalaraTax.TotalTax);
                     var externalTaxRate = {
                         name: result.shippingAddress.postalCode,
                         amount: totalTax == 0 ? 0 : totalTax/ (result.shippingInfo.price.centAmount/100),
