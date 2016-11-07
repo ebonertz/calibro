@@ -56,9 +56,12 @@ module.exports = function (app) {
 
         }
         options.body = JSON.stringify (bodyObject);
+        app.logger.debug ("Avalara request: %s",options.body);
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
+                app.logger.debug ("Avalara response: %s",result);
+
                 if (error) {
                     app.logger.warn ("Error calculating Avalara tax %s", JSON.stringify(error));
                     reject("There was a problem calculating taxes");
@@ -97,7 +100,7 @@ module.exports = function (app) {
         return lineItems;
     }
     function calculateShippingItem (cart) {
-       return {
+        return {
             "LineNo": 1,
             "DestinationCode": cart.shippingAddress.id,
             "OriginCode": ORIGIN_ADDRESS.AddressCode,
