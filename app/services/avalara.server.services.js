@@ -1,9 +1,10 @@
 var _ = require('lodash'),
-    request = require('request')
-config = require('../../config/config'),
+    request = require('request'),
+    config = require('../../config/config'),
     Promise = require('bluebird');
 
 module.exports = function (app) {
+    var   ChannelService = require('./sphere/sphere.channels.server.service')(app);
     var service = {};
     service.LINE_ITEM_TAX = 1;
     service.SHIPPING_TAX = 2;
@@ -60,8 +61,7 @@ module.exports = function (app) {
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
-                app.logger.debug ("Avalara response: %s",result);
-
+                app.logger.debug ("Avalara response: %s",body);
                 if (error) {
                     app.logger.warn ("Error calculating Avalara tax %s", JSON.stringify(error));
                     reject("There was a problem calculating taxes");
@@ -73,7 +73,7 @@ module.exports = function (app) {
                     if (result.TaxLines.length > 1) {
                         app.logger.debug ("Cart cart %s has %s tax lines", cart.id, result.TaxLines.length);
                     }
-                    resolve(result.TaxLines[0].Rate);
+                    resolve(parseFloat(result.TotalTax));
                 }
                 else {
                     app.logger.warn (result.Messages[0].Details);
@@ -87,6 +87,14 @@ module.exports = function (app) {
     function calculateLineItems (cart) {
         var lineItems = [];
         _.each (cart.lineItems, function (item) {
+            var distributionChannel = ChannelService.getById (item.distributionChannel.id);
+            var taxCode;
+            if (distributionChannel.key == 'nonprescription') {
+                taxCode =  config.avalara.nonPrescriptionTaxCode;
+            }
+            else if (distributionChannel.key == 'singlevision'){
+                taxCode =  config.avalara.prescriptionTaxCode;
+            }
             lineItems.push({
                 "LineNo": item.id,
                 "DestinationCode": cart.shippingAddress.id,
@@ -94,13 +102,14 @@ module.exports = function (app) {
                 "Qty": item.quantity,
                 "Amount": Number(parseInt(item.totalPrice.centAmount / 100).toFixed(0)),
                 "Description": item.name.en,
-                "ItemCode": item.productSlug.en
+                "ItemCode": item.productSlug.en,
+                "TaxCode": taxCode
             });
         });
         return lineItems;
     }
     function calculateShippingItem (cart) {
-       return {
+        return {
             "LineNo": 1,
             "DestinationCode": cart.shippingAddress.id,
             "OriginCode": ORIGIN_ADDRESS.AddressCode,

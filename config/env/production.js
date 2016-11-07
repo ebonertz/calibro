@@ -159,6 +159,8 @@ module.exports = {
 	},
 	avalara: {
 		key: process.env.AVALARA_API_KEY,
-		url: process.env.AVALARA_URL
+		url: process.env.AVALARA_URL,
+		prescriptionTaxCode: process.env.PRESCRIPTION_TAX_CODE || "PH150122",
+		nonPrescriptionTaxCode: process.env.NONPRESCRIPTION_TAX_CODE || "PH150121"
 	}
 };
