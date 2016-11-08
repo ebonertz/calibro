@@ -35,10 +35,9 @@ module.exports = function (app) {
     // Variants
     this.variants = []
     for(var i = 0; i < options.variants.length; i++){
-      this.variants.push(new Variant(options.variants[i]))
+      this.variants.push(new model.Variant(options.variants[i]))
     }
-
-    this.masterVariant = new Variant(options.masterVariant)
+    this.masterVariant = new model.Variant(options.masterVariant)
   };
 
   model.Variant = function(options){
