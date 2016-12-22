@@ -12,19 +12,14 @@
     </section>
     <section class="page">
         <div class="content checkout-steps">
-            <h1 class="page-title">Checkout</h1>
+            <h1 ng-if="phasePrescription" class="page-title">Prescription Details</h1>
+            <h1 ng-if="!phasePrescription" class="page-title">Checkout</h1>
             <section class="steps">
                 <div class="panels full">
 
                     <!-- PHASE PRESCRIPTION -->
                     <div ng-if="phasePrescription" ng-init="getPrescription()">
                         <h4>Apply Prescription</h4>
-                        <div id="lensType">
-                            <hr />
-                            <h6>What kind of glasses do you need?</h6>
-                            <prescription-box header="prescription" size="2" ng-click="prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
-                            <prescription-box header="reader" size="2" ng-click="prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
-                        </div>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
                             <br />
                             <hr />
@@ -75,20 +70,6 @@
                         <div ng-show="prescription.method == 'upload' && file.original_filename" style="margin-top: 20px; margin-bottom: -20px;">
                             <label>Filename: {{file.original_filename}}</label>
                             <label>Size: {{file.file_size}}</label>
-                        </div>
-
-                        <div ng-show="prescription.type == 'reader'">
-                            <br />
-                            <hr />
-                            <h6>Select reading glasses strength</h6>
-                            <form name="readerForm" data-ng-submit="savePrescription('reader', readerForm.$valid);" novalidate>
-                                <div class="form-field-half">
-                                    <select class="half"  name="strength" data-ng-model="prescription.strength" ng-options="n*0.25 as '+'+n*0.25 for n in [] | range:1:11"  ng-init="$parent.prescription.strength=''" required>
-                                        <option value="">Select a strength</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn radius outline green block">Next ></button>
-                            </form>
                         </div>
 
 
