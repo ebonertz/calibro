@@ -480,6 +480,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 if (result.value) {
                     console.log(result.value)
                     $scope.prescription = result.value;
+                    $scope.prescription.type = 'prescription';
                     if ($scope.prescription.type == 'reader') {
                         $scope.prescription.strength = $scope.prescription.data.strength;
                     } else if ($scope.prescription.method == 'calldoctor') {
