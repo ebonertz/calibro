@@ -249,3 +249,29 @@ angular.module('core').directive('addthisToolbox', ['$timeout','$location','$roo
         }
     };
 }]);
+
+
+angular.module('core').directive('searchExpander', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            $(element).click(function () {
+                $('.site-search-wrapper').addClass('showing');
+                return false;
+            });
+        }
+    }
+});
+
+angular.module('core').directive('searchClose', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            $(element).click(function () {
+                $('.site-search-wrapper').removeClass('showing');
+                return false;
+
+            });
+        }
+    }
+});
