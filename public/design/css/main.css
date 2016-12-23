@@ -2923,7 +2923,7 @@ label:not(.channel-price) {
   display: inline;
 }
 form.ng-dirty .ng-invalid {
-  border: 1px solid red !important;
+  border: 1px solid #b2b2b2;
 }
 table {
   width: 100%;

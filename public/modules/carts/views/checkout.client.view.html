@@ -135,46 +135,47 @@
                                     <h6>Enter Shipping Address</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
-                                        <label>First Name</label>
+                                        <label>First Name<span ng-show="!loading && cart.shippingAddress.firstName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="firstName" placeholder="First Name"
                                                ng-model="cart.shippingAddress.firstName" required/>
-                                        <label>Last Name</label>
+                                        <label>Last Name<span ng-show="!loading && cart.shippingAddress.lastName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="lastName" placeholder="Last Name"
                                                ng-model="cart.shippingAddress.lastName" required/>
 
-                                      <!-- New field for email address. Should display only when not logged in -->
-                                        <label ng-if="!authentication.user">Email</label>
+
+                                        <!-- New field for email address. Should display only when not logged in -->
+                                        <label ng-if="!authentication.user">Email<span ng-show="!loading && cart.shippingAddress.email.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="email" placeholder="Email" ng-if="!authentication.user"
                                                ng-model="cart.shippingAddress.email" required/>
 
-                                        <label>Phone</label>
+                                        <label>Phone<span ng-show="!loading && cart.shippingAddress.phone.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
                                                ng-model="cart.shippingAddress.phone" required/>
 
                                         <!-- <div class="form-field-big-quarter"> -->
-                                            <label>Address</label>
+                                            <label>Address<span ng-show="!loading && cart.shippingAddress.streetName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                             <input type="text" name="streetName" placeholder="Street Name"
                                                    ng-model="cart.shippingAddress.streetName" required/>
                                         <!-- </div> -->
                                         <label>Additional Address Information</label>
                                         <input type="text" name="additionalStreetInfo" placeholder="Additional Address Information"
                                                    ng-model="cart.shippingAddress.additionalStreetInfo"/>
-                                        <label for="country">Country</label>
+                                        <label for="country">Country<span ng-show="!loading && cart.shippingAddress.country.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select name="country" id="country" ng-model="cart.shippingAddress.country"
                                                 required>
                                             <option value="" disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
-                                        <label>State/Province</label>
+                                        <label>State/Province<span ng-show="!loading && cart.shippingAddress.state.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select id="states"  ng-model="cart.shippingAddress.state"   required>
                                             <option value="" selected disabled>Choose Province/State</option>
                                             <option ng-selected="{{cart.shippingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.shippingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
 
                                         </select>
-                                        <label>City</label>
+                                        <label>City<span ng-show="!loading && cart.shippingAddress.city.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
-                                        <label>Zip/Postal</label>
+                                        <label>Zip/Postal<span ng-show="!loading && cart.shippingAddress.postalCode.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.shippingAddress.postalCode" required/>
                                         <div class="checkbox-same">
@@ -312,18 +313,18 @@
                                     <h6>Enter Billing Address</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
-                                        <label>First Name</label>
+                                        <label>First Name<span ng-show="!loading && cart.billingAddress.firstName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="firstName" placeholder="First Name"
                                                ng-model="cart.billingAddress.firstName" required/>
-                                        <label>Last Name</label>
+                                        <label>Last Name<span ng-show="!loading && cart.billingAddress.lastName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="lastName" placeholder="Last Name"
                                                ng-model="cart.billingAddress.lastName" required/>
-                                        <label>Phone</label>
+                                        <label>Phone<span ng-show="!loading && cart.billingAddress.phone.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
                                                ng-model="cart.billingAddress.phone" required/>
 
                                         <!-- <div class="form-field-big-quarter"> -->
-                                            <label>Address</label>
+                                            <label>Address<span ng-show="!loading && cart.billingAddress.streetName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                             <input type="text" name="streetName" placeholder="Street Adress"
                                                    ng-model="cart.billingAddress.streetName" required/>
                                         <!-- </div> -->
@@ -336,16 +337,16 @@
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
-                                        <label>State/Province</label>
+                                        <label>State/Province<span ng-show="!loading && cart.billingAddress.state.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select id="state"  ng-model="cart.billingAddress.state"   required>
                                             <option value="" selected disabled>Choose Province/State</option>
                                             <option ng-selected="{{cart.billingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.billingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
 
                                         </select>
-                                        <label>City</label>
+                                        <label>City<span ng-show="!loading && cart.billingAddress.city.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.billingAddress.city" required/>
-                                        <label>Zip/Postal</label>
+                                        <label>Zip/Postal<span ng-show="!loading && cart.billingAddress.postalCode.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.billingAddress.postalCode" required/>
                                         <input ng-if="authentication.user && validateBillingAddress()" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"
