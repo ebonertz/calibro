@@ -81,7 +81,6 @@ module.exports = function (app) {
             request(options, function (error, response, body) {
                 var result = JSON.parse (body);
                 app.logger.debug ("Avalara response: %s",body);
-
                 if (error) {
                     app.logger.warn ("Error calculating Avalara tax %s", JSON.stringify(error));
                     reject("There was a problem calculating taxes");
