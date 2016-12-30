@@ -145,8 +145,8 @@
 
                                         <!-- New field for email address. Should display only when not logged in -->
                                         <label ng-if="!authentication.user">Email<span ng-show="!loading && cart.shippingAddress.email.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
-                                        <input type="text" name="email" placeholder="Email" ng-if="!authentication.user"
-                                               ng-model="cart.shippingAddress.email" required/>
+                                        <input type="email" name="email" validate-email placeholder="Email" ng-if="!authentication.user"
+                                               ng-model="cart.shippingAddress.email" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required/>
 
                                         <label>Phone<span ng-show="!loading && cart.shippingAddress.phone.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
