@@ -63,5 +63,11 @@ module.exports = {
 			'public/lib/angular-mocks/angular-mocks.js',
 			'public/modules/*/tests/*.js'
 		]
+	},
+	contentful: {
+		cache: {
+			ttl: 1000,
+			flushTimeout: 30
+		}
 	}
 };

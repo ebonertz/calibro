@@ -17,3 +17,21 @@ angular.module('carts').directive('prescriptionBox', function () {
         }
     }
 });
+
+
+angular.module('carts').directive('prescriptionBoxBind', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'modules/carts/templates/prescriptionBoxBind.client.template.html',
+        scope: {
+          'header': '@',
+          'content': '='
+        },
+        replace: true,
+        link: function ($scope, $element, $attrs) {
+            // We don't want watches here!
+            // $element.css('width', Math.floor(100/$attrs.size)+"%");
+            $element.css('width', Math.floor(100/($element.parent().children().length)) + "%");
+        }
+    }
+});

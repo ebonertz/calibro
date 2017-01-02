@@ -1,10 +1,26 @@
 var ContenfulClient = require('../clients/contenful.server.client.js'),
-    ProductService = require('../services/sphere/sphere.products.server.service.js');
+    ProductService = require('../services/sphere/sphere.products.server.service.js'),
+    config = require('../../config/config');
+
+var NodeCache = require('node-cache');
+
+var cache;
+var service = {};
+
+service.getCache = function() {
+  if (!(cache instanceof NodeCache)) {
+    ttl = config.contentful.cache.ttl
+    cache = ttl ? new NodeCache({
+      stdTTL: ttl,
+    }) : new NodeCache();
+  }
+  return cache;
+}
 
 /**
  * List
  */
-exports.list = function (callback) {
+service.list = function (callback) {
     ContenfulClient.getClient().entries({}, function (err, entries) {
         if (err) {
             callback(err, null);
@@ -14,7 +30,7 @@ exports.list = function (callback) {
     });
 };
 
-exports.byId = function (id, callback) {
+service.byId = function (id, callback) {
     ContenfulClient.getClient().entries({
         'sys.id': id
     }, function (err, entries) {
@@ -26,10 +42,10 @@ exports.byId = function (id, callback) {
     });
 };
 
-exports.home = function (callback) {
+service.home = function (callback) {
     var entityId = '3jUtHsj4y4QeGkWESIo0Qa';
 
-    exports.byId(entityId, function (err, entries) {
+    service.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
         } else {
@@ -39,10 +55,10 @@ exports.home = function (callback) {
     });
 };
 
-exports.help = function (callback) {
+service.help = function (callback) {
     var entityId = '3wp9hYrKBikSOSsE80Y8KG';
 
-    exports.byId(entityId, function (err, entries) {
+    service.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
         } else {
@@ -52,7 +68,7 @@ exports.help = function (callback) {
     });
 };
 
-exports.eyewear = function (gender,callback) {
+service.eyewear = function (gender,callback) {
     var entityId;
     if (gender == 'men') {
         entityId = "6jbTL9KhPOA8KA0sCQ4Y6I";
@@ -60,7 +76,7 @@ exports.eyewear = function (gender,callback) {
    else if (gender == 'women'){
         entityId = '32Mzd4XlIkEYK4U2m2GOqM';
     }
-    exports.byId(entityId, function (err, entries) {
+    service.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
         } else {
@@ -71,14 +87,14 @@ exports.eyewear = function (gender,callback) {
 
 };
 
-exports.sunglasses = function (gender,callback) {
+service.sunglasses = function (gender,callback) {
     if (gender == 'men') {
         entityId = "4TSQucctC8AOKeUaUA8Qc8";
     }
     else if (gender == 'women'){
         entityId = '3ifY0yAVI4wuukGIU2OOkA';
     }
-    exports.byId(entityId, function (err, entries) {
+    service.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
         } else {
@@ -88,7 +104,7 @@ exports.sunglasses = function (gender,callback) {
     });
 };
 
-exports.menSummer = function (callback) {
+service.menSummer = function (callback) {
     var entityId = '1RSBBWPySY08Wc2ScOWMwI';
 
     summer(entityId, function(err, data) {
@@ -99,7 +115,7 @@ exports.menSummer = function (callback) {
     })
 };
 
-exports.womenSummer = function (callback) {
+service.womenSummer = function (callback) {
     var entityId = '3iDQHkMHa80WYCmYAoiggu';
 
     summer(entityId, function(err, data) {
@@ -110,23 +126,34 @@ exports.womenSummer = function (callback) {
     })
 };
 
-exports.byTypeAndName = function (type, name, callback) {
-    ContenfulClient.getClient().entries({
-        'content_type': type,
-        'fields.name': name
-    }, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            var entity = entries[0].fields;
-            callback(null, entity);
+service.byTypeAndName = function (type, name, callback) {
+  var entry = service.getCache().get(type + '::' + name);
+  if(entry) {
+    callback(null, entry);
+    return;
+  }
+
+  ContenfulClient.getClient().entries({
+      'content_type': type,
+      'fields.title': name
+  }, function (err, entries) {
+      if (err) {
+          callback(err, null);
+      } else {
+        try {
+          var fields = entries[0].fields;
+          service.getCache().set(type + '::' + name, fields);
+          callback(null, fields);
+        } catch(e) {
+          console.log(e);
         }
-    });
+      }
+  });
 
 };
 
 var summer = function (entityId, callback) {
-    exports.byId(entityId, function (err, entries) {
+    service.byId(entityId, function (err, entries) {
         if (err) {
             callback(err, null);
         } else {
@@ -146,3 +173,5 @@ var summer = function (entityId, callback) {
         }
     });
 };
+
+module.exports = service;

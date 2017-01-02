@@ -1,9 +1,18 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('misc').service('ContentfulService', ['$http', '$q',
-    function ($http, $q) {
+angular.module('misc').service('ContentfulService', ['$http', '$q', '$resource',
+    function ($http, $q, $resource) {
         var urlString = '/contentful';
+        var Contentful = $resource(urlString + '/:res/:type/:name', {}, {
+          search: {
+            method: 'GET',
+            params: {
+              res: 's'
+            },
+            cache: true
+          }
+        });
 
         this.home = function () {
             var deferred = $q.defer();
@@ -57,12 +66,18 @@ angular.module('misc').service('ContentfulService', ['$http', '$q',
 
 
         this.byTypeAndName = function (type, name) {
-            return $http.get(urlString + '/byTypeAndName', {
+            return $http.get(urlString + '/s/', {
                 params: {
                     type: type,
                     name: name
                 }
             });
+        };
+
+        this.search = function (type, name) {
+          var res = Contentful.search({type: type, name: name});
+
+          return res.$promise;
         }
     }
 ]);
