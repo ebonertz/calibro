@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('FooterController', ['$scope', 'Authentication', 'LoggerServices', '$http',
-    function($scope, Authentication, LoggerServices, $http) {
+angular.module('core').controller('FooterController', ['$scope', 'Authentication', 'LoggerServices', '$http', 'ContentfulService',
+    function($scope, Authentication, LoggerServices, $http, ContentfulService) {
         $scope.authentication = Authentication;
 
         $scope.subscribeToNewsletter = function(){
@@ -21,5 +21,9 @@ angular.module('core').controller('FooterController', ['$scope', 'Authentication
             });
         }
 
+        ContentfulService.getView('footer').then(function(view){
+          console.log(view);
+          $scope.view = view;
+        })
     }
 ]);

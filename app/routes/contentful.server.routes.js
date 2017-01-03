@@ -25,6 +25,9 @@ module.exports = function(app) {
   app.route('/contentful/s/:type/:name')
     .get(contentful.byTypeAndName);
 
+  app.route('/contentful/v/:name')
+    .get(contentful.getView);
+
   app.route('/contentful/cache/clear')
     .post(contentful.clearCache);
 };
