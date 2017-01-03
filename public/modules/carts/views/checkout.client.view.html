@@ -77,16 +77,24 @@
                             <br />
                             <hr />
                             <h6>Do you want high-index lenses if necessary?</h6>
-                            <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index (thinner) lenses for an additional $30 if I have a strong prescription. (see Support page for more details) </prescription-box>
-                            <prescription-box header="No" size="2" ng-click="selectHighIndex(false)">Please do not use high-index lenses with my prescription.</prescription-box>
+                            <div class="prescription-row">
+                              <prescription-box-bind header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: !!highIndexLine()}" ng-init="getTextContent('HighIndexYes')"
+                                content="::cmsContent.HighIndexYes"></prescription-box-bind>
+                              <prescription-box-bind header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: !highIndexLine()}" ng-init="getTextContent('HighIndexNo')"
+                                content="::cmsContent.HighIndexNo"></prescription-box-bind>
+                            </div>
                         </div>
 
                         <div ng-show="blueBlock" id="blueblock">
                           <br />
                           <hr />
                           <h6> Do you want the Blue Block AR treatment?</h6>
-                          <prescription-box header="Yes" size="2" ng-click="selectBlueBlock(true)" ng-class="{selected: blueBlockLine() !=null}">Please add Blue Block AR treatment that blocks harmful High-Enery Visible light (HEV), known to cause Digital Eye Strain and Macular Degeneration for an additional $20. (see Support page for more details)</prescription-box>
-                          <prescription-box header="No" size="2" ng-click="selectBlueBlock(false)"> Please do not use Blue Block AR treatment </prescription-box>
+                          <div style="display: table; border-spacing: 5px 0; margin-left: -5px" class="prescription-row">
+                            <prescription-box-bind header="Yes" ng-click="selectBlueBlock(true)" ng-class="{selected: !!blueBlockLine()}" ng-init="getTextContent('BlueBlockYes')"
+                              content="::cmsContent.BlueBlockYes"></prescription-box-bind>
+                            <prescription-box-bind header="No" ng-click="selectBlueBlock(false)" ng-class="{selected: !blueBlockLine()}" ng-init="getTextContent('BlueBlockNo')"
+                              content="::cmsContent.BlueBlockNo"></prescription-box-bind>
+                          </div>
                         </div>
 
 

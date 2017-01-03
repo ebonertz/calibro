@@ -1,7 +1,14 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie','$http',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope',
+  'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart',
+  'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
+  'AddressSelector','BraintreeService','ipCookie','$http','ContentfulService', '$sce',
+
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location,
+      Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription,
+      Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http, ContentfulService,
+      $sce) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -642,8 +649,24 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.setAsBilling = status;
         }
 
+        $scope.getCmsContent = function (type, name, entity) {
+          if (typeof $scope.cmsContent !== 'object') {
+            $scope.cmsContent = {};
+          }
 
+          if (!entity) {
+            entity = name;
+          }
 
+          ContentfulService.search(type, name).then(function(result){
+            // We will generally want the content of the entity, but not always have it
+            $scope.cmsContent[entity] = result.content ?
+              $sce.trustAsHtml(result.content) :
+              result;
+          })
+        }
+
+        $scope.getTextContent = $scope.getCmsContent.bind(null, 'textContent');
     }
 ])
 ;
