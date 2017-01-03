@@ -71,6 +71,29 @@ module.exports = function (app) {
         });
     }
 
+    function getExternalTaxRate (taxLines, item, shippingAddress) {
+      var taxLine = _.find(taxLines,function (taxLine) {
+        return taxLine.LineNo == item.id
+      });
+
+      if (!taxLine) {
+        app.logger.debug('No tax line found for item', item.id);
+        return
+      } else {
+        app.logger.debug('Tax line found for item', item.id);
+      }
+
+      var tax = parseFloat (taxLine.Tax);
+      var rate = parseFloat (taxLine.Rate);
+      var externalTaxRate = {
+        name: shippingAddress.postalCode,
+        amount:  tax == 0 ? 0 : rate,
+        country: "US"
+      };
+
+      return externalTaxRate;
+    }
+
     service.setShippingAddress = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingAddress;
@@ -82,36 +105,28 @@ module.exports = function (app) {
                     var actions = [];
 
                     _.each (result.lineItems, function (item){
-                        var taxLine = _.find(avalaraTax.TaxLines,function (taxLine) {
-                            if (taxLine.LineNo == item.id){
-                                return true;
-                            }
-                            return false;
-                        });
-                        var tax = parseFloat (taxLine.Tax);
-                        var rate = parseFloat (taxLine.Rate);
-                        var externalTaxRate = {
-                            name: result.shippingAddress.postalCode,
-                            amount:  tax == 0 ? 0 : rate,
-                            country: "US"
-
-                        };
-                       var payload = {
-                           action: "setLineItemTaxRate",
-                           lineItemId: item.id,
-                           externalTaxRate: externalTaxRate
-                       }
+                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
+                      if (externalTaxRate) {
+                        var payload = {
+                          action: "setLineItemTaxRate",
+                          lineItemId: item.id,
+                          externalTaxRate: externalTaxRate
+                        }
                         actions.push (payload);
+                      }
                     });
 
                     //set taxes to customLineitems
                     _.each (result.customLineItems, function (item){
+                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
+                      if (externalTaxRate) {
                         var payload = {
-                            action: "setCustomLineItemTaxRate",
-                            customLineItemId: item.id,
-                            externalTaxRate: externalTaxRate
+                          action: "setCustomLineItemTaxRate",
+                          customLineItemId: item.id,
+                          externalTaxRate: externalTaxRate
                         }
                         actions.push (payload);
+                      }
                     });
                     actions.push ({
                         action: "recalculate",
@@ -122,6 +137,7 @@ module.exports = function (app) {
                     });
                 }).catch(function(err){
                     app.logger.error('Error setting tax values from Avalara: %s', err);
+                    app.logger.error(err.stack)
                     callback(err, null);;
                 });
             });
