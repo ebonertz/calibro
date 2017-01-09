@@ -121,6 +121,7 @@ module.exports = function(app) {
     var timestamp = Date.now();
 
     ContentfulService.getView(slug).then(function(content){
+      // console.log(content);
       return res.json(content);
     }).catch(function(err) {
       app.logger.error(err);

@@ -3,9 +3,9 @@
     <div class="content-wrapper">
         <section id="footer-newsletter">
             <div class="newsletter">
-                <h3>{{::view.signUp.title}}</h3>
+                <h3>{{::(view.signUp.name || view.signUp.title)}}</h3>
 
-                <p>{{::view.signUp.text}}</p>
+                <p marked="::view.signUp.text"></p>
 
                 <form data-ng-submit="subscribeToNewsletter()" class="validate" id="newsletter-form" novalidate>
                     <div class="nl-wrapper mc-field-group">
@@ -13,15 +13,6 @@
                         <button type="submit"><img src="/design/images/footer/newsletter-button.png"/></button>
                     </div>
                 </form>
-
-                <!--<form action="//localhost.us11.list-manage.com/subscribe/post?u=32c60b976811b3cb878cd5a76&amp;id=363d286358" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>-->
-                <!--&lt;!&ndash; <form action="#" id="newsletter-form"> &ndash;&gt;-->
-                    <!--<div class="nl-wrapper mc-field-group">-->
-                        <!--<input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Enter your email address"/>-->
-                        <!--<button type="submit"><img src="/design/images/footer/newsletter-button.png"/></button>-->
-                        <!--<div style="position: absolute; left: -5000px;"><input type="text" name="b_32c60b976811b3cb878cd5a76_363d286358" tabindex="-1" value=""></div>-->
-                    <!--</div>-->
-                <!--</form>-->
             </div>
         </section>
     </div>
@@ -66,12 +57,12 @@
                 <hr />
 
                 <ul>
-                  <li ng-repeat="link in ::block.links.slice(1)">
+                  <li ng-repeat="link in ::block.links.slice(1) track by $index">
                     <div ng-if="::!link.url">
-                      {{::(link.text || link.name)}}
+                      {{::(link.title || link.name)}}
                     </div>
                     <a ng-href="{{::link.url}}" ng-if="::!!link.url">
-                      {{::(link.text || link.name)}}
+                      {{::(link.title || link.name)}}
                     </a>
                   </li>
                 </ul>
@@ -82,8 +73,8 @@
             <hr/>
             <div class="footer-copy">
               <span id="site-copyright">{{::view.copyright}}<br>
-                <a ng-repeat="link in ::view.disclaimerLinks.links" ng-href="{{::link.url}}" style="display:inline-block; margin: 0px 10px">
-                  {{::(link.text || link.name)}}
+                <a ng-repeat="link in ::view.disclaimerLinks track by $index" ng-href="{{::link.url}}" style="display:inline-block; margin: 0px 10px">
+                  {{::(link.title || link.name)}}
                 </a>
               </span>
             </div>

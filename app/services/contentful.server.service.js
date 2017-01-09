@@ -160,18 +160,6 @@ service.byTypeAndName = function (type, name, callback) {
   });
 };
 
-// service.getViewId = function(name) {
-//   return Promise.resolve().then(function(){
-//     var entry = service.getCache().get('views');
-//
-//     if (entry) return entry;
-//
-//     // return service.getClient().
-//   }).then(function(views){
-//
-//   })
-// }
-
 service.process = function(content) {
   return service.pruneMetadataDeep(content);
 }
@@ -195,6 +183,9 @@ service.pruneMetadataDeep = function(content) {
       return result;
     }, {});
   }
+
+  // Return the object if it isn't a reference
+  return content;
 }
 
 service.getView = function (slug) {

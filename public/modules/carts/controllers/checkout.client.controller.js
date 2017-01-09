@@ -20,6 +20,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         ];
         $scope.highindex = false;
         $scope.blueBlock = false;
+        $scope.prescriptionOptions = {highIndex: null, blueBlock: null}
 
         $scope.anchorScroll = function (where) {
             $location.hash(where);
@@ -417,65 +418,42 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return $scope.card.card_number != null && $scope.card.card_exp != null && $scope.card.card_security_code != null;
         };
 
+        $scope.selectPrescriptionOption = function(type, method) {
+          // Escape if method not expected
+          switch(method) {
+            case 'addHighIndex':
+            case 'removeHighIndex':
+            case 'addBlueBlock':
+            case 'removeBlueBlock':
+              break;
+            default:
+              LoggerServices.error('There was an issue with the prescription update. Please try again later.');
+              return;
+          }
 
-        $scope.selectHighIndex = function (status) {
-            var method = status ? 'addHighIndex' : 'removeHighIndex';
+          if ($scope.prescriptionOptions[type] === method) {
+            return
+          }
 
-            var highIndexLine = $scope.highIndexLine();
-            var payload = {
-                quantity: $scope.cartEyewearPrescriptionCount,
-                lineId: highIndexLine ? highIndexLine.id : null
-            };
+          var prescriptionLine = getPrescriptionLine(type);
+          var payload = {
+              quantity: $scope.cartEyewearPrescriptionCount,
+              lineId: prescriptionLine ? prescriptionLine.id : null
+          };
 
-            // Don't remove if there's high-index line
-            if (!highIndexLine && !status) {
-                return
-            }
+          CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
+              $rootScope.cart = result;
+              LoggerServices.success('Prescription updated');
+              $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+              $rootScope.loading = false;
 
-            $rootScope.loading = true;
-            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
-                $rootScope.cart = result;
-                if (status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
-                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
-                $rootScope.loading = false;
-            }, function (err) {
-                $rootScope.loading = false;
-                LoggerServices.error('Could not save, please try again');
-                console.log(err)
-            })
-
-            return false;
-        };
-
-        $scope.selectBlueBlock = function (status) {
-            var method = status ? 'addBlueBlock' : 'removeBlueBlock';
-
-            var blueBlockLine = $scope.blueBlockLine();
-            var payload = {
-                quantity: $scope.cartEyewearPrescriptionCount,
-                lineId: blueBlockLine ? blueBlockLine.id : null
-            };
-
-            // Don't remove if there's blueBlock line
-            if (!blueBlockLine && !status) {
-                return
-            }
-
-            $rootScope.loading = true;
-            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
-                $rootScope.cart = result;
-                if (status) LoggerServices.success('Added Blue Block AR'); // I have the feeling no feedback should be given when no index lenses are selected
-                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
-                $rootScope.loading = false;
-            }, function (err) {
-                $rootScope.loading = false;
-                LoggerServices.error('Could not save, please try again');
-                console.log(err)
-            })
-
-            return false;
-        };
-
+              $scope.prescriptionOptions[type] = method;
+          }, function (err) {
+              $rootScope.loading = false;
+              LoggerServices.error('Could not save, please try again');
+              console.log(err)
+          })
+        }
 
 
 
@@ -625,48 +603,30 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             }
         }
 
-        $scope.highIndexLine = function () {
-            for (var i in $rootScope.cart.customLineItems) {
-                var line = $rootScope.cart.customLineItems[i];
-                if (line.slug == 'high-index-lens') {
-                    return line;
-                }
-            }
-            return null
-        };
+        var getPrescriptionLine = function(type) {
+          var slug;
 
-        $scope.blueBlockLine = function () {
-            for (var i in $rootScope.cart.customLineItems) {
-                var line = $rootScope.cart.customLineItems[i];
-                if (line.slug == 'blue-block') {
-                    return line;
-                }
-            }
-            return null
-        };
+          switch(type) {
+            case 'highIndex': slug = 'high-index-lens'; break;
+            case 'blueBlock': slug = 'blue-block'; break;
+          }
+
+          for (var i in $rootScope.cart.customLineItems) {
+              var line = $rootScope.cart.customLineItems[i];
+              if (line.slug == slug) {
+                  return line;
+              }
+          }
+          return null
+        }
 
         $scope.setAsBillingAddress = function (status) {
             $scope.setAsBilling = status;
         }
 
-        $scope.getCmsContent = function (type, name, entity) {
-          if (typeof $scope.cmsContent !== 'object') {
-            $scope.cmsContent = {};
-          }
-
-          if (!entity) {
-            entity = name;
-          }
-
-          ContentfulService.search(type, name).then(function(result){
-            // We will generally want the content of the entity, but not always have it
-            $scope.cmsContent[entity] = result.content ?
-              $sce.trustAsHtml(result.content) :
-              result;
-          })
-        }
-
-        $scope.getTextContent = $scope.getCmsContent.bind(null, 'textContent');
+        ContentfulService.getView('checkout').then(function(view) {
+          $scope.view = view;
+        })
     }
 ])
 ;

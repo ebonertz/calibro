@@ -12,15 +12,15 @@
     </section>
     <section class="page">
         <div class="content checkout-steps">
-            <h1 ng-if="phasePrescription" class="page-title">Prescription Details</h1>
+            <h1 ng-if="phasePrescription" class="page-title">{{::view.prescriptionTitle}}</h1>
             <h1 ng-if="!phasePrescription" class="page-title">Checkout</h1>
             <section class="steps">
                 <div class="panels full">
 
                     <!-- PHASE PRESCRIPTION -->
                     <div ng-if="phasePrescription" ng-init="getPrescription()">
-                        <h4>Apply Prescription</h4>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
+                          <h4>Apply Prescription</h4>
                             <br />
                             <hr />
                             <h6>How would you like to send us your prescription?</h6>
@@ -73,30 +73,33 @@
                         </div>
 
 
-                        <div ng-show="highindex" id="highindex">
+                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.highIndex = 'removeHighIndex'">
                             <br />
                             <hr />
-                            <h6>Do you want high-index lenses if necessary?</h6>
+                            <h6>{{::view.highIndexOptions.name}}</h6>
                             <div class="prescription-row">
-                              <prescription-box-bind header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: !!highIndexLine()}" ng-init="getTextContent('HighIndexYes')"
-                                content="::cmsContent.HighIndexYes"></prescription-box-bind>
-                              <prescription-box-bind header="No" size="2" ng-click="selectHighIndex(false)" ng-class="{selected: !highIndexLine()}" ng-init="getTextContent('HighIndexNo')"
-                                content="::cmsContent.HighIndexNo"></prescription-box-bind>
+                              <prescription-box-bind ng-repeat="opt in ::view.highIndexOptions.links"
+                                header="{{::opt.title}}" size="{{::view.highIndexOptions.links.length}}"
+                                ng-click="selectPrescriptionOption('highIndex', opt.url)"
+                                ng-class="{selected: prescriptionOptions.highIndex === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
                             </div>
                         </div>
 
-                        <div ng-show="blueBlock" id="blueblock">
-                          <br />
-                          <hr />
-                          <h6> Do you want the Blue Block AR treatment?</h6>
-                          <div style="display: table; border-spacing: 5px 0; margin-left: -5px" class="prescription-row">
-                            <prescription-box-bind header="Yes" ng-click="selectBlueBlock(true)" ng-class="{selected: !!blueBlockLine()}" ng-init="getTextContent('BlueBlockYes')"
-                              content="::cmsContent.BlueBlockYes"></prescription-box-bind>
-                            <prescription-box-bind header="No" ng-click="selectBlueBlock(false)" ng-class="{selected: !blueBlockLine()}" ng-init="getTextContent('BlueBlockNo')"
-                              content="::cmsContent.BlueBlockNo"></prescription-box-bind>
-                          </div>
+                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.blueBlock = 'removeBlueBlock'">
+                            <br />
+                            <hr />
+                            <h6>{{::view.blueBlockOptions.name}}</h6>
+                            <div class="prescription-row">
+                              <prescription-box-bind ng-repeat="opt in ::view.blueBlockOptions.links"
+                                header="{{::opt.title}}" size="{{::view.blueBlockOptions.links.length}}"
+                                ng-click="selectPrescriptionOption('blueBlock', opt.url)"
+                                ng-class="{selected: prescriptionOptions.blueBlock === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
+                            </div>
                         </div>
-
 
                         <div id="next">
                             <br />
