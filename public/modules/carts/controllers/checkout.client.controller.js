@@ -21,6 +21,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         $scope.highindex = false;
         $scope.blueBlock = false;
         $scope.prescriptionOptions = {highIndex: null, blueBlock: null}
+        $scope.prescription = {type: 'prescription'}
 
         $scope.anchorScroll = function (where) {
             $location.hash(where);
@@ -371,7 +372,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
 
         $scope.addCustomerAddress = function (address, valid) {
-            console.log(valid);
 
             var address = new Addresses(address);
             $rootScope.loading = true;
@@ -380,7 +380,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 Authentication.user = response;
                 LoggerServices.success('Address added');
                 $rootScope.loading = false;
-                console.log("success address");
             }, function (response) {
                 $scope.error = response.data.message;
                 $rootScope.loading = false;
@@ -455,15 +454,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
           })
         }
 
-
-
-
-
-
         $scope.getPrescription = function (prescription) {
             new Prescription({_id: $rootScope.cart.id}).$get().then(function (result) {
                 if (result.value) {
-                    console.log(result.value)
                     $scope.prescription = result.value;
                     $scope.prescription.type = 'prescription';
                     if ($scope.prescription.type == 'reader') {
@@ -477,6 +470,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.prescription.upload = result.value.data;
                     }
                 }
+            }).catch(function(err){
+              console.log('No prescription available.');
             });
         }
         $scope.savePrescription = function (type_method, valid) {
@@ -512,8 +507,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $rootScope.loading = false;
                         LoggerServices.success('Prescription saved');
                         callback(response);
-                        console.log(response.cart);
-
                     }, function (response) {
                         $scope.error = response.data.message;
                         $rootScope.loading = false;
@@ -569,9 +562,15 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             if (files && files.length > 0) {
                 if (extensions.indexOf(files[0].name.split('.').pop()) < 0) {
-                    LoggerServices.error('Incorrect file format')
+                  // Incorrect format
+                  LoggerServices.warning('Incorrect file format. Only '
+                    + extensions.slice(0, extensions.length - 1).join(', ')
+                    + ' and ' + extensions[extensions.length - 1]
+                    + ' supported.'
+                  );
                 } else if (files[0].size / (1024 * 1024) > maxSizeMB) {
-                    LoggerServices.error('File size exceeded (max. ' + maxSizeMB + 'MB)')
+                  // Incorrect file size
+                  LoggerServices.warning('File size exceeded (max. ' + maxSizeMB + 'MB)')
                 } else {
                     Upload.upload({
                         url: '/prescriptions/upload',
@@ -591,13 +590,9 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         $scope.prescription.upload = data; // {new_filename, original_filename, file_size}
                         $scope.savePrescription('upload')
-                        //$timeout(function () {
-                        //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-                        //});
                     }).error(function (data, status, headers, config) {
-                        console.log(status);
                         $scope.progressbar.reset();
-                        // handle error
+                        LoggerServices.error(data || "An unexpected error ocurred. Please contact us at welcome@focalioptics.com");
                     })
                 }
             }
