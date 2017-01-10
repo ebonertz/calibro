@@ -23,10 +23,27 @@ module.exports = function (app) {
                             app.logger.error("Error deleting uploaded file: %s", JSON.stringify(err));
                         }
                         else {
-                            app.logger.info('file deleted successfully');
+                            app.logger.debug('file deleted successfully');
                         }
                     });
-                    callback(null, result)
+
+                    // Handle incoming errors here
+                    if (result.error || !result) {
+                      var error = result.error;
+
+                      // Authorization error or unexpected error
+                      if (error.http_code === 401 || !result) {
+                        callback({
+                          http_code: 503,
+                          message: "There has been an issue uploading the file. Please contact us at welcome@focalioptics.com"
+                        });
+                      } else {
+                        callback(error);
+                      }
+                    } else {
+                      // If everything went alright
+                      callback(null, result);
+                    }
                 });
             });
 
@@ -81,4 +98,3 @@ module.exports = function (app) {
 
     return service;
 }
-

@@ -6,10 +6,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		$scope.authentication = Authentication;
 		$scope.lang = 'en';
 
-		$scope.trustAsHtml = function (string) {
-			return $sce.trustAsHtml(string);
-		};
-
 		if ($stateParams.hasOwnProperty('gender')) {
 			$scope.gender = $stateParams.gender;
 		}
@@ -18,13 +14,9 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			$scope.category = $stateParams.slug
 		}
 
-		$scope.loadContent = function(page, args){
-			console.log('Loading contentful data: '+page+'('+(args?args:'')+')')
-			ContentfulService[page](args).then(function(data) {
-				console.log('Contentful page loaded.')
-				$scope.contentfulData = data;
-			});
-		}
+		ContentfulService.getView('home').then(function(view){
+			$scope.view = view;
+		})
 
 	}
 ]);

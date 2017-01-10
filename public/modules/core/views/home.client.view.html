@@ -1,117 +1,87 @@
-<div ng-controller="HomeController" ng-init="loadContent('home')">
+<div ng-controller="HomeController">
 
 
     <div class="slider-wrapper">
-                <div class="hero slider">
-                    <ul>
-                      <li>
-                            <img class="hero-image" ng-src="{{contentfulData.newhero.fields.file.url}}"/>
-                            <!-- <div class="content">
+        <div class="hero slider">
+            <ul>
+                <li>
+                    <img class="hero-image" ng-src="{{view.heroImage.file.url}}" />
+                    <!-- <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.heroText)"></h2>
                                 <a href="{{contentfulData.heroButtonUrl}}" class="btn blue radius">{{contentfulData.heroButtonText}}</a>
                             </div> -->
-                        </li>
-                        <!-- <li>
+                </li>
+                <!-- <li>
                           <img class="hero-image" ng-src="{{contentfulData.slide2.fields.file.url}}"/>
                             <div class="content">
                                 <h2 ng-bind-html="trustAsHtml(contentfulData.slide2Text)"></h2>
                                 <a href="{{contentfulData.slide2ButtonUrl}}" class="btn blue radius">{{contentfulData.slide2ButtonText}}</a>
                             </div>
                         </li> -->
-                    </ul>
-                </div>
+            </ul>
+        </div>
     </div>
 
 
-        <div class="content-wrapper">
+    <div class="content-wrapper">
         <section id="breadcrumbs">
             <div class="breadcrumb">
-			<span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb">
-				<span class="breadcrumb-last" rel="v:url" property="v:title">Home</span>
-			</span></span>
+                <span xmlns:v="http://rdf.data-vocabulary.org/#">
+                  <span typeof="v:Breadcrumb">
+				            <span class="breadcrumb-last" rel="v:url" property="v:title">Home</span>
+                </span>
+                </span>
             </div>
         </section>
-        <section id="home-eyewear" class="home-category-module">
-            <div class="intro">
-                <h2 ng-bind-html="trustAsHtml(contentfulData.eyewearTitle)"></h2>
-                <p ng-bind-html="trustAsHtml(contentfulData.eyewearDescription)"></p>
-            </div>
-            <div class="clearfix"></div>
-            <div class="eyewear-cover">
-                <img class="circle" ng-src="{{contentfulData.eyewearSideImage.fields.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear"/>
-            </div>
-            <div class="eyewear-gender">
-                <h4>For Him</h4>
-                <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img src="{{contentfulData.eyewearImage1.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
-                <a href="{{contentfulData.eyewearHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHimButtonText)"></span></a>
-            </div>
-            <div class="eyewear-gender">
-                <h4>For Her</h4>
-                <img ng-src="{{contentfulData.eyewearImage2.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
-                <a href="{{contentfulData.eyewearHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.eyewearHerButtonText)"></span></a>
-            </div>
-        </section>
-        <!--Sunglasses-->
-        <hr/>
-        <section id="home-sunglasses" class="home-category-module">
-            <div class="intro">
-                <h2 ng-bind-html="trustAsHtml(contentfulData.sunglassesTitle)"></h2>
-                <p ng-bind-html="trustAsHtml(contentfulData.sunglassesDescription)"></p>
-            </div>
-            <div class="clearfix"></div>
-            <div class="eyewear-gender">
-                <h4>For Him</h4>
-                <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
-                <img ng-src="{{contentfulData.sunglassesImage1.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
-                <a href="{{contentfulData.sunglassesHimButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHimButtonText)"></span></a>
-            </div>
-            <div class="eyewear-gender">
-                <h4>For Her</h4>
-                <img ng-src="{{contentfulData.sunglassesImage2.fields.file.url + '?w=362&h=226'}}" width="362" height="226"/>
-                <a href="{{contentfulData.sunglassesHerButtonUrl}}" class="btn blue radius"><span ng-bind-html="trustAsHtml(contentfulData.sunglassesHerButtonText)"></span></a>
-            </div>
-            <div class="sunglasses-cover">
-                <img class="circle" src="{{contentfulData.sunglassesSideImage.fields.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear"/>
-            </div>
-        </section>
-        <hr/>
+
+        <div ng-repeat="collection in ::view.collections track by $index">
+            <section id="home-eyewear" class="home-category-module">
+                <div class="intro">
+                    <h3>{{::collection.title}}</h3>
+                    <p marked="::collection.description"></p>
+                </div>
+                <div class="clearfix"></div>
+                <div class="eyewear-cover" ng-if="::collection.thumbnailPosition === 'left'">
+                    <img class="circle" ng-src="{{::collection.thumbnail.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear" />
+                </div>
+                <div class="eyewear-gender" ng-repeat="button in ::collection.buttons track by $index">
+                    <h4>{{::button.title}}</h4>
+                    <!--when injecting dynamic images, make sure that the object specifies the width and height when pushing the code-->
+                    <img src="{{::button.image.file.url + '?w=362&h=226'}}" width="362" height="226" />
+                    <a href="{{::button.url}}" class="btn blue radius">
+                        <span marked="::button.text"></span>
+                    </a>
+                </div>
+                <div class="eyewear-cover" ng-if="::collection.thumbnailPosition === 'right'">
+                    <img class="circle" ng-src="{{::collection.thumbnail.file.url + '?w=300&h=300'}}" width="300" height="300" alt="Focali Eyewear" />
+                </div>
+            </section>
+            <hr />
+        </div>
+
         <section id="home-info-blocks">
-            <div class="info-block" id="about-us">
-                <section class="inside">
-                    <div class="block-icon">
-                        <img src="/design/images/homepage/about-icon.png"/>
-                    </div>
-                    <div class="block-content">
-                        <h4>About Us</h4>
+          <div class="info-block" ng-repeat="block in ::view.infoBlocks">
+              <section class="inside">
+                  <div class="block-icon">
+                      <img ng-src="{{::block.image.file.url}}" />
+                  </div>
+                  <div class="block-content">
+                      <h4>{{::(block.title || block.name)}}</h4>
 
-                        <p ng-bind-html="trustAsHtml(contentfulData.aboutUsText)"></p>
-                        <a href="#!/about-us">Learn More...</a>
-                    </div>
-                </section>
-            </div>
-            <div class="info-block" id="help">
-                <section class="inside">
-                    <div class="block-icon">
-                        <img src="/design/images/homepage/help-icon.png"/>
-                    </div>
-                    <div class="block-content">
-                        <h4>Help</h4>
-
-                        <p ng-bind-html="trustAsHtml(contentfulData.helpText)"></p>
-                        <a href="#!/support">Learn More...</a>
-                    </div>
-                </section>
-            </div>
+                      <p marked="block.text"></p>
+                      <a ng-href="{{::block.url}}">Learn More...</a>
+                  </div>
+              </section>
+          </div>
         </section>
         <hr/>
         <section id="homepage-information">
             <div class="contact-data">
-                <a href="mailto:orders@focali.com"><img src="/design/images/homepage/email-icon.png"/> {{contentfulData.orderEmail}}</a>
-                <a href="tel:+123 456 7890-00"><img src="/design/images/homepage/phone-icon.png"/> {{contentfulData.orderPhone}}</a>
+                <a ng-repeat="link in ::view.contactLinks" ng-href="{{link.url}}">
+                  <img ng-src="{{link.image.file.url}}" /> {{::(link.title || link.name)}}
+                </a>
             </div>
-            <div class="store-hours" ng-bind-html="trustAsHtml(contentfulData.workTime)">
-            </div>
+            <div class="store-hours" marked="view.storeHours"></div>
         </section>
         <hr/>
     </div>

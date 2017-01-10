@@ -1,11 +1,16 @@
-var ContenfulClient = require('../clients/contenful.server.client.js'),
+var ContentfulClient = require('../clients/contenful.server.client.js'),
     ProductService = require('../services/sphere/sphere.products.server.service.js'),
-    config = require('../../config/config');
+    config = require('../../config/config'),
+    _ = require('lodash');
 
 var NodeCache = require('node-cache');
 
 var cache;
 var service = {};
+
+/**
+ * Getters
+ */
 
 service.getCache = function() {
   if (!(cache instanceof NodeCache)) {
@@ -15,6 +20,10 @@ service.getCache = function() {
     }) : new NodeCache();
   }
   return cache;
+}
+
+service.getClient = function() {
+  return ContentfulClient.getClient();
 }
 
 /**
@@ -149,8 +158,58 @@ service.byTypeAndName = function (type, name, callback) {
         }
       }
   });
-
 };
+
+service.process = function(content) {
+  return service.pruneMetadataDeep(content);
+}
+
+/**
+ * Remove all metadata from content references (sys), iterating through all deep references
+ * @param  {Object} content Content retrieved from Contentful
+ * @return {Object}         Pruned content
+ */
+service.pruneMetadataDeep = function(content) {
+  if (typeof content.fields === 'object' && typeof content.sys === 'object'){
+    return _.reduce(content.fields, function(result, field, key){
+      if(typeof field === 'object'){
+        if (_.isArray(field)){
+          field = _.map(field, service.pruneMetadataDeep);
+        } else {
+          field = service.pruneMetadataDeep(field);
+        }
+      }
+      result[key] = field;
+      return result;
+    }, {});
+  }
+
+  // Return the object if it isn't a reference
+  return content;
+}
+
+service.getView = function (slug) {
+  // Check if cache contains this view
+  var content = service.getCache().get('view::' + slug);
+  if (content) return Promise.resolve(content);
+
+  // Fetch from Contentful
+  return service.getClient().getEntries({
+    'content_type': 'view',
+    'fields.slug': slug
+  })
+  .then(function (entries) {
+    if (!entries.total || entries.total < 1) throw new Error('No entries found');
+
+    var view = _.get(entries, 'items[0].fields.view');
+    if (!view) throw new Error('Entry received has wrong structure');
+
+    var content = service.process(view);
+    service.getCache().set('view::' + slug, content);
+
+    return content;
+  });
+}
 
 var summer = function (entityId, callback) {
     service.byId(entityId, function (err, entries) {
