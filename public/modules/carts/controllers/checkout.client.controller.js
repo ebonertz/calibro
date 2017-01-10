@@ -3,12 +3,12 @@
 angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope',
   'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart',
   'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
-  'AddressSelector','BraintreeService','ipCookie','$http','ContentfulService', '$sce',
+  'AddressSelector','BraintreeService','ipCookie','$http','ContentfulService', '$sce', '$q',
 
     function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location,
       Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription,
       Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http, ContentfulService,
-      $sce) {
+      $sce, $q) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -417,39 +417,69 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return $scope.card.card_number != null && $scope.card.card_exp != null && $scope.card.card_security_code != null;
         };
 
-        $scope.selectPrescriptionOption = function(type, method) {
+        var getPrescriptionPayload = function(type) {
+          var prescriptionLine = getPrescriptionLine(type);
+          var payload = {
+              quantity: $scope.cartEyewearPrescriptionCount,
+              lineId: prescriptionLine ? prescriptionLine.id : null
+          };
+          return payload;
+        }
+
+        var updateCart = function(method, type) {
+          var payload = getPrescriptionPayload(type);
+          return CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload)
+            .then(function(result){
+              $rootScope.cart = result;
+              $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+              LoggerServices.success('Prescription updated');
+            })
+        }
+
+
+        var prescriptionOptionsMethods = {
+          addHighIndex: updateCart.bind(null, 'addHighIndex', 'highIndex'),
+          removeHighIndex: updateCart.bind(null, 'removeHighIndex', 'highIndex'),
+
+          addBlueBlock: updateCart.bind(null, 'addBlueBlock', 'blueBlock'),
+          removeBlueBlock: updateCart.bind(null, 'removeBlueBlock', 'blueBlock'),
+
+          callDoctor: function() {
+            $scope.prescription.method = 'calldoctor';
+            $scope.anchorScroll('lensType');
+          },
+
+          sendLater: function() {
+            $scope.prescription.method = 'sendlater';
+            $scope.savePrescription('sendlater');
+          },
+
+          uploadPrescription: function(files) {
+            $scope.prescription.method = 'upload';
+            $scope.uploadPrescription(files)
+          }
+        }
+
+        $scope.selectPrescriptionOption = function(type, method, args) {
+          var prescriptionMethod = prescriptionOptionsMethods[method];
+
           // Escape if method not expected
-          switch(method) {
-            case 'addHighIndex':
-            case 'removeHighIndex':
-            case 'addBlueBlock':
-            case 'removeBlueBlock':
-              break;
-            default:
-              LoggerServices.error('There was an issue with the prescription update. Please try again later.');
-              return;
+          if (typeof prescriptionMethod !== 'function') {
+            LoggerServices.error('There was an issue with the prescription update. Please try again later.');
+            return
           }
 
           if ($scope.prescriptionOptions[type] === method) {
             return
           }
 
-          var prescriptionLine = getPrescriptionLine(type);
-          var payload = {
-              quantity: $scope.cartEyewearPrescriptionCount,
-              lineId: prescriptionLine ? prescriptionLine.id : null
-          };
-
-          CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
-              $rootScope.cart = result;
-              LoggerServices.success('Prescription updated');
-              $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+          $q.when(prescriptionOptionsMethods[method](args))
+          .then(function (result) {
               $rootScope.loading = false;
-
               $scope.prescriptionOptions[type] = method;
           }, function (err) {
               $rootScope.loading = false;
-              LoggerServices.error('Could not save, please try again');
+              LoggerServices.error('Could not save, please try again.');
               console.log(err)
           })
         }
@@ -499,13 +529,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                             $scope.prescription.calldoctor = $scope.prescription.value.data;
                         }else if ($scope.prescription.method == 'sendlater') {
                             console.log('Will send prescriptions later')
+
                         }
 
                         $rootScope.cart = response.cart;
                         $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
                         $rootScope.loading = false;
-                        LoggerServices.success('Prescription saved');
                         callback(response);
                     }, function (response) {
                         $scope.error = response.data.message;
@@ -533,6 +563,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         data = $scope.prescription.calldoctor
                         save('prescription', 'calldoctor', data, function () {
                             $scope.anchorScroll('calldoctor');
+                            LoggerServices.success('Prescription updated');
                         });
                     }
                     break;
@@ -540,6 +571,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
+                        LoggerServices.success('Prescription updated');
                     })
                     break;
 

@@ -24,15 +24,19 @@
                             <!-- <br /> -->
                             <hr />
                             <h6>How would you like to send us your prescription?</h6>
-                            <!--<prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>-->
-                            <prescription-box header="Upload a picture" size="3"
-                                              ngf-select="true" ngf-change="uploadPrescription($files)" ngf-multiple="false"  ngf-allow-dir="false"
-                                              ng-class="{selected: prescription.method == 'upload'}" id="upload-prescription">
-                                              I will upload my prescription from my computer (.pdf, .jpg or .png).
-                            </prescription-box>
 
-                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
-                            <prescription-box header="Send It Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater');" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
+                            <div class="prescription-row">
+                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') !== -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                                header="{{::opt.title}}" ng-class="{selected: prescriptionOptions.send === opt.url}"
+                                content="::opt.text" ngf-select="true"
+                                ngf-multiple="false"  ngf-allow-dir="false" ngf-change="uploadPrescription($files)">
+                              </prescription-box-bind>
+                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') === -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('send', opt.url)"
+                                ng-class="{selected: prescriptionOptions.send === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
+                            </div>
 
                             <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
                                 <br />
@@ -57,7 +61,7 @@
                                         <input required type="text" class="half" id="patientName" name="patientName" data-ng-model="prescription.calldoctor.patientName" placeholder="Patient Full Name" ng-minlength="4"/>
                                     </div>
                                     <div class="form-field-half">
-                                        <label>patient date of birth*</label>
+                                        <label>Patient date of birth*</label>
                                         <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/^[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}$/"/>
                                     </div>
                                     <div class="form-field-half">
@@ -79,8 +83,7 @@
                             <h6>{{::view.highIndexOptions.name}}</h6>
                             <div class="prescription-row">
                               <prescription-box-bind ng-repeat="opt in ::view.highIndexOptions.links"
-                                header="{{::opt.title}}" size="{{::view.highIndexOptions.links.length}}"
-                                ng-click="selectPrescriptionOption('highIndex', opt.url)"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('highIndex', opt.url)"
                                 ng-class="{selected: prescriptionOptions.highIndex === opt.url}"
                                 content="::opt.text">
                               </prescription-box-bind>
@@ -93,8 +96,7 @@
                             <h6>{{::view.blueBlockOptions.name}}</h6>
                             <div class="prescription-row">
                               <prescription-box-bind ng-repeat="opt in ::view.blueBlockOptions.links"
-                                header="{{::opt.title}}" size="{{::view.blueBlockOptions.links.length}}"
-                                ng-click="selectPrescriptionOption('blueBlock', opt.url)"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('blueBlock', opt.url)"
                                 ng-class="{selected: prescriptionOptions.blueBlock === opt.url}"
                                 content="::opt.text">
                               </prescription-box-bind>

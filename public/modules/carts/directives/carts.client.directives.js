@@ -25,12 +25,12 @@ angular.module('carts').directive('prescriptionBoxBind', function () {
         templateUrl: 'modules/carts/templates/prescriptionBoxBind.client.template.html',
         scope: {
           'header': '@',
-          'content': '='
+          'content': '=',
         },
         replace: true,
         link: function ($scope, $element, $attrs) {
-            // We don't want watches here!
-            $element.parent().children().css('width', Math.floor(100/($element.parent().children().length)) + "%");
+          // We don't want watches here!
+          $element.parent().children().css('width', Math.floor(100/($element.parent().children().length)) + "%");
         }
     }
 });
