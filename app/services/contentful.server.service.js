@@ -1,7 +1,8 @@
 var ContentfulClient = require('../clients/contenful.server.client.js'),
     ProductService = require('../services/sphere/sphere.products.server.service.js'),
     config = require('../../config/config'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    Promise = require('bluebird');
 
 var NodeCache = require('node-cache');
 
@@ -26,42 +27,16 @@ service.getClient = function() {
   return ContentfulClient.getClient();
 }
 
-/**
- * List
- */
-service.list = function (callback) {
-    ContenfulClient.getClient().entries({}, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            callback(null, entries);
-        }
-    });
-};
-
+// This should be removed as soon as FOC-19 is finished (kept for backwards compatibility)
 service.byId = function (id, callback) {
-    ContenfulClient.getClient().entries({
-        'sys.id': id
-    }, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            callback(null, entries);
-        }
-    });
-};
-
-service.home = function (callback) {
-    var entityId = '3jUtHsj4y4QeGkWESIo0Qa';
-
-    service.byId(entityId, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            var entity = entries[0].fields;
-            callback(null, entity);
-        }
-    });
+  service.getClient().getEntries({
+    'sys.id': id
+  }).then(function (result) {
+    var entries = result.items;
+    callback(null, entries);
+  }).catch(function(err) {
+    callback(err);
+  });
 };
 
 service.help = function (callback) {
@@ -142,21 +117,19 @@ service.byTypeAndName = function (type, name, callback) {
     return;
   }
 
-  ContenfulClient.getClient().entries({
+  ContentfulClient.getClient().getEntries({
       'content_type': type,
-      'fields.title': name
-  }, function (err, entries) {
-      if (err) {
-          callback(err, null);
-      } else {
-        try {
-          var fields = entries[0].fields;
-          service.getCache().set(type + '::' + name, fields);
-          callback(null, fields);
-        } catch(e) {
-          console.log(e);
-        }
-      }
+      'fields.name': name
+  }).then(function (result) {
+    try {
+      var fields = result.items[0].fields;
+      service.getCache().set(type + '::' + name, fields);
+      callback(null, fields);
+    } catch(e) {
+      callback(err);
+    }
+  }).catch(function(err){
+    callback(err)
   });
 };
 

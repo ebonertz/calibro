@@ -540,7 +540,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                     }, function (response) {
                         $scope.error = response.data.message;
                         $rootScope.loading = false;
-                        LoggerServices.error(response);
+                        LoggerServices.error('Could not save, please try again.');
                     }, function (error) {
                         $rootScope.loading = false;
                         LoggerServices.warning(error);
