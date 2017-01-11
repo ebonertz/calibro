@@ -67,8 +67,8 @@
 						</ins>
 					</span>
 						<p>{{contentfulData[selectedGender+'Product'][0].description[lang]}}</p>
-						<a ng-href="#!/products/{{contentfulData[selectedGender+'Product'][0].slug}}" class="btn blue radius thick shop-now">SHOP NOW</a>
-						<a ng-href="#!/categories/{{selectedGender}}/{{category}}" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
+						<a ng-href="/products/{{contentfulData[selectedGender+'Product'][0].slug}}" class="btn blue radius thick shop-now">SHOP NOW</a>
+						<a ng-href="/categories/{{selectedGender}}/{{category}}" class="btn blue outline radius thick">Shop All {{selectedGender}}'s {{category}}</a>
 					</div>
 					<div class="section-cover">
 						<img ng-src="{{contentfulData[selectedGender+'Product'][0].masterVariant.images[0]['url']}}" ng-show="contenfulData[selectedGender+'Product'][0].masterVariant.images.length > 0" />
@@ -88,7 +88,7 @@
 			<latest-products category="{{category}}" gender="men"></latest-products>
 		</section>
 		<section class="all-link"><!--has to be a section for clearfix-->
-			<a ng-href="#!/categories/men/{{category}}" class="btn blue radius">Shop All Men's {{category}}</a>
+			<a ng-href="/categories/men/{{category}}" class="btn blue radius">Shop All Men's {{category}}</a>
 		</section>
 		<hr/>
 		<section class="products" id="women-{{category}}-products">
@@ -101,7 +101,7 @@
             <latest-products category="{{category}}" gender="women"></latest-products>
 		</section>
 		<section class="all-link"><!--has to be a section for clearfix-->
-			<a ng-href="#!/categories/women/{{category}}" class="btn blue radius">Shop All Women's {{category}}</a>
+			<a ng-href="/categories/women/{{category}}" class="btn blue radius">Shop All Women's {{category}}</a>
 		</section>
 
 	</div>
