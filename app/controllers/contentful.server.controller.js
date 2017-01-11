@@ -31,7 +31,6 @@ module.exports = function(app) {
   var controller = {};
 
   controller.home = function(req, res) {
-    return res.sendStatus(200);
     ContentfulService.home(function(err, result) {
       if (err) {
         return res.sendStatus(400);
@@ -45,7 +44,6 @@ module.exports = function(app) {
   };
 
   controller.help = function(req, res) {
-    return res.sendStatus(200);
     ContentfulService.help(function(err, result) {
       if (err) {
         return res.sendStatus(400);
@@ -56,7 +54,6 @@ module.exports = function(app) {
   };
 
   controller.eyewear = function(req, res) {
-    return res.sendStatus(200);
     var gender = req.params.gender;
     ContentfulService.eyewear(gender, function(err, result) {
       if (err) {
@@ -68,7 +65,6 @@ module.exports = function(app) {
   };
 
   controller.sunglasses = function(req, res) {
-    return res.sendStatus(200);
     var gender = req.params.gender;
     ContentfulService.sunglasses(gender, function(err, result) {
       if (err) {
@@ -80,7 +76,6 @@ module.exports = function(app) {
   };
 
   controller.menSummer = function(req, res) {
-    return res.sendStatus(200);
     ContentfulService.menSummer(function(err, result) {
       if (err) {
         return res.sendStatus(400);
@@ -91,7 +86,6 @@ module.exports = function(app) {
   };
 
   controller.womenSummer = function(req, res) {
-    return res.sendStatus(200);
     ContentfulService.womenSummer(function(err, result) {
       if (err) {
         return res.sendStatus(400);
@@ -102,7 +96,6 @@ module.exports = function(app) {
   };
 
   controller.byTypeAndName = function(req, res) {
-    return res.sendStatus(200);
     var type = req.query.type || req.params.type;
     var name = req.query.name || req.params.name;
 

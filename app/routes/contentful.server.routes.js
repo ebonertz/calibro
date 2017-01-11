@@ -24,6 +24,8 @@ module.exports = function(app) {
   // search by type and name
   app.route('/contentful/s/:type/:name')
     .get(contentful.byTypeAndName);
+  app.route('/contentful/s/')
+    .get(contentful.byTypeAndName);
 
   app.route('/contentful/v/:slug')
     .get(contentful.getView);
