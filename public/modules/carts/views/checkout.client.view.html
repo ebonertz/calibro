@@ -29,7 +29,7 @@
                               <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') !== -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
                                 header="{{::opt.title}}" ng-class="{selected: prescriptionOptions.send === opt.url}"
                                 content="::opt.text" ngf-select="true"
-                                ngf-multiple="false"  ngf-allow-dir="false" ngf-change="uploadPrescription($files)">
+                                ngf-multiple="false"  ngf-allow-dir="false" ngf-change="selectPrescriptionOption('send', opt.url, $files)">
                               </prescription-box-bind>
                               <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') === -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
                                 header="{{::opt.title}}" ng-click="selectPrescriptionOption('send', opt.url)"
