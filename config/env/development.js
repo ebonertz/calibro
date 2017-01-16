@@ -87,9 +87,9 @@ module.exports = {
     },
     contenful: {
         space: '6b721x8g60bf',
-        accessToken: '7c3d6d88a6e7dcbbc1b7a586314714ee7551c4fea6b21d890bd0a267ab1e16d7',
+        accessToken: '73442aacb2db7bd511319cd4ae77f8f86cc352c47bfddbe459eb9decb015c4b6',
         secure: true,
-        host: 'cdn.contentful.com'
+        host: 'preview.contentful.com'
     },
     braintree: {
         merchantId: process.env.BRAINTREE_MERCHANT_ID || "j6jnrqf6cysjmswf",
