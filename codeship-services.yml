@@ -1,0 +1,6 @@
+app:
+  build:
+    image: devgurus/focali
+    dockerfile_path: Dockerfile
+  cached: false
+  encrypted_env_file: deployment.env.encrypted
