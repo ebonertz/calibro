@@ -456,7 +456,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
           uploadPrescription: function(files) {
             $scope.prescription.method = 'upload';
-            $scope.uploadPrescription(files)
+            return $scope.uploadPrescription(files)
           }
         }
 
@@ -604,7 +604,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                   // Incorrect file size
                   LoggerServices.warning('File size exceeded (max. ' + maxSizeMB + 'MB)')
                 } else {
-                    Upload.upload({
+                    return Upload.upload({
                         url: '/prescriptions/upload',
                         file: files[0]
                     }).progress(function (evt) {
