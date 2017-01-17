@@ -5,8 +5,8 @@
 		
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
-				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
-				<a class="bc-link" rel="v:url" property="v:title" href="#!/account">My Account</a> / 
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
+				<a class="bc-link" rel="v:url" property="v:title" href="/account">My Account</a> / 
 				<span class="breadcrumb-last" rel="v:url" property="v:title">My Orders</span>
 			</span></span>
 		</div>
@@ -36,7 +36,7 @@
 			<tbody>
 				<tr class="order" ng-repeat="order in orders track by order.id">
 					<td class="order-id">
-						<a ng-href="#!/orders/{{order.id}}">{{order.orderNumber}}</a>
+						<a ng-href="/orders/{{order.id}}">{{order.orderNumber}}</a>
 					</td>
 					<td class="order-items">
 						{{order.lineItems | totalItems}}
@@ -54,7 +54,7 @@
 			</tbody>
 			</table>
 			<br/>
-			<a href="#!/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
+			<a href="/account" class="btn tblue xsmall outline radius">&larr; Back to My Account</a>
 		</div>
 	</section>
 </div>

@@ -5,7 +5,7 @@
 
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
-				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Login</span>
 			</span></span>
     </div>
@@ -16,7 +16,7 @@
       <section class="inner">
         <form data-ng-submit="signin()" class="signin form-horizontal" ng-hide="resetPasswordForm">
           <div class="login">
-            <form action="#!/account" class="site-login" method="post">
+            <form action="/account" class="site-login" method="post">
               <span class="sub-title">Login</span>
               <label>Email</label>
               <input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Please Enter Your Email" tabindex=1>
@@ -32,7 +32,7 @@
         </form>
         <form data-ng-submit="requestPasswordReset()" class="signin form-horizontal" ng-show="resetPasswordForm">
           <div class="login">
-            <form action="#!/account" class="site-login" method="post">
+            <form action="/account" class="site-login" method="post">
               <span class="sub-title">Forgot Password?</span>
               <label>Please enter your email to reset password</label>
               <input type="email" id="email" name="email" class="form-control" data-ng-model="reset.email" placeholder="Please Enter Your Email" tabindex=1>
@@ -67,7 +67,7 @@
             <input type="password" id="password" name="password" class="form-control" data-ng-model="register.password" placeholder="Please Enter Your Password" required>
 
             <label>
-              <input required type="checkbox" class="rememberme"/> I HAVE READ AND I'M AGREE WITH THE <a href="#!/terms-of-use">TERMS AND CONDITIONS</a>
+              <input required type="checkbox" class="rememberme"/> I HAVE READ AND I'M AGREE WITH THE <a href="/terms-of-use">TERMS AND CONDITIONS</a>
             </label>
             <br/>
               <div data-ng-show="register_error" class="text-center text-danger">

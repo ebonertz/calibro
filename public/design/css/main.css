@@ -5712,6 +5712,14 @@ table#cart .remove-item {
     width: 100%;
   }
 }
+.checkout-steps .prescription-row {
+  display: table;
+  border-spacing: 5px 0;
+  margin-left: -5px;
+}
+.checkout-steps .prescription-row .prescription-box {
+  display: table-cell !important;
+}
 .checkout-steps .prescription-box {
   display: inline-block;
   padding: 15px 15px;
@@ -5733,8 +5741,10 @@ table#cart .remove-item {
 .checkout-steps .prescription-box.selected hr {
   border-color: #00A2E1;
 }
+.checkout-steps .prescription-box p {
+  margin: 0px;
+}
 .checkout-steps .prescription-box .content {
-  height: 100px;
   overflow: hidden;
   font-size: 15px;
   display: block;

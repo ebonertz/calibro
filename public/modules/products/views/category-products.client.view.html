@@ -16,7 +16,7 @@
       <span xmlns:v="http://rdf.data-vocabulary.org/#">
       <span typeof="v:Breadcrumb" ng-if="gender">
         <a class="bc-link" rel="v:url" property="v:title" href="/#!">Home</a> /
-        <!-- <a class="bc-link" rel="v:url" property="v:title" href="/#!/categories/{{category}}">{{category}}</a> / -->
+        <!-- <a class="bc-link" rel="v:url" property="v:title" href="//categories/{{category}}">{{category}}</a> / -->
         <span class="breadcrumb-last" rel="v:url" property="v:title">{{pageTitle}}</span>
       </span>
       <span typeof="v:Breadcrumb" ng-if="!gender">
@@ -31,14 +31,14 @@
             <div class="shop-intro-text">
                 <h1 class="page-title">{{pageTitle}}</h1>
 
-                <div class="sorters">
+                <!-- <div class="sorters">
                     <a ng-click="sortBy('name');" id="by-name"
                        class="sorting {{selectedSort.name == 'name'?'active':''}}"
                        ng-class="sort.name == 'ASC' ? 'up' : 'down'">Sort by Name</a>
                     <a ng-click="sortBy('price');" id="by-price"
                        class="sorting {{selectedSort.name == 'price'?'active':''}}"
                        ng-class="sort.price == 'ASC' ? 'up' : 'down'">Sort by Price</a>
-                </div>
+                </div> -->
                 <div class="category-filters">
                     <div ng-click="optionFilter()"  class="cat-sort {{selectedOptionFilter == 'ALL'? 'active':''}}" id="all">Filter Options</div>
                     <!-- <a ng-click="optionFilter('FRAMES') " class="cat-sort {{selectedOptionFilter == 'FRAMES'? 'active':''}}" id="frames">Frames</a>

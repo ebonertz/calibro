@@ -5,39 +5,38 @@
 
 			<span xmlns:v="http://rdf.data-vocabulary.org/#">
 			<span typeof="v:Breadcrumb">
-				<a class="bc-link" rel="v:url" property="v:title" href="#!/">Home</a> /
+				<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
 				<span class="breadcrumb-last" rel="v:url" property="v:title">Checkout</span>
 			</span></span>
         </div>
     </section>
     <section class="page">
         <div class="content checkout-steps">
-            <h1 class="page-title">Checkout</h1>
+            <h1 ng-if="phasePrescription" class="page-title">{{::view.prescriptionTitle}}</h1>
+            <h1 ng-if="!phasePrescription" class="page-title">Checkout</h1>
             <section class="steps">
                 <div class="panels full">
 
                     <!-- PHASE PRESCRIPTION -->
                     <div ng-if="phasePrescription" ng-init="getPrescription()">
-                        <h4>Apply Prescription</h4>
-                        <div id="lensType">
-                            <hr />
-                            <h6>What kind of glasses do you need?</h6>
-                            <prescription-box header="prescription" size="2" ng-click="prescription.type = 'prescription';" ng-class="{selected: prescription.type == 'prescription'}">I need prescription lenses for my glasses.</prescription-box>
-                            <prescription-box header="reader" size="2" ng-click="prescription.type = 'reader'" ng-class="{selected: prescription.type == 'reader'}">I need reading/magnifying lenses for my glasses.</prescription-box>
-                        </div>
                         <div ng-show="prescription.type == 'prescription'"  id="prescriptionMethod">
-                            <br />
+                          <!-- <h4>Apply Prescription</h4> -->
+                            <!-- <br /> -->
                             <hr />
                             <h6>How would you like to send us your prescription?</h6>
-                            <!--<prescription-box header="Upload a picture" size="3" ng-click="prescription.method = 'upload'; $parent.highindex=false; uploadPrescription()" ng-class="{selected: prescription.method == 'upload'}">I will attach a copy of my prescription and upload it from my computer.</prescription-box>-->
-                            <prescription-box header="Upload a picture" size="3"
-                                              ngf-select="true" ngf-change="uploadPrescription($files)" ngf-multiple="false"  ngf-allow-dir="false"
-                                              ng-class="{selected: prescription.method == 'upload'}" id="upload-prescription">
-                            I will upload my prescription from my computer. (.pdf, .jpg or .png)
-                            </prescription-box>
 
-                            <prescription-box header="Call My Doctor" size="3" ng-click="prescription.method = 'calldoctor'; anchorScroll('lensType')" ng-class="{selected: prescription.method == 'calldoctor'}">I would like Focali to call my doctor and obtain my prescription.</prescription-box>
-                            <prescription-box header="Send It Later" size="3" ng-click="prescription.method = 'sendlater'; savePrescription('sendlater');" ng-class="{selected: prescription.method == 'sendlater'}">I don't have my prescription right now but I will send it to Focali later. </prescription-box>
+                            <div class="prescription-row">
+                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') !== -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                                header="{{::opt.title}}" ng-class="{selected: prescriptionOptions.send === opt.url}"
+                                content="::opt.text" ngf-select="true"
+                                ngf-multiple="false"  ngf-allow-dir="false" ngf-change="selectPrescriptionOption('send', opt.url, $files)">
+                              </prescription-box-bind>
+                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') === -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('send', opt.url)"
+                                ng-class="{selected: prescriptionOptions.send === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
+                            </div>
 
                             <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
                                 <br />
@@ -62,7 +61,7 @@
                                         <input required type="text" class="half" id="patientName" name="patientName" data-ng-model="prescription.calldoctor.patientName" placeholder="Patient Full Name" ng-minlength="4"/>
                                     </div>
                                     <div class="form-field-half">
-                                        <label>patient date of birth*</label>
+                                        <label>Patient date of birth*</label>
                                         <input required type="text" class="half" id="patientBirth" name="patientBirth" data-ng-model="prescription.calldoctor.patientBirth" placeholder="MM/DD/YYYY" ng-pattern="/^[01][0-9]\/[0-3][0-9]\/[1-2][890][0-9]{2}$/"/>
                                     </div>
                                     <div class="form-field-half">
@@ -77,37 +76,32 @@
                             <label>Size: {{file.file_size}}</label>
                         </div>
 
-                        <div ng-show="prescription.type == 'reader'">
+
+                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.highIndex = 'removeHighIndex'">
                             <br />
                             <hr />
-                            <h6>Select reading glasses strength</h6>
-                            <form name="readerForm" data-ng-submit="savePrescription('reader', readerForm.$valid);" novalidate>
-                                <div class="form-field-half">
-                                    <select class="half"  name="strength" data-ng-model="prescription.strength" ng-options="n*0.25 as '+'+n*0.25 for n in [] | range:1:11"  ng-init="$parent.prescription.strength=''" required>
-                                        <option value="">Select a strength</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn radius outline green block">Next ></button>
-                            </form>
+                            <h6>{{::view.highIndexOptions.name}}</h6>
+                            <div class="prescription-row">
+                              <prescription-box-bind ng-repeat="opt in ::view.highIndexOptions.links"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('highIndex', opt.url)"
+                                ng-class="{selected: prescriptionOptions.highIndex === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
+                            </div>
                         </div>
 
-
-                        <div ng-show="highindex" id="highindex">
+                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.blueBlock = 'removeBlueBlock'">
                             <br />
                             <hr />
-                            <h6>Do you want high-index lenses if necessary?</h6>
-                            <prescription-box header="Yes" size="2" ng-click="selectHighIndex(true)" ng-class="{selected: highIndexLine() != null}">Please use high-index (thinner) lenses for an additional $30 if I have a strong prescription. (see Support page for more details) </prescription-box>
-                            <prescription-box header="No" size="2" ng-click="selectHighIndex(false)">Please do not use high-index lenses with my prescription.</prescription-box>
+                            <h6>{{::view.blueBlockOptions.name}}</h6>
+                            <div class="prescription-row">
+                              <prescription-box-bind ng-repeat="opt in ::view.blueBlockOptions.links"
+                                header="{{::opt.title}}" ng-click="selectPrescriptionOption('blueBlock', opt.url)"
+                                ng-class="{selected: prescriptionOptions.blueBlock === opt.url}"
+                                content="::opt.text">
+                              </prescription-box-bind>
+                            </div>
                         </div>
-
-                        <div ng-show="blueBlock" id="blueblock">
-                          <br />
-                          <hr />
-                          <h6> Do you want the Blue Block AR treatment?</h6>
-                          <prescription-box header="Yes" size="2" ng-click="selectBlueBlock(true)" ng-class="{selected: blueBlockLine() !=null}">Please add Blue Block AR treatment that blocks harmful High-Enery Visible light (HEV), known to cause Digital Eye Strain and Macular Degeneration for an additional $20. (see Support page for more details)</prescription-box>
-                          <prescription-box header="No" size="2" ng-click="selectBlueBlock(false)"> Please do not use Blue Block AR treatment </prescription-box>
-                        </div>
-
 
                         <div id="next">
                             <br />
@@ -154,46 +148,47 @@
                                     <h6>Enter Shipping Address</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
-                                        <label>First Name</label>
+                                        <label>First Name<span ng-show="!loading && cart.shippingAddress.firstName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="firstName" placeholder="First Name"
                                                ng-model="cart.shippingAddress.firstName" required/>
-                                        <label>Last Name</label>
+                                        <label>Last Name<span ng-show="!loading && cart.shippingAddress.lastName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="lastName" placeholder="Last Name"
                                                ng-model="cart.shippingAddress.lastName" required/>
 
-                                      <!-- New field for email address. Should display only when not logged in -->
-                                        <label ng-if="!authentication.user">Email</label>
-                                        <input type="text" name="email" placeholder="Email" ng-if="!authentication.user"
-                                               ng-model="cart.shippingAddress.email" required/>
 
-                                        <label>Phone</label>
+                                        <!-- New field for email address. Should display only when not logged in -->
+                                        <label ng-if="!authentication.user">Email<span ng-show="!loading && cart.shippingAddress.email.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
+                                        <input type="email" name="email" validate-email placeholder="Email" ng-if="!authentication.user"
+                                               ng-model="cart.shippingAddress.email" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required/>
+
+                                        <label>Phone<span ng-show="!loading && cart.shippingAddress.phone.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
                                                ng-model="cart.shippingAddress.phone" required/>
 
                                         <!-- <div class="form-field-big-quarter"> -->
-                                            <label>Address</label>
+                                            <label>Address<span ng-show="!loading && cart.shippingAddress.streetName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                             <input type="text" name="streetName" placeholder="Street Name"
                                                    ng-model="cart.shippingAddress.streetName" required/>
                                         <!-- </div> -->
                                         <label>Additional Address Information</label>
                                         <input type="text" name="additionalStreetInfo" placeholder="Additional Address Information"
                                                    ng-model="cart.shippingAddress.additionalStreetInfo"/>
-                                        <label for="country">Country</label>
+                                        <label for="country">Country<span ng-show="!loading && cart.shippingAddress.country.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select name="country" id="country" ng-model="cart.shippingAddress.country"
                                                 required>
                                             <option value="" disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
-                                        <label>State/Province</label>
+                                        <label>State/Province<span ng-show="!loading && cart.shippingAddress.state.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select id="states"  ng-model="cart.shippingAddress.state"   required>
                                             <option value="" selected disabled>Choose Province/State</option>
                                             <option ng-selected="{{cart.shippingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.shippingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
 
                                         </select>
-                                        <label>City</label>
+                                        <label>City<span ng-show="!loading && cart.shippingAddress.city.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.shippingAddress.city" required/>
-                                        <label>Zip/Postal</label>
+                                        <label>Zip/Postal<span ng-show="!loading && cart.shippingAddress.postalCode.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.shippingAddress.postalCode" required/>
                                         <div class="checkbox-same">
@@ -331,18 +326,18 @@
                                     <h6>Enter Billing Address</h6>
 
                                     <form id="add-address" name="addAddress" action="#">
-                                        <label>First Name</label>
+                                        <label>First Name<span ng-show="!loading && cart.billingAddress.firstName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="firstName" placeholder="First Name"
                                                ng-model="cart.billingAddress.firstName" required/>
-                                        <label>Last Name</label>
+                                        <label>Last Name<span ng-show="!loading && cart.billingAddress.lastName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="lastName" placeholder="Last Name"
                                                ng-model="cart.billingAddress.lastName" required/>
-                                        <label>Phone</label>
+                                        <label>Phone<span ng-show="!loading && cart.billingAddress.phone.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="tel" name="last-name" placeholder="Phone #"
                                                ng-model="cart.billingAddress.phone" required/>
 
                                         <!-- <div class="form-field-big-quarter"> -->
-                                            <label>Address</label>
+                                            <label>Address<span ng-show="!loading && cart.billingAddress.streetName.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                             <input type="text" name="streetName" placeholder="Street Adress"
                                                    ng-model="cart.billingAddress.streetName" required/>
                                         <!-- </div> -->
@@ -355,16 +350,16 @@
                                             <option disabled selected>Please choose a country</option>
                                             <option value="US">United States</option>
                                         </select>
-                                        <label>State/Province</label>
+                                        <label>State/Province<span ng-show="!loading && cart.billingAddress.state.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <select id="state"  ng-model="cart.billingAddress.state"   required>
                                             <option value="" selected disabled>Choose Province/State</option>
                                             <option ng-selected="{{cart.billingAddress.state == ds.code}}" ng-repeat="ds in dataStates[cart.billingAddress.country]" value="{{ds.code}}">{{ds.name}}</option>
 
                                         </select>
-                                        <label>City</label>
+                                        <label>City<span ng-show="!loading && cart.billingAddress.city.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="city" placeholder="City"
                                                ng-model="cart.billingAddress.city" required/>
-                                        <label>Zip/Postal</label>
+                                        <label>Zip/Postal<span ng-show="!loading && cart.billingAddress.postalCode.length == null" style="margin-left: 10px;color:red;"> Required. Please complete.</span></label>
                                         <input type="text" name="postalCode" placeholder="ZIP/Postal" maxlength="5"
                                                ng-model="cart.billingAddress.postalCode" required/>
                                         <input ng-if="authentication.user && validateBillingAddress()" ng-click="addCustomerAddress(cart.billingAddress, addAddress.$valid)"

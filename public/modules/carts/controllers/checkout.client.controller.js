@@ -1,7 +1,14 @@
 'use strict';
 
-angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope', 'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart', 'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory','AddressSelector','BraintreeService','ipCookie','$http',
-    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location, Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription, Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http) {
+angular.module('carts').controller('CheckoutController', ['$scope', 'Authentication', '$rootScope',
+  'CartService', 'ShippingMethods', 'Order', '$location', 'Addresses', 'LoggerServices', 'Cart',
+  'ShippingMethodService', '$anchorScroll', '$window', 'Prescriptions', 'Upload', 'ngProgressFactory',
+  'AddressSelector','BraintreeService','ipCookie','$http','ContentfulService', '$sce', '$q',
+
+    function ($scope, Authentication, $rootScope, CartService, ShippingMethods, Order, $location,
+      Addresses, LoggerServices, Cart,  ShippingMethodService, $anchorScroll, $window, Prescription,
+      Upload, ngProgressFactory,AddressSelector,BraintreeService,ipCookie,$http, ContentfulService,
+      $sce, $q) {
         $scope.dataStates = AddressSelector.dataStates;
         $scope.card = {};
         $scope.loadingPayPal = 0;
@@ -13,6 +20,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         ];
         $scope.highindex = false;
         $scope.blueBlock = false;
+        $scope.prescriptionOptions = {highIndex: null, blueBlock: null}
+        $scope.prescription = {type: 'prescription'}
 
         $scope.anchorScroll = function (where) {
             $location.hash(where);
@@ -363,7 +372,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
 
         $scope.addCustomerAddress = function (address, valid) {
-            console.log(valid);
 
             var address = new Addresses(address);
             $rootScope.loading = true;
@@ -372,7 +380,6 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 Authentication.user = response;
                 LoggerServices.success('Address added');
                 $rootScope.loading = false;
-                console.log("success address");
             }, function (response) {
                 $scope.error = response.data.message;
                 $rootScope.loading = false;
@@ -410,76 +417,78 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             return $scope.card.card_number != null && $scope.card.card_exp != null && $scope.card.card_security_code != null;
         };
 
+        var getPrescriptionPayload = function(type) {
+          var prescriptionLine = getPrescriptionLine(type);
+          var payload = {
+              quantity: $scope.cartEyewearPrescriptionCount,
+              lineId: prescriptionLine ? prescriptionLine.id : null
+          };
+          return payload;
+        }
 
-        $scope.selectHighIndex = function (status) {
-            var method = status ? 'addHighIndex' : 'removeHighIndex';
-
-            var highIndexLine = $scope.highIndexLine();
-            var payload = {
-                quantity: $scope.cartEyewearPrescriptionCount,
-                lineId: highIndexLine ? highIndexLine.id : null
-            };
-
-            // Don't remove if there's high-index line
-            if (!highIndexLine && !status) {
-                return
-            }
-
-            $rootScope.loading = true;
-            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
-                $rootScope.cart = result;
-                if (status) LoggerServices.success('Added high-index lenses'); // I have the feeling no feedback should be given when no index lenses are selected
-                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
-                $rootScope.loading = false;
-            }, function (err) {
-                $rootScope.loading = false;
-                LoggerServices.error('Could not save, please try again');
-                console.log(err)
+        var updateCart = function(method, type) {
+          var payload = getPrescriptionPayload(type);
+          return CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload)
+            .then(function(result){
+              $rootScope.cart = result;
+              $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
+              LoggerServices.success('Prescription updated');
             })
-
-            return false;
-        };
-
-        $scope.selectBlueBlock = function (status) {
-            var method = status ? 'addBlueBlock' : 'removeBlueBlock';
-
-            var blueBlockLine = $scope.blueBlockLine();
-            var payload = {
-                quantity: $scope.cartEyewearPrescriptionCount,
-                lineId: blueBlockLine ? blueBlockLine.id : null
-            };
-
-            // Don't remove if there's blueBlock line
-            if (!blueBlockLine && !status) {
-                return
-            }
-
-            $rootScope.loading = true;
-            CartService[method]($rootScope.cart.id, $rootScope.cart.version, payload).then(function (result) {
-                $rootScope.cart = result;
-                if (status) LoggerServices.success('Added Blue Block AR'); // I have the feeling no feedback should be given when no index lenses are selected
-                $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
-                $rootScope.loading = false;
-            }, function (err) {
-                $rootScope.loading = false;
-                LoggerServices.error('Could not save, please try again');
-                console.log(err)
-            })
-
-            return false;
-        };
+        }
 
 
+        var prescriptionOptionsMethods = {
+          addHighIndex: updateCart.bind(null, 'addHighIndex', 'highIndex'),
+          removeHighIndex: updateCart.bind(null, 'removeHighIndex', 'highIndex'),
 
+          addBlueBlock: updateCart.bind(null, 'addBlueBlock', 'blueBlock'),
+          removeBlueBlock: updateCart.bind(null, 'removeBlueBlock', 'blueBlock'),
 
+          callDoctor: function() {
+            $scope.prescription.method = 'calldoctor';
+            $scope.anchorScroll('lensType');
+          },
 
+          sendLater: function() {
+            $scope.prescription.method = 'sendlater';
+            $scope.savePrescription('sendlater');
+          },
 
+          uploadPrescription: function(files) {
+            $scope.prescription.method = 'upload';
+            return $scope.uploadPrescription(files)
+          }
+        }
+
+        $scope.selectPrescriptionOption = function(type, method, args) {
+          var prescriptionMethod = prescriptionOptionsMethods[method];
+
+          // Escape if method not expected
+          if (typeof prescriptionMethod !== 'function') {
+            LoggerServices.error('There was an issue with the prescription update. Please try again later.');
+            return
+          }
+
+          if ($scope.prescriptionOptions[type] === method) {
+            return
+          }
+
+          $q.when(prescriptionOptionsMethods[method](args))
+          .then(function (result) {
+              $rootScope.loading = false;
+              $scope.prescriptionOptions[type] = method;
+          }, function (err) {
+              $rootScope.loading = false;
+              LoggerServices.error('Could not save, please try again.');
+              console.log(err)
+          })
+        }
 
         $scope.getPrescription = function (prescription) {
             new Prescription({_id: $rootScope.cart.id}).$get().then(function (result) {
                 if (result.value) {
-                    console.log(result.value)
                     $scope.prescription = result.value;
+                    $scope.prescription.type = 'prescription';
                     if ($scope.prescription.type == 'reader') {
                         $scope.prescription.strength = $scope.prescription.data.strength;
                     } else if ($scope.prescription.method == 'calldoctor') {
@@ -491,6 +500,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         $scope.prescription.upload = result.value.data;
                     }
                 }
+            }).catch(function(err){
+              console.log('No prescription available.');
             });
         }
         $scope.savePrescription = function (type_method, valid) {
@@ -518,20 +529,18 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                             $scope.prescription.calldoctor = $scope.prescription.value.data;
                         }else if ($scope.prescription.method == 'sendlater') {
                             console.log('Will send prescriptions later')
+
                         }
 
                         $rootScope.cart = response.cart;
                         $rootScope.cart.totalDiscount = CartService.calculateDiscountCode($rootScope.cart);
 
                         $rootScope.loading = false;
-                        LoggerServices.success('Prescription saved');
                         callback(response);
-                        console.log(response.cart);
-
                     }, function (response) {
                         $scope.error = response.data.message;
                         $rootScope.loading = false;
-                        LoggerServices.error(response);
+                        LoggerServices.error('Could not save, please try again.');
                     }, function (error) {
                         $rootScope.loading = false;
                         LoggerServices.warning(error);
@@ -554,6 +563,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                         data = $scope.prescription.calldoctor
                         save('prescription', 'calldoctor', data, function () {
                             $scope.anchorScroll('calldoctor');
+                            LoggerServices.success('Prescription updated');
                         });
                     }
                     break;
@@ -561,6 +571,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
                 case 'sendlater':
                     save('prescription', 'sendlater', '', function () {
                         $scope.anchorScroll('lensType');
+                        LoggerServices.success('Prescription updated');
                     })
                     break;
 
@@ -583,11 +594,17 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
             if (files && files.length > 0) {
                 if (extensions.indexOf(files[0].name.split('.').pop()) < 0) {
-                    LoggerServices.error('Incorrect file format')
+                  // Incorrect format
+                  LoggerServices.warning('Incorrect file format. Only '
+                    + extensions.slice(0, extensions.length - 1).join(', ')
+                    + ' and ' + extensions[extensions.length - 1]
+                    + ' supported.'
+                  );
                 } else if (files[0].size / (1024 * 1024) > maxSizeMB) {
-                    LoggerServices.error('File size exceeded (max. ' + maxSizeMB + 'MB)')
+                  // Incorrect file size
+                  LoggerServices.warning('File size exceeded (max. ' + maxSizeMB + 'MB)')
                 } else {
-                    Upload.upload({
+                    return Upload.upload({
                         url: '/prescriptions/upload',
                         file: files[0]
                     }).progress(function (evt) {
@@ -605,44 +622,38 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
 
                         $scope.prescription.upload = data; // {new_filename, original_filename, file_size}
                         $scope.savePrescription('upload')
-                        //$timeout(function () {
-                        //    $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-                        //});
                     }).error(function (data, status, headers, config) {
-                        console.log(status);
                         $scope.progressbar.reset();
-                        // handle error
+                        LoggerServices.error(data || "An unexpected error ocurred. Please contact us at welcome@focalioptics.com");
                     })
                 }
             }
         }
 
-        $scope.highIndexLine = function () {
-            for (var i in $rootScope.cart.customLineItems) {
-                var line = $rootScope.cart.customLineItems[i];
-                if (line.slug == 'high-index-lens') {
-                    return line;
-                }
-            }
-            return null
-        };
+        var getPrescriptionLine = function(type) {
+          var slug;
 
-        $scope.blueBlockLine = function () {
-            for (var i in $rootScope.cart.customLineItems) {
-                var line = $rootScope.cart.customLineItems[i];
-                if (line.slug == 'blue-block') {
-                    return line;
-                }
-            }
-            return null
-        };
+          switch(type) {
+            case 'highIndex': slug = 'high-index-lens'; break;
+            case 'blueBlock': slug = 'blue-block'; break;
+          }
+
+          for (var i in $rootScope.cart.customLineItems) {
+              var line = $rootScope.cart.customLineItems[i];
+              if (line.slug == slug) {
+                  return line;
+              }
+          }
+          return null
+        }
 
         $scope.setAsBillingAddress = function (status) {
             $scope.setAsBilling = status;
         }
 
-
-
+        ContentfulService.getView('checkout').then(function(view) {
+          $scope.view = view;
+        })
     }
 ])
 ;

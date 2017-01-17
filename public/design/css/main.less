@@ -2328,6 +2328,16 @@ table#cart{
 		.make-md-column(12);
   	}
 
+	.prescription-row {
+		display: table;
+		border-spacing: 5px 0;
+		margin-left: -5px;
+
+		.prescription-box {
+			display: table-cell !important;
+		}
+	}
+
 	.prescription-box{
 	  	//width: 50%;
 	  	display: inline-block;
@@ -2339,29 +2349,35 @@ table#cart{
 		  border-radius: 5px;
 
 	  	&:hover, &.selected{
-			border-color: rgba(0, 124, 175, 0.45);
+				border-color: rgba(0, 124, 175, 0.45);
 		  	opacity: 1;
-			.header{
-			  	color: #007caf;
-			}
-		  	hr {
-			  	//color: #00A2E1;
-			  	border-color: #00A2E1;
-			}
-		}
-	  	.content {
-		  	height: 100px;
-		  	overflow: hidden;
-				font-size: 15px;
-				display:block;
 
-				@media(max-width:@screen-sm-max) {
-					font-size: 12px;
-					height: 140px;
+				.header{
+			  	color: #007caf;
 				}
 
-		  	label {
-			  	margin-top: 4px;
+				hr {
+			  	//color: #00A2E1;
+			  	border-color: #00A2E1;
+				}
+			}
+
+		p {
+			margin: 0px;
+		}
+  	.content {
+	  	// height: 100px;
+	  	overflow: hidden;
+			font-size: 15px;
+			display:block;
+
+			@media(max-width:@screen-sm-max) {
+				font-size: 12px;
+				height: 140px;
+			}
+
+	  	label {
+		  	margin-top: 4px;
 			}
 		}
 

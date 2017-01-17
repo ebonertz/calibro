@@ -7,7 +7,7 @@
                         <meta itemprop="target" content="http://www.focali.com/search?q={query}"/>
                         <input ng-model="searchText" itemprop="query-input" type="text" name="query" placeholder="Search for product" ng-enter="search(searchText)">
                         <button ng-click="search(searchText)"><img src="/design/images/search-icon.png" width="20" height="auto"/></button>
-                        <a class="close" id="search-close" href="#"><img src="/design/images/close-button.png" width="30" height="30" alt="close-search"/>
+                        <a class="close" id="search-close" search-close href="#"><img src="/design/images/close-button.png" width="30" height="30" alt="close-search"/>
                     </div>
                 </div>
             </section>
@@ -24,27 +24,27 @@
                     <li class="has-children">
                         <a href="#">Men</a>
                         <ul class="sub-menu">
-                            <li><a href="#!/categories/men/eyewear">Men's Eyewear</a></li>
-                            <li><a href="#!/categories/men/sunglasses">Men's Sunglasses</a></li>
-                            <!--<li><a href="#!/landing/summer/men">Men's Summer 2015</a></li>-->
+                            <li><a href="/categories/men/eyewear">Men's Eyewear</a></li>
+                            <li><a href="/categories/men/sunglasses">Men's Sunglasses</a></li>
+                            <!--<li><a href="/landing/summer/men">Men's Summer 2015</a></li>-->
                         </ul>
                     </li>
                     <li class="has-children">
                         <a href="#">Women</a>
                         <ul class="sub-menu">
-                            <li><a href="#!/categories/women/eyewear">Women's Eyewear</a></li>
-                            <li><a href="#!/categories/women/sunglasses">Women's Sunglasses</a></li>
-                            <!--<li><a href="#!/landing/summer/women">Women's Summer 2015</a></li>-->
+                            <li><a href="/categories/women/eyewear">Women's Eyewear</a></li>
+                            <li><a href="/categories/women/sunglasses">Women's Sunglasses</a></li>
+                            <!--<li><a href="/landing/summer/women">Women's Summer 2015</a></li>-->
                         </ul>
 
                     </li>
-                    <li><a href="#!/about-us">About Us</a></li>
-                    <li><a href="#!/support">Support</a></li>
+                    <li><a href="/about-us">About Us</a></li>
+                    <li><a href="/support">Support</a></li>
                 </ul>
             </nav>
             <div class="top-cart">
                 <div class="search">
-                    <a href="#" id="search-expander"><img src="/design/images/search-icon.png" width="20" height="auto"/></a>
+                    <a href="#" id="search-expander" search-expander><img src="/design/images/search-icon.png" width="20" height="auto"/></a>
                 </div>
                 <div class="top-user-name">
                     <a href="/login" class="site-login" data-ng-hide="authentication.user">Login</a>
@@ -77,7 +77,7 @@
                         </tbody>
                     </table>
                     <div class="top-cart-action-buttons">
-	                    <a href="#!/cart" id="view-cart-btn" class="btn radius small outline thick blue">View Cart</a>
+	                    <a href="/cart" id="view-cart-btn" class="btn radius small outline thick blue">View Cart</a>
 	                    <a ng-click="proceedToCheckout()" href="" class="btn radius small blue">Checkout</a>
                     </div>
                     <div class="top-cart-total">
@@ -92,15 +92,3 @@
         </header>
     </div>
 </div>
-<script type="text/javascript">
-    $(function () {
-        $('#search-expander').click(function () {
-            $('.site-search-wrapper').addClass('showing');
-            return false;
-        });
-        $('#search-close').click(function () {
-            $('.site-search-wrapper').removeClass('showing');
-            return false;
-        });
-    });
-</script>

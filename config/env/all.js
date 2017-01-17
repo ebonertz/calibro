@@ -29,7 +29,7 @@ module.exports = {
 				'public/design/js/focali-scripts.js',
 				'public/lib/optile/ajax-integration-1.1.min.js',
 				'public/lib/angular-cookie/angular-cookie.min.js',
-				'public/lib/angular-toastr/dist/angular-toastr.min.js',
+				'public/lib/angular-toastr/dist/angular-toastr.tpls.min.js',
 				'public/lib/angular-bindonce/bindonce.min.js',
 				'public/lib/angular-socialshare/angular-socialshare.min.js',
 				'public/lib/angular-addthis/dist/angular-addthis.min.js',
@@ -40,8 +40,9 @@ module.exports = {
 				'public/lib/ng-lodash/build/ng-lodash.min.js',
 				'public/lib/braintree-web/dist/braintree.js',
 				'public/lib/stacktrace-js/dist/stacktrace.min.js',
-				'public/lib/angular-adaptive-detection/angular-adaptive-detection.min.js'
-
+				'public/lib/angular-adaptive-detection/angular-adaptive-detection.min.js',
+				'public/lib/angular-marked/dist/angular-marked.min.js',
+				'public/lib/marked/marked.min.js'
 			]
 		},
 		css: [
@@ -63,5 +64,11 @@ module.exports = {
 			'public/lib/angular-mocks/angular-mocks.js',
 			'public/modules/*/tests/*.js'
 		]
+	},
+	contentful: {
+		cache: {
+			ttl: 1000,
+			flushTimeout: 30
+		}
 	}
 };

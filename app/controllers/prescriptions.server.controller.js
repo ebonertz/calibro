@@ -43,7 +43,7 @@ module.exports = function (app) {
 
        UploadFileService.upload(req, function (err, file_data) {
             if (err) {
-                return res.sendStatus(400)
+              return res.status(err.http_code || 503).send(err.message)
             } else {
                 res.json({
                     original_filename: file_data.original_filename,
