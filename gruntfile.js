@@ -181,7 +181,7 @@ module.exports = function(grunt) {
       options: {
         specNameSuffix: ["specs.js", "spec.js"],
         useHelpers: false,
-        traceFatal: true
+        traceFatal: 2
       },
       all: {
         specs: defaultAssets.assets.tests.server,
@@ -218,7 +218,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['csslint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin', 'concat']);
 
   // Test task.
-  // grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
+  grunt.registerTask('test', ['test:server']);
 	grunt.registerTask('test:server', ['env:test', 'jasmine_nodejs']);
 
   // Run the project in production mode
