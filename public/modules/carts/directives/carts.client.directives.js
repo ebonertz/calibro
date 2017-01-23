@@ -1,28 +1,23 @@
-
 angular.module('carts').directive('prescriptionBox', function () {
     return {
         restrict: 'E',
         templateUrl: 'modules/carts/templates/prescriptionBox.client.template.html',
-        scope: false,
-        transclude: true,
+        scope: {
+          'header': '@',
+          'content': '=',
+        },
         replace: true,
         link: function ($scope, $element, $attrs) {
-            // We don't want watches here!
-            $element.find('h6').text($attrs.header);
-            $element.css('width', Math.floor(100/$attrs.size - 1)+"%");
-            $element.on('click', function(){
-                $element.parent().find('.prescription-box').removeClass('selected');
-                $element.addClass('selected');
-            })
+          // We don't want watches here!
+          $element.parent().children().css('width', Math.floor(100/($element.parent().children().length)) + "%");
         }
     }
 });
 
-
-angular.module('carts').directive('prescriptionBoxBind', function () {
+angular.module('carts').directive('prescriptionInput', function () {
     return {
         restrict: 'E',
-        templateUrl: 'modules/carts/templates/prescriptionBoxBind.client.template.html',
+        templateUrl: 'modules/carts/templates/prescriptionInput.client.template.html',
         scope: {
           'header': '@',
           'content': '=',

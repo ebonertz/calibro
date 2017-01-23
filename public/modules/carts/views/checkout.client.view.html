@@ -26,16 +26,16 @@
                             <h6>How would you like to send us your prescription?</h6>
 
                             <div class="prescription-row">
-                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') !== -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                              <prescription-box ng-if="opt.url.toLowerCase().indexOf('upload') !== -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
                                 header="{{::opt.title}}" ng-class="{selected: prescriptionOptions.send === opt.url}"
                                 content="::opt.text" ngf-select="true"
-                                ngf-multiple="false"  ngf-allow-dir="false" ngf-change="selectPrescriptionOption('send', opt.url, $files)">
-                              </prescription-box-bind>
-                              <prescription-box-bind ng-if="opt.url.toLowerCase().indexOf('upload') === -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
+                                ngf-multiple="false" ngf-allow-dir="false" ngf-change="selectPrescriptionOption('send', opt.url, $files)">
+                              </prescription-box>
+                              <prescription-box ng-if="opt.url.toLowerCase().indexOf('upload') === -1" ng-repeat="opt in ::view.sendPrescriptionOptions.links"
                                 header="{{::opt.title}}" ng-click="selectPrescriptionOption('send', opt.url)"
                                 ng-class="{selected: prescriptionOptions.send === opt.url}"
                                 content="::opt.text">
-                              </prescription-box-bind>
+                              </prescription-box>
                             </div>
 
                             <div ng-show="prescription.method=='calldoctor'" id="calldoctor">
@@ -77,29 +77,29 @@
                         </div>
 
 
-                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.highIndex = 'removeHighIndex'">
+                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.highIndex = isPrescriptionAdded('highIndex') ? 'addHighIndex' : 'removeHighIndex'">
                             <br />
                             <hr />
                             <h6>{{::view.highIndexOptions.name}}</h6>
                             <div class="prescription-row">
-                              <prescription-box-bind ng-repeat="opt in ::view.highIndexOptions.links"
+                              <prescription-box ng-repeat="opt in ::view.highIndexOptions.links"
                                 header="{{::opt.title}}" ng-click="selectPrescriptionOption('highIndex', opt.url)"
                                 ng-class="{selected: prescriptionOptions.highIndex === opt.url}"
                                 content="::opt.text">
-                              </prescription-box-bind>
+                              </prescription-box>
                             </div>
                         </div>
 
-                        <div ng-show="highindex" id="highindex" ng-init="prescriptionOptions.blueBlock = 'removeBlueBlock'">
+                        <div ng-show="blueBlock" id="blueBlock" ng-init="prescriptionOptions.blueBlock = isPrescriptionAdded('blueBlock') ? 'addBlueBlock' : 'removeBlueBlock'">
                             <br />
                             <hr />
                             <h6>{{::view.blueBlockOptions.name}}</h6>
                             <div class="prescription-row">
-                              <prescription-box-bind ng-repeat="opt in ::view.blueBlockOptions.links"
+                              <prescription-box ng-repeat="opt in ::view.blueBlockOptions.links"
                                 header="{{::opt.title}}" ng-click="selectPrescriptionOption('blueBlock', opt.url)"
                                 ng-class="{selected: prescriptionOptions.blueBlock === opt.url}"
                                 content="::opt.text">
-                              </prescription-box-bind>
+                              </prescription-box>
                             </div>
                         </div>
 
