@@ -22,16 +22,6 @@ angular.module('misc').service('ContentfulService', ['$http', '$q', '$resource',
       }
     });
 
-    service.home = function() {
-      var deferred = $q.defer();
-
-      $http.get(urlString + '/home').success(function(data) {
-        deferred.resolve(data);
-      });
-
-      return deferred.promise;
-    }
-
     service.eyewear = function(gender) {
       var deferred = $q.defer();
 
@@ -61,25 +51,6 @@ angular.module('misc').service('ContentfulService', ['$http', '$q', '$resource',
 
       return deferred.promise;
     }
-
-    service.help = function() {
-      var deferred = $q.defer();
-
-      $http.get(urlString + '/help').success(function(data) {
-        deferred.resolve(data);
-      });
-
-      return deferred.promise;
-    }
-
-    service.byTypeAndName = function(type, name) {
-      return $http.get(urlString + '/s/', {
-        params: {
-          type: type,
-          name: name
-        }
-      });
-    };
 
     service.search = function(type, name) {
       var res = Contentful.search({

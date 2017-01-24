@@ -17,29 +17,22 @@
         <header id="main">
             <div class="brand">
               <img class="logo-icon" src="/design/images/focali-icon.png" width="50" height="50"/>
-              <a href="/" rel="logo"><img src="/design/images/focalilogo.png" alt="Focali" width="100" height="50"/></a>
+              <a ng-href="/" rel="logo">
+                <img ng-src="{{view.logo.file.url}}" alt="Focali" height="50">
+              </a>
             </div>
             <nav id="primary" itemscope itemtype="http://schema.org/SiteNavigationElement">
                 <ul class="main-navigation">
-                    <li class="has-children">
-                        <a href="#">Men</a>
-                        <ul class="sub-menu">
-                            <li><a href="/categories/men/eyewear">Men's Eyewear</a></li>
-                            <li><a href="/categories/men/sunglasses">Men's Sunglasses</a></li>
-                            <!--<li><a href="/landing/summer/men">Men's Summer 2015</a></li>-->
-                        </ul>
-                    </li>
-                    <li class="has-children">
-                        <a href="#">Women</a>
-                        <ul class="sub-menu">
-                            <li><a href="/categories/women/eyewear">Women's Eyewear</a></li>
-                            <li><a href="/categories/women/sunglasses">Women's Sunglasses</a></li>
-                            <!--<li><a href="/landing/summer/women">Women's Summer 2015</a></li>-->
-                        </ul>
-
-                    </li>
-                    <li><a href="/about-us">About Us</a></li>
-                    <li><a href="/support">Support</a></li>
+                  <li ng-repeat="li in ::view.links" ng-class="{'has-children': li.links}">
+                    <!-- li can be a container or a list -->
+                    <a ng-if="!li.links.length" ng-href="{{::li.url}}">{{::(li.title || li.name)}}</a>
+                    <a ng-if="li.links.length > 0" ng-href="{{::li.links[0].url}}">{{::(li.links[0].title || li.links[0].name)}}</a>
+                    <ul ng-if="li.links.length > 0" class="sub-menu">
+                        <li ng-repeat="sub in ::li.links.slice(1)">
+                          <a ng-href="{{::sub.url}}">{{::(sub.title || sub.name)}}</a>
+                        </li>
+                    </ul>
+                  </li>
                 </ul>
             </nav>
             <div class="top-cart">

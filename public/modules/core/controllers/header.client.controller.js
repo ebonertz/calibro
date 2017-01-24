@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', '$location','$rootScope','$http','$window','ipCookie',
-	function($scope, Authentication, Menus, CartService, CustomerService, $location,$rootScope,$http,$window,ipCookie) {
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', 'CartService', 'CustomerService', '$location','$rootScope','$http','$window','ipCookie', 'ContentfulService',
+	function($scope, Authentication, Menus, CartService, CustomerService, $location,$rootScope,$http,$window,ipCookie, ContentfulService) {
 		$scope.authentication = Authentication;
 
 		$scope.removeFromCart = function (item) {
@@ -40,6 +40,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		$scope.search = function(text){
 			$location.path('text/' + text);
 		}
+
+		ContentfulService.getView('header').then(function(view) {
+			$scope.view = view;
+		})
 
 	}
 ]);
