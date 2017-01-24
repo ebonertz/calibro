@@ -1,0 +1,30 @@
+<span ng-controller="SimplePageController">
+	<div class="slider-wrapper" ng-if="{{::view.content.image.file}}">
+			<section id="subpage-head">
+				<div class="subpage-hero">
+					<img ng-src="{{::view.content.image.file.url}}" alt="{{::view.content.name}}"/>
+				</div>
+			</section>
+	</div>
+	<hr class="nav-divider"/>
+	<br ng-if="{{::view.content.image.file}}">
+	<div class="content-wrapper">
+		<section id="breadcrumbs">
+			<div class="breadcrumb">
+				<span xmlns:v="http://rdf.data-vocabulary.org/#">
+				<span typeof="v:Breadcrumb">
+					<a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
+					<span class="breadcrumb-last" rel="v:url" property="v:title">{{::view.content.name}}</span>
+				</span>
+				</span>
+			</div>
+		</section>
+		<section class="page">
+			<div class="content about-us">
+				<h1 class="page-title" marked="::view.content.title"></h1>
+				<p marked="::view.content.text"></p>
+			</div>
+			<hr/>
+		</section>
+	</div>
+</span>
