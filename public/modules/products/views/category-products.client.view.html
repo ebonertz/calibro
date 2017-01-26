@@ -4,7 +4,7 @@
             <section id="subpage-head">
                 <div class="subpage-hero">
                     <h1 class="subpage-title"></h1>
-                    <img  ng-src="{{contentfulData.subHeaderImage.fields.file.url}}" />
+                    <img  ng-src="{{::CMSView.image.file.url}}" />
                 </div>
             </section>
         <!-- </div>
@@ -15,12 +15,12 @@
 
       <span xmlns:v="http://rdf.data-vocabulary.org/#">
       <span typeof="v:Breadcrumb" ng-if="gender">
-        <a class="bc-link" rel="v:url" property="v:title" href="/#!">Home</a> /
+        <a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
         <!-- <a class="bc-link" rel="v:url" property="v:title" href="//categories/{{category}}">{{category}}</a> / -->
-        <span class="breadcrumb-last" rel="v:url" property="v:title">{{pageTitle}}</span>
+        <span class="breadcrumb-last" rel="v:url" property="v:title">{{::(CMSView.title || CMSView.name)}}</span>
       </span>
       <span typeof="v:Breadcrumb" ng-if="!gender">
-        <a class="bc-link" rel="v:url" property="v:title" href="/#!">Home</a> /
+        <a class="bc-link" rel="v:url" property="v:title" href="/">Home</a> /
         <!-- <span class="breadcrumb-last" rel="v:url" property="v:title">{{category}}</span> -->
       </span>
 
@@ -29,7 +29,7 @@
         </section>
         <section id="{{gender}}s-{{category}}" class="page page-head shop-head">
             <div class="shop-intro-text">
-                <h1 class="page-title">{{pageTitle}}</h1>
+                <h1 class="page-title">{{::(CMSView.title || CMSView.name)}}</h1>
 
                 <!-- <div class="sorters">
                     <a ng-click="sortBy('name');" id="by-name"

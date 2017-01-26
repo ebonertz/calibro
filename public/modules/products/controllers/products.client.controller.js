@@ -189,10 +189,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
         }
 
-        $scope.loadContent = function(gender, slug){
-            ContentfulService[slug](gender).then(function(data) {
-                $scope.contentfulData = data;
-            });
+        $scope.loadContent = function(){
+          var slug = $stateParams.gender + '-' + $stateParams.slug + '-category'
+          ContentfulService.getView(slug).then(function(view) {
+            $scope.CMSView = view.content;
+          }).catch(function(e){
+            console.debug('View ' + slug + ' couldn\'t be loaded: ' + e.data);
+          });
         }
 
         $scope.optionFilter = function (value) {

@@ -30,19 +30,6 @@ function mapPropertiesToHtml(result, notProcess) {
 module.exports = function(app) {
   var controller = {};
 
-  controller.home = function(req, res) {
-    ContentfulService.home(function(err, result) {
-      if (err) {
-        return res.sendStatus(400);
-      } else {
-        var notProcessableKeys = ['heroText', 'heroButtonText', 'slide2Text', 'slide2ButtonText', 'orderEmail', 'orderPhone',
-          'heroButtonUrl', 'slide2ButtonUrl', 'eyewearHimButtonUrl', 'eyewearHerButtonUrl', 'sunglassesHimButtonUrl', 'sunglassesHerButtonUrl'
-        ];
-        res.json(mapPropertiesToHtml(result, notProcessableKeys));
-      }
-    });
-  };
-
   controller.help = function(req, res) {
     ContentfulService.help(function(err, result) {
       if (err) {
@@ -95,19 +82,6 @@ module.exports = function(app) {
     });
   };
 
-  controller.byTypeAndName = function(req, res) {
-    var type = req.query.type || req.params.type;
-    var name = req.query.name || req.params.name;
-
-    ContentfulService.byTypeAndName(type, name, function(err, result) {
-      if (err) {
-        app.logger.error(err);
-        return res.sendStatus(400);
-      } else {
-        res.json(mapPropertiesToHtml(result));
-      }
-    });
-  };
 
   controller.getView = function(req, res) {
     var slug = req.params.slug;
@@ -117,8 +91,12 @@ module.exports = function(app) {
       // console.log(content);
       return res.json(content);
     }).catch(function(err) {
-      app.logger.error(err);
-      return res.sendStatus(400);
+      if(err.message === 'No entries found') {
+        return res.sendStatus(404);
+      } else {
+        app.logger.error(err);
+        return res.status(400).send(err.message);
+      }
     })
   }
 
