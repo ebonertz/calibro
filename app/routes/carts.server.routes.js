@@ -8,10 +8,6 @@ var entity = 'carts';
 module.exports = function (app) {
     var commons = require('../controllers/commons.server.controller.js')(app),
         carts = require('../controllers/carts.server.controller.js')(app);
-    app.route('/api/carts')
-        .get(commons.list.bind({entity: entity}))
-        .post(commons.create.bind({entity: entity}))
-        .delete(commons.deleteAll.bind({entity: entity}))
 
     app.route('/api/carts/init')
         .get(carts.init);

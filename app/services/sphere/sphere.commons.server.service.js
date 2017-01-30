@@ -31,6 +31,12 @@ module.exports = function (app) {
             app.logger.error("Error fetching all entity: %s. Error: %s",entity,JSON.stringify(err));
             callback(err, null);
         });
+    };
+
+    service.getFirst = function(entity) {
+      return SphereClient.getClient()[entity].page(1).perPage(1).fetch().then(function(results){
+        return results.body.results[0];
+      })
     }
 
 
