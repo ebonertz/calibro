@@ -1,5 +1,5 @@
 var ContentfulClient = require('../clients/contenful.server.client.js'),
-    ProductService = require('../services/sphere/sphere.products.server.service.js'),
+    // ProductService = require('../services/sphere/sphere.products.server.service.js'),
     config = require('../../config/config'),
     _ = require('lodash'),
     Promise = require('bluebird');
@@ -134,6 +134,7 @@ service.byTypeAndName = function (type, name, callback) {
 };
 
 service.process = function(content) {
+
   return service.pruneMetadataDeep(content);
 }
 
@@ -185,25 +186,25 @@ service.getView = function (slug) {
 }
 
 var summer = function (entityId, callback) {
-    service.byId(entityId, function (err, entries) {
-        if (err) {
-            callback(err, null);
-        } else {
-            var entity = entries[0].fields,
-                eyewearIds = entity.eyewearProducts.split(','),
-                sunglassesIds = entity.sunglassesProducts.split(',');
-
-            // TODO: Populate products.
-            ProductService.bySku(eyewearIds, function(err, result){
-                entity.eyewearProducts = result;
-
-                ProductService.bySku(sunglassesIds, function(err, result){
-                    entity.sunglassesProducts = result;
-                    callback(null, entity);
-                });
-            });
-        }
-    });
+    // service.byId(entityId, function (err, entries) {
+    //     if (err) {
+    //         callback(err, null);
+    //     } else {
+    //         var entity = entries[0].fields,
+    //             eyewearIds = entity.eyewearProducts.split(','),
+    //             sunglassesIds = entity.sunglassesProducts.split(',');
+    //
+    //         // TODO: Populate products.
+    //         ProductService.bySku(eyewearIds, function(err, result){
+    //             entity.eyewearProducts = result;
+    //
+    //             ProductService.bySku(sunglassesIds, function(err, result){
+    //                 entity.sunglassesProducts = result;
+    //                 callback(null, entity);
+    //             });
+    //         });
+    //     }
+    // });
 };
 
 module.exports = service;

@@ -60,10 +60,16 @@ module.exports = {
 			'public/*/design/less/*.less',
 			'public/design/css/main.less',
 		],
-		tests: [
-			'public/lib/angular-mocks/angular-mocks.js',
-			'public/modules/*/tests/*.js'
-		]
+		tests: {
+			client: [
+				'public/lib/angular-mocks/angular-mocks.js',
+				'public/modules/*/specs/*.js'
+			],
+			server: [
+				'app/**/specs/**/*.js'
+			]
+
+		}
 	},
 	contentful: {
 		cache: {
