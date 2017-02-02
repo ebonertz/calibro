@@ -1,10 +1,12 @@
 var SphereClient = require('../../clients/sphere.server.client.js'),
     config = require('../../../config/config'),
-    _ = require('lodash');
-entity = 'carts';
+    _ = require('lodash'),
+    Promise = require('bluebird');
+
+var entity = 'carts';
 
 module.exports = function (app) {
-    var CommonService = require('./sphere.commons.server.service.js')(app),
+    var CommonService = Promise.promisifyAll(require('./sphere.commons.server.service.js')(app)),
         AvalaraService = require('../../services/avalara.server.services.js')(app),
         Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
     TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
@@ -48,6 +50,7 @@ module.exports = function (app) {
         if (payload)
             payload.action = actions.addCustomLineItem;
 
+        console.log(payload);
         CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
             callback(err, result);
         });
@@ -205,35 +208,61 @@ module.exports = function (app) {
         });
     }
 
-    service.addHighIndex = function (cartId, version, payload, callback) {
-        var quantity = payload.quantity;
-        if (quantity < 1)
-            return callback("No lines to apply high-index to");
+    service.addHighIndex = function(cart, payload) {
+      var quantity = payload.quantity;
+      if (quantity < 1)
+        return Promise.reject({
+          status: 400
+        });
 
-        var taxCategory = TaxCategoryService.getFirst();
-        var payload = {
+      // Check if custom line item already exists
+      return Promise.resolve().then(function() {
+        return _.find(cart.customLineItems, {
+          slug: config.highIndex.slug
+        });
+      })
+      .then(function(previousCustomLineItem) {
+
+        // Update current custom line item
+        if (previousCustomLineItem) {
+          var action = {
+            action: 'changeCustomLineItemQuantity',
+            customLineItemId: previousCustomLineItem.id,
+            quantity: quantity
+          }
+
+          return action;
+        }
+
+        // Add new custom line item
+        return TaxCategoryService.getFirst().then(function(taxCategory) {
+
+          var action = {
+            'action': 'addCustomLineItem',
             'name': {
-                'en': "High-index Lens",
+              'en': "High-index Lens",
             },
             'quantity': quantity,
             'money': {
-                // Move to config
-                "currencyCode": "USD",
-                "centAmount": config.highIndex.price * 100 || 3000
+              "currencyCode": "USD",
+              "centAmount": config.highIndex.price * 100 || 3000
             },
             'slug': config.highIndex.slug,
             'taxCategory': {
-                typeId: 'tax-category',
-                id: taxCategory.id
+              typeId: 'tax-category',
+              id: taxCategory.id
             }
-        };
+          };
 
-        service.addCustomLineItem(cartId, version, payload, function (err, result) {
-            callback(err, result);
-        });
+          return action;
+        })
+      }).then(function(action) {
+        // Update cart
+        return CommonService.updateWithVersionAsync(entity, cart.id, cart.version, [action]);
+      });
     };
 
-// Proxy
+    // Proxy
     service.removeHighIndex = function (cartId, version, lineId, callback) {
         var payload = {
             customLineItemId: lineId
@@ -241,33 +270,58 @@ module.exports = function (app) {
         service.removeCustomLineItem(cartId, version, payload, callback);
     };
 
+    service.addBlueBlock = function(cart, payload) {
+      var quantity = payload.quantity;
+      if (quantity < 1)
+        return Promise.reject({
+          status: 400
+        });
 
-    service.addBlueBlock = function (cartId, version, payload, callback) {
-        var quantity = payload.quantity;
-        if (quantity < 1)
-            return callback("No lines to apply high-index to");
+      // Check if custom line item already exists
+      return Promise.resolve().then(function() {
+        return _.find(cart.customLineItems, {
+          slug: config.blueBlock.slug
+        });
+      })
+      .then(function(previousCustomLineItem) {
 
-        var taxCategory = TaxCategoryService.getFirst();
-        var payload = {
+        // Update current custom line item
+        if (previousCustomLineItem) {
+          var action = {
+            action: 'changeCustomLineItemQuantity',
+            customLineItemId: previousCustomLineItem.id,
+            quantity: quantity
+          }
+
+          return action;
+        }
+
+        // Add new custom line item
+        return TaxCategoryService.getFirst().then(function(taxCategory) {
+
+          var action = {
+            'action': 'addCustomLineItem',
             'name': {
-                'en': "Blue Block",
+              'en': "Blue Block",
             },
             'quantity': quantity,
             'money': {
-                // Move to config
-                "currencyCode": "USD",
-                "centAmount": config.blueBlock.price * 100 || 3000
+              "currencyCode": "USD",
+              "centAmount": config.blueBlock.price * 100 || 3000
             },
             'slug': config.blueBlock.slug,
             'taxCategory': {
-                typeId: 'tax-category',
-                id: taxCategory.id
+              typeId: 'tax-category',
+              id: taxCategory.id
             }
-        };
+          };
 
-        service.addCustomLineItem(cartId, version, payload, function (err, result) {
-            callback(err, result);
-        });
+          return action;
+        })
+      }).then(function(action) {
+        // Update cart
+        return CommonService.updateWithVersionAsync(entity, cart.id, cart.version, [action]);
+      });
     };
 
     // Proxy

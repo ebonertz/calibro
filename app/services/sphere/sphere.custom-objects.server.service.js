@@ -30,8 +30,10 @@ module.exports = function (app) {
         SphereClient.getClient().customObjects.byId(container+'/'+key).fetch().then(function(result){
             callback(null, result.body)
         }).error(function(err){
+          if ((err.body || {}).statusCode !== 404) {
             app.logger.error("Error finding by id custom objects %s",JSON.stringify(err));
-            callback(err, null)
+          }
+          callback(err, null);
         })
     }
 
@@ -39,8 +41,10 @@ module.exports = function (app) {
         SphereClient.getClient().customObjects.byId(id).fetch().then(function(result){
             callback(null, result.body)
         }).error(function(err){
+          if (err.body.statusCode !== 404) {
             app.logger.error("Error finding by id custom objects %s",JSON.stringify(err));
-            callback(err, null)
+          }
+          callback(err, null);
         })
     }
 

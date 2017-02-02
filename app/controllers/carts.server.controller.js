@@ -1,9 +1,10 @@
-var entity = 'carts';
+var entity = 'carts',
+  Promise = require('bluebird');
 
 module.exports = function (app) {
     var CartService = require('../services/sphere/sphere.carts.server.service.js')(app),
         ChannelService = require('../services/sphere/sphere.channels.server.service.js')(app),
-        CommonService = require('../services/sphere/sphere.commons.server.service.js')(app),
+        CommonService = Promise.promisifyAll(require('../services/sphere/sphere.commons.server.service.js')(app)),
         Cart = require('../models/sphere/sphere.cart.server.model.js') (app);
 
     var controller = {};
@@ -167,28 +168,22 @@ module.exports = function (app) {
             version = parseInt(req.param('version')),
             payload = req.body;
 
-        var addLine = function (version) {
-            CartService.addHighIndex(cartId, version, req.body, function (err, result) {
-                if (err) {
-                    return res.status(400).send(err.body.message);
-                } else {
-                    var cart = new Cart(result);
-                    res.json(cart);
-                }
-            })
-        };
-
-        // Remove + add if already have the line (can't update quantity)
-        if (payload.lineId) {
-            CartService.removeHighIndex(cartId, version, payload.lineId, function (err, result) {
-                if (result)
-                    addLine(result.version)
-                else
-                    return res.status(400)
-            });
-        } else {
-            addLine(version)
-        }
+        CommonService.byIdAsync(entity, cartId).then(function(result){
+          return new Cart(result);
+        })
+        .then(function(cart){
+          CartService.addHighIndex(cart, req.body).then(function (result) {
+            var cart = new Cart(result);
+            res.json(cart);
+          }).catch(function(err){
+            if(err.status === 400){
+              return res.status(err.status);
+            } else {
+              app.logger.error(err);
+              return res.status(500);
+            }
+          });
+        })
     };
 
     controller.removeHighIndex = function (req, res) {
@@ -211,28 +206,22 @@ module.exports = function (app) {
             version = parseInt(req.param('version')),
             payload = req.body;
 
-        var addLine = function (version) {
-            CartService.addBlueBlock(cartId, version, req.body, function (err, result) {
-                if (err) {
-                    return res.status(400).send(err.body.message);
-                } else {
-                    var cart = new Cart(result);
-                    res.json(cart);
-                }
-            })
-        };
-
-        // Remove + add if already have the line (can't update quantity)
-        if (payload.lineId) {
-            CartService.removeBlueBlock(cartId, version, payload.lineId, function (err, result) {
-                if (result)
-                    addLine(result.version)
-                else
-                    return res.status(400)
-            });
-        } else {
-            addLine(version)
-        }
+        CommonService.byIdAsync(entity, cartId).then(function(result){
+          return new Cart(result);
+        })
+        .then(function(cart){
+          CartService.addBlueBlock(cart, req.body).then(function (result) {
+            var cart = new Cart(result);
+            res.json(cart);
+          }).catch(function(err){
+            if(err.status === 400){
+              return res.status(err.status);
+            } else {
+              app.logger.error(err);
+              return res.status(500);
+            }
+          });
+        })
     };
 
     controller.removeBlueBlock = function (req, res) {

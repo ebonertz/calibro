@@ -5,7 +5,8 @@ var prescriptionChannels = ['singlevision'];
 
 module.exports = function (app) {
     var ChannelService = require('../../services/sphere/sphere.channels.server.service.js')(app),
-        CommonService = require('../../services/sphere/sphere.commons.server.service.js')(app);
+        CommonService = require('../../services/sphere/sphere.commons.server.service.js')(app),
+        TaxCategoryService = require('../../services/sphere/sphere.taxCategories.server.service.js')(app);
 
     var Cart = function(opt) {
         var self = this
@@ -30,26 +31,7 @@ module.exports = function (app) {
         };
 
         this.firstTaxCategory = function(){
-            if(self.taxCategory){
-                return self.taxCategory
-            }else {
-                getFirstTaxCategory().then(function (res) {
-                    self.taxCategory = res;
-                    return res;
-                });
-            }
-        }
-
-        this.getFirstTaxCategory = function(){
-            return new Promise(function(resolve, reject){
-                CommonService.all('taxCategories', function(err, res){
-                    if(err && res.length > 0){
-                        reject(err)
-                    }else{
-                        resolve(res[0])
-                    }
-                })
-            });
+          return TaxCategoryService.getFirst();
         }
     };
     return Cart;
