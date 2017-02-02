@@ -4,42 +4,22 @@ var Promise = require('promise');
 
 
 module.exports = function (app) {
-  var CommonService = require('./sphere.commons.server.service.js')(app);
+  // var CommonService = require('./sphere.commons.server.service.js')(app);
 
   var service = {};
-
+  var CommonService = require('./sphere.commonsasync.server.service.js').bind({entity: 'categories'})(app);
   var LANG = 'en';
 
   var categories = []
   var catById = {}
   var catBySlug = {}
 
-  service.getId = function(slug){
-    if(catBySlug[slug]){
-      return catBySlug[slug].id
-    }else{
-      fetchCategories().then(function(){
-        if(catBySlug[slug]){
-          return catBySlug[slug].id
-        }else{
-          return null
-        }
-      })
-    }
+  service.byId = function(id){
+    return CommonService.byId(id);
   }
 
-  service.getSlug = function(id){
-    if(catById[id]){
-      return catById[id].slug[LANG]
-    }else{
-      fetchCategories().then(function(){
-        if(catById[id]){
-          return catById[id].slug[LANG];
-        }else{
-          return null;
-        }
-      })
-    }
+  service.bySlug = function(slug){
+    return CommonService.bySlug(slug);
   }
 
   service.getName = function (id) {

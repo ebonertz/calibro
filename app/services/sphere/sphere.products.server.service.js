@@ -26,35 +26,32 @@ module.exports = function (app) {
     });
   };
 
-  service.listBy = function (categories, attributes, page, perPage, sortAttr, sortAsc) {
+  service.listBy = function(categories, attributes, page, perPage, sortAttr, sortAsc) {
+    var productClient = SphereClient.getClient().productProjections,
+      categoriesObjects = [];
 
-    return new Promise(function (resolve, reject) {
+    _.forEach(config.sphere.facets, function(facet) {
+      productClient = productClient.facet(facet);
+    })
 
-      var productClient = SphereClient.getClient().productProjections,
-          categoriesObjects = [];
-
-      for (var i = 0; i < config.sphere.facets.length; i++)
-        productClient = productClient.facet(config.sphere.facets[i]);
-
-      for (var i = 0; i < categories.length; i++) {
-        productClient = productClient.filterByQuery('categories.id:"' + categories[i] + '"');
-        categoriesObjects.push(CategoriesService.getCategoryById(categories[i]));
-      }
+    return Promise.map(categories, function(cat){
+      productClient = productClient.filterByQuery('categories.id:"' + cat + '"');
+      return CategoriesService.byId(cat);
+    }).then(function(catgs){
+      categoriesObjects = catgs;
 
       var attributeKeys = Object.keys(attributes);
 
       for (var i = 0; i < attributeKeys.length; i++) {
         var queryString = "";
         if (_.isObject(attributes[attributeKeys[i]]) && _.isArray(attributes[attributeKeys[i]])) {
-          _.each (attributes[attributeKeys[i]],function (attribute) {
-            queryString +=  '"' + attribute + '",';
+          _.each(attributes[attributeKeys[i]], function(attribute) {
+            queryString += '"' + attribute + '",';
           });
           queryString = queryString.substring(0, queryString.length - 1);
-        }
-        else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
+        } else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
           queryString = attributes[attributeKeys[i]].value;
-        }
-        else {
+        } else {
           queryString = '"' + attributes[attributeKeys[i]] + '"';
         }
         productClient = productClient.filterByQuery(config.sphere.product_types[attributeKeys[i]] + ':' + queryString);
@@ -68,17 +65,13 @@ module.exports = function (app) {
       if (sortAttr)
         productClient = productClient.sort(sortAttr, (sortAsc === "true"));
 
-      productClient.staged(false).search().then(function (result) {
+      return productClient.staged(false).search().then(function(result) {
 
         var products = result.body.results;
-        var cats = result.body.facets['categories.id'].terms;
+        var catg_facets = result.body.facets['categories.id'].terms;
 
-        _.each(cats, function (item) {
-          item.id = item.term;
-          item.term = CategoriesService.getName(item.term);
-        });
-        _.each (products,function (product) {
-          _.each (product.masterVariant.prices, function (price) {
+        _.each(products, function(product) {
+          _.each(product.masterVariant.prices, function(price) {
             if (price.channel) {
               var channel = ChannelsService.getById(price.channel.id);
               price.channel = channel;
@@ -87,113 +80,115 @@ module.exports = function (app) {
           });
           if (product.masterVariant.isMatchingVariant === true) {
             product.displayVariant = product.masterVariant;
-          }
-          else {
-            product.displayVariant = _.find (product.variants, function (variant) {
+          } else {
+            product.displayVariant = _.find(product.variants, function(variant) {
               return variant.isMatchingVariant === true
             });
           }
-
-        });
-        Promise.all(categoriesObjects).then(function (promises) {
-          var results = {
-            products: products,
-            facets: facetsShortener(result.body.facets),
-            pages: {
-              total: Math.ceil(result.body.total / perPage),
-              page: page,
-              perPage: perPage
-            },
-            total: result.body.total,
-            categories: promises
-          }
-
-          resolve(results)
         });
 
-
-      });
-    });
-
-
-  };
-
-  service.search = function (text, attributes, page, perPage, sortAttr, sortAsc) {
-
-    return new Promise(function (resolve, reject) {
-
-          var productClient = SphereClient.getClient().productProjections;
-          productClient = productClient.text(text, 'en');
-
-          for (var i = 0; i < config.sphere.facets.length; i++)
-            productClient = productClient.facet(config.sphere.facets[i]);
-
-          var attributeKeys = Object.keys(attributes);
-
-          for (var i = 0; i < attributeKeys.length; i++) {
-            var queryString = "";
-            if (_.isObject(attributes[attributeKeys[i]]) && _.isArray(attributes[attributeKeys[i]])) {
-              _.each (attributes[attributeKeys[i]],function (attribute) {
-                queryString +=  '"' + attribute + '",';
-              });
-              queryString = queryString.substring(0, queryString.length - 1);
-            }
-            else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
-              queryString = attributes[attributeKeys[i]].value;
-            }
-            else {
-              queryString = '"' + attributes[attributeKeys[i]] + '"';
-            }
-            productClient = productClient.filterByQuery(config.sphere.product_types[attributeKeys[i]] + ':' + queryString);
-          }
-          if (page)
-            productClient = productClient.page(parseInt(page));
-
-          if (perPage)
-            productClient = productClient.perPage(parseInt(perPage));
-
-          if (sortAttr != null) {
-            productClient = productClient.sort(sortAttr, (sortAsc === "true"));
-          }
-
-
-          productClient.staged(config.sphere.staged).search().then(function (result) {
-
-            var cats = result.body.facets['categories.id'].terms;
-
-            _.each(cats, function (item) {
-              item.id = item.term;
-              item.term = CategoriesService.getName(item.term);
-            });
-            _.each (result.body.results,function (product) {
-              if (product.masterVariant.isMatchingVariant === true) {
-                product.displayVariant = product.masterVariant;
-              }
-              else {
-                product.displayVariant = _.find (product.variants, function (variant) {
-                  return variant.isMatchingVariant === true
-                });
-              }
-
-            });
-
+        return Promise.map(catg_facets, function(item) {
+          return CategoriesService.byId(item.term)
+          .then(function(cat) {
+            item.id = cat.id;
+            item.term = cat.name.en;
+          });
+        })
+        .then(function() {
+          return Promise.all(categoriesObjects).then(function(promises) {
             var results = {
-              products: result.body.results,
+              products: products,
               facets: facetsShortener(result.body.facets),
-              total: result.body.total,
               pages: {
                 total: Math.ceil(result.body.total / perPage),
                 page: page,
                 perPage: perPage
-              }
+              },
+              total: result.body.total,
+              categories: promises
             }
 
-            resolve(results)
+            return results;
+          });
+        });
+      });
+    });
+  };
 
-          })
+  service.search = function(text, attributes, page, perPage, sortAttr, sortAsc) {
 
+    return new Promise(function(resolve, reject) {
+
+      var productClient = SphereClient.getClient().productProjections;
+      productClient = productClient.text(text, 'en');
+
+      _.forEach(config.sphere.facets, function(facet) {
+        productClient = productClient.facet(facet);
+      })
+
+      var attributeKeys = Object.keys(attributes);
+
+      for (var i = 0; i < attributeKeys.length; i++) {
+        var queryString = "";
+        if (_.isObject(attributes[attributeKeys[i]]) && _.isArray(attributes[attributeKeys[i]])) {
+          _.each(attributes[attributeKeys[i]], function(attribute) {
+            queryString += '"' + attribute + '",';
+          });
+          queryString = queryString.substring(0, queryString.length - 1);
+        } else if (_.isObject(attributes[attributeKeys[i]]) && !attributes[attributeKeys[i]].isText) {
+          queryString = attributes[attributeKeys[i]].value;
+        } else {
+          queryString = '"' + attributes[attributeKeys[i]] + '"';
         }
-    );
+        productClient = productClient.filterByQuery(config.sphere.product_types[attributeKeys[i]] + ':' + queryString);
+      }
+      if (page)
+        productClient = productClient.page(parseInt(page));
+
+      if (perPage)
+        productClient = productClient.perPage(parseInt(perPage));
+
+      if (sortAttr != null) {
+        productClient = productClient.sort(sortAttr, (sortAsc === "true"));
+      }
+
+
+      productClient.staged(config.sphere.staged).search().then(function(result) {
+
+        var catg_facets = result.body.facets['categories.id'].terms;
+
+        return Promise.map(catg_facets, function(item) {
+          return CategoriesService.byId(item.term).then(function(cat) {
+            item.id = cat.id;
+            item.term = cat.name.en;
+          });
+        }).then(function() {
+          _.each(result.body.results, function(product) {
+            if (product.masterVariant.isMatchingVariant === true) {
+              product.displayVariant = product.masterVariant;
+            } else {
+              product.displayVariant = _.find(product.variants, function(variant) {
+                return variant.isMatchingVariant === true
+              });
+            }
+
+          });
+
+          var results = {
+            products: result.body.results,
+            facets: facetsShortener(result.body.facets),
+            total: result.body.total,
+            pages: {
+              total: Math.ceil(result.body.total / perPage),
+              page: page,
+              perPage: perPage
+            }
+          }
+
+          resolve(results)
+        })
+      })
+    });
   };
 
 
