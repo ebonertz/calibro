@@ -19,6 +19,12 @@ angular.module('misc').service('ContentfulService', ['$http', '$q', '$resource',
           dir: 'v'
         },
         cache: true
+      },
+      help: {
+        method: 'GET',
+        url: urlString + '/:dir',
+        params: {dir: 'help'},
+        cache: true
       }
     });
 
@@ -52,8 +58,14 @@ angular.module('misc').service('ContentfulService', ['$http', '$q', '$resource',
       return deferred.promise;
     }
 
+    service.help = function(){
+      var res = service.Contentful.help();
+
+      return res.$promise;
+    }
+
     service.search = function(type, name) {
-      var res = Contentful.search({
+      var res = service.Contentful.search({
         type: type,
         name: name
       });
