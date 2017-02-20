@@ -1,8 +1,8 @@
 - type: parallel
   steps:
-    - name: run
-      service: app
-      command: grunt prod:test
+    # - name: run
+    #   service: app
+    #   command: grunt prod:test
     - name: test
       service: app
       command: npm test
