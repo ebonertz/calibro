@@ -479,7 +479,7 @@ module.exports = function (app) {
 
                     if (result.body.results && result.body.results.length > 0) {
                         var eyewearProductArray = _.reduce(result.body.results, function (eyewearProducts, product) {
-                            if (product.categories[0].obj.slug.en === "eyewear") {
+                            if (product.categories[0].obj.slug.en === "eyeglasses") {
                                 eyewearProducts.push(product);
                             }
                             return eyewearProducts;
