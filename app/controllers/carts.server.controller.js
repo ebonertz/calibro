@@ -80,13 +80,18 @@ module.exports = function (app) {
         var cartId = req.param('cartId'),
             payload = req.body;
 
-        CartService.setShippingAddress(cartId, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
+        CartService.setShippingAddress(cartId, payload)
+        .then(function(cart){
+          return CartService.updateExternalRate(cart);
+        })
+        .then(function(result){
+          // TODO: move to services, controller should only provide a sendable version of the cart
+          var cart = new Cart(result);
+          res.json(cart);
+        })
+        .catch(function(err){
+          app.logger.error(err);
+          return res.status(400).send(err);
         });
     };
 
