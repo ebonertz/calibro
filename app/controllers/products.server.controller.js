@@ -1,5 +1,7 @@
 'use strict';
 
+var Promise = require('bluebird'),
+  _ = require('lodash');
 
 module.exports = function (app) {
     var controller = {};
@@ -54,28 +56,25 @@ module.exports = function (app) {
 
         var categories = [];
 
-        if (categoryA) {
-            categoryAId = CategoriesService.getId(categoryA);
-            if (categoryAId)
-                categories.push(categoryAId);
-            else {
-                res.sendStatus(400);
-                return;
-            }
-        }
-
-        if (categoryB) {
-            categoryBId = CategoriesService.getId(categoryB);
-            if (categoryAId)
-                categories.push(categoryBId);
-            else {
-                res.sendStatus(400);
-                return;
-            }
-        }
-
-        ProductService.listBy(categories, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
+        return Promise.map(
+          _.compact([categoryA, categoryB]),
+          function(slug){
+            return CategoriesService.bySlug(slug).then(function(catg){
+              return catg ? catg.id : null;
+            })
+          }
+        )
+        .then(function(categories){
+          var cats = _.compact(categories); // Remove empty values
+          return ProductService.listBy(cats, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
             res.json(result);
+          });
+        })
+        .catch(function(err) {
+          res.sendStatus(err.statusCode || 500);
+          if(!err.statusCode || err.statusCode !== 404){
+            app.logger.error(err);
+          }
         });
     }
 
@@ -90,11 +89,10 @@ module.exports = function (app) {
 
         ProductService.search(text, attributes, page, perPage, sortAttr, sortAsc).then(function (result) {
             res.json(result);
+        }).catch(function(err) {
+          res.sendStatus(err.statusCode || 500);
+          app.logger.error(err);
         });
     }
     return controller;
 }
-
-
-
-

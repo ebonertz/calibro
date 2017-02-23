@@ -1,8 +1,7 @@
-var SphereClient,
-    client,
-    config = require('../../config/config'),
-
-SphereClient = require('sphere-node-sdk').SphereClient;
+var SphereClient = require('sphere-node-sdk').SphereClient,
+  SphereHttpError = require('sphere-node-sdk').Errors.SphereHttpError,
+  client,
+  config = require('../../config/config'),
 
 client = new SphereClient({
     config: {
@@ -32,3 +31,5 @@ exports.setClient = function() {
 
     });
 }
+
+exports.SphereHttpError = SphereHttpError;
