@@ -6,10 +6,12 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
 var entity = 'carts';
 
 module.exports = function (app) {
+    // Dependencies
     var CommonService = Promise.promisifyAll(require('./sphere.commons.server.service.js')(app)),
         AvalaraService = require('../../services/avalara.server.services.js')(app),
-        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
-    TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
+        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app),
+        TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
+
     var service = {};
     var actions = {
         addLineItem: 'addLineItem',
@@ -23,7 +25,22 @@ module.exports = function (app) {
         addDiscountCode: 'addDiscountCode'
     }
 
+    /*
+      Getters
+     */
 
+    service.getCommonService = function (){
+      return CommonService;
+    }
+
+    service.getAvalaraService = function () {
+      return AvalaraService;
+    }
+
+
+    /*
+      Service methods
+     */
     service.byCustomer = function (customerId, callback, expand) {
         SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt', false).expand(expand).all().fetch().then(function (result) {
             if (result.body.results && result.body.results.length > 0) {
@@ -50,7 +67,6 @@ module.exports = function (app) {
         if (payload)
             payload.action = actions.addCustomLineItem;
 
-        console.log(payload);
         CommonService.updateWithVersion(entity, cartId, version, [payload], function (err, result) {
             callback(err, result);
         });
@@ -74,16 +90,16 @@ module.exports = function (app) {
         });
     }
 
-    function getExternalTaxRate (taxLines, item, shippingAddress) {
+    service.getExternalTaxRate = function (taxLines, item, shippingAddress) {
       var taxLine = _.find(taxLines,function (taxLine) {
         return taxLine.LineNo == item.id
       });
 
       if (!taxLine) {
-        app.logger.debug('No tax line found for item', item.id);
+        app.logger.debug('No tax line found for item', item.slug);
         return
       } else {
-        app.logger.debug('Tax line found for item', item.id);
+        app.logger.debug('Tax line found for item', item.slug);
       }
 
       var tax = parseFloat (taxLine.Tax);
@@ -100,52 +116,67 @@ module.exports = function (app) {
     service.setShippingAddress = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingAddress;
-        app.logger.debug  ("Setting address: %s",JSON.stringify(payload.address));
-        SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
-            CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(avalaraTax){
-                    //set taxes to line items
-                    var actions = [];
 
-                    _.each (result.lineItems, function (item){
-                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
-                      if (externalTaxRate) {
-                        var payload = {
-                          action: "setLineItemTaxRate",
-                          lineItemId: item.id,
-                          externalTaxRate: externalTaxRate
-                        }
-                        actions.push (payload);
-                      }
-                    });
+        // Update shipping
+        return service.getCommonService().byIdAsync(entity, cartId)
+        .then(function (cart) {
+          return service.getCommonService().updateWithVersionAsync(entity, cart.id, cart.version, [payload]);
+        });
+    }
 
-                    //set taxes to customLineitems
-                    _.each (result.customLineItems, function (item){
-                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
-                      if (externalTaxRate) {
-                        var payload = {
-                          action: "setCustomLineItemTaxRate",
-                          customLineItemId: item.id,
-                          externalTaxRate: externalTaxRate
-                        }
-                        actions.push (payload);
-                      }
-                    });
-                    actions.push ({
-                        action: "recalculate",
-                        updateProductData: true
-                    });
-                    CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
-                        callback(err, cart);
-                    });
-                }).catch(function(err){
-                    app.logger.error('Error setting tax values from Avalara: %s', err);
-                    app.logger.error(err.stack)
-                    callback(err, null);;
-                });
-            });
+    service.updateExternalRate = function(cart) {
+      return service.getAvalaraService().getSalesOrderTax(cart, AvalaraService.LINE_ITEM_TAX)
+      .then(function (avalaraTax) {
+        var actions = [];
+        var externalTaxRate;
+
+        // Set taxes to line items
+        _.each (cart.lineItems, function (item){
+          externalTaxRate = service.getExternalTaxRate(avalaraTax.TaxLines, item, cart.shippingAddress);
+          if (!externalTaxRate) {
+            throw new Error('No tax rate for ', item.name.en);
+          }
+
+          var action = {
+            action: "setLineItemTaxRate",
+            lineItemId: item.id,
+            externalTaxRate: externalTaxRate
+          }
+          actions.push(action);
         });
 
+        // Set taxes to customLineitems
+        _.each (cart.customLineItems, function (item){
+          // External rate is picked up from the one calculated from the line items.
+          // These have a taxline defined (unlike the custom line items)
+          // TODO get taxlines for these items, otherwise we can get unexpected results
+          if (!externalTaxRate) {
+            throw new Error('No tax rate for ', item.name.en)
+          }
+
+          var action = {
+            action: "setCustomLineItemTaxRate",
+            customLineItemId: item.id,
+            externalTaxRate: externalTaxRate
+          }
+
+          actions.push(action);
+        });
+
+        // Recalculate item prices and taxes
+        actions.push ({
+          action: "recalculate",
+          updateProductData: false // Change from true, as we only need the price/tax update
+        });
+
+        return actions;
+      })
+      .then(function (actions) {
+        return service.getCommonService().updateWithVersionAsync(entity, cart.id, cart.version, actions)
+      })
+      // .then(function (updated_cart) {
+      //   return new Cart(updated_cart)
+      // })
     }
 
     service.setBillingAddress = function (cartId, payload, callback) {
@@ -236,7 +267,6 @@ module.exports = function (app) {
 
         // Add new custom line item
         return TaxCategoryService.getFirst().then(function(taxCategory) {
-
           var action = {
             'action': 'addCustomLineItem',
             'name': {

@@ -2,4 +2,4 @@ app:
   build:
     image: devgurus/focali
     dockerfile_path: Dockerfile
-  cached: false
+  cached: true

@@ -1,8 +1,6 @@
 'use strict';
 
-var init = require('./config/init')();
 var defaultAssets = require('./config/env/all');
-
 
 module.exports = function(grunt) {
   // Unified Watch Object
@@ -12,7 +10,6 @@ module.exports = function(grunt) {
     clientViews: ['public/modules/**/views/**/*.html'],
     clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
     clientCSS: ['public/modules/**/*.css'],
-    mochaTests: ['app/tests/**/*.js']
   };
 
   // Project Configuration
@@ -164,13 +161,6 @@ module.exports = function(grunt) {
         NODE_ENV: 'secure'
       }
     },
-    mochaTest: {
-      src: watchFiles.mochaTests,
-      options: {
-        reporter: 'spec',
-        require: 'server.js'
-      }
-    },
     karma: {
       unit: {
         configFile: 'karma.conf.js'
@@ -181,7 +171,7 @@ module.exports = function(grunt) {
       options: {
         specNameSuffix: ["specs.js", "spec.js"],
         useHelpers: false,
-        traceFatal: 2
+        traceFatal: true
       },
       all: {
         specs: defaultAssets.assets.tests.server,
