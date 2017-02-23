@@ -8,6 +8,6 @@ public/dist
 app/tests/coverage/
 .bower-*/
 .idea/
+codeship.aes
 
 sessions
-test.js

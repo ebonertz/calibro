@@ -26,15 +26,18 @@ module.exports = function (app) {
     };
 
     controller.byCart = function (req, res) {
-        var cartId = req.param('cartId');
+      var cartId = req.param('cartId');
 
-        PrescriptionService.byId(cartId, function (err, result) {
-            if (err) {
-                return res.sendStatus(400);
-            } else {
-                res.json(result);
-            }
-        })
+      PrescriptionService.byId(cartId, function (err, result) {
+        if (err) {
+          // This should be handled in the service, but can't due to backwards-compatibility
+          var status = (err.body || {}).statusCode || 500;
+
+          return res.sendStatus(status);
+        } else {
+          res.json(result);
+        }
+      })
     }
 
     controller.upload = function (req, res) {

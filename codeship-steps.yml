@@ -1,0 +1,42 @@
+- type: parallel
+  steps:
+    # - name: run
+    #   service: app
+    #   command: grunt prod:test
+    - name: test
+      service: app
+      command: npm test
+- type: serial
+  steps:
+    - name: dockerhub_push_stage
+      service: app
+      type: push
+      tag: "^release/.*$"
+      image_name: devgurus/focali
+      image_tag: "staging"
+      registry: https://index.docker.io/v1/
+      encrypted_dockercfg_path: dockercfg.encrypted
+    - name: dockerhub_push_production
+      service: app
+      type: push
+      tag: "^stable/v[0-9.]+$"
+      image_name: devgurus/focali
+      image_tag: "production"
+      registry: https://index.docker.io/v1/
+      encrypted_dockercfg_path: dockercfg.encrypted
+    - name: dockerhub_push_build_number
+      service: app
+      type: push
+      tag: "^v[0-9.]+$"
+      image_name: devgurus/focali
+      image_tag: "{{ .Branch }}"
+      registry: https://index.docker.io/v1/
+      encrypted_dockercfg_path: dockercfg.encrypted
+    - name: dockerhub_push_commit_sha
+      service: app
+      type: push
+      tag: "^stable/v[0-9.]+$"
+      image_name: devgurus/focali
+      image_tag: "{{ .CommitID }}"
+      registry: https://index.docker.io/v1/
+      encrypted_dockercfg_path: dockercfg.encrypted

@@ -111,7 +111,7 @@ module.exports = function (app) {
                     var distributionChannel = ChannelService.getById (item.distributionChannel.id);
                     var taxCode;
                     if (distributionChannel.key == 'nonprescription') {
-                        if (product.categories[0].slug === 'eyewear') {
+                        if (product.categories[0].slug === 'eyeglasses') {
                             taxCode = config.avalara.nonPrescriptionEyewearTaxCode;
                         }
                         else {
@@ -119,7 +119,7 @@ module.exports = function (app) {
                         }
                     }
                     else if (distributionChannel.key == 'singlevision') {
-                        if (product.categories[0].slug === 'eyewear') {
+                        if (product.categories[0].slug === 'eyeglasses') {
                             taxCode = config.avalara.prescriptionEyewearTaxCode;
                         }
                         else {

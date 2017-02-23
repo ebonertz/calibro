@@ -4,13 +4,18 @@ var ContenfulClient,
 
 ContenfulClient = require('contentful');
 
-client = ContenfulClient.createClient({
-    space: config.contenful.space,
-    accessToken: config.contenful.accessToken,
-    secure: config.contenful.secure,
-    host: config.contenful.host
-});
+function initClient() {
+  client = ContenfulClient.createClient({
+      space: config.contenful.space,
+      accessToken: config.contenful.accessToken,
+      secure: config.contenful.secure,
+      host: config.contenful.host
+  });
+
+  return client;
+}
+
 
 exports.getClient = function() {
-    return client;
+    return client || initClient();
 }

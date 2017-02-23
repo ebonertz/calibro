@@ -430,7 +430,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                     $scope.distributionChannel = $scope.currentVariant.prices[0].channel.key;
                 }
                 $scope.facets = result.facets;
-                if (result.product.categories[0].obj.slug.en === "eyewear") {
+
+                if (result.product.categories[0].obj.slug.en === "eyeglasses") {
                     delete $scope.facets.mirrorColor;
                     delete $scope.facets.lensColor;
                 }
@@ -449,7 +450,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 _.each(Object.keys(result.facets), function (key) {
                     if (result.facets[key].length > 0) {
                         var displayName = key;
-                        if (key === "lensColor" && result.product.categories[0].obj.slug.en === "eyewear") {
+                        if (key === "lensColor" && result.product.categories[0].obj.slug.en === "eyeglasses") {
                             displayName = "LensOption"
                         }
                         $scope.facetsArray.push({name: key, value: result.facets[key],displayName:displayName});

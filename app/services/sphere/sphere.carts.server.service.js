@@ -1,13 +1,17 @@
 var SphereClient = require('../../clients/sphere.server.client.js'),
     config = require('../../../config/config'),
-    _ = require('lodash');
-entity = 'carts';
+    _ = require('lodash'),
+    Promise = require('bluebird');
+
+var entity = 'carts';
 
 module.exports = function (app) {
-    var CommonService = require('./sphere.commons.server.service.js')(app),
+    // Dependencies
+    var CommonService = Promise.promisifyAll(require('./sphere.commons.server.service.js')(app)),
         AvalaraService = require('../../services/avalara.server.services.js')(app),
-        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
-    TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
+        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app),
+        TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
+
     var service = {};
     var actions = {
         addLineItem: 'addLineItem',
@@ -21,7 +25,22 @@ module.exports = function (app) {
         addDiscountCode: 'addDiscountCode'
     }
 
+    /*
+      Getters
+     */
 
+    service.getCommonService = function (){
+      return CommonService;
+    }
+
+    service.getAvalaraService = function () {
+      return AvalaraService;
+    }
+
+
+    /*
+      Service methods
+     */
     service.byCustomer = function (customerId, callback, expand) {
         SphereClient.getClient()[entity].where('cartState="Active" and customerId="' + customerId + '"').sort('createdAt', false).expand(expand).all().fetch().then(function (result) {
             if (result.body.results && result.body.results.length > 0) {
@@ -71,16 +90,16 @@ module.exports = function (app) {
         });
     }
 
-    function getExternalTaxRate (taxLines, item, shippingAddress) {
+    service.getExternalTaxRate = function (taxLines, item, shippingAddress) {
       var taxLine = _.find(taxLines,function (taxLine) {
         return taxLine.LineNo == item.id
       });
 
       if (!taxLine) {
-        app.logger.debug('No tax line found for item', item.id);
+        app.logger.debug('No tax line found for item', item.slug);
         return
       } else {
-        app.logger.debug('Tax line found for item', item.id);
+        app.logger.debug('Tax line found for item', item.slug);
       }
 
       var tax = parseFloat (taxLine.Tax);
@@ -97,52 +116,67 @@ module.exports = function (app) {
     service.setShippingAddress = function (cartId, payload, callback) {
         if (payload)
             payload.action = actions.setShippingAddress;
-        app.logger.debug  ("Setting address: %s",JSON.stringify(payload.address));
-        SphereClient.getClient().carts.byId(cartId).fetch().then(function (cart) {
-            CommonService.updateWithVersion(entity, cartId, cart.body.version, [payload], function (err, result) {
-                AvalaraService.getSalesOrderTax(result,AvalaraService.LINE_ITEM_TAX).then(function(avalaraTax){
-                    //set taxes to line items
-                    var actions = [];
 
-                    _.each (result.lineItems, function (item){
-                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
-                      if (externalTaxRate) {
-                        var payload = {
-                          action: "setLineItemTaxRate",
-                          lineItemId: item.id,
-                          externalTaxRate: externalTaxRate
-                        }
-                        actions.push (payload);
-                      }
-                    });
+        // Update shipping
+        return service.getCommonService().byIdAsync(entity, cartId)
+        .then(function (cart) {
+          return service.getCommonService().updateWithVersionAsync(entity, cart.id, cart.version, [payload]);
+        });
+    }
 
-                    //set taxes to customLineitems
-                    _.each (result.customLineItems, function (item){
-                      var externalTaxRate = getExternalTaxRate(avalaraTax.TaxLines, item, result.shippingAddress);
-                      if (externalTaxRate) {
-                        var payload = {
-                          action: "setCustomLineItemTaxRate",
-                          customLineItemId: item.id,
-                          externalTaxRate: externalTaxRate
-                        }
-                        actions.push (payload);
-                      }
-                    });
-                    actions.push ({
-                        action: "recalculate",
-                        updateProductData: true
-                    });
-                    CommonService.updateWithVersion('carts', result.id, result.version, actions, function (err, cart) {
-                        callback(err, cart);
-                    });
-                }).catch(function(err){
-                    app.logger.error('Error setting tax values from Avalara: %s', err);
-                    app.logger.error(err.stack)
-                    callback(err, null);;
-                });
-            });
+    service.updateExternalRate = function(cart) {
+      return service.getAvalaraService().getSalesOrderTax(cart, AvalaraService.LINE_ITEM_TAX)
+      .then(function (avalaraTax) {
+        var actions = [];
+        var externalTaxRate;
+
+        // Set taxes to line items
+        _.each (cart.lineItems, function (item){
+          externalTaxRate = service.getExternalTaxRate(avalaraTax.TaxLines, item, cart.shippingAddress);
+          if (!externalTaxRate) {
+            throw new Error('No tax rate for ', item.name.en);
+          }
+
+          var action = {
+            action: "setLineItemTaxRate",
+            lineItemId: item.id,
+            externalTaxRate: externalTaxRate
+          }
+          actions.push(action);
         });
 
+        // Set taxes to customLineitems
+        _.each (cart.customLineItems, function (item){
+          // External rate is picked up from the one calculated from the line items.
+          // These have a taxline defined (unlike the custom line items)
+          // TODO get taxlines for these items, otherwise we can get unexpected results
+          if (!externalTaxRate) {
+            throw new Error('No tax rate for ', item.name.en)
+          }
+
+          var action = {
+            action: "setCustomLineItemTaxRate",
+            customLineItemId: item.id,
+            externalTaxRate: externalTaxRate
+          }
+
+          actions.push(action);
+        });
+
+        // Recalculate item prices and taxes
+        actions.push ({
+          action: "recalculate",
+          updateProductData: false // Change from true, as we only need the price/tax update
+        });
+
+        return actions;
+      })
+      .then(function (actions) {
+        return service.getCommonService().updateWithVersionAsync(entity, cart.id, cart.version, actions)
+      })
+      // .then(function (updated_cart) {
+      //   return new Cart(updated_cart)
+      // })
     }
 
     service.setBillingAddress = function (cartId, payload, callback) {
@@ -205,35 +239,60 @@ module.exports = function (app) {
         });
     }
 
-    service.addHighIndex = function (cartId, version, payload, callback) {
-        var quantity = payload.quantity;
-        if (quantity < 1)
-            return callback("No lines to apply high-index to");
+    service.addHighIndex = function(cart, payload) {
+      var quantity = payload.quantity;
+      if (quantity < 1)
+        return Promise.reject({
+          status: 400
+        });
 
-        var taxCategory = TaxCategoryService.getFirst();
-        var payload = {
+      // Check if custom line item already exists
+      return Promise.resolve().then(function() {
+        return _.find(cart.customLineItems, {
+          slug: config.highIndex.slug
+        });
+      })
+      .then(function(previousCustomLineItem) {
+
+        // Update current custom line item
+        if (previousCustomLineItem) {
+          var action = {
+            action: 'changeCustomLineItemQuantity',
+            customLineItemId: previousCustomLineItem.id,
+            quantity: quantity
+          }
+
+          return action;
+        }
+
+        // Add new custom line item
+        return TaxCategoryService.getFirst().then(function(taxCategory) {
+          var action = {
+            'action': 'addCustomLineItem',
             'name': {
-                'en': "High-index Lens",
+              'en': "High-index Lens",
             },
             'quantity': quantity,
             'money': {
-                // Move to config
-                "currencyCode": "USD",
-                "centAmount": config.highIndex.price * 100 || 3000
+              "currencyCode": "USD",
+              "centAmount": config.highIndex.price * 100 || 3000
             },
             'slug': config.highIndex.slug,
             'taxCategory': {
-                typeId: 'tax-category',
-                id: taxCategory.id
+              typeId: 'tax-category',
+              id: taxCategory.id
             }
-        };
+          };
 
-        service.addCustomLineItem(cartId, version, payload, function (err, result) {
-            callback(err, result);
-        });
+          return action;
+        })
+      }).then(function(action) {
+        // Update cart
+        return CommonService.updateWithVersionAsync(entity, cart.id, cart.version, [action]);
+      });
     };
 
-// Proxy
+    // Proxy
     service.removeHighIndex = function (cartId, version, lineId, callback) {
         var payload = {
             customLineItemId: lineId
@@ -241,33 +300,58 @@ module.exports = function (app) {
         service.removeCustomLineItem(cartId, version, payload, callback);
     };
 
+    service.addBlueBlock = function(cart, payload) {
+      var quantity = payload.quantity;
+      if (quantity < 1)
+        return Promise.reject({
+          status: 400
+        });
 
-    service.addBlueBlock = function (cartId, version, payload, callback) {
-        var quantity = payload.quantity;
-        if (quantity < 1)
-            return callback("No lines to apply high-index to");
+      // Check if custom line item already exists
+      return Promise.resolve().then(function() {
+        return _.find(cart.customLineItems, {
+          slug: config.blueBlock.slug
+        });
+      })
+      .then(function(previousCustomLineItem) {
 
-        var taxCategory = TaxCategoryService.getFirst();
-        var payload = {
+        // Update current custom line item
+        if (previousCustomLineItem) {
+          var action = {
+            action: 'changeCustomLineItemQuantity',
+            customLineItemId: previousCustomLineItem.id,
+            quantity: quantity
+          }
+
+          return action;
+        }
+
+        // Add new custom line item
+        return TaxCategoryService.getFirst().then(function(taxCategory) {
+
+          var action = {
+            'action': 'addCustomLineItem',
             'name': {
-                'en': "Blue Block",
+              'en': "Blue Block",
             },
             'quantity': quantity,
             'money': {
-                // Move to config
-                "currencyCode": "USD",
-                "centAmount": config.blueBlock.price * 100 || 3000
+              "currencyCode": "USD",
+              "centAmount": config.blueBlock.price * 100 || 3000
             },
             'slug': config.blueBlock.slug,
             'taxCategory': {
-                typeId: 'tax-category',
-                id: taxCategory.id
+              typeId: 'tax-category',
+              id: taxCategory.id
             }
-        };
+          };
 
-        service.addCustomLineItem(cartId, version, payload, function (err, result) {
-            callback(err, result);
-        });
+          return action;
+        })
+      }).then(function(action) {
+        // Update cart
+        return CommonService.updateWithVersionAsync(entity, cart.id, cart.version, [action]);
+      });
     };
 
     // Proxy
@@ -425,7 +509,7 @@ module.exports = function (app) {
 
                     if (result.body.results && result.body.results.length > 0) {
                         var eyewearProductArray = _.reduce(result.body.results, function (eyewearProducts, product) {
-                            if (product.categories[0].obj.slug.en === "eyewear") {
+                            if (product.categories[0].obj.slug.en === "eyeglasses") {
                                 eyewearProducts.push(product);
                             }
                             return eyewearProducts;
