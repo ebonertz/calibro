@@ -8,11 +8,20 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
 
 module.exports = function (app) {
   var  CategoriesService = require('./sphere.categories.server.service.js')(app),
-      ChannelsService = require('./sphere.channels.server.service.js')(app);
+      ChannelsService = require('./sphere.channels.server.service.js')(app),
+      CommonServiceAsync = require('./sphere.commonsasync.server.service.js').bind({entity: 'productProjections'})(app);
 
   var Product = require('../../models/sphere/sphere.product.server.model.js')(app).Product;
 
   var service = {};
+
+  /**
+   * Getters
+   */
+
+  service.getCommonService = function() {
+    return CommonServiceAsync;
+  }
 
   /**
    * List
@@ -73,7 +82,7 @@ module.exports = function (app) {
         _.each(products, function(product) {
           _.each(product.masterVariant.prices, function(price) {
             if (price.channel) {
-              var channel = ChannelsService.getById(price.channel.id);
+              var channel = ChannelsService.byId(price.channel.id);
               price.channel = channel;
             }
 
@@ -195,8 +204,8 @@ module.exports = function (app) {
 
 
   service.byId = function(id, callback){
-    SphereClient.getClient().productProjections.staged(false).byId(id).fetch().then(function (result) {
-      var product = new Product(result.body)
+    SphereClient.getClient().productProjections.staged(false).byId(id).expand('categories[*]').fetch().then(function (result) {
+      var product = new Product(result.body);
       callback(null, product);
     }).error(function(err){
       app.logger.error ("Error finding product by id. Error: %s",JSON.stringify(err));
@@ -205,7 +214,7 @@ module.exports = function (app) {
   }
 
   service.bySlug = function(slug, callback){
-    SphereClient.getClient().productProjections.staged(false).where('slug(en = "'+slug+'")').fetch().then(function (result) {
+    SphereClient.getClient().productProjections.staged(false).where('slug(en = "'+slug+'")').expand('categories[*]').fetch().then(function (result) {
       var product = new Product(result.body.results[0])
       callback(null, product);
     }).error(function(err){
@@ -232,10 +241,10 @@ module.exports = function (app) {
     }
 
     return result;
-
-
   }
 
+
+  // TODO This needs a major review -- productProjections is being requested 2 times
   service.bySlugWithFacets = function (slug) {
     var productClient = SphereClient.getClient().productProjections;
     productClient = productClient.filterByQuery('slug.en:"' + slug + '"');
@@ -256,23 +265,20 @@ module.exports = function (app) {
           productClient = productClient.facet(config.sphere.product_types[attribute.name]);
       });
 
+      return productClient.staged(false)
+        .expand('productType') // Why is the productType needed? There's only 1 product type
+        .expand('categories[*]')
+        .expand('masterVariant.prices[*].channel')
+        .search().then(function (result) {
 
-      return productClient.staged(false).expand('productType').expand('categories[*]').search().then(function (result) {
-        //populate channel
-        var masterVariant = result.body.results[0].masterVariant;
-        _.each (masterVariant.prices, function (price) {
-          if(price.channel) {
-            var channel = ChannelsService.getById(price.channel.id);
-            price.channel = channel;
+        // Why are all channels required here?
+        return ChannelsService.list().then(function(channels) {
+          return {
+            product: result.body.results[0],
+            channels: channels,
+            facets: facetsShortener(result.body.facets, result.body.results[0].variants.length + 1)
           }
         });
-
-        var results = {
-          product: result.body.results[0],
-          channels: ChannelsService.listChannels(),
-          facets: facetsShortener(result.body.facets, result.body.results[0].variants.length + 1)
-        }
-        return results;
       });
     });
   }
@@ -289,7 +295,7 @@ module.exports = function (app) {
     }
     app.logger.debug("By sku query: %s",query);
 
-    SphereClient.getClient().productProjections.filterByQuery(query).search().then(function (result) {
+    SphereClient.getClient().productProjections.filterByQuery(query).expand('categories[*]').search().then(function (result) {
       var products = result.body.results;
       for(var i = 0; i < products.length; i++){
         products[i] = new Product(products[i])
@@ -300,6 +306,10 @@ module.exports = function (app) {
       app.logger.error ("Error finding product by sku. Error: %s",JSON.stringify(err));
       callback(err, null);
     })
+  }
+
+  service.find = function(query, expand) {
+    return service.getCommonService().where(query, expand);
   }
 
   return service;

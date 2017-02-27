@@ -8,13 +8,42 @@ module.exports = function (app) {
     var service = {};
     var entity = this.entity;
 
+    service.getSphereClient = function() {
+      return SphereClient.getClient()[entity]
+    }
+
     service.list = function (entity, callback) {
     };
 
-    service.where = function (entity, query, callback) {
+
+    service.where = function (opts, expand) {
+      var q = SphereClient.getClient()[entity]
+
+      if (typeof opts === 'object') {
+        // Call all opts
+        _.forEach(opts, function(value, key) {
+          if (_.has(q, key)) {
+            q[key].apply(null, value)
+          }
+        })
+      } else {
+        // Regular where
+        q.where(opts).all()
+      }
+
+      if (expand) q.expand(expand)
+
+      return q.fetch()
+        .then(function(res) {
+          return res.body.results;
+        })
     };
 
-    service.all = function (entity, callback) {
+    service.all = function () {
+      return SphereClient.getClient()[entity].all().fetch()
+      .then(function(res) {
+        return res.body.results;
+      });
     }
 
 
@@ -61,19 +90,33 @@ module.exports = function (app) {
       })
     };
 
-    service.update = function (id, actions) {
-      return SphereClient.getClient()[entity].byId(id).fetch().then(function (result) {
-        SphereClient.getClient()[entity].byId(id).update({
-            version: result.body.version,
-            actions: actions
-        }).then(function (result) {
-          return result.body;
-        });
-      });
+    service.findOne = function (query, expand) {
+      var q = service.getSphereClient().where(query);
+
+      if (expand) q = q.expand(expand);
+
+      return q.fetch().then(function (result) {
+        if (result.body.results.length > 0) {
+          return result.body.results[0];
+        } else {
+          throw new SphereClient.SphereHttpErrors.NotFound();
+        }
+      })
     };
 
-    service.updateWithVersion = function (id, version, actions) {
-      return SphereClient.getClient()[entity].byId(id).update({
+    service.update = function (id, actions, expand) {
+      return service.byId(id)
+      .then(function(obj) {
+        return service.updateWithVersion(id, obj.version, actions, expand)
+      })
+    };
+
+    service.updateWithVersion = function (id, version, actions, expand) {
+      var q = service.getSphereClient().byId(id);
+
+      if (expand) q = q.expand(expand);
+
+      return q.update({
         version: version,
         actions: actions
       }).then(function (result) {

@@ -4,7 +4,6 @@ var _ = require('lodash'),
 var app = require(path.resolve('specs/server-stub.js'));
 var ProductService = require('../sphere/sphere.carts.server.service.js')(app);
 var Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
-var entity = 'carts';
 
 function getRandomString(len) {
   len = len || 7;
@@ -46,12 +45,12 @@ describe('Cart Service', function(){
     fakeCart = {id: getRandomString(), version: getRandomInt()};
 
     CommonServiceStubs = {
-      byIdAsync: function() { return Promise.resolve(fakeCart) },
-      updateWithVersionAsync: function() { return Promise.resolve(fakeCart) }
+      byId: function() { return Promise.resolve(fakeCart) },
+      updateWithVersion: function() { return Promise.resolve(fakeCart) }
     }
     spyOn(ProductService, 'getCommonService').and.returnValue(CommonServiceStubs);
-    spyOn(CommonServiceStubs, 'byIdAsync').and.callThrough();
-    spyOn(CommonServiceStubs, 'updateWithVersionAsync').and.callThrough();
+    spyOn(CommonServiceStubs, 'byId').and.callThrough();
+    spyOn(CommonServiceStubs, 'updateWithVersion').and.callThrough();
   })
 
   xit('should add line items', function(done){
@@ -70,11 +69,9 @@ describe('Cart Service', function(){
     it('should update the cart setting a new shipping address', function(done) {
       var payload = getRandomFlatObject();
       var action = {action: 'setShippingAddress'};
-      var reqId = getRandomString();
 
-      ProductService.setShippingAddress(reqId, payload).then(function(cart) {
-        expect(CommonServiceStubs.byIdAsync).toHaveBeenCalledWith(entity, reqId);
-        expect(CommonServiceStubs.updateWithVersionAsync).toHaveBeenCalledWith(entity, fakeCart.id, fakeCart.version, [_.merge(payload, action)]);
+      ProductService.setShippingAddress(fakeCart.id, fakeCart.version, payload).then(function(cart) {
+        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(fakeCart.id, fakeCart.version, [_.merge(payload, action)]);
         done();
       }).catch(function(err){
         done.fail(err)
@@ -112,7 +109,7 @@ describe('Cart Service', function(){
       fakeCart.lineItems = lineItems;
 
       ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersionAsync).toHaveBeenCalledWith(entity, cart.id, cart.version, [recalculateAction]);
+        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(cart.id, cart.version, [recalculateAction]);
         done();
       }).catch(function(err){
         done.fail(err)
@@ -133,8 +130,7 @@ describe('Cart Service', function(){
       })
 
       ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersionAsync).toHaveBeenCalledWith(
-          entity,
+        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(
           cart.id,
           cart.version,
           _.concat(liActions, recalculateAction)
@@ -198,8 +194,7 @@ describe('Cart Service', function(){
       )
 
       ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersionAsync).toHaveBeenCalledWith(
-          entity,
+        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(
           cart.id,
           cart.version,
           _.concat(liActions, recalculateAction)

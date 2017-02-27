@@ -127,12 +127,15 @@ module.exports = function (app) {
             rid = req.body.rid;
         //anonymousCart = req.body.anonymousCart;
 
-        if (!rem || !rid || rem.length < 5 || rid.length < 5)
+        if (!rem || !rid || rem.length < 5 || rid.length < 5) {
+          res.statusCode(400);
+        }
 
+        // TODO: Clean up this callback hell
             CustomObjectsService.find('RememberMe', rem, function (err, customobject) {
                 if (err || !customobject) {
                     app.logger.error("Error in signWithToken method: %s", JSON.stringify(err))
-                    res.status(400)
+                    res.sendStatus(400)
                 } else {
                     app.logger.info("RemmberMe object: %s", JSON.stringify(customobject));
 

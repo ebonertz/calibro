@@ -409,7 +409,7 @@
                                     </td>
                                     <td class="product-name">
                                         <div class="name">{{lineItem.name.en}}</div>
-                                        <div class="lens-type" style="font-size: 90%">{{lineItem.distributionChannel.name | locale}}</div>
+                                        <div class="lens-type" style="font-size: 90%">{{lineItem.distributionChannel.obj.name | locale}}</div>
                                     </td>
                                     <td class="product-price">
                                         {{lineItem.price | spherePrice}}

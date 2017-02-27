@@ -1,7 +1,9 @@
 "use strict";
 
+var _ = require('lodash');
 
 var lang = 'en';
+var eyewearSlug = 'eyeglass';
 
 module.exports = function (app) {
   var CategoriesService = require('../../services/sphere/sphere.categories.server.service')(app),
@@ -21,13 +23,8 @@ module.exports = function (app) {
     this.description = options.description;
     this.slug = options.slug
 
-    // Add slug to categories
     this.categories = options.categories
-    for(var i = 0; i < this.categories.length; i++){
-      var slug = CategoriesService.getSlug(this.categories[i].id)
-      this.categories[i].slug = slug;
-    }
-
+    this.isEyeglass = !!_.find(this.categories, ['slug.en', eyewearSlug])
 
     if(options.displayVariant)
       this.displayVariant = options.displayVariant
@@ -62,7 +59,7 @@ module.exports = function (app) {
 
       // Ignore price if it has no channel
       if(price.channel) {
-        var channel = ChannelsService.getById(price.channel.id);
+        var channel = ChannelsService.byId(price.channel.id);
         price.channel = channel;
         this.prices.push(price);
       }

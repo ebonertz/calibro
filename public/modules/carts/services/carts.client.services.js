@@ -50,7 +50,7 @@ angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$roo
                 $rootScope.cart = result;
                 $rootScope.loading = false;
             }, function (error) {
-                LoggerServices.error('Error while adding to Sphere Cart');
+                LoggerServices.error('Error while adding item to cart');
                 $rootScope.loading = false;
             });
 
