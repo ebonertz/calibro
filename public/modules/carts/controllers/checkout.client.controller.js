@@ -482,10 +482,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         return
       }
 
-      // if ($scope.prescriptionOptions[type] === method) {
-      //   return
-      // }
+      // Easy update if value is the same as the one selected
+      if ($scope.prescriptionOptions[type] === method) {
+        LoggerServices.success('Prescription updated');
+        return
+      }
 
+      // Method is selected from prescriptionOptionsMethods
       $q.when(prescriptionOptionsMethods[method](args))
         .then(function(result) {
           $rootScope.loading = false;

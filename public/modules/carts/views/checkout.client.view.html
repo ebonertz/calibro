@@ -71,9 +71,9 @@
                             </div>
                         </div>
 
-                        <div ng-show="prescription.method == 'upload' && file.original_filename" style="margin-top: 20px; margin-bottom: -20px;">
-                            <label>Filename: {{file.original_filename}}</label>
-                            <label>Size: {{file.file_size}}</label>
+                        <div ng-show="prescription.method == 'upload' && prescription.data.original_filename" style="margin-top: 20px; margin-bottom: -20px;">
+                            <label>File Uploaded:<br />
+                              Name: {{prescription.data.original_filename}} - Size: {{prescription.data.file_size}}</label>
                         </div>
 
 
