@@ -22,7 +22,7 @@ angular.module('customers').factory('Customers', ['$resource',
                 var funs = this;
 
 				if(!Authentication.user && ipCookie('rem')){
-					console.log('Requesting login from cookie')
+					console.debug('Requesting login from cookie')
 
 					var payload = {
 						rem: ipCookie('rem'),
@@ -40,11 +40,11 @@ angular.module('customers').factory('Customers', ['$resource',
 					});
 				}
 			},
-			/*removeCookie: function(){
-				console.log("Remove cookie");
+			removeCookie: function(){
+				console.debug("Remove cookie");
 				ipCookie.remove('rem');
-                ipCookie.remove('rid');
-			}*/
+        ipCookie.remove('rid');
+			}
 		}
         return funs;
 	}

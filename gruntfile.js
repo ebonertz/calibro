@@ -57,9 +57,10 @@ module.exports = function(grunt) {
     },
     jshint: {
       all: {
-        src: watchFiles.clientJS.concat(watchFiles.serverJS),
+        src: defaultAssets.assets.shint,
         options: {
-          jshintrc: true
+          jshintrc: true,
+          reporter: require('jshint-stylish')
         }
       }
     },

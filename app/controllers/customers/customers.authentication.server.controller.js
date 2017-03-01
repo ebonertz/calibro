@@ -5,8 +5,8 @@
  */
 var _ = require('lodash'),
     passport = require('passport'),
-    RememberService = require('../../services/remember.server.service.js');
-
+    RememberService = require('../../services/remember.server.service.js'),
+    Promise = require('bluebird');
 
 var entity = 'customers';
 
@@ -14,7 +14,8 @@ module.exports = function (app) {
     var MandrillService = require('../../services/mandrill.server.service.js')(app),
         CommonsService = require('../../services/sphere/sphere.commons.server.service.js')(app),
         CustomObjectsService = require('../../services/sphere/sphere.custom-objects.server.service.js')(app),
-        CartService = require('../../services/sphere/sphere.carts.server.service.js')(app);
+        CartService = require('../../services/sphere/sphere.carts.server.service.js')(app),
+        Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
     var controller = {};
 
     /**
@@ -70,55 +71,55 @@ module.exports = function (app) {
     /**
      * Signin after passport authentication
      */
-    controller.signin = function (req, res, next) {
-        passport.authenticate('sphere-login', function (err, customer, info) {
-            if (err || !customer) {
-                res.status(400).send({
-                    message: "Login incorrect"
-                })
-            } else {
-                // Remove sensitive data before login
-                delete customer.password;
+    controller.signin = function(req, res, next) {
+      var response = {};
 
-                req.login(customer, function (err) {
-                    if (err) {
-                        res.status(400).send({
-                            message: "Issue login in customer. Please try again."
-                        })
-                        app.logger.error(JSON.stringify(err))
-                    } else {
-                        req.session.user = req.user;
+      new Promise(function(resolve, reject) {
+        // Deal with the login callbacks here
+        passport.authenticate('sphere-login', function(err, info) {
+          if (err || !info.customer) {
+            reject({info:err, message: 'Login incorrect'});
+          } else {
+            response = info;
 
-                        var result = {
-                            customer: customer,
-                            cart: info.cart
-                        }
-
-                        // Send remember me token if requested
-                        if (info.hasOwnProperty('remember')) {
-                            result.remember = info.remember
-                        }
-
-                        res.json(result);
-                    }
-                });
-            }
+            req.login(info.customer, function(err) {
+              if(err) {
+                reject({info: err, message: 'Issue login in customer. Please try again.'});
+              }
+              resolve(info.customer);
+            });
+          }
         })(req, res, next);
+      })
+      .then(function(customer) {
+        return CartService.byCustomer(customer.id, CartService.EXPANDS.distributionChannel);
+      })
+      .then(function(cart) {
+        response.cart = cart;
+
+        res.json(response);
+      })
+      .catch(function(err) {
+        app.logger.error(err)
+        res.status(400).send({message: err.message});
+      });
     };
 
     /**
      * Signout
      */
-    controller.signout = function (req, res) {
-        req.logout();
-        var cookieId = req.query.cookie;
+    controller.signout = function(req, res) {
+      req.logout();
+      var cookieId = req.query.cookie;
 
-        CartService.init(null, cookieId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                res.json(result);
-            }
+      CartService.init(null, cookieId, CartService.EXPANDS.distributionChannel)
+        .then(function(result) {
+          var cart = new Cart(result);
+          res.json(cart);
+        })
+        .catch(function(err) {
+          app.logger.error(err);
+          return res.status(500).send(err);
         });
     };
 

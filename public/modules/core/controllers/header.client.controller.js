@@ -30,8 +30,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			$http.get('/api/auth/signout').success(function (result) {
 				$rootScope.cart = result;
 				$window.location = '/';
-
-
+				CustomerService.removeCookie();
 			}).error(function (error) {
 				console.log(error)
 			});

@@ -92,8 +92,10 @@ module.exports = function (app) {
                     resolve(result);
                 }
                 else {
-                    app.logger.warn (result.Messages[0].Details);
-                    reject("There was a problem calculating taxes: "+result.Messages[0].Details);
+                    // app.logger.warn(result.Messages[0].Details);
+                    app.logger.error(result)
+                    // reject("There was a problem calculating taxes: "+result.Messages[0].Details);
+                    reject(result.Messages[0].Summary)
                 }
             });
         });
@@ -140,7 +142,7 @@ module.exports = function (app) {
         throw new Error("There was an error calculating the taxes, please try again later or contact us for support.")
       });
     }
-    
+
     function calculateShippingItem (cart) {
        var item = {
             "LineNo": 1,

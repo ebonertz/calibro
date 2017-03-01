@@ -1,9 +1,12 @@
+'use strict';
+
 var SphereClient = require('../../clients/sphere.server.client.js'),
   config = require('../../../config/config'),
   _ = require('lodash'),
   Promise = require('bluebird');
 
 var entity = 'carts';
+
 
 module.exports = function(app) {
   // Dependencies
@@ -13,7 +16,6 @@ module.exports = function(app) {
     })(app),
     ProductService = require('./sphere.products.server.service.js')(app),
     AvalaraService = require('../../services/avalara.server.services.js')(app),
-    Cart = require('../../models/sphere/sphere.cart.server.model.js')(app),
     TaxCategoryService = require('./sphere.taxCategories.server.service.js')(app);
 
   var service = {};
@@ -27,7 +29,7 @@ module.exports = function(app) {
     setBillingAddress: 'setBillingAddress',
     setShippingMethod: 'setShippingMethod',
     addDiscountCode: 'addDiscountCode'
-  }
+  };
 
   /*
     Getters
@@ -35,18 +37,27 @@ module.exports = function(app) {
 
   service.getCommonService = function() {
     return CommonServiceAsync;
-  }
+  };
 
   service.getAvalaraService = function() {
     return AvalaraService;
-  }
+  };
 
   service.getProductService = function() {
     return ProductService;
-  }
+  };
 
   /*
-    Service methods
+    Constants
+   */
+
+  service.EXPANDS = {
+    distributionChannel: 'lineItems[*].distributionChannel'
+  };
+
+
+  /*
+    Service helpers
    */
 
   service.byId = CommonServiceAsync.byId;
@@ -58,21 +69,39 @@ module.exports = function(app) {
     } else if (typeof cart !== 'object') {
       return service.getCommonService().update(cart, payload, expand);
     }
-  }
+  };
 
-  service.byCustomer = function(customerId, callback, expand) {
+  service.byCustomer = function(customerId, expand) {
     var opts = {
       where: 'cartState="Active" and customerId="' + customerId + '"',
-      sort: ['createdAt', false],
-      page: 1,
-      perPage: 1
-    }
+      sort: ['createdAt', false]
+    };
 
-    return service.getCommonService().where(opts, expand)
-      .then(function(res) {
-        return res[0];
-      })
+    return service.getCommonService().findOne(opts, expand);
   };
+
+  service.activeById = function(cartId, expand) {
+    var opts = {
+      where: 'cartState="Active" and id="' + cartId + '"',
+      sort: ['createdAt', false]
+    };
+
+    return service.getCommonService().findOne(opts, expand);
+  }
+
+  service.newCart = function(userId) {
+    var newCart = {
+      'currency': 'USD',
+      'customerId': userId,
+      'taxMode': 'External'
+    };
+
+    return service.getCommonService().save(newCart);
+  }
+
+  /*
+    Service methods
+   */
 
   service.addLineItem = function(cart, payload, expand) {
     if (payload)
@@ -93,23 +122,23 @@ module.exports = function(app) {
       payload.action = actions.removeLineItem;
 
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
   service.removeCustomLineItem = function(cart, payload, expand) {
     if (payload)
       payload.action = actions.removeCustomLineItem;
 
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
   service.getExternalTaxRate = function(taxLines, item, shippingAddress) {
     var taxLine = _.find(taxLines, function(taxLine) {
-      return taxLine.LineNo == item.id
+      return taxLine.LineNo === item.id;
     });
 
     if (!taxLine) {
       app.logger.debug('No tax line found for item', item.slug);
-      return
+      return;
     } else {
       app.logger.debug('Tax line found for item', item.slug);
     }
@@ -118,12 +147,12 @@ module.exports = function(app) {
     var rate = parseFloat(taxLine.Rate);
     var externalTaxRate = {
       name: shippingAddress.postalCode,
-      amount: tax == 0 ? 0 : rate,
-      country: "US"
+      amount: tax === 0 ? 0 : rate,
+      country: 'US'
     };
 
     return externalTaxRate;
-  }
+  };
 
   service.setShippingAddress = function(cart, payload, expand) {
     if (payload)
@@ -131,7 +160,7 @@ module.exports = function(app) {
 
     // Update shipping
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
   service.updateExternalRate = function(cart, expand) {
     return service.getAvalaraService().getSalesOrderTax(cart, AvalaraService.LINE_ITEM_TAX)
@@ -139,18 +168,21 @@ module.exports = function(app) {
         var actions = [];
         var externalTaxRate;
 
+        var shippingAddress = cart.shippingAddress;
+        var taxLines = avalaraTax.TaxLines;
+
         // Set taxes to line items
         _.each(cart.lineItems, function(item) {
-          externalTaxRate = service.getExternalTaxRate(avalaraTax.TaxLines, item, cart.shippingAddress);
+          externalTaxRate = service.getExternalTaxRate(taxLines, item, shippingAddress);
           if (!externalTaxRate) {
             throw new Error('No tax rate for ', item.name.en);
           }
 
           var action = {
-            action: "setLineItemTaxRate",
+            action: 'setLineItemTaxRate',
             lineItemId: item.id,
             externalTaxRate: externalTaxRate
-          }
+          };
           actions.push(action);
         });
 
@@ -160,21 +192,21 @@ module.exports = function(app) {
           // These have a taxline defined (unlike the custom line items)
           // TODO get taxlines for these items, otherwise we can get unexpected results
           if (!externalTaxRate) {
-            throw new Error('No tax rate for ', item.name.en)
+            throw new Error('No tax rate for ', item.name.en);
           }
 
           var action = {
-            action: "setCustomLineItemTaxRate",
+            action: 'setCustomLineItemTaxRate',
             customLineItemId: item.id,
             externalTaxRate: externalTaxRate
-          }
+          };
 
           actions.push(action);
         });
 
         // Recalculate item prices and taxes
         actions.push({
-          action: "recalculate",
+          action: 'recalculate',
           updateProductData: false // Change from true, as we only need the price/tax update
         });
 
@@ -182,15 +214,15 @@ module.exports = function(app) {
       })
       .then(function(actions) {
         return service.updateCart(cart, actions, expand);
-      })
-  }
+      });
+  };
 
   service.setBillingAddress = function(cart, payload, expand) {
     if (payload)
       payload.action = actions.setBillingAddress;
 
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
   service.setShippingMethod = function(cartId, payload, expand) {
     if (payload)
@@ -198,48 +230,48 @@ module.exports = function(app) {
 
     return service.updateCart(cartId, [payload])
       .then(function(cart) {
-        return AvalaraService.getSalesOrderTax(result, AvalaraService.SHIPPING_TAX)
+        return AvalaraService.getSalesOrderTax(cart, AvalaraService.SHIPPING_TAX)
           .then(function(avalaraTax) {
 
             var totalTax = parseFloat(avalaraTax.TotalTax);
             var externalTaxRate = {
-              name: result.shippingAddress.postalCode,
-              amount: totalTax == 0 ? 0 : totalTax / (result.shippingInfo.price.centAmount / 100),
-              country: "US"
-
+              name: cart.shippingAddress.postalCode,
+              amount: totalTax === 0 ? 0 : totalTax / (cart.shippingInfo.price.centAmount / 100),
+              country: 'US'
             };
             var actions = [];
+
             actions.push({
-              action: "setShippingMethodTaxRate",
+              action: 'setShippingMethodTaxRate',
               externalTaxRate: externalTaxRate
             });
             actions.push({
-              action: "recalculate"
+              action: 'recalculate'
             });
 
-            return actions
+            return actions;
           })
           .then(function(actions) {
             return service.updateCart(cart, actions, expand);
-          })
-      })
-  }
+          });
+      });
+  };
 
   service.changeLineItemQuantity = function(cart, payload, expand) {
     if (payload)
       payload.action = actions.changeLineItemQuantity;
 
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
-  service.addDiscountCode = function(cartId, payload, expand) {
+  service.addDiscountCode = function(cart, payload, expand) {
     if (payload)
       payload.action = actions.addDiscountCode;
 
     return service.updateCart(cart, [payload], expand);
-  }
+  };
 
-  service.addHighIndex = function(cart, payload) {
+  service.addHighIndex = function(cart, payload, expand) {
     var quantity = payload.quantity;
 
     // Early bail-out if quantity is not valid
@@ -263,7 +295,7 @@ module.exports = function(app) {
             action: 'changeCustomLineItemQuantity',
             customLineItemId: previousCustomLineItem.id,
             quantity: quantity
-          }
+          };
 
           return action;
         }
@@ -273,12 +305,12 @@ module.exports = function(app) {
           var action = {
             'action': 'addCustomLineItem',
             'name': {
-              'en': "High-index Lens",
+              'en': 'High-index Lens',
             },
             'quantity': quantity,
             'money': {
-              "currencyCode": "USD",
-              "centAmount": config.highIndex.price * 100 || 3000
+              'currencyCode': 'USD',
+              'centAmount': config.highIndex.price * 100 || 3000
             },
             'slug': config.highIndex.slug,
             'taxCategory': {
@@ -288,7 +320,7 @@ module.exports = function(app) {
           };
 
           return [action];
-        })
+        });
       }).then(function(actions) {
         // Update cart
         return service.updateCart(cart, actions, expand);
@@ -302,7 +334,8 @@ module.exports = function(app) {
     return service.removeCustomLineItem(cart, payload);
   };
 
-  service.addBlueBlock = function(cart, payload) {
+  // TODO: Refactor with highIndex to reduce repetition
+  service.addBlueBlock = function(cart, payload, expand) {
     var quantity = payload.quantity;
 
     // Early bail-out if quantity is not valid
@@ -326,7 +359,7 @@ module.exports = function(app) {
             action: 'changeCustomLineItemQuantity',
             customLineItemId: previousCustomLineItem.id,
             quantity: quantity
-          }
+          };
 
           return action;
         }
@@ -336,12 +369,12 @@ module.exports = function(app) {
           var action = {
             'action': 'addCustomLineItem',
             'name': {
-              'en': "Blue Block",
+              'en': 'Blue Block',
             },
             'quantity': quantity,
             'money': {
-              "currencyCode": "USD",
-              "centAmount": config.blueBlock.price * 100 || 3000
+              'currencyCode': 'USD',
+              'centAmount': config.blueBlock.price * 100 || 3000
             },
             'slug': config.blueBlock.slug,
             'taxCategory': {
@@ -351,7 +384,7 @@ module.exports = function(app) {
           };
 
           return [action];
-        })
+        });
       }).then(function(actions) {
         // Update cart
         return service.updateCart(cart, actions, expand);
@@ -366,88 +399,32 @@ module.exports = function(app) {
     return service.removeCustomLineItem(cart, payload);
   };
 
-  service.init = function(userId, cookieId, callback, expand) {
-    SphereClient.setClient();
-    var newCart = {
-      "currency": "USD",
-      "customerId": userId,
-      "taxMode": "External"
-    };
+  // TODO: Review this method, currently not using promises
+  service.init = function(userId, cookieId, expand) {
 
-    if (userId) {
+    return Promise.resolve()
+      .then(function() {
+        if (userId) {
+          return service.byCustomer(userId, expand);
+        } else if (cookieId) {
+          return service.activeById(cookieId, expand);
+        }
+      })
+      .then(function(cart) {
+        return cart || service.newCart(userId);
+      })
+      .catch(function() {
+        return service.newCart(userId);
+      })
 
-      service.byCustomer(userId, expand).then(function(cart) {
-          if (cart == null || cart.errors != null && cart.errors.length > 0) {
-            CommonService.create('carts', newCart, function(err, cart) {
-              if (err) {
-                callback(err, null);
-              } else {
-                app.logger.debug("Init Cart A - Cart created - Cart ID: " + cart.id);
-                callback(null, cart);
-              }
-            });
-          } else {
-            app.logger.debug("Init Cart B - Customer has a cart - Cart ID: " + cart.id);
-            callback(null, cart);
-          }
+  };
 
-        })
-        .catch(function(err) {
-          callback(err, null);
-        })
-
-    } else {
-
-      if (cookieId == null) {
-        CommonService.create('carts', newCart, function(err, cart) {
-          if (err) {
-            callback(err, null);
-          } else {
-            app.logger.debug("Init Cart C - Cart created - Cart ID: " + cart.id);
-            callback(null, cart);
-          }
-        });
-      } else {
-
-        CommonService.byId('carts', cookieId, function(err, cart) {
-
-          if (err) {
-            CommonService.create('carts', newCart, function(err, cart) {
-              if (err) {
-                callback(err, null);
-              } else {
-                app.logger.debug("Init Cart F - Cart created - Cart ID: " + cart.id);
-                callback(null, cart);
-              }
-            });
-          } else {
-            // This check is to avoid showing a user cart, that started as an anonymous cart.
-            if (cart.customerId == null && cart.cartState == 'Active') {
-              app.logger.debug("Init Cart D - Customer has a cart from cookie - Cart ID: " + cart.id);
-              callback(null, cart);
-            } else {
-              CommonService.create('carts', newCart, function(err, cart) {
-                if (err) {
-                  callback(err, null);
-                } else {
-                  app.logger.debug("Init Cart E - Cart created - Cart ID: " + cart.id);
-                  callback(null, cart);
-                }
-              });
-            }
-
-          }
-        }, expand);
-      }
-    }
-  }
-
-
+  // TODO: Review this method, currently not using promises
   service.refreshCart = function(cookieId, callback, expand) {
     SphereClient.setClient();
     var newCart = {
-      "currency": "USD",
-      "taxMode": "External"
+      'currency': 'USD',
+      'taxMode': 'External'
     };
 
     CommonService.byId('carts', cookieId, function(err, cart) {
@@ -456,21 +433,18 @@ module.exports = function(app) {
           if (err) {
             callback(err, null);
           } else {
-            app.logger.debug("Cart refreshed A - Cart ID: " + cart.id);
+            app.logger.debug('Cart refreshed A - Cart ID: ' + cart.id);
             callback(null, cart);
           }
         });
       } else {
-        callback(null, cart)
+        callback(null, cart);
 
       }
     }, expand);
+  };
 
-
-
-
-  }
-
+  // TODO: Review this method, currently not using promises
   service.deleteBillingAddress = function(cartId, callback) {
     CommonService.byId('carts', cartId, function(err, cart) {
       if (err) {
@@ -493,7 +467,7 @@ module.exports = function(app) {
     });
   };
 
-  service.cartEyewearPrescriptionCount = function(cartId, expand) {
+  service.cartEyewearPrescriptionCount = function(cartId) {
     return service.byId(cartId, 'lineItems[*].distributionChannel')
       .then(function(cart) {
 
@@ -503,24 +477,25 @@ module.exports = function(app) {
 
         var query = 'id in (' + ids + ')';
 
-        // Get eyewear products
+        // Get all products from the cart
         return service.getProductService().find(query, 'categories[*]')
+          // Filter eyeglasses
           .then(function(products) {
-            return _.filter(products, ['categories[0].obj.slug.en', 'eyeglasses'])
+            return _.filter(products, ['categories[0].obj.slug.en', 'eyeglasses']);
           })
+          // Sum all the singlevision lineitems
           .then(function(eyewearProducts) {
-            // Sum all the singlevision lineitems
             return _.reduce(eyewearProducts, function(sum, product) {
-              var li = _.find(cart.lineItems, ['productId', product.id])
+              var li = _.find(cart.lineItems, ['productId', product.id]);
               var distChan = _.get(li, 'distributionChannel.obj.key');
 
               // Sum 1 if distribution channel is singlevision
-              return sum + (distChan === 'singlevision')
-            }, 0)
-          })
-      })
+              return sum + (distChan === 'singlevision');
+            }, 0);
+          });
+      });
 
   };
 
   return service;
-}
+};

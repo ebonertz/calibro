@@ -1,9 +1,17 @@
+'use strict';
+
 var _ = require('lodash'),
-  path = require('path');
+  path = require('path'),
+  Promise = require('bluebird');
 
 var app = require(path.resolve('specs/server-stub.js'));
-var ProductService = require('../sphere/sphere.carts.server.service.js')(app);
-var Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
+var CartService = require('../sphere/sphere.carts.server.service.js')(app);
+var AvalaraService = require(path.resolve('app/services/avalara.server.services.js'))(app);
+// var Cart = require('../../models/sphere/sphere.cart.server.model.js')(app);
+
+function promiseStub(res) {
+  return Promise.resolve(res);
+}
 
 function getRandomString(len) {
   len = len || 7;
@@ -24,7 +32,7 @@ function getRandomFlatObject() {
       result[getRandomString()] = getRandomString();
       return result;
     }, {}
-  )
+  );
 }
 
 /**
@@ -33,32 +41,36 @@ function getRandomFlatObject() {
 function getRandomLineItem() {
   return {
     id: getRandomString()
-  }
+  };
 }
 
 describe('Cart Service', function(){
   var fakeCart,
-    CommonServiceStubs;
+    CommonServiceStubs,
+    expand;
 
   beforeEach(function(){
     // CommonService is currently not returning a cart instance but an obj
     fakeCart = {id: getRandomString(), version: getRandomInt()};
+    expand = getRandomString();
 
     CommonServiceStubs = {
-      byId: function() { return Promise.resolve(fakeCart) },
-      updateWithVersion: function() { return Promise.resolve(fakeCart) }
-    }
-    spyOn(ProductService, 'getCommonService').and.returnValue(CommonServiceStubs);
+      byId: promiseStub.bind(fakeCart),
+      updateWithVersion: promiseStub.bind(fakeCart),
+      update: promiseStub.bind(fakeCart)
+    };
+    spyOn(CartService, 'getCommonService').and.returnValue(CommonServiceStubs);
     spyOn(CommonServiceStubs, 'byId').and.callThrough();
     spyOn(CommonServiceStubs, 'updateWithVersion').and.callThrough();
-  })
+
+    spyOn(CartService, 'updateCart').and.callFake(promiseStub.bind(fakeCart));
+  });
 
   xit('should add line items', function(done){
-  })
+  });
 
   xit('should add custom line items', function(done){
-
-  })
+  });
 
   /**
    * Update Shipping Address specs
@@ -70,15 +82,16 @@ describe('Cart Service', function(){
       var payload = getRandomFlatObject();
       var action = {action: 'setShippingAddress'};
 
-      ProductService.setShippingAddress(fakeCart.id, fakeCart.version, payload).then(function(cart) {
-        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(fakeCart.id, fakeCart.version, [_.merge(payload, action)]);
+      CartService.setShippingAddress(fakeCart.id, payload, expand).then(function(cart) {
+        expect(CartService.updateCart)
+          .toHaveBeenCalledWith(fakeCart.id, [_.merge(payload, action)], expand);
         done();
       }).catch(function(err){
-        done.fail(err)
-      })
-    })
+        done.fail(err);
+      });
+    });
 
-  })
+  });
 
 
   /**
@@ -89,18 +102,18 @@ describe('Cart Service', function(){
       recalculateAction = {
         action: 'recalculate',
         updateProductData: false
-      }
+      };
 
 
     beforeEach(function() {
-      var AvalaraStubs = {
-        getSalesOrderTax: function(){ return Promise.resolve({TaxLines: getRandomString()}) }
-      }
-      spyOn(ProductService, 'getAvalaraService').and.returnValue(AvalaraStubs);
+      AvalaraStubs = {
+        getSalesOrderTax: promiseStub.bind({TaxLines: getRandomString()})
+      };
+      spyOn(CartService, 'getAvalaraService').and.returnValue(AvalaraStubs);
       spyOn(AvalaraStubs, 'getSalesOrderTax').and.callThrough();
 
-      spyOn(ProductService, 'getExternalTaxRate').and.returnValue({test: getRandomString()})
-    })
+      spyOn(CartService, 'getExternalTaxRate').and.returnValue({test: getRandomString()});
+    });
 
 
     // No line items or custom line items
@@ -108,11 +121,14 @@ describe('Cart Service', function(){
       var lineItems = {};
       fakeCart.lineItems = lineItems;
 
-      ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(cart.id, cart.version, [recalculateAction]);
+      CartService.updateExternalRate(fakeCart, expand).then(function(cart){
+        expect(AvalaraStubs.getSalesOrderTax)
+          .toHaveBeenCalledWith(fakeCart, AvalaraService.LINE_ITEM_TAX);
+        expect(CartService.updateCart)
+          .toHaveBeenCalledWith(fakeCart, [recalculateAction], expand);
         done();
       }).catch(function(err){
-        done.fail(err)
+        done.fail(err);
       });
     });
 
@@ -125,19 +141,16 @@ describe('Cart Service', function(){
         return {
           action: 'setLineItemTaxRate',
           lineItemId: li.id,
-          externalTaxRate: ProductService.getExternalTaxRate()
-        }
-      })
+          externalTaxRate: CartService.getExternalTaxRate()
+        };
+      });
 
-      ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(
-          cart.id,
-          cart.version,
-          _.concat(liActions, recalculateAction)
-        );
+      CartService.updateExternalRate(fakeCart, expand).then(function(cart){
+        expect(CartService.updateCart)
+          .toHaveBeenCalledWith(fakeCart, _.concat(liActions, recalculateAction), expand);
         done();
       }).catch(function(err){
-        done.fail(err)
+        done.fail(err);
       });
     });
 
@@ -146,25 +159,14 @@ describe('Cart Service', function(){
       var lineItems = getRandomFlatObject();
       fakeCart.lineItems = lineItems;
 
-      ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(ProductService.getExternalTaxRate).toHaveBeenCalledTimes(_.size(lineItems));
+      CartService.updateExternalRate(fakeCart).then(function(cart){
+        expect(CartService.getExternalTaxRate)
+          .toHaveBeenCalledTimes(_.size(lineItems));
         done();
       }).catch(function(err){
-        done.fail(err)
-      })
-    })
-
-
-    // Return test
-    xit('should return a cart instance', function (done){
-      // TODO: Review the Cart object, as it has weird stuff
-      ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(cart instanceof Cart).toBe(true);
-        done();
-      }).catch(function(err){
-        done.fail(err)
-      })
-    })
+        done.fail(err);
+      });
+    });
 
 
     // Needs a lineItem to work
@@ -175,35 +177,40 @@ describe('Cart Service', function(){
       var lineItem = getRandomLineItem();
       fakeCart.lineItems = [lineItem];
 
-      // Set up expected actions
-      // for line items
+      // Set up expected actions for line items
       var liActions = [{
         action: 'setLineItemTaxRate',
         lineItemId: lineItem.id,
-        externalTaxRate: ProductService.getExternalTaxRate()
-      }]
+        externalTaxRate: CartService.getExternalTaxRate()
+      }];
 
       // For custom line items
       liActions = _.concat(liActions, _.map(customLineItems, function(li) {
           return {
             action: 'setCustomLineItemTaxRate',
             customLineItemId: li.id,
-            externalTaxRate: ProductService.getExternalTaxRate()
-          }
+            externalTaxRate: CartService.getExternalTaxRate()
+          };
         })
-      )
+      );
 
-      ProductService.updateExternalRate(fakeCart).then(function(cart){
-        expect(CommonServiceStubs.updateWithVersion).toHaveBeenCalledWith(
-          cart.id,
-          cart.version,
-          _.concat(liActions, recalculateAction)
-        );
+      CartService.updateExternalRate(fakeCart, expand).then(function(cart){
+        expect(cart).toBe(fakeCart);
+        expect(CartService.updateCart)
+          .toHaveBeenCalledWith(fakeCart, _.concat(liActions, recalculateAction), expand);
         done();
       }).catch(function(err){
-        done.fail(err)
+        done.fail(err);
       });
-    })
-  })
+    });
+  });
 
-})
+  /**
+   * Eyewear prescription count
+   */
+
+  describe('Eyewear prescription count', function() {
+
+    // it('')
+  });
+});

@@ -1,33 +1,31 @@
-var entity = 'carts',
-  Promise = require('bluebird');
+'use strict';
 
 var EXPAND = {
-  distributionChannel: 'lineItems[*].distributionChannel'
-}
+    distributionChannel: 'lineItems[*].distributionChannel'
+  };
 
 module.exports = function(app) {
   var CartService = require('../services/sphere/sphere.carts.server.service.js')(app),
     ChannelService = require('../services/sphere/sphere.channels.server.service.js')(app),
-    CommonService = Promise.promisifyAll(require('../services/sphere/sphere.commons.server.service.js')(app)),
     Cart = require('../models/sphere/sphere.cart.server.model.js')(app);
 
   var controller = {};
+
   controller.byCustomer = function(req, res) {
     var customerId = req.param('customerId');
 
     CartService.byCustomer(customerId)
-      .then(function(cart) {
-        return new Cart(cart);
-      })
-      .then(function(cart) {
-        res.json(cart);
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
       })
       .catch(function(err) {
         // Error
         if (err.statusCode === '404') {
           res.status(404);
         } else {
-          app.logger.error(err)
+          app.logger.error(err);
           return res.status(500).send(err);
         }
       });
@@ -37,17 +35,17 @@ module.exports = function(app) {
     var cartId = req.param('cartId');
 
     CartService.byId(cartId, EXPAND.distributionChannel)
-      .then(function(cart) {
-        return new Cart(cart);
-      }).then(function(cart) {
-        res.json(cart);
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
       })
       .catch(function(err) {
         // Error
         if (err.statusCode === '404') {
           res.status(404);
         } else {
-          app.logger.error(err)
+          app.logger.error(err);
           return res.status(500).send(err);
         }
       });
@@ -58,17 +56,17 @@ module.exports = function(app) {
       payload = req.body;
 
     if (!payload.distributionChannel) {
-      app.logger.warn('[AddLineItem] Payload contained no distribution channel')
-      return res.status(400).send("Distribution Channel required to add line items");
+      app.logger.warn('[AddLineItem] Payload contained no distribution channel');
+      return res.status(400).send('Distribution Channel required to add line items');
     }
 
     // Fetch distribution channel
     return ChannelService.byKey(payload.distributionChannel)
       .then(function(distributionChannel) {
         payload.distributionChannel = {
-          typeId: "channel",
+          typeId: 'channel',
           id: distributionChannel.id
-        }
+        };
 
         return CartService.addLineItem(cartId, payload, EXPAND.distributionChannel);
       })
@@ -173,15 +171,15 @@ module.exports = function(app) {
     var cartId = req.param('cartId'),
       payload = req.body;
 
-    return CartService.addDiscountCode(cart.id, payload, EXPAND.distributionChannel)
-      .then(function(cart) {
+    return CartService.addDiscountCode(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
         var cart = new Cart(result);
         res.json(cart);
       })
       .catch(function(err) {
         app.logger.error(err);
         return res.status(500).send(err);
-      })
+      });
   };
 
   controller.createOrder = function(req, res) {
@@ -194,7 +192,7 @@ module.exports = function(app) {
       if (err) {
         return res.status(400).send(err.body.message);
       } else {
-        res.redirect('/#!/orders/' + result.id)
+        res.redirect('/#!/orders/' + result.id);
       }
     });
   };
@@ -264,13 +262,15 @@ module.exports = function(app) {
     var customerId = req.query.customer,
       cookieId = req.query.cookie;
 
-    CartService.init(customerId, cookieId, function(err, result) {
-      if (err) {
-        return res.status(400).send(err.body.message);
-      } else {
-        res.json(result);
-      }
-    }, EXPAND.distributionChannel);
+    CartService.init(customerId, cookieId, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
   };
 
   // TODO: Move to promise
@@ -291,7 +291,7 @@ module.exports = function(app) {
 
     return CartService.cartEyewearPrescriptionCount(id)
       .then(function(count) {
-        return res.json(count)
+        return res.json(count);
       })
       .catch(function(err) {
         app.logger.error(err);
