@@ -390,7 +390,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
       $rootScope.loading = true;
 
       address.$save(function(response) {
-        Authentication.user = response;
+        Authentication.setUser(response);
         LoggerServices.success('Address added');
         $rootScope.loading = false;
       }, function(response) {

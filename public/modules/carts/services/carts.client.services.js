@@ -20,16 +20,12 @@ angular.module('carts').service('CartService', ['$http', '$q', 'ipCookie', '$roo
                 cookieId = ipCookie('anonymousCart', undefined, {path: '/'});
             }
 
-            this.init(customerId, cookieId).then(function (cart) {
-                console.log('Cart ID: ' + cart.id);
-                $rootScope.cart = cart;
-
+            return this.init(customerId, cookieId).then(function (cart) {
                 if(customerId == null) {
-                    ipCookie('anonymousCart', $rootScope.cart.id, {path: '/'});
-                    console.log('Cart saved in cookie.');
+                  ipCookie('anonymousCart', cart.id, {path: '/'});
                 }
 
-                $rootScope.loading = false;
+                return cart;
             });
 
         }

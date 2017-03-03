@@ -1,3 +1,5 @@
+'use strict';
+
 var SphereClient = require('../../clients/sphere.server.client.js'),
     entity = 'customObjects';
 
@@ -14,13 +16,13 @@ module.exports = function (app) {
             } else {
 
                 for (var i = 0; i < resultArray.length; i++) {
-                    if (resultArray[i].key == key) {
+                    if (resultArray[i].key === key) {
                         callback(null, resultArray[i]);
                         return;
                     }
                 }
 
-                callback(new Error('Custom Object not found.'), null);
+                callback(new SphereClient.SphereHttpError.NotFound());
 
             }
         });
