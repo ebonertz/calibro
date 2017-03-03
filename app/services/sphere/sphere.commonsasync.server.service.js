@@ -138,8 +138,8 @@ module.exports = function () {
     service.login = function (payload) {
       return service.getSphereClient().login(payload).then(function (result) {
         return result.body;
-      })
-    }
+      });
+    };
 
     return service;
 };

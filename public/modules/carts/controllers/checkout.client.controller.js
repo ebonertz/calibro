@@ -468,8 +468,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
       },
 
       uploadPrescription: function(files) {
-        $scope.prescription.method = 'upload';
-        return $scope.uploadPrescription(files)
+        return $scope.uploadPrescription(files).then(function(result){
+          $scope.prescription.method = 'upload';
+          return result
+        })
       }
     }
 
@@ -558,7 +560,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.prescription.calldoctor = $scope.prescription.value.data;
           } else if ($scope.prescription.method == 'sendlater') {
             console.log('Will send prescriptions later')
-
+          } else if ($scope.prescription.method == 'upload') {
+            $scope.prescription.upload = $scope.prescription.value.data;
           }
 
           $rootScope.cart = response.cart;

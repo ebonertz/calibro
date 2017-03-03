@@ -87,7 +87,7 @@ module.exports = function(app) {
     };
 
     return service.getCommonService().findOne(opts, expand);
-  }
+  };
 
   service.newCart = function(userId) {
     var newCart = {
@@ -97,7 +97,7 @@ module.exports = function(app) {
     };
 
     return service.getCommonService().save(newCart);
-  }
+  };
 
   /*
     Service methods
@@ -413,7 +413,7 @@ module.exports = function(app) {
       })
       .catch(function() {
         return service.newCart(userId);
-      })
+      });
   };
 
   // TODO: Review this method, currently not using promises
