@@ -34,14 +34,14 @@ angular.module('customers').factory('Customers', ['$resource',
           }
 
           // Add login loader?
-          return $http.post('/api/auth/token', payload).success(function(response) {
+          return $http.post('/api/auth/token', payload).then(function(response) {
             // If successful we assign the response to the global user model
-            Authentication.setUser(response.customer);
-            return response.cart;
-          }).error(function(error) {
+            Authentication.setUser(response.data.customer);
+            return response.data.cart;
+          }).catch(function(err) {
             console.log('Could not login from cookie')
             funs.removeCookie()
-            return $q.reject();
+            return $q.reject(err);
           });
         } else {
           return $q.reject();

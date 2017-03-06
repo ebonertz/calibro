@@ -71,9 +71,8 @@
                             </div>
                         </div>
 
-                        <div ng-show="prescription.method == 'upload' && prescription.data.original_filename" style="margin-top: 20px; margin-bottom: -20px;">
-                            <label>File Uploaded:<br />
-                              Name: {{prescription.data.original_filename}} - Size: {{prescription.data.file_size}}</label>
+                        <div ng-show="prescription.method == 'upload' && prescription.upload.original_filename" style="margin-top: 20px; margin-bottom: -20px;">
+                            <label>File Uploaded: {{prescription.upload.original_filename}} ({{prescription.upload.file_size}})</label>
                         </div>
 
 
@@ -106,7 +105,7 @@
                         <div id="next">
                             <br />
                             <hr />
-                            <button type="button" class="btn radius outline green block" ng-click="showPhaseA();">Next ></button>
+                            <button type="button" class="btn radius outline block" ng-click="showPhaseA();" ng-disabled="!prescription.method" ng-class="{green: !!prescription.method}">Next ></button>
                         </div>
 
 
