@@ -11,8 +11,16 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 		//$httpProvider.interceptors.push('headTagsInterceptor');
 	}
 ]).run(function ($rootScope, CartService, CustomerService, $anchorScroll, $FB) {
-	CustomerService.checkCookieAndLogin();
-	CartService.pageLoad();
+	$rootScope.loading = true;
+	CustomerService.checkCookieAndLogin()
+		.catch(function() {
+			return CartService.pageLoad();
+		})
+		.then(function(cart) {
+			$rootScope.cart = cart;
+			$rootScope.loading = false;
+		});
+
 	//console.log(Authentication)
 	//$rootScope.cart = CartService.createAnonymous();
 	$rootScope.$on('$viewContentLoaded', function() {

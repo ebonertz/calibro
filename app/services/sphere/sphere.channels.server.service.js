@@ -10,76 +10,23 @@ var chanByKey = {};
 var channels = [];
 var lastFetchTime;
 
-
 module.exports = function (app) {
     var service = {};
-    service.listChannels = function () {
-        return channels;
+    var CommonService = require('./sphere.commonsasync.server.service.js').bind({entity: 'channels'})(app);
+
+    service.getCommonService = function() {
+      return CommonService;
     }
-    service.getByKey = function(key){
-        // TODO: Block thread if channel not there (this is wrong)
-        if(chanByKey.hasOwnProperty(key) && stillValidData()){
-            return chanByKey[key]
-        }else{
-            fetchChannels().then(function(){
-                if(chanByKey.hasOwnProperty(key)){
-                    return chanByKey[key]
-                }else{
-                    return null
-                }
-            })
-        }
-    };
 
-    service.getById = function(id){
-        if(chanById.hasOwnProperty(id) && stillValidData()){
-            return chanById[id];
-        }else{
-            fetchChannels().then(function(){
-                if(chanById.hasOwnProperty(id)){
-                    return chanById[id];
-                }else{
-                    return null;
-                }
-            })
-        }
-    };
+    service.list = function () {
+      return service.getCommonService().all();
+    }
 
-    var stillValidData = function(){
-        var maxHoursDifference = 24;
-        return ((new Date - lastFetchTime)/(1000*60*60) < maxHoursDifference);
-    };
+    service.byKey = function(key) {
+      return service.getCommonService().findOne('key="' + key + '"');
+    }
 
-    var fetchChannels = function(){
-        var p = new Promise(function(resolve, reject){
-            SphereClient.getClient().channels.all().fetch().then(function(results){
-                channels = results.body.results;
-
-                for(var i = 0; i < channels.length; i++){
-                    var chan = channels[i];
-                    delete chan.createdAt;
-                    delete chan.lastModifiedAt;
-
-                    chanById[chan.id] = chan;
-                    chanByKey[chan.key] = chan;
-                }
-
-                lastFetchTime = new Date()
-
-                resolve()
-            }).error(function (err) {
-                app.logger.error("Error fetching channels: %s",JSON.stringify(err));
-                reject(err);
-            })
-        });
-
-        return p
-    };
-
-// Run once on startup
-    app.logger.debug("Initializing Sphere Channels");
-    fetchChannels();
+    service.byId = CommonService.byId;
+    
     return service;
 }
-
-

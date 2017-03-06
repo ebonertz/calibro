@@ -17,7 +17,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 
 				customer.$update(function(response) {
 					$scope.success = "Profile updated successfully.";
-					Authentication.user = response;
+					Authentication.setUser(response);
 					$scope.customer = angular.copy(Authentication.user);
 				}, function(response) {
 					$scope.error = response.data.message;
@@ -55,7 +55,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 
 				address.$save(function(response) {
 					$scope.success = true;
-					Authentication.user = response;
+					Authentication.setUser(response);
 					$scope.customer = angular.copy(Authentication.user);
 					$scope.newAddress = {};
 
@@ -79,7 +79,7 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 
 				address.$delete(function(response){
 					$scope.success = true;
-					Authentication.user = response;
+					Authentication.setUser(response);
 					$scope.customer = angular.copy(Authentication.user);
 
 					$scope.addAddressError = null;
@@ -105,12 +105,12 @@ angular.module('customers').controller('ProfileController', ['$scope', '$http', 
 				var address = new Addresses($scope.editAddress)
 
 				address.$update(function(response){
-					Authentication.user = response;
+					Authentication.setUser(response);
 					$location.path('/my-addresses');
 					updateStatus.message = "Address updated successfully";
 				}, function(error){
 					$scope.updateError = "Error updating the address"
-				});				
+				});
 			}
 		}
 

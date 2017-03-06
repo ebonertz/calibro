@@ -88,6 +88,7 @@
     "grunt-ng-annotate": "^1.0.1",
     "grunt-node-inspector": "~0.2.0",
     "grunt-nodemon": "~0.4.0",
+    "jshint-stylish": "^2.2.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "~0.2.0",

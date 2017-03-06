@@ -1,5 +1,7 @@
 "use strict";
 
+var _ = require('lodash'),
+  Promise = require('bluebird');
 
 var prescriptionChannels = ['singlevision'];
 
@@ -12,12 +14,6 @@ module.exports = function (app) {
         var self = this
         for(var key in opt){
             this[key] = opt[key]
-        }
-
-        for(var i in this.lineItems){
-            var distChan = this.lineItems[i].distributionChannel
-            if(distChan)
-                this.lineItems[i].distributionChannel = ChannelService.getById(distChan.id);
         }
 
         this.getPrescriptionCount = function(){
@@ -34,6 +30,6 @@ module.exports = function (app) {
           return TaxCategoryService.getFirst();
         }
     };
-    return Cart;
 
+    return Cart;
 }

@@ -1,285 +1,303 @@
-var entity = 'carts',
-  Promise = require('bluebird');
+'use strict';
 
-module.exports = function (app) {
-    var CartService = require('../services/sphere/sphere.carts.server.service.js')(app),
-        ChannelService = require('../services/sphere/sphere.channels.server.service.js')(app),
-        CommonService = Promise.promisifyAll(require('../services/sphere/sphere.commons.server.service.js')(app)),
-        Cart = require('../models/sphere/sphere.cart.server.model.js') (app);
+var EXPAND = {
+    distributionChannel: 'lineItems[*].distributionChannel'
+  };
 
-    var controller = {};
-    controller.byCustomer = function (req, res) {
-        var customerId = req.param('customerId');
+module.exports = function(app) {
+  var CartService = require('../services/sphere/sphere.carts.server.service.js')(app),
+    ChannelService = require('../services/sphere/sphere.channels.server.service.js')(app),
+    Cart = require('../models/sphere/sphere.cart.server.model.js')(app);
 
-        CartService.byCustomer(customerId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                if (result.errors != null && result.errors.length > 0) {
-                    return res.sendStatus(400);
-                } else {
-                    var cart = new Cart(result);
-                    res.json(cart);
-                }
+  var controller = {};
 
-            }
-        });
-    };
+  controller.byCustomer = function(req, res) {
+    var customerId = req.param('customerId');
 
-    controller.byId = function (req, res) {
-        var id = req.param('cartId');
-
-        CommonService.byId(entity, id, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        })
-    };
-
-    controller.addLineItem = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
-
-        if (payload.distributionChannel) {
-            payload.distributionChannel = {
-                typeId: "channel",
-                id: ChannelService.getByKey(payload.distributionChannel).id
-            }
-        }
-
-        CartService.addLineItem(cartId, version, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
-
-    controller.removeLineItem = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
-
-        CartService.removeLineItem(cartId, version, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
-
-    controller.setShippingAddress = function (req, res) {
-        var cartId = req.param('cartId'),
-            payload = req.body;
-
-        CartService.setShippingAddress(cartId, payload)
-        .then(function(cart){
-          return CartService.updateExternalRate(cart);
-        })
-        .then(function(result){
-          // TODO: move to services, controller should only provide a sendable version of the cart
-          var cart = new Cart(result);
-          res.json(cart);
-        })
-        .catch(function(err){
+    CartService.byCustomer(customerId)
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
+      })
+      .catch(function(err) {
+        // Error
+        if (err.statusCode === '404') {
+          res.status(404);
+        } else {
           app.logger.error(err);
-          return res.status(400).send(err);
-        });
-    };
+          return res.status(500).send(err);
+        }
+      });
+  };
 
-    controller.setBillingAddress = function (req, res) {
-        var cartId = req.param('cartId'),
-            payload = req.body;
+  controller.byId = function(req, res) {
+    var cartId = req.param('cartId');
 
-        CartService.setBillingAddress(cartId, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
+    CartService.byId(cartId, EXPAND.distributionChannel)
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
+      })
+      .catch(function(err) {
+        // Error
+        if (err.statusCode === '404') {
+          res.status(404);
+        } else {
+          app.logger.error(err);
+          return res.status(500).send(err);
+        }
+      });
+  };
 
-    controller.setShippingMethod = function (req, res) {
-        var cartId = req.param('cartId'),
-            payload = req.body;
+  controller.addLineItem = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-        CartService.setShippingMethod(cartId, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
+    if (!payload.distributionChannel) {
+      app.logger.warn('[AddLineItem] Payload contained no distribution channel');
+      return res.status(400).send('Distribution Channel required to add line items');
+    }
 
-    controller.changeLineItemQuantity = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+    // Fetch distribution channel
+    return ChannelService.byKey(payload.distributionChannel)
+      .then(function(distributionChannel) {
+        payload.distributionChannel = {
+          typeId: 'channel',
+          id: distributionChannel.id
+        };
 
-        CartService.changeLineItemQuantity(cartId, version, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
+        return CartService.addLineItem(cartId, payload, EXPAND.distributionChannel);
+      })
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
+      })
+      .catch(function(err) {
+        // Error
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-    controller.addDiscountCode = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+  controller.removeLineItem = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-        CartService.addDiscountCode(cartId, version, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        });
-    };
+    return CartService.removeLineItem(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        // Return response
+        var cart = new Cart(result);
+        return res.json(cart);
 
-    controller.createOrder = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+      })
+      .catch(function(err) {
+        // Error
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        // Create order and any associated notes
-        CartService.createOrder(cartId, version, payload, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                res.redirect('/#!/orders/' + result.id)
-            }
-        });
-    };
+  controller.setShippingAddress = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.addHighIndex = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+    return CartService.setShippingAddress(cartId, payload)
+      .then(function(cart) {
+        return CartService.updateExternalRate(cart, EXPAND.distributionChannel);
+      })
+      .then(function(result) {
+        // TODO: move to services, controller should only provide a sendable version of the cart
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        CommonService.byIdAsync(entity, cartId).then(function(result){
-          return new Cart(result);
-        })
-        .then(function(cart){
-          CartService.addHighIndex(cart, req.body).then(function (result) {
-            var cart = new Cart(result);
-            res.json(cart);
-          }).catch(function(err){
-            if(err.status === 400){
-              return res.status(err.status);
-            } else {
-              app.logger.error(err);
-              return res.status(500);
-            }
-          });
-        })
-    };
+  controller.setBillingAddress = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.removeHighIndex = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+    CartService.setBillingAddress(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        // TODO: move to services, controller should only provide a sendable version of the cart
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        CartService.removeHighIndex(cartId, version, payload.lineId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        })
-    };
+  controller.setShippingMethod = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.addBlueBlock = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+    CartService.setShippingMethod(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        // TODO: move to services, controller should only provide a sendable version of the cart
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        CommonService.byIdAsync(entity, cartId).then(function(result){
-          return new Cart(result);
-        })
-        .then(function(cart){
-          CartService.addBlueBlock(cart, req.body).then(function (result) {
-            var cart = new Cart(result);
-            res.json(cart);
-          }).catch(function(err){
-            if(err.status === 400){
-              return res.status(err.status);
-            } else {
-              app.logger.error(err);
-              return res.status(500);
-            }
-          });
-        })
-    };
+  controller.changeLineItemQuantity = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.removeBlueBlock = function (req, res) {
-        var cartId = req.param('cartId'),
-            version = parseInt(req.param('version')),
-            payload = req.body;
+    CartService.changeLineItemQuantity(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        // TODO: move to services, controller should only provide a sendable version of the cart
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        CartService.removeBlueBlock(cartId, version, payload.lineId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                var cart = new Cart(result);
-                res.json(cart);
-            }
-        })
-    };
+  controller.addDiscountCode = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.init = function (req, res) {
-        var customerId = req.query.customer,
-            cookieId = req.query.cookie;
+    return CartService.addDiscountCode(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-        CartService.init(customerId, cookieId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                res.json(result);
-            }
-        },'lineItems[*].distributionChannel');
-    };
+  controller.createOrder = function(req, res) {
+    var cartId = req.param('cartId'),
+      version = parseInt(req.param('version')),
+      payload = req.body;
 
-    controller.refreshCart = function (req, res) {
-        var cookieId = req.query.cookie;
+    // Create order and any associated notes
+    CartService.createOrder(cartId, version, payload, function(err, result) {
+      if (err) {
+        return res.status(400).send(err.body.message);
+      } else {
+        res.redirect('/#!/orders/' + result.id);
+      }
+    });
+  };
 
-        CartService.refreshCart(cookieId, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                res.json(result);
-            }
-        },'lineItems[*].distributionChannel');
-    };
+  controller.addHighIndex = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    controller.cartEyewearPrescriptionCount = function (req, res) {
-        var id = req.param('cartId');
-        CartService.cartEyewearPrescriptionCount(id, function (err, result) {
-            if (err) {
-                return res.status(400).send(err.body.message);
-            } else {
-                res.json(result);
-            }
-        })
+    return CartService.addHighIndex(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
 
-    };
+  controller.removeHighIndex = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
 
-    return controller;
+    return CartService.removeHighIndex(cartId, payload.lineId, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
+
+  controller.addBlueBlock = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
+
+    return CartService.addBlueBlock(cartId, payload, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
+
+  controller.removeBlueBlock = function(req, res) {
+    var cartId = req.param('cartId'),
+      payload = req.body;
+
+    return CartService.removeBlueBlock(cartId, payload.lineId, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
+
+  // TODO: Move to promise
+  controller.init = function(req, res) {
+    var customerId = req.query.customer,
+      cookieId = req.query.cookie;
+
+    CartService.init(customerId, cookieId, EXPAND.distributionChannel)
+      .then(function(result) {
+        var cart = new Cart(result);
+        res.json(cart);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500).send(err);
+      });
+  };
+
+  // TODO: Move to promise
+  controller.refreshCart = function(req, res) {
+    var cookieId = req.query.cookie;
+
+    CartService.refreshCart(cookieId, function(err, result) {
+      if (err) {
+        return res.status(400).send(err.body.message);
+      } else {
+        res.json(result);
+      }
+    }, EXPAND.distributionChannel);
+  };
+
+  controller.cartEyewearPrescriptionCount = function(req, res) {
+    var id = req.param('cartId');
+
+    return CartService.cartEyewearPrescriptionCount(id)
+      .then(function(count) {
+        return res.json(count);
+      })
+      .catch(function(err) {
+        app.logger.error(err);
+        return res.status(500);
+      });
+  };
+
+  return controller;
 };

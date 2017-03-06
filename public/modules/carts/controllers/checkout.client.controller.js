@@ -390,7 +390,7 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
       $rootScope.loading = true;
 
       address.$save(function(response) {
-        Authentication.user = response;
+        Authentication.setUser(response);
         LoggerServices.success('Address added');
         $rootScope.loading = false;
       }, function(response) {
@@ -468,8 +468,10 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
       },
 
       uploadPrescription: function(files) {
-        $scope.prescription.method = 'upload';
-        return $scope.uploadPrescription(files)
+        return $scope.uploadPrescription(files).then(function(result){
+          $scope.prescription.method = 'upload';
+          return result
+        })
       }
     }
 
@@ -482,10 +484,13 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
         return
       }
 
-      // if ($scope.prescriptionOptions[type] === method) {
-      //   return
-      // }
+      // Easy update if value is the same as the one selected
+      if ($scope.prescriptionOptions[type] === method) {
+        LoggerServices.success('Prescription updated');
+        return
+      }
 
+      // Method is selected from prescriptionOptionsMethods
       $q.when(prescriptionOptionsMethods[method](args))
         .then(function(result) {
           $rootScope.loading = false;
@@ -555,7 +560,8 @@ angular.module('carts').controller('CheckoutController', ['$scope', 'Authenticat
             $scope.prescription.calldoctor = $scope.prescription.value.data;
           } else if ($scope.prescription.method == 'sendlater') {
             console.log('Will send prescriptions later')
-
+          } else if ($scope.prescription.method == 'upload') {
+            $scope.prescription.upload = $scope.prescription.value.data;
           }
 
           $rootScope.cart = response.cart;

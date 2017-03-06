@@ -6,12 +6,30 @@ var SphereClient = require('../../clients/sphere.server.client.js'),
 
 
 module.exports = function (app) {
-    var service = {};
+  var CommonServiceAsync = require('./sphere.commonsasync.server.service.js').bind({
+    entity: 'customers'
+  })(app);
 
-    var endpoints = {
-        login: "/login",
-        change_password: "/customers/password"
-    }
+  var service = {};
+
+  var endpoints = {
+      login: "/login",
+      change_password: "/customers/password"
+  }
+
+  /**
+   * Getters
+   */
+
+  service.getCommonService = function() {
+    return CommonServiceAsync;
+  }
+
+  /**
+   * Service methods
+   */
+
+  service.byId = CommonServiceAsync.byId;
 
     service.create = function (customer, callback) {
         return getSequenceNewValue("customerNumberSequence").then(function (customerNumber) {
@@ -58,21 +76,21 @@ module.exports = function (app) {
             });
     };
 
-    service.login = function (email, password, anonymousCartId, callback) {
-        var customer = {
-            "email": email,
-            "password": password,
-            "anonymousCartId": anonymousCartId
-        };
+    service.login = function(email, password, anonymousCartId) {
+      var customerDraft = {
+        'email': email,
+        'password': password,
+        'anonymousCartId': anonymousCartId
+      };
 
-        app.logger.debug("anonymousCartId " + anonymousCartId)
+      app.logger.debug('anonymousCartId ' + anonymousCartId);
 
-        SphereClient.getClient().customers._save(endpoints['login'],customer).then(function (result) {
-            var customer = new Customer(result.body.customer)
-            callback(null, customer, result.body.cart);
-        }).error(function (err) {
-            app.logger.error ("Error doing login for customer. Error: %s",JSON.stringify(err));
-            callback(err, null);
+      return service.getCommonService().login(customerDraft)
+        .then(function(result) {
+          return {
+            customer: new Customer(result.customer),
+            cart: result.cart
+          };
         });
     };
 

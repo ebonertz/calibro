@@ -11,41 +11,51 @@ var passport = require('passport'),
 module.exports = function (app) {
     var CustomerService = require('../../app/services/sphere/sphere.customers.server.service.js')(app),
         CommonService = require('../../app/services/sphere/sphere.commons.server.service.js')(app);
+
     // Use local strategy
     passport.use('sphere-login', new LocalStrategy({
-            usernameField: 'email',
-            passwordField: 'password',
-            passReqToCallback: true
-        },
-        function (req, email, password, done) {
-            CustomerService.login(email, password, req.body.anonymousCartId, function (err, customer, cart) {
-                if (err) {
-                    return done(err);
-                }
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+      },
+      function(req, email, password, done) {
+        var info = {};
 
-                var info = {cart: cart}
+        var anonCartId = req.body.anonymousCartId,
+          rememberMe = req.body.rememberme;
 
-                // Return remember info
-                if (req.body.rememberme) {
-                    var rem = RememberService.getToken(customer.id),
-                        remember = {
-                            rem: rem,
-                            rid: RememberService.encodeId(customer.id, rem)
-                        },
-                        rememberCustomObject = {
-                            container: 'RememberMe',
-                            key: remember.rem,
-                            value: customer.id
-                        }
+        CustomerService.login(email, password, anonCartId)
+          .then(function(info) {
 
-                    // Create customobject with remember info
-                    CommonService.create('customObjects', rememberCustomObject);
-                    info.remember = remember;
-                }
+            if(!info.customer) {
+              throw new Error('No customer');
+            }
 
-                return done(null, customer, info);
-            });
-        }
+            delete info.customer.password;
+
+            // TODO: Cleanup
+            if (rememberMe) {
+              var rem = RememberService.getToken(info.customer.id),
+                remember = {
+                  rem: rem,
+                  rid: RememberService.encodeId(info.customer.id, rem)
+                },
+                rememberCustomObject = {
+                  container: 'RememberMe',
+                  key: rem,
+                  value: info.customer.id
+                };
+
+              CommonService.create('customObjects', rememberCustomObject);
+              info.remember = remember;
+            }
+
+            return done(null, info);
+          })
+          .catch(function (err) {
+            return done(err, null);
+          });
+      }
     ));
 
     passport.use('sphere-register', new LocalStrategy({

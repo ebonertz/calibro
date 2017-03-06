@@ -56,6 +56,11 @@ module.exports = {
 			'public/modules/*/*.js',
 			'public/modules/*/*[!tests]*/*.js'
 		],
+		shint: [
+			'app/controllers/carts.server.controller.js',
+			'app/services/sphere/sphere.carts.server.service.js',
+			'app/services/sphere/sphere.commonsasync.server.service.js'
+		],
 		less: [
 			'public/*/design/less/*.less',
 			'public/design/css/main.less',

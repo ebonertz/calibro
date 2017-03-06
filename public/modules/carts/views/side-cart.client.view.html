@@ -6,7 +6,7 @@
         <span ng-if="(cart.lineItems == null || cart.lineItems.length == 0)">(No products yet)</span>
         <tr ng-repeat="lineItem in cart.lineItems track by lineItem.id" class="product">
             <td class="product-name">
-                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name | locale}}</label>
+                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.obj.name | locale}}</label>
             <td class="product-quantity">
                 x{{lineItem.quantity}}
             </td>
@@ -17,7 +17,7 @@
         </tr>
         <tr ng-repeat="lineItem in cart.customLineItems track by lineItem.slug" class="product">
             <td class="product-name">
-                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.name | locale}}</label>
+                {{lineItem.name.en}} <label>{{lineItem.distributionChannel.obj.name | locale}}</label>
             <td class="product-quantity">
                 x{{lineItem.quantity}}
             </td>

@@ -5,7 +5,7 @@ var _ = require('lodash'),
 
 module.exports = function (app) {
     var ChannelService = require('./sphere/sphere.channels.server.service')(app);
-    var ProductService = require('./sphere/sphere.products.server.service')(app);
+    var ProductService = Promise.promisifyAll(require('./sphere/sphere.products.server.service')(app));
 
     var service = {};
     service.LINE_ITEM_TAX = 1;
@@ -17,7 +17,6 @@ module.exports = function (app) {
         "City": "Lithia Springs",
         "Region": "GA",
         "PostalCode": "30122-1546"
-
     };
     var REQUEST_OPTIONS = {
         method: 'POST',
@@ -25,9 +24,9 @@ module.exports = function (app) {
         headers: {
             'Content-Type': 'text/json',
             'Authorization': 'Basic ' + config.avalara.key
-
         }
     };
+
     service.getSalesOrderTax = function (cart,type) {
         var bodyObject = {
             "DocDate": (new Date()).toISOString().slice(0, 10),
@@ -93,56 +92,57 @@ module.exports = function (app) {
                     resolve(result);
                 }
                 else {
-                    app.logger.warn (result.Messages[0].Details);
-                    reject("There was a problem calculating taxes: "+result.Messages[0].Details);
+                    // app.logger.warn(result.Messages[0].Details);
+                    app.logger.error(result)
+                    // reject("There was a problem calculating taxes: "+result.Messages[0].Details);
+                    reject(result.Messages[0].Summary)
                 }
             });
         });
     }
-    function calculateLineItems (cart) {
-        var lineItems = [];
-        return Promise.map(cart.lineItems, function (item){
-            return new Promise(function (resolve, reject) {
-                ProductService.byId (item.productId, function (error, product) {
-                    if (error) {
-                        app.logger.error ("Error calculating Avalara taxes %s", JSON.stringify(error));
-                        reject (error);
-                    }
-                    var distributionChannel = ChannelService.getById (item.distributionChannel.id);
-                    var taxCode;
-                    if (distributionChannel.key == 'nonprescription') {
-                        if (product.categories[0].slug === 'eyeglasses') {
-                            taxCode = config.avalara.nonPrescriptionEyewearTaxCode;
-                        }
-                        else {
-                            taxCode = config.avalara.nonPrescriptionSunglassTaxCode;
-                        }
-                    }
-                    else if (distributionChannel.key == 'singlevision') {
-                        if (product.categories[0].slug === 'eyeglasses') {
-                            taxCode = config.avalara.prescriptionEyewearTaxCode;
-                        }
-                        else {
-                            taxCode = config.avalara.prescriptionSunglassTaxCode;
-                        }
-                    }
-                    lineItems.push({
-                        "LineNo": item.id,
-                        "DestinationCode": cart.shippingAddress.id,
-                        "OriginCode": ORIGIN_ADDRESS.AddressCode,
-                        "Qty": item.quantity,
-                        "Amount": Number(parseInt(item.totalPrice.centAmount / 100).toFixed(0)),
-                        "Description": item.name.en,
-                        "ItemCode": item.productSlug.en,
-                        "TaxCode": taxCode
-                    });
-                    resolve (lineItems);
-                });
-            });
-        }).then (function (done) {
-            return lineItems;
-        });
+
+    // TODO: Review the product call, this info could already be retrieved through the cart
+    function calculateLineItems(cart) {
+      var lineItems = [];
+      return Promise.map(cart.lineItems, function(item) {
+        return ChannelService.byId(item.distributionChannel.id).then(function(distributionChannel) {
+          return ProductService.byIdAsync(item.productId).then(function(product) {
+
+            var taxCode;
+            if (distributionChannel.key == 'nonprescription') {
+              if (product.categories[0].obj.slug.en === 'eyeglasses') {
+                taxCode = config.avalara.nonPrescriptionEyewearTaxCode;
+              } else {
+                taxCode = config.avalara.nonPrescriptionSunglassTaxCode;
+              }
+            } else if (distributionChannel.key == 'singlevision') {
+              if (product.categories[0].obj.slug.en === 'eyeglasses') {
+                taxCode = config.avalara.prescriptionEyewearTaxCode;
+              } else {
+                taxCode = config.avalara.prescriptionSunglassTaxCode;
+              }
+            }
+
+            return {
+              "LineNo": item.id,
+              "DestinationCode": cart.shippingAddress.id,
+              "OriginCode": ORIGIN_ADDRESS.AddressCode,
+              "Qty": item.quantity,
+              "Amount": Number(parseInt(item.totalPrice.centAmount / 100).toFixed(0)),
+              "Description": item.name.en,
+              "ItemCode": item.productSlug.en,
+              "TaxCode": taxCode
+            };
+          })
+        })
+      }).then(function(lineItems) {
+        return lineItems;
+      }).catch(function(error) {
+        app.logger.error("Error calculating Avalara taxes %s", JSON.stringify(error));
+        throw new Error("There was an error calculating the taxes, please try again later or contact us for support.")
+      });
     }
+
     function calculateShippingItem (cart) {
        var item = {
             "LineNo": 1,
