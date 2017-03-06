@@ -74,7 +74,7 @@ module.exports = function(app) {
   service.byCustomer = function(customerId, expand) {
     var opts = {
       where: 'cartState="Active" and customerId="' + customerId + '"',
-      sort: ['createdAt', false]
+      sort: ['lastModifiedAt', false]
     };
 
     return service.getCommonService().findOne(opts, expand);
@@ -83,7 +83,7 @@ module.exports = function(app) {
   service.activeById = function(cartId, expand) {
     var opts = {
       where: 'cartState="Active" and id="' + cartId + '"',
-      sort: ['createdAt', false]
+      sort: ['lastModifiedAt', false]
     };
 
     return service.getCommonService().findOne(opts, expand);
@@ -399,9 +399,7 @@ module.exports = function(app) {
     return service.removeCustomLineItem(cart, payload);
   };
 
-  // TODO: Review this method, currently not using promises
   service.init = function(userId, cookieId, expand) {
-
     return Promise.resolve()
       .then(function() {
         if (userId) {
@@ -416,7 +414,6 @@ module.exports = function(app) {
       .catch(function() {
         return service.newCart(userId);
       })
-
   };
 
   // TODO: Review this method, currently not using promises

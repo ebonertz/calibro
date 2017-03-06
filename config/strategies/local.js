@@ -25,26 +25,25 @@ module.exports = function (app) {
           rememberMe = req.body.rememberme;
 
         CustomerService.login(email, password, anonCartId)
-          .then(function(customer) {
+          .then(function(info) {
 
-            if(!customer) {
+            if(!info.customer) {
               throw new Error('No customer');
             }
 
-            delete customer.password;
-            info.customer = customer;
+            delete info.customer.password;
 
             // TODO: Cleanup
             if (rememberMe) {
-              var rem = RememberService.getToken(customer.id),
+              var rem = RememberService.getToken(info.customer.id),
                 remember = {
                   rem: rem,
-                  rid: RememberService.encodeId(customer.id, rem)
+                  rid: RememberService.encodeId(info.customer.id, rem)
                 },
                 rememberCustomObject = {
                   container: 'RememberMe',
                   key: rem,
-                  value: customer.id
+                  value: info.customer.id
                 };
 
               CommonService.create('customObjects', rememberCustomObject);

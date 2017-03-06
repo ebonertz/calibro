@@ -29,6 +29,8 @@ module.exports = function (app) {
    * Service methods
    */
 
+  service.byId = CommonServiceAsync.byId;
+
     service.create = function (customer, callback) {
         return getSequenceNewValue("customerNumberSequence").then(function (customerNumber) {
             customer.customerNumber = customerNumber.toString();
@@ -85,7 +87,10 @@ module.exports = function (app) {
 
       return service.getCommonService().login(customerDraft)
         .then(function(result) {
-          return new Customer(result.customer);
+          return {
+            customer: new Customer(result.customer),
+            cart: result.cart
+          };
         });
     };
 
