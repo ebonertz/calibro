@@ -1,6 +1,6 @@
 FROM node:0.12
 
-MAINTAINER Matthias Luebken, matthias@catalyst-zero.com
+MAINTAINER Evan Bonertz, bonertz.unc@gmail.com
 
 WORKDIR /home/mean
 
